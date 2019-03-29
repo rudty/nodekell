@@ -1,7 +1,11 @@
 {
   "name": "nodkell",
   "version": "0.0.1",
-  "description": "haskell prelude function for js",
+  "description": "node js functional library",
+  "repository": { 
+    "type": "git",
+    "url": "https://github.com/rudty/nodekell"
+  },
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -21,5 +25,9 @@
     "functional"
   ],
   "author": "rudtyz",
-  "license": "MIT"
+  "license": "MIT",
+  "engines": {
+    "node": ">=10.15.3"
+  },
+  "bugs":"https://github.com/rudty/nodekell/issues"
 }
