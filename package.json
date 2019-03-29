@@ -1,0 +1,25 @@
+{
+  "name": "nodkell",
+  "version": "0.0.1",
+  "description": "haskell prelude function for js",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "^6.0.2"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "haskell",
+    "prelude",
+    "async",
+    "function",
+    "functional"
+  ],
+  "author": "rudtyz",
+  "license": "MIT"
+}
