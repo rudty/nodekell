@@ -33,7 +33,7 @@ print
 
 
 
-use a combination of three functions
+use a combination of 4 functions
 ```node
 const v = await F.run(
             F.range(10),//[0~9]
