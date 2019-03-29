@@ -1,6 +1,9 @@
 # nodekell
 node js functional library
 
+```npm install nodekell```
+
+
 require module 
 ```node
 const F = require("nodekell");
@@ -9,8 +12,7 @@ const F = require("nodekell");
 
 functional library for node 
 
-
-
+all functions are curried and can be used in combination with other functions like haskell
 
 
 # Examples
@@ -39,4 +41,39 @@ const v = await F.run(
             F.map(e => e + 1), //[1,3,5,7,9]
             F.reduce((acc, e) => acc + e)) // 1+3+5+7+9
 console.log(v);//25
+```
+
+
+creating a currying function
+```node
+const myAdd = F.curry((a,b,c) => a + b + c);
+const myAdd1 = myAdd(1);
+const myAdd2 = myAdd1(2);
+const myAdd3 = myAdd2(3);//<- real call
+console.log(myAdd3);
+```
+
+# Functions
+---
+```
+    run
+    head
+    seq
+    collect
+    reverse
+    curry
+    filter
+    fmap
+    flat
+    map
+    range
+    foldl
+    foldl1
+    reduce
+    foldr
+    take
+    takeWhile
+    reduce
+    zip
+    zipWith
 ```
