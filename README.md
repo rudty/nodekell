@@ -43,7 +43,7 @@ const v = await F.run(
 console.log(v);//25
 ```
 
-concurrent run
+concurrent for each
 ```javascript
 const beginTime = Date.now();
 await F.run(

@@ -1,3 +1,4 @@
 'use strict';
-Object.assign(module.exports, require("./prelude"));
-Object.assign(module.exports, require("./stream"));
+const a = require("./prelude");
+Object.assign(a, require("./stream"));
+module.exports = a;
