@@ -18,7 +18,7 @@ all functions are curried and can be used in combination with other functions li
 # Examples
 ---
 using filter function
-```node
+```javascript
 const a = [1,2,3,4,5];
 const filtered = F.filter(e=> e % 2 == 0, a)
 for await (const e of filtered) {
@@ -34,7 +34,7 @@ print
 
 
 use a combination of 4 functions
-```node
+```javascript
 const v = await F.run(
             F.range(10),//[0~9]
             F.filter(e => e % 2 == 0), //[0,2,4,6,8] 
@@ -45,7 +45,7 @@ console.log(v);//25
 
 
 use and collect 
-```node
+```javascript
 const v = await F.run(
     F.range(Infinity),//[0,1,2....]
     F.filter(e => (e % 3) === 0), //[0,3,6...] 
@@ -56,7 +56,7 @@ console.log(v); //[1,4,7,10,13]
 ```
 
 creating a currying function
-```node
+```javascript
 const myAdd = F.curry((a,b,c) => a + b + c);
 const myAdd1 = myAdd(1);
 const myAdd2 = myAdd1(2);
