@@ -17,8 +17,6 @@ all functions are curried and can be used in combination with other functions li
 
 # Examples
 ---
-# Functions
----
 *    [run](#run)
 *    [head](#head)
 *    [tail](#tail)
