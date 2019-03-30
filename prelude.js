@@ -33,6 +33,26 @@ const seq = async function* (iter) {
     }
 }
 
+const tail = async function* (iter) {
+    const g = seq(iter);
+    const { done } = await g.next();
+    if (done) {
+        throw Error("empty iter");
+    }
+    yield* g;
+};
+
+const drop = async function* (count, iter) {
+    const g = seq(iter);
+    for (let i = 0; i < count; i++) {
+        const { done } = await g.next();
+        if (done) {
+            break;
+        }
+    }
+    yield* g;
+}
+
 /**
  * make array
  * iterator to array
@@ -165,7 +185,7 @@ const range = function* (a) {
     for (let i = begin; i !== end; i += n) {
         yield i;
     }
-}
+};
 
 /**
  * like `$` or `.`
@@ -185,6 +205,8 @@ const run = curry(async (iter, ...f) => foldl((z, fn) => fn(z), iter, f));
 module.exports = {
     run: run,
     head: head,
+    tail: tail,
+    drop: drop,
     seq: seq,
     collect: collect,
     reverse: reverse,
@@ -192,6 +214,7 @@ module.exports = {
     filter: filter,
     fmap: fmap,
     flat: flat,
+    flatMap: fmap,
     map: map,
     range: range,
     foldl: foldl,
