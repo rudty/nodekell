@@ -1,5 +1,5 @@
 # nodekell
-node js functional library
+node js async functional library
 
 ```npm install nodekell```
 
@@ -10,7 +10,7 @@ const F = require("nodekell");
 ```
 
 
-functional library for node 
+async functional library for node 
 
 all functions are curried and can be used in combination with other functions like haskell
 
@@ -69,6 +69,8 @@ console.log(myAdd3);
 ```
     run
     head
+    tail
+    drop
     seq
     collect
     reverse
