@@ -44,6 +44,17 @@ console.log(v);//25
 ```
 
 
+use and collect 
+```node
+const v = await F.run(
+    F.range(Infinity),//[0,1,2....]
+    F.filter(e => (e % 3) === 0), //[0,3,6...] 
+    F.map(e => e + 1), //[1,4,7...]
+    F.take(5), // generator([1,4,7,10,13])
+    F.collect);  // generator => array
+console.log(v); //[1,4,7,10,13]
+```
+
 creating a currying function
 ```node
 const myAdd = F.curry((a,b,c) => a + b + c);
