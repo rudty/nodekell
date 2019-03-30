@@ -43,6 +43,17 @@ const v = await F.run(
 console.log(v);//25
 ```
 
+concurrent run
+```javascript
+const beginTime = Date.now();
+await F.run(
+    F.range(100), 
+    F.forEach(async e => {
+        await F.sleep(100)
+    }));
+const endTime = Date.now();
+console.log(endTime - beginTime); // print 121
+```
 
 use and collect 
 ```javascript
