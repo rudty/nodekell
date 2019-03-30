@@ -71,6 +71,7 @@ console.log(myAdd3);
     head
     tail
     drop
+    dropWhile
     seq
     collect
     reverse
