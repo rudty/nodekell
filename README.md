@@ -80,11 +80,12 @@ console.log(myAdd3);
     filter
     fmap
     flat
+    forEach
     map
     range
     foldl
     foldl1
-    reduce
+    sleep
     foldr
     take
     takeWhile

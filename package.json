@@ -1,6 +1,6 @@
 {
   "name": "nodekell",
-  "version": "0.2.1",
+  "version": "0.2.3",
   "description": "node js functional library",
   "repository": { 
     "type": "git",
@@ -9,10 +9,6 @@
   "main": "index.js",
   "directories": {
     "test": "test"
-  },
-  "dependencies": {},
-  "devDependencies": {
-    "mocha": "^6.0.2"
   },
   "scripts": {
     "test": "mocha"

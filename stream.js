@@ -34,11 +34,28 @@ const count = async (iter) => {
         c += 1;
     }
     return c;
-}
+};
+
+const forEach = P.curry(async (f, iter) => {
+    let wait = [];
+    for await (const e of iter) {
+        const r = f(e);
+        if (r) {
+            wait.push(r);
+        }
+    } 
+    return Promise.all(wait);
+});
+
+const sleep = (t) => new Promise(r => {
+    setTimeout(()=> r(), t);
+});
 
 module.exports = {
     firstOrGet: firstOrGet,
     collect: collect,
     collectMap: collectMap,
-    count: count
+    count: count,
+    forEach: forEach,
+    sleep: sleep
 };
