@@ -42,7 +42,7 @@ const tail = async function* (iter) {
     yield* g;
 };
 
-const drop = async function* (count, iter) {
+const drop = curry(async function* (count, iter) {
     const g = seq(iter);
     for (let i = 0; i < count; i++) {
         const { done } = await g.next();
@@ -51,7 +51,20 @@ const drop = async function* (count, iter) {
         }
     }
     yield* g;
-}
+});
+
+const dropWhile = curry(async function* (f, iter) {
+    const g = seq(iter);
+    let drop = true;
+    for await (const e of g) {
+        if (drop && (await f(e))) {
+            continue;
+        } else {
+            drop = false;
+        }
+        yield e;
+    }
+});
 
 /**
  * make array
@@ -63,7 +76,8 @@ const collect = async (iter) => {
         res.push(e);
     }
     return res;
-}
+};
+
 const filter = curry(async function* (fn, iter) {
     for await (const e of iter) {
         if (await fn(e)) {
@@ -207,6 +221,7 @@ module.exports = {
     head: head,
     tail: tail,
     drop: drop,
+    dropWhile: dropWhile,
     seq: seq,
     collect: collect,
     reverse: reverse,
