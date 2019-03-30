@@ -17,7 +17,7 @@ all functions are curried and can be used in combination with other functions li
 
 # Examples
 ---
-using a single function
+using filter function
 ```node
 const a = [1,2,3,4,5];
 const filtered = F.filter(e=> e % 2 == 0, a)
