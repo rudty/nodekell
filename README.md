@@ -17,22 +17,62 @@ all functions are curried and can be used in combination with other functions li
 
 # Examples
 ---
-using filter function
+# Functions
+---
+*    [run](#run)
+*    [head](#head)
+*    [tail](#tail)
+*    [drop](#drop)
+*    [dropWhile](#dropWhile)
+*    [distinct](#distinct)
+*    [distinctBy](#distinctBy)
+*    [seq](#seq)
+*    [collect](#collect)
+*    [collectMap](#collectMap)
+*    [reverse](#reverse)
+*    [curry](#curry)
+*    [filter](#filter)
+*    [fmap](#fmap)
+*    [flat](#flat)
+*    [forEach](#forEach)
+*    [map](#map)
+*    [range](#range)
+*    [foldl](#foldl)
+*    [foldl](#foldl)1
+*    [sleep](#sleep)
+*    [foldr](#foldr)
+*    [take](#take)
+*    [takeWhile](#takeWhile)
+*    [reduce](#reduce)
+*    [zip](#zip)
+*    [zipWith](#zipWith)
+
+
+
+### filter
 ```javascript
 const a = [1,2,3,4,5];
 const filtered = F.filter(e=> e % 2 == 0, a)
 for await (const e of filtered) {
        console.log(e);
 }
-/*
-print
-2
-4
-*/
+//print
+//2
+//4
 ```
+```javascript
+const r = await F.run(
+ [1,2,3,4,5], 
+ F.filter(e => e % 2 == 0));
 
-
-
+for await (const e of r) {
+ console.log(e);
+}
+//print 
+//2
+//4
+```
+### run
 use a combination of 4 functions
 ```javascript
 const v = await F.run(
@@ -43,7 +83,7 @@ const v = await F.run(
 console.log(v);//25
 ```
 
-concurrent for each
+### foreach
 ```javascript
 const beginTime = Date.now();
 await F.run(
@@ -55,7 +95,7 @@ const endTime = Date.now();
 console.log(endTime - beginTime); // print 121
 ```
 
-use and collect 
+### collect
 ```javascript
 const v = await F.run(
     F.range(Infinity),//[0,1,2....]
@@ -66,7 +106,7 @@ const v = await F.run(
 console.log(v); //[1,4,7,10,13]
 ```
 
-creating a currying function
+### curry
 ```javascript
 const myAdd = F.curry((a,b,c) => a + b + c);
 const myAdd1 = myAdd(1);
@@ -75,32 +115,3 @@ const myAdd3 = myAdd2(3);//<- real call
 console.log(myAdd3);
 ```
 
-# Functions
----
-```
-    run
-    head
-    tail
-    drop
-    dropWhile
-    seq
-    collect
-    collectMap
-    reverse
-    curry
-    filter
-    fmap
-    flat
-    forEach
-    map
-    range
-    foldl
-    foldl1
-    sleep
-    foldr
-    take
-    takeWhile
-    reduce
-    zip
-    zipWith
-```
