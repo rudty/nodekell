@@ -5,7 +5,7 @@ node js async functional library
 
 
 require module 
-```node
+```javascript
 const F = require("nodekell");
 ```
 
