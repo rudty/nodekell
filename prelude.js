@@ -66,18 +66,6 @@ const dropWhile = curry(async function* (f, iter) {
     }
 });
 
-/**
- * make array
- * iterator to array
- */
-const collect = async (iter) => {
-    const res = [];
-    for await (const e of iter) {
-        res.push(e);
-    }
-    return res;
-};
-
 const filter = curry(async function* (fn, iter) {
     for await (const e of iter) {
         if (await fn(e)) {
@@ -223,7 +211,6 @@ module.exports = {
     drop: drop,
     dropWhile: dropWhile,
     seq: seq,
-    collect: collect,
     reverse: reverse,
     curry: curry,
     filter: filter,

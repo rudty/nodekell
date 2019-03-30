@@ -74,6 +74,7 @@ console.log(myAdd3);
     dropWhile
     seq
     collect
+    collectMap
     reverse
     curry
     filter

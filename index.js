@@ -1,2 +1,3 @@
 'use strict';
-module.exports = require("./prelude");
+Object.assign(module.exports, require("./prelude"));
+Object.assign(module.exports, require("./stream"));
