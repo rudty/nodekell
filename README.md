@@ -114,7 +114,7 @@ for await (const e of r) {
 //4
 ```
 
-## map
+### map
 ```javascript
 const a = [1,2,3,4,5];
 for await (const e of F.map(e=> e * 2, a)) {
