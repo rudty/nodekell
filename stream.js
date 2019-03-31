@@ -12,6 +12,22 @@ const firstOrGet = P.curry(async (supply, iter) => {
     return supply;
 });
 
+
+const emptyThen = P.curry(async function*(supply, iter) {
+    for await (const e of iter) {
+        yield e;
+        yield* iter;
+        return;
+    }
+    
+    supply = await supply;
+    if (supply instanceof Function) {
+        yield* await supply();
+    } else {
+        yield* supply; 
+    }
+});
+
 /**
  * make array
  * iterator to array
@@ -77,6 +93,7 @@ module.exports = {
     collectSet: collectSet,
     count: count,
     sum: sum,
+    emptyThen: emptyThen,
     forEach: forEach,
     sleep: sleep,
     distinct: distinct,

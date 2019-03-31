@@ -95,11 +95,11 @@ const flat = fmap(e => e);
 const take = curry(async function* (count, iter) {
     let it = 0;
     for await (const e of iter) {
-        yield e;
         it += 1;
-        if (it >= count) {
+        if (it > count) {
             break;
         }
+        yield e;
     }
 });
 

@@ -56,6 +56,7 @@ console.log(v);//25
 *    [zipWith](#zipWith)
 *    [count](#count)
 *    [sum](#sum)
+*    [emptyThen](#emptyThen)
 
 
 
@@ -453,4 +454,30 @@ console.log(n); // print 15
 const a = "abcde";
 const n = await F.sum(a);
 console.log(n); // print abcde
+```
+
+###emptyThen
+```javascript
+const v = await F.run(F.range(Infinity),
+            F.take(0), // take 0 
+            F.emptyThen([1,2,3,4,5]), // new array
+            F.map(e => e + 1), // 2,3,4,5,6
+            F.collect);
+console.log(v); // 2,3,4,5,6
+```
+```javascript
+const v = await F.run(F.range(Infinity),
+    F.take(0),// take 0
+    F.emptyThen(()=> { return [1,2,3] }), // new array from function
+    F.map(e => e + 1), // 2,3,4
+    F.collect) 
+console.log(v);// 2,3,4
+```
+```javascript
+const v = await F.run(F.range(Infinity),
+    F.take(3), // [0,1,2]
+    F.emptyThen(([9,9,9]),//not work
+    F.map(e => e + 1), //[1,2,3]
+    F.collect);
+console.log(v); //2,3,4
 ```
