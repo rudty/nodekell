@@ -15,7 +15,7 @@ async functional library for node
 all functions are curried and can be used in combination with other functions like haskell
 
 
-# Examples
+# Functions / Examples
 ---
 *    [run](#run)
 *    [head](#head)
@@ -123,7 +123,7 @@ console.log(v);
 ```
 
 
-### foreach
+### forEach
 ```javascript
 const beginTime = Date.now();
 await F.run(
@@ -153,6 +153,17 @@ const v = await F.run(
 console.log(v); //[1,4,7,10,13]
 ```
 
+### collectMap
+```javascript
+const a = [[1,2],[3,4]];
+const m = await F.collectMap(a); // new Map([[1,2],[3,4]])
+for(const [k,v] of m) {
+    console.log(k, v);
+}
+//print 
+//1 2
+//3 4
+```
 
 ### foldl
 ```javascript
@@ -191,6 +202,14 @@ const v = await F.run(
     F.collect
 );
 console.log(v); // print 0 1
+```
+
+
+### takeWhile
+```javascript
+const a = [1,2,3,1,2,3];
+const t = F.takeWhile(e => e < 3, a);
+console.log(await F.collect(t)); // print 1, 2
 ```
 
 
@@ -272,6 +291,14 @@ console.log(await F.collect(f)); // print [1,2,3,4,5]
 same as fmap
 
 
+### flat
+```javascript
+const a = [[1],[2],3,4,5];
+const f = F.flat(a);
+console.log(await F.collect(f)); // print [1,2,3,4,5]
+```
+
+
 ### sleep
 like sleep in other language 
 ```javascript
@@ -349,6 +376,13 @@ for (const m of result) {
 //print
 //{num:1}
 //{num:2}
+```
+
+### reverse
+```javascript
+const a = [1,2,3,4,5];
+const t = F.reverse(a);
+console.log(await F.collect(t)); // print 5,4,3,2,1
 ```
 
 
