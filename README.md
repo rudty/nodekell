@@ -165,7 +165,16 @@ const sum = await F.foldl((acc, e) => acc + e, "hello", a);
 console.log(sum); // print "helloworld"
 ```
 
+### foldl1
+take 1 items and call foldl
+```javascript
+const a = [1,2,3,4,5];
+const sum = await F.foldl1((acc, e) => acc + e, a); 
+console.log(sum); // print 15;
+```
 
+### reduce
+same as foldl1
 
 
 ### take
@@ -180,7 +189,73 @@ const v = await F.run(
     F.take(2),
     F.collect
 );
-console.log(v);
+console.log(v); // print 0 1
 ```
+
+
+### zip
+```javascript
+const a = [1,2,3,4,5];
+const b = [6,7,8,9,10];
+const z = F.zip(a, b);
+const arr = await F.collect(z);
+for (const e of arr) {
+    console.log(e);
+    //print
+    //[1,6]
+    //[2,7]
+    //[4,9]
+    //[5,0]
+}
+```
+
+### zipWith
+```javascript
+const a = [{id:1}, {id:2}];
+const b = [{name:"a"}, {name:"b"}];
+
+const myZip = (f, s) => {
+    return [f.id, s.name];
+};
+
+const z = F.zipWith(myZip,a, b);
+const arr = await F.collect(z);
+for (const e of arr) {
+    console.log(e);
+}
+//print
+//[1,"a"]
+//[2,"b"]
+```
+
+
+### head
+```javascript
+const a = [1,2,3,4,5];
+console.log(await F.head(a));
+```
+
+```javascript
+const a = [];
+try{
+    await F.head(a);
+}catch(e) {
+    console.log(e);
+} 
+//print empty iter 
+```
+
+
+### tail
+```javascript
+const a = [1,2,3,4,5];
+const t = F.tail(a);
+console.log(await F.collect(t)); // print 2 3 4 5
+```
+
+
+
+
+
 
 
