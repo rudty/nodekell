@@ -84,7 +84,7 @@ console.log(myAdd3);
 ```
 
 ### run
-use a combination functions
+combination functions like haskell $ or .
 ```javascript
 const v = await F.run(
             F.range(10),//[0~9]
