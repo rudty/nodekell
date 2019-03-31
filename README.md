@@ -193,6 +193,24 @@ const sum = await F.foldl1((acc, e) => acc + e, a);
 console.log(sum); // print 15;
 ```
 
+### foldr
+```javascript
+const arr = [1,2,3,4,5];
+const r = await F.foldr((a, b) => a + b, 0, arr);
+console.log(r);
+```
+```javascript
+const arr = [64,2,1];
+const r = await F.foldr((a, b) => a / b, 1, arr);
+console.log(r);
+```
+```javascript
+const arr = ["1","2","3","4"];
+const r = await F.foldr((a, b) => a + b, "5", arr);
+console.log(r); // print 12345
+```
+
+
 ### reduce
 same as foldl1
 
