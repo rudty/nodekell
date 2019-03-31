@@ -23,8 +23,8 @@ const v = await F.run(
 console.log(v);//25
 ```
 
-# Functions / Examples
 ---
+# Functions / Examples
 *    [run](#run)
 *    [head](#head)
 *    [tail](#tail)
