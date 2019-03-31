@@ -57,6 +57,8 @@ console.log(v);//25
 *    [count](#count)
 *    [sum](#sum)
 *    [emptyThen](#emptyThen)
+*    [some](#some)
+*    [every](#every)
 
 
 
@@ -488,4 +490,31 @@ const v = await F.run(F.range(Infinity),
     F.map(e => e + 1), //[1,2,3]
     F.collect);
 console.log(v); //2,3,4
+```
+
+### some
+```javascript
+const a = [1,2,3,4,5];
+const r = await F.some(e=> e % 2 == 0, a); //found '2' return
+console.log(r); // true
+```
+```javascript
+const r = await F.run(
+    F.range(Infinity), //[0...Infinity]
+    F.some(e=> Promise.resolve(e > 100)) // found '101' return
+);
+console.log(r); // true
+```
+
+### every
+```javascript
+const a = [1,2,3,4,5];
+const r = await F.every(e=> e  >= 0, a); // all elem >= 0 return true
+console.log(r); // true
+```
+```javascript
+const a = [1,2,3,4,5];
+const r = await F.every(e=> Promise.resolve(e < 3), a); 
+//1 ok, 2 ok, 3 no return false
+console.log(r); // false
 ```

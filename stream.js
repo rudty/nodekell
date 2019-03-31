@@ -82,6 +82,26 @@ const distinctBy = P.curry(async function*(f, iter) {
 
 const distinct = P.curry((iter) => distinctBy(e => e, iter));
 
+
+const some = P.curry(async (f, iter) => {
+    for await (const e of iter) {
+        if (await f(e)) {
+            return true;
+        }
+    }
+    return false;
+});
+
+const every = P.curry(async (f, iter) => {
+    for await (const e of iter) {
+        if (!(await f(e))) {
+            return false;
+        }
+    }
+    return true;
+});
+
+
 const sleep = (t) => new Promise(r => {
     setTimeout(()=> r(), t);
 });
@@ -97,5 +117,7 @@ module.exports = {
     forEach: forEach,
     sleep: sleep,
     distinct: distinct,
-    distinctBy: distinctBy
+    distinctBy: distinctBy,
+    some: some,
+    every: every
 };
