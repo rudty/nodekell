@@ -16,10 +16,11 @@ all functions are curried and can be used in combination with other functions li
 
 ```javascript
 const v = await F.run(
-            F.range(10),//[0~9]
-            F.filter(e => e % 2 == 0), //[0,2,4,6,8] 
-            F.map(e => e + 1), //[1,3,5,7,9]
-            F.reduce((acc, e) => acc + e)) // 1+3+5+7+9
+    F.range(Infinity),//[0,1,2...]
+    F.filter(e => e % 2 == 0), //[0,2,4...] 
+    F.map(e => e + 1), //[1,3,5...]
+    F.take(5), // [1,3,5,7,9]
+    F.reduce((acc, e) => acc + e)) // 1+3+5+7+9
 console.log(v);//25
 ```
 
@@ -225,6 +226,11 @@ const sum = await F.foldl1((acc, e) => acc + e, a);
 console.log(sum); // print 15;
 ```
 
+
+### reduce
+same as foldl1
+
+
 ### foldr
 ```javascript
 const arr = [1,2,3,4,5];
@@ -241,11 +247,6 @@ const arr = ["1","2","3","4"];
 const r = await F.foldr((a, b) => a + b, "5", arr);
 console.log(r); // print 12345
 ```
-
-
-### reduce
-same as foldl1
-
 
 ### take
 ```javascript
