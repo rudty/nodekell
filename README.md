@@ -31,6 +31,7 @@ all functions are curried and can be used in combination with other functions li
 *    [curry](#curry)
 *    [filter](#filter)
 *    [fmap](#fmap)
+*    [flatMap](#flatMap)
 *    [flat](#flat)
 *    [forEach](#forEach)
 *    [map](#map)
@@ -254,8 +255,100 @@ console.log(await F.collect(t)); // print 2 3 4 5
 ```
 
 
+### fmap
+```javascript
+const a = [[1],[2],3,4,5];
+const f = F.fmap(e => e, a);
+console.log(await F.collect(f)); // print [1,2,3,4,5]
+```
+```javascript
+const a = [[Promise.resolve(1)],Promise.resolve([2]),3,4,5];
+const f = F.fmap(e => e, a);
+console.log(await F.collect(f)); // print [1,2,3,4,5]
+```
 
 
+### flatMap
+same as fmap
 
+
+### sleep
+like sleep in other language 
+```javascript
+const beginDate = Date.now();
+await F.sleep(1000);
+const endDate = Date.now();
+console.log(endDate - beginDate); // print 1009
+```
+
+
+### drop
+```javascript
+const a = [1,2,3,4,5];
+const r = F.drop(3, a)
+const result = await F.collect(r);
+console.log(result); // print [4, 5]
+```
+```javascript
+const a = [1,2,3,4,5];
+const r = F.drop(Infinity, a)
+const result = await F.collect(r);
+console.log(result); // print []
+```
+
+
+### dropWhile
+```javascript
+const a = [1,2,3,4,1];
+const r = F.dropWhile(e=> e < 3, a)
+const result = await F.collect(r);
+console.log(result); // print [3,4,1]
+```
+
+```javascript
+const a = [Promise.resolve(1),2,3,4,1];
+const r = F.dropWhile(e=> e < 3, a)
+const result = await F.collect(r);
+console.log(result); // print [3,4,1]
+```
+
+
+## seq 
+make iterable(array, set, map, iteratorObject) to asyncIterator 
+```javascript
+const a = [1,2,3,4,5];
+for await(const e of F.seq(a)) {
+    console.log(e);
+}
+```
+```javascript
+const a = new Map([[1,2],[3,4]]);
+for await(const e of F.seq(a)) {
+    console.log(e);
+}
+```
+
+
+### distinct
+```javascript
+const a = [1,2,1,2,2,3];
+const r = F.distinct(a);
+const result = await F.collect(r);
+console.log(result);
+```
+
+
+### distinctBy
+```javascript
+const a = [{num:1}, {num:1}, {num:2}];
+const r = F.distinctBy(e=>e.num, a);
+const result = await F.collect(r);
+for (const m of result) {
+    console.log(m);
+}
+//print
+//{num:1}
+//{num:2}
+```
 
 
