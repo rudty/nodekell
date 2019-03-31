@@ -59,7 +59,7 @@ const count = async (iter) => {
 };
 
 const forEach = P.curry(async (f, iter) => {
-    let wait = [];
+    const wait = [];
     for await (const e of iter) {
         const r = f(e);
         if (r) {
