@@ -18,7 +18,8 @@
     "prelude",
     "async",
     "function",
-    "functional"
+    "functional",
+    "stream"
   ],
   "author": "rudtyz",
   "license": "MIT",

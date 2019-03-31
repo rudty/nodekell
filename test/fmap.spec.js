@@ -1,5 +1,5 @@
 "use strict";
-const F = require("../prelude");
+const F = require("../index");
 const assert = require("assert");
 
 describe('test fmap', () => {
@@ -10,7 +10,7 @@ describe('test fmap', () => {
         for await (const e of r) {
            result.push(e); 
         }
-        assert.deepEqual(result, [[1],2,3,4,5]);
+        assert.deepStrictEqual(result, [[1],2,3,4,5]);
     });
 
     it('promise value', async () => {
@@ -20,7 +20,7 @@ describe('test fmap', () => {
         for await (const e of r) {
            result.push(e); 
         }
-        assert.deepEqual(result, [[Promise.resolve(1)],2,3,4,5]);
+        assert.deepStrictEqual(result, [[Promise.resolve(1)],2,3,4,5]);
     });
 
     it('async func', async () => {
@@ -30,6 +30,15 @@ describe('test fmap', () => {
         for await (const e of r) {
            result.push(e); 
         }
-        assert.deepEqual(result, [1,2,3,4,5]);
+        assert.deepStrictEqual(result, [1,2,3,4,5]);
+    });
+
+    it('with run', async () => {
+        const a = [[1],[2],[3],[4],[5]];
+        const result = await F.run(a,
+            F.filter(e => e[0] > 1), //[2][3][4][5]
+            F.fmap(e => e), 
+            F.collect);
+        assert.deepStrictEqual(result, [2,3,4,5]);
     });
 });
