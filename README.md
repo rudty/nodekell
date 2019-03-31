@@ -366,7 +366,7 @@ console.log(result); // print [3,4,1]
 ```
 
 
-## seq 
+### seq 
 make iterable(array, set, map, iteratorObject) to asyncIterator 
 ```javascript
 const a = [1,2,3,4,5];
