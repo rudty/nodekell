@@ -35,6 +35,7 @@ console.log(v);//25
 *    [seq](#seq)
 *    [collect](#collect)
 *    [collectMap](#collectMap)
+*    [collectSet](#collectSet)
 *    [reverse](#reverse)
 *    [curry](#curry)
 *    [filter](#filter)
@@ -53,6 +54,8 @@ console.log(v);//25
 *    [reduce](#reduce)
 *    [zip](#zip)
 *    [zipWith](#zipWith)
+*    [count](#count)
+*    [sum](#sum)
 
 
 
@@ -171,6 +174,28 @@ for(const [k,v] of m) {
 //print 
 //1 2
 //3 4
+```
+
+### collectSet
+```javascript
+const a = [1,2,3,1,2,3];
+const m = await F.collectSet(a); //new Set([1,2,3])
+for(const e of m) {
+    console.log(e);
+}
+//print 
+//1
+//2
+//3
+```
+```javascript
+const a = "hello world";
+const m = await F.collectSet(a); //new Set("helo wrd")
+for(const e of m) {
+    console.log(e);
+}
+//print 
+//helo wrd
 ```
 
 ### foldl
@@ -411,4 +436,21 @@ const t = F.reverse(a);
 console.log(await F.collect(t)); // print 5,4,3,2,1
 ```
 
+### count
+```javascript
+const a = [1,2,3,4,5];
+const n = await F.count(a);
+console.log(n); // print 5
+```
 
+### sum
+```javascript
+const a = [1,2,3,4,5];
+const n = await F.sum(a);
+console.log(n); // print 15
+```
+```javascript
+const a = "abcde";
+const n = await F.sum(a);
+console.log(n); // print abcde
+```
