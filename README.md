@@ -460,7 +460,7 @@ const n = await F.sum(a);
 console.log(n); // print abcde
 ```
 
-###emptyThen
+### emptyThen
 ```javascript
 const v = await F.run(F.range(Infinity),
             F.take(0), // take 0 
