@@ -14,6 +14,14 @@ async functional library for node
 
 all functions are curried and can be used in combination with other functions like haskell
 
+```javascript
+const v = await F.run(
+            F.range(10),//[0~9]
+            F.filter(e => e % 2 == 0), //[0,2,4,6,8] 
+            F.map(e => e + 1), //[1,3,5,7,9]
+            F.reduce((acc, e) => acc + e)) // 1+3+5+7+9
+console.log(v);//25
+```
 
 # Functions / Examples
 ---
@@ -72,7 +80,7 @@ console.log(myAdd3);
 ```
 
 ### run
-use a combination of 4 functions
+use a combination functions
 ```javascript
 const v = await F.run(
             F.range(10),//[0~9]
