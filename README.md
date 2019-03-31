@@ -36,7 +36,7 @@ all functions are curried and can be used in combination with other functions li
 *    [map](#map)
 *    [range](#range)
 *    [foldl](#foldl)
-*    [foldl](#foldl)1
+*    [foldl1](#foldl1)
 *    [sleep](#sleep)
 *    [foldr](#foldr)
 *    [take](#take)
@@ -150,6 +150,37 @@ const v = await F.run(
     F.take(5), // generator([1,4,7,10,13])
     F.collect);  // generator => array
 console.log(v); //[1,4,7,10,13]
+```
+
+
+### foldl
+```javascript
+const a = [1,2,3,4,5];
+const sum = await F.foldl((acc, e) => acc + e, 0, a); 
+console.log(sum); // print 15
+```
+```javascript
+const a = ["w","o","r","l","d"];
+const sum = await F.foldl((acc, e) => acc + e, "hello", a); 
+console.log(sum); // print "helloworld"
+```
+
+
+
+
+### take
+```javascript
+const a = [1,2,3,4,5];
+const t = F.take(3, a);
+console.log(await F.collect(t)); // print 1 2 3
+```
+```javascript
+const v = await F.run(
+    F.range(Infinity),
+    F.take(2),
+    F.collect
+);
+console.log(v);
 ```
 
 
