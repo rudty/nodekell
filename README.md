@@ -399,11 +399,15 @@ const a = [1,2,3,4,5];
 for await(const e of F.seq(a)) {
     console.log(e);
 }
+//print 1,2,3,4,5
 ```
 ```javascript
 const a = new Map([[1,2],[3,4]]);
 for await(const e of F.seq(a)) {
     console.log(e);
+    //print 
+    //[1,2]
+    //[3,4]
 }
 ```
 
@@ -413,7 +417,7 @@ for await(const e of F.seq(a)) {
 const a = [1,2,1,2,2,3];
 const r = F.distinct(a);
 const result = await F.collect(r);
-console.log(result);
+console.log(result); // print 1,2,3
 ```
 
 
