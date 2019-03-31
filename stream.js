@@ -28,9 +28,15 @@ const collectMap = async (iter) => {
     return new Map(await collect(iter));
 };
 
+const collectSet = async (iter) => {
+    return new Set(await collect(iter));
+}
+
+const sum = (iter) => P.foldl1((acc, e) => acc + e, iter);
+
 const count = async (iter) => {
     let c = 0;
-    for await (const e of iter) {
+    for await (const _ of iter) {
         c += 1;
     }
     return c;
@@ -68,7 +74,9 @@ module.exports = {
     firstOrGet: firstOrGet,
     collect: collect,
     collectMap: collectMap,
+    collectSet: collectSet,
     count: count,
+    sum: sum,
     forEach: forEach,
     sleep: sleep,
     distinct: distinct,
