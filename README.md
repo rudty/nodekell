@@ -82,6 +82,10 @@ const myAdd2 = myAdd1(2);
 const myAdd3 = myAdd2(3);//<- real call
 console.log(myAdd3);
 ```
+```javascript
+const myAdd = F.curry((a,b,c) => a + b + c);
+myAdd(1,2,3); // <- real call
+```
 
 ### run
 combination functions like haskell $ or .
