@@ -237,12 +237,12 @@ same as foldl1
 ```javascript
 const arr = [1,2,3,4,5];
 const r = await F.foldr((a, b) => a + b, 0, arr);
-console.log(r);
+console.log(r); // print 15
 ```
 ```javascript
 const arr = [64,2,1];
 const r = await F.foldr((a, b) => a / b, 1, arr);
-console.log(r);
+console.log(r); // print 32
 ```
 ```javascript
 const arr = ["1","2","3","4"];
@@ -313,7 +313,7 @@ for (const e of arr) {
 ### head
 ```javascript
 const a = [1,2,3,4,5];
-console.log(await F.head(a));
+console.log(await F.head(a)); //print 1
 ```
 
 ```javascript
