@@ -60,6 +60,8 @@ console.log(v);//25
 *    [emptyThen](#emptyThen)
 *    [some](#some)
 *    [every](#every)
+*    [maxBy](#minBy)
+*    [minBy](#maxBy)
 
 
 
@@ -518,4 +520,30 @@ const a = [1,2,3,4,5];
 const r = await F.every(e=> Promise.resolve(e < 3), a); 
 //1 ok, 2 ok, 3 no return false
 console.log(r); // false
+```
+
+
+### maxBy
+```javascript
+const a = [10,9,8,7];
+const r = await F.maxBy(e => e, a);
+console.log(r); // print 10;
+```
+```javascript
+const a = [1,10,9,8,7,11];
+const r = await F.maxBy(e => Math.floor(e/10), a) //compare [0,1,0,0,0,1]
+console.log(r);
+```
+
+
+### minBy
+```javascript
+const a = [0,10,9,8,7];
+const r = await F.minBy(e => e, a);
+console.log(r); // print 0
+```
+```javascript
+const a = [7,10,9,8,1,11];
+const r = await F.minBy(e => Math.floor(e/10), a) //compare [0,1,0,0,0,1]
+console.log(r); // 7
 ```

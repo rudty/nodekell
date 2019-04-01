@@ -101,6 +101,35 @@ const every = P.curry(async (f, iter) => {
     return true;
 });
 
+const maxBy = P.curry(async (f, iter) => {
+    let m = await P.head(iter);
+    let c = await f(m);
+    for await (const e of iter) {
+        const g = await f(e);
+        if (g > c) {
+            m = e;
+            c = g;
+        }
+    }
+    return m;
+});
+
+const minBy = P.curry(async (f, iter) => {
+    let m = await P.head(iter);
+    let c = await f(m);
+    for await (const e of iter) {
+        const g = await f(e);
+        if (g < c) {
+            m = e;
+            c = g;
+        }
+    }
+    return m;
+});
+
+const splitBy = P.curry(async function*(f, any) {
+    yield* await f(any);
+});
 
 const sleep = (t) => new Promise(r => {
     setTimeout(()=> r(), t);
@@ -119,5 +148,8 @@ module.exports = {
     distinct: distinct,
     distinctBy: distinctBy,
     some: some,
-    every: every
+    every: every,
+    maxBy: maxBy,
+    minBy: minBy,
+    splitBy: splitBy
 };
