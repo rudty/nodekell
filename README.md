@@ -62,6 +62,8 @@ console.log(v);//25
 *    [every](#every)
 *    [maxBy](#minBy)
 *    [minBy](#maxBy)
+*    [splitBy](#splitBy)
+
 
 
 
@@ -546,4 +548,17 @@ console.log(r); // print 0
 const a = [7,10,9,8,1,11];
 const r = await F.minBy(e => Math.floor(e/10), a) //compare [0,1,0,0,0,1]
 console.log(r); // 7
+```
+
+### splitBy
+to iterable from any  
+```javascript
+const helloWorld = "hello world";
+const r = await F.splitBy(e=>e.split(" "), helloWorld);
+for await(const e of r) {
+    console.log(e);
+}
+//print 
+//hello
+//world
 ```

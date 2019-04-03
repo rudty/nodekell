@@ -3,6 +3,13 @@ const F = require("../index");
 const assert = require("assert");
     
 describe('test split', () => {
+
+    it("for", async() => {
+        const helloWorld = "hello world";
+        const r = await F.splitBy(e=>e.split(" "), helloWorld);
+        assert.deepStrictEqual(await F.collect(r), ["hello", "world"]);
+    })
+
     it('helloworld', async () => {
         const helloWorld = await F.collect(
             await F.splitBy(
