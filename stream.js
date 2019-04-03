@@ -102,7 +102,12 @@ const every = P.curry(async (f, iter) => {
 });
 
 const maxBy = P.curry(async (f, iter) => {
-    let m = await P.head(iter);
+    const g = P.seq(iter);
+    const head = await g.next();
+    if (head.done) {
+        throw new Error("empty iter");
+    }
+    let m = head.value;
     let c = await f(m);
     for await (const e of iter) {
         const g = await f(e);
@@ -115,9 +120,15 @@ const maxBy = P.curry(async (f, iter) => {
 });
 
 const minBy = P.curry(async (f, iter) => {
-    let m = await P.head(iter);
+    const g = P.seq(iter);
+    const head = await g.next();
+    if (head.done) {
+        throw new Error("empty iter");
+    }
+    let m = head.value;
     let c = await f(m);
-    for await (const e of iter) {
+
+    for await (const e of g) {
         const g = await f(e);
         if (g < c) {
             m = e;

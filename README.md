@@ -313,9 +313,19 @@ for (const e of arr) {
 
 
 ### head
+get first element
+warning: if use head for generator, result is not the same
 ```javascript
 const a = [1,2,3,4,5];
 console.log(await F.head(a)); //print 1
+console.log(await F.head(a)); //print 1
+```
+
+```javascript
+const a = F.seq([10,9,8,7]); // make generator
+console.log(await F.head(a)); //print 9
+console.log(await F.head(a)); //print 8
+console.log(await F.head(a)); //print 7
 ```
 
 ```javascript
@@ -330,12 +340,27 @@ try{
 
 
 ### tail
+get from the second
+warning: if use tail for generator, result is not the same
 ```javascript
 const a = [1,2,3,4,5];
 const t = F.tail(a);
 console.log(await F.collect(t)); // print 2 3 4 5
 ```
-
+```javascript
+const a = F.seq([10,9,8,7]); //make generator
+for await (const e of F.tail(a)){
+    console.log(e);
+}
+for await (const e of a) {
+    //a is empty...
+    console.log("a is empty");
+}
+//print 
+//9
+//8
+//7
+```
 
 ### fmap
 ```javascript

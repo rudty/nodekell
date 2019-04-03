@@ -15,13 +15,6 @@ const curry = fn => (...a) => {
     else return (...b) => curry(fn)(...a, ...b);
 };
 
-const head = async (iter) => {
-    for await (const e of iter) {
-        return e;
-    }
-    throw Error("empty iter");
-};
-
 /**
  * make generator
  * do not need to check if iter 
@@ -33,11 +26,20 @@ const seq = async function* (iter) {
     }
 }
 
+const head = async (iter) => {
+    const g = seq(iter);
+    const { value, done } = await g.next();
+    if (done) {
+        throw new Error("empty iter");
+    }
+    return value;
+};
+
 const tail = async function* (iter) {
     const g = seq(iter);
     const { done } = await g.next();
     if (done) {
-        throw Error("empty iter");
+        throw new Error("empty iter");
     }
     yield* g;
 };
@@ -124,7 +126,7 @@ const foldl1 = curry(async (f, iter) => {
     const g = seq(iter);
     const h = await g.next();
     if (h.done) {
-        throw Error("empty iter");
+        throw new Error("empty iter");
     }
     return foldl(f, h.value, g);
 });

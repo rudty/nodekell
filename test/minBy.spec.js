@@ -29,4 +29,10 @@ describe('test minBy', () => {
         const r = await F.minBy(e => Math.floor(e/10), a) //compare [0,1,0,0,0,1]
         assert.deepStrictEqual(r, 7);
     });
+
+    it('gen', async () => {
+        const s = F.seq([1,2,3,4,0]);
+        const r = await F.minBy(e=>e, s);
+        assert.deepStrictEqual(r, 0);
+    });
 });

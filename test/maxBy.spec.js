@@ -29,4 +29,10 @@ describe('test maxBy', () => {
         const r = await F.maxBy(e => Math.floor(e/10), a) //compare [0,1,0,0,0,1]
         assert.deepStrictEqual(r, 10);
     });
+
+    it('gen', async () => {
+        const s = F.seq([1,2,3,4,10]);
+        const r = await F.maxBy(e=>e);
+        assert.deepStrictEqual(r, 10);
+    });
 });
