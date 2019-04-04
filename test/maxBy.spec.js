@@ -32,7 +32,7 @@ describe('test maxBy', () => {
 
     it('gen', async () => {
         const s = F.seq([1,2,3,4,10]);
-        const r = await F.maxBy(e=>e);
+        const r = await F.maxBy(e=>e, s);
         assert.deepStrictEqual(r, 10);
     });
 });

@@ -155,7 +155,9 @@ await F.run(
         await F.sleep(100)
     }));
 const endTime = Date.now();
-console.log(endTime - beginTime); // works concurrency, print 121
+console.log(endTime - beginTime); 
+// print 121
+// works concurrency
 ```
 
 ### collect
@@ -559,7 +561,7 @@ console.log(r); // print 10;
 ```javascript
 const a = [1,10,9,8,7,11];
 const r = await F.maxBy(e => Math.floor(e/10), a) //compare [0,1,0,0,0,1]
-console.log(r);
+console.log(r); // print 10
 ```
 
 
@@ -586,4 +588,39 @@ for await(const e of r) {
 //print 
 //hello
 //world
+```
+
+
+### repeat
+
+```javascript
+const r = F.repeat(3);
+for await(const e of r) {
+    console.log(e);
+}
+//print 
+//3
+//3
+//3
+//....
+```
+```javascript
+const v = await F.run(
+    F.repeat(1), //[1,1,1....]
+    F.map(e => e + 1), //[2,2,2....]
+    F.take(5), //[2,2,2,2,2]
+    F.collect); //generator => array
+console.log(v);
+//print [2,2,2,2,2]
+```
+```javascript
+const r = F.repeat(()=>{return 3;});
+for await(const e of r) {
+    console.log(e);
+}
+//print 
+//3
+//3
+//3
+//....
 ```

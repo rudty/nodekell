@@ -173,6 +173,19 @@ const zipWith = curry(async function* (f, a, b) {
     }
 });
 
+const repeat = async function* (supply) {
+    supply = await supply;
+    if (supply instanceof Function) {
+        while (true) {
+            yield await supply();
+        }
+    } else {
+        while (true) {
+            yield supply;
+        }
+    }
+};
+
 const range = function* (a) {
     let begin = 0;
     let end = a;
@@ -229,5 +242,6 @@ module.exports = {
     takeWhile: takeWhile,
     reduce: reduce,
     zip: zip,
-    zipWith: zipWith
+    zipWith: zipWith,
+    repeat: repeat
 };
