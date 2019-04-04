@@ -1,33 +1,9 @@
 'use strict';
 
-/**
- * currying function wrapper
- * ex)
- * var mySum = curry((a,b,c) => {return a+b+c;});
- *
- * var mySum1 = mySum(1) 
- * var mySum2 = mySum1(2)
- * var sum = mySum2(3) // <-- real call 
- * 
- */
-const curry = fn => (...a) => {
-    if (fn.length <= a.length) return fn(...a);
-    else return (...b) => curry(fn)(...a, ...b);
-};
+const C = require("./core.js");
 
-/**
- * make generator
- * do not need to check if iter 
- * Symbol.asyncIterator or Symbol.iterator 
- */
-const seq = async function* (iter) {
-    for await (const e of iter) {
-        yield e;
-    }
-}
-
-const head = async (iter) => {
-    const g = seq(iter);
+exports.head = async (iter) => {
+    const g =  C.seq(iter);
     const { value, done } = await g.next();
     if (done) {
         throw new Error("empty iter");
@@ -35,8 +11,8 @@ const head = async (iter) => {
     return value;
 };
 
-const tail = async function* (iter) {
-    const g = seq(iter);
+exports.tail = async function* (iter) {
+    const g = C.seq(iter);
     const { done } = await g.next();
     if (done) {
         throw new Error("empty iter");
@@ -44,8 +20,8 @@ const tail = async function* (iter) {
     yield* g;
 };
 
-const drop = curry(async function* (count, iter) {
-    const g = seq(iter);
+exports.drop =  C.curry(async function* (count, iter) {
+    const g =  C.seq(iter);
     for (let i = 0; i < count; i++) {
         const { done } = await g.next();
         if (done) {
@@ -55,8 +31,8 @@ const drop = curry(async function* (count, iter) {
     yield* g;
 });
 
-const dropWhile = curry(async function* (f, iter) {
-    const g = seq(iter);
+exports.dropWhile =  C.curry(async function* (f, iter) {
+    const g =  C.seq(iter);
     let drop = true;
     for await (const e of g) {
         if (drop && (await f(e))) {
@@ -68,7 +44,7 @@ const dropWhile = curry(async function* (f, iter) {
     }
 });
 
-const filter = curry(async function* (fn, iter) {
+exports.filter =  C.curry(async function* (fn, iter) {
     for await (const e of iter) {
         if (await fn(e)) {
             yield e;
@@ -76,13 +52,13 @@ const filter = curry(async function* (fn, iter) {
     }
 });
 
-const map = curry(async function* (fn, iter) {
+exports.map =  C.curry(async function* (fn, iter) {
     for await (const e of iter) {
         yield await fn(e);
     }
 });
 
-const fmap = curry(async function* (fn, iter) {
+const fmap =  C.curry(async function* (fn, iter) {
     for await (const e of iter) {
         if (e && (e[Symbol.iterator] || e[Symbol.asyncIterator])) {
             yield* await fn(e);
@@ -91,10 +67,10 @@ const fmap = curry(async function* (fn, iter) {
         }
     }
 });
+exports.fmap = fmap;
+exports.flat = fmap(C.ioe);
 
-const flat = fmap(e => e);
-
-const take = curry(async function* (count, iter) {
+exports.take =  C.curry(async function* (count, iter) {
     let it = 0;
     for await (const e of iter) {
         it += 1;
@@ -105,7 +81,7 @@ const take = curry(async function* (count, iter) {
     }
 });
 
-const takeWhile = curry(async function* (f, iter) {
+exports.takeWhile =  C.curry(async function* (f, iter) {
     for await (const e of iter) {
         if (!(await f(e))) {
             break;
@@ -114,24 +90,25 @@ const takeWhile = curry(async function* (f, iter) {
     }
 });
 
-const foldl = curry(async (f, z, iter) => {
+const foldl =  C.curry(async (f, z, iter) => {
     z = await z;
     for await (const e of iter) {
         z = await f(z, e);
     }
     return z;
 });
+exports.foldl = foldl;
 
-const foldl1 = curry(async (f, iter) => {
-    const g = seq(iter);
+const foldl1 =  C.curry(async (f, iter) => {
+    const g =  C.seq(iter);
     const h = await g.next();
     if (h.done) {
         throw new Error("empty iter");
     }
     return foldl(f, h.value, g);
 });
-
-const reduce = foldl1;
+exports.foldl1 = foldl1;
+exports.reduce = foldl1;
 
 const reverse = async function* (iter) {
     const a = [];
@@ -142,18 +119,20 @@ const reverse = async function* (iter) {
         yield a[i];
     }
 };
+exports.reverse = reverse;
 
-const foldr = curry(async (f, z, iter) => {
+const foldr =  C.curry(async (f, z, iter) => {
     z = await z;
     for await (const e of reverse(iter)) {
         z = await f(e, z);
     }
     return z;
 });
+exports.foldr = foldr;
 
-const zip = curry(async function* (a, b) {
-    a = seq(a);
-    for await (const e of seq(b)) {
+exports.zip =  C.curry(async function* (a, b) {
+    a =  C.seq(a);
+    for await (const e of C.seq(b)) {
         const { value, done } = await a.next();
         if (done) {
             break;
@@ -162,9 +141,9 @@ const zip = curry(async function* (a, b) {
     }
 });
 
-const zipWith = curry(async function* (f, a, b) {
-    a = seq(a);
-    for await (const e of seq(b)) {
+exports.zipWith =  C.curry(async function* (f, a, b) {
+    a =  C.seq(a);
+    for await (const e of C.seq(b)) {
         const { value, done } = await a.next();
         if (done) {
             break;
@@ -173,7 +152,7 @@ const zipWith = curry(async function* (f, a, b) {
     }
 });
 
-const repeat = async function* (supply) {
+exports.repeat = async function* (supply) {
     supply = await supply;
     if (supply instanceof Function) {
         while (true) {
@@ -186,7 +165,7 @@ const repeat = async function* (supply) {
     }
 };
 
-const range = function* (a) {
+exports.range = function* (a) {
     let begin = 0;
     let end = a;
     const len = arguments.length;
@@ -216,32 +195,4 @@ const range = function* (a) {
  * result:
  * [ 2 , 3 ]
  */
-const run = curry(async (iter, ...f) => foldl((z, fn) => fn(z), iter, f));
-
-
-module.exports = {
-    run: run,
-    head: head,
-    tail: tail,
-    drop: drop,
-    dropWhile: dropWhile,
-    seq: seq,
-    reverse: reverse,
-    curry: curry,
-    filter: filter,
-    fmap: fmap,
-    flat: flat,
-    flatMap: fmap,
-    map: map,
-    range: range,
-    foldl: foldl,
-    foldl1: foldl1,
-    reduce: reduce,
-    foldr: foldr,
-    take: take,
-    takeWhile: takeWhile,
-    reduce: reduce,
-    zip: zip,
-    zipWith: zipWith,
-    repeat: repeat
-};
+exports.run =  C.curry(async (iter, ...f) => foldl((z, fn) => fn(z), iter, f));

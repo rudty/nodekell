@@ -1,7 +1,8 @@
 'use strict';
+const C = require("./core");
 const P = require("./prelude");
 
-const firstOrGet = P.curry(async (supply, iter) => {
+exports.firstOrGet = C.curry(async (supply, iter) => {
     for await (const e of iter) {
         return e;
     }
@@ -12,8 +13,7 @@ const firstOrGet = P.curry(async (supply, iter) => {
     return supply;
 });
 
-
-const emptyThen = P.curry(async function*(supply, iter) {
+exports.emptyThen = C.curry(async function*(supply, iter) {
     for await (const e of iter) {
         yield e;
         yield* iter;
@@ -39,18 +39,19 @@ const collect = async (iter) => {
     }
     return res;
 };
+exports.collect = collect;
 
-const collectMap = async (iter) => {
+exports.collectMap = async (iter) => {
     return new Map(await collect(iter));
 };
 
-const collectSet = async (iter) => {
+exports.collectSet = async (iter) => {
     return new Set(await collect(iter));
 }
 
-const sum = (iter) => P.foldl1((acc, e) => acc + e, iter);
+exports.sum = (iter) => P.foldl1(C.add, iter);
 
-const count = async (iter) => {
+exports.count = async (iter) => {
     let c = 0;
     for await (const _ of iter) {
         c += 1;
@@ -58,7 +59,7 @@ const count = async (iter) => {
     return c;
 };
 
-const forEach = P.curry(async (f, iter) => {
+exports.forEach = C.curry(async (f, iter) => {
     const wait = [];
     for await (const e of iter) {
         const r = f(e);
@@ -69,7 +70,7 @@ const forEach = P.curry(async (f, iter) => {
     return Promise.all(wait);
 });
 
-const distinctBy = P.curry(async function*(f, iter) {
+const distinctBy = C.curry(async function*(f, iter) {
     const s = new Set();
     for await (const e of iter) {
         const d = await f(e);
@@ -79,11 +80,10 @@ const distinctBy = P.curry(async function*(f, iter) {
         }
     }
 });
+exports.distinctBy = distinctBy;
+exports.distinct = C.curry((iter) => distinctBy(C.ioe, iter));
 
-const distinct = P.curry((iter) => distinctBy(e => e, iter));
-
-
-const some = P.curry(async (f, iter) => {
+exports.some = C.curry(async (f, iter) => {
     for await (const e of iter) {
         if (await f(e)) {
             return true;
@@ -92,7 +92,7 @@ const some = P.curry(async (f, iter) => {
     return false;
 });
 
-const every = P.curry(async (f, iter) => {
+exports.every = C.curry(async (f, iter) => {
     for await (const e of iter) {
         if (!(await f(e))) {
             return false;
@@ -101,26 +101,26 @@ const every = P.curry(async (f, iter) => {
     return true;
 });
 
-const maxBy = P.curry(async (f, iter) => {
-    const g = P.seq(iter);
+exports.maxBy = C.curry(async (f, iter) => {
+    const g = C.seq(iter);
     const head = await g.next();
     if (head.done) {
         throw new Error("empty iter");
     }
     let m = head.value;
     let c = await f(m);
-    for await (const e of iter) {
-        const g = await f(e);
-        if (g > c) {
+    for await (const e of g) {
+        const k = await f(e);
+        if (k > c) {
             m = e;
-            c = g;
+            c = k;
         }
     }
     return m;
 });
 
-const minBy = P.curry(async (f, iter) => {
-    const g = P.seq(iter);
+exports.minBy = C.curry(async (f, iter) => {
+    const g = C.seq(iter);
     const head = await g.next();
     if (head.done) {
         throw new Error("empty iter");
@@ -129,38 +129,19 @@ const minBy = P.curry(async (f, iter) => {
     let c = await f(m);
 
     for await (const e of g) {
-        const g = await f(e);
-        if (g < c) {
+        const k = await f(e);
+        if (k < c) {
             m = e;
-            c = g;
+            c = k;
         }
     }
     return m;
 });
 
-const splitBy = P.curry(async function*(f, any) {
+exports.splitBy = C.curry(async function*(f, any) {
     yield* await f(any);
 });
 
-const sleep = (t) => new Promise(r => {
+exports.sleep = (t) => new Promise(r => {
     setTimeout(()=> r(), t);
 });
-
-module.exports = {
-    firstOrGet: firstOrGet,
-    collect: collect,
-    collectMap: collectMap,
-    collectSet: collectSet,
-    count: count,
-    sum: sum,
-    emptyThen: emptyThen,
-    forEach: forEach,
-    sleep: sleep,
-    distinct: distinct,
-    distinctBy: distinctBy,
-    some: some,
-    every: every,
-    maxBy: maxBy,
-    minBy: minBy,
-    splitBy: splitBy
-};
