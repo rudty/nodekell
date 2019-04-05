@@ -145,3 +145,19 @@ exports.splitBy = C.curry(async function*(f, any) {
 exports.sleep = (t) => new Promise(r => {
     setTimeout(()=> r(), t);
 });
+
+exports.errorThen = C.curry(async function*(supply, iter){
+    try{
+        yield* iter;
+    } catch(e) {
+        supply = await supply;
+        
+        if (supply instanceof Function) {
+            supply = await supply(e);
+        }
+
+        if(supply && (supply[Symbol.iterator] || supply[Symbol.asyncIterator])) {
+            yield* supply;
+        }
+    }
+});

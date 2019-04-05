@@ -63,6 +63,7 @@ console.log(v);//25
 *    [maxBy](#minBy)
 *    [minBy](#maxBy)
 *    [splitBy](#splitBy)
+*    [errorThen](#errorThen)
 
 
 
@@ -316,6 +317,7 @@ for (const e of arr) {
 
 ### head
 get first element
+
 warning: if use head for generator, result is not the same
 ```javascript
 const a = [1,2,3,4,5];
@@ -343,6 +345,7 @@ try{
 
 ### tail
 get from the second
+
 warning: if use tail for generator, result is not the same
 ```javascript
 const a = [1,2,3,4,5];
@@ -623,4 +626,39 @@ for await(const e of r) {
 //3
 //3
 //....
+```
+
+### errorThen
+catch error 
+```javascript
+const v = await F.run([1,2,3,4,5],
+    F.filter(e =>{
+        if (e > 2) {
+            throw new Error("hello")
+        }
+        return e;
+    }), // [1, 2 error! 
+    F.errorThen([9,8]),//catch and return 9,8
+    F.collect); // 
+console.log(v);
+//print 1,2,9,8
+```
+```javascript
+const v = await F.run([1,2,3,4,5],
+    F.filter(e =>{
+        if (e > 2) {
+            throw new Error("hello error");
+        }
+        return e;
+    }), // [1, 2 error! 
+    F.errorThen((reason) => {
+        console.log(reason); //hello error
+        return [9,8];
+    }),//catch and return 9,8
+    F.collect); // 
+console.log(v);
+//print 
+//hello error 
+//callstack... 
+//1,2,9,8
 ```
