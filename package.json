@@ -1,6 +1,6 @@
 {
   "name": "nodekell",
-  "version": "0.6.5",
+  "version": "0.6.7",
   "description": "node js functional library",
   "repository": { 
     "type": "git",
@@ -19,7 +19,17 @@
     "async",
     "function",
     "functional",
-    "stream"
+    "stream",
+    "iterator",
+    "functor",
+    "curry",
+    "map",
+    "filter",
+    "range",
+    "reduce",
+    "list",
+    "fold",
+    "collect"
   ],
   "author": "rudtyz",
   "license": "MIT",

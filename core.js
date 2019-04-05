@@ -26,11 +26,8 @@ exports.seq = async function* (iter) {
 };
 
 /**
- * input = output
+ * internal methods
  */
 exports.ioe = e => e;
-
 exports.add = (a, b) => a + b;
 exports.sub = (a, b) => a - b;
-exports.max = (a, b) => a < b ? b : a;
-exports.min = (a, b) => a < b ? a : b;

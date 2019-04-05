@@ -26,6 +26,7 @@ console.log(v);//25
 
 ---
 # Functions / Examples
+
 *    [run](#run)
 *    [head](#head)
 *    [tail](#tail)
@@ -64,6 +65,9 @@ console.log(v);//25
 *    [minBy](#maxBy)
 *    [splitBy](#splitBy)
 *    [errorThen](#errorThen)
+*    [rangeOf](#rangeOf)
+*    [max](#max)
+*    [min](#min)
 
 
 
@@ -661,4 +665,37 @@ console.log(v);
 //hello error 
 //callstack... 
 //1,2,9,8
+```
+
+### rangeOf
+make flatten range
+```javascript
+const r = await F.rangeOf(1,2,3);
+for await(const e of r) {
+    console.log(e);
+}
+//print 1,2,3
+```
+```javascript
+const r = await F.rangeOf([1,2,3],4,5);
+for await(const e of r) {
+    console.log(e);
+}
+//print 1,2,3,4,5
+```
+
+### max
+```javascript
+const a = [Promise.resolve(10),9,8,7];
+const r = await F.max(a);
+console.log(r);
+//print 10
+```
+
+### min
+```javascript
+const a = [10,9,8,Promise.resolve(7)];
+const r = await F.min(a);
+console.log(r);
+//print 7
 ```

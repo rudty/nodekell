@@ -2,6 +2,12 @@
 const C = require("./core");
 const P = require("./prelude");
 
+exports.rangeOf = (...a) => P.fmap(C.ioe, a);
+
+exports.sleep = (t) => new Promise(r => {
+    setTimeout(()=> r(), t);
+});
+
 exports.firstOrGet = C.curry(async (supply, iter) => {
     for await (const e of iter) {
         return e;
@@ -41,23 +47,8 @@ const collect = async (iter) => {
 };
 exports.collect = collect;
 
-exports.collectMap = async (iter) => {
-    return new Map(await collect(iter));
-};
-
-exports.collectSet = async (iter) => {
-    return new Set(await collect(iter));
-}
-
-exports.sum = (iter) => P.foldl1(C.add, iter);
-
-exports.count = async (iter) => {
-    let c = 0;
-    for await (const _ of iter) {
-        c += 1;
-    }
-    return c;
-};
+exports.collectMap = async (iter) => new Map(await collect(iter));
+exports.collectSet = async (iter) => new Set(await collect(iter));
 
 exports.forEach = C.curry(async (f, iter) => {
     const wait = [];
@@ -81,7 +72,7 @@ const distinctBy = C.curry(async function*(f, iter) {
     }
 });
 exports.distinctBy = distinctBy;
-exports.distinct = C.curry((iter) => distinctBy(C.ioe, iter));
+exports.distinct = (iter) => distinctBy(C.ioe, iter);
 
 exports.some = C.curry(async (f, iter) => {
     for await (const e of iter) {
@@ -101,7 +92,7 @@ exports.every = C.curry(async (f, iter) => {
     return true;
 });
 
-exports.maxBy = C.curry(async (f, iter) => {
+const maxBy = C.curry(async (f, iter) => {
     const g = C.seq(iter);
     const head = await g.next();
     if (head.done) {
@@ -118,8 +109,9 @@ exports.maxBy = C.curry(async (f, iter) => {
     }
     return m;
 });
+exports.maxBy = maxBy;
 
-exports.minBy = C.curry(async (f, iter) => {
+const minBy = C.curry(async (f, iter) => {
     const g = C.seq(iter);
     const head = await g.next();
     if (head.done) {
@@ -137,13 +129,22 @@ exports.minBy = C.curry(async (f, iter) => {
     }
     return m;
 });
+exports.minBy = minBy;
+
+exports.count = async (iter) => {
+    let c = 0;
+    for await (const _ of iter) {
+        c += 1;
+    }
+    return c;
+};
+
+exports.sum = P.foldl1(C.add);
+exports.max = maxBy(C.ioe);
+exports.min = minBy(C.ioe);
 
 exports.splitBy = C.curry(async function*(f, any) {
     yield* await f(any);
-});
-
-exports.sleep = (t) => new Promise(r => {
-    setTimeout(()=> r(), t);
 });
 
 exports.errorThen = C.curry(async function*(supply, iter){
