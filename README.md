@@ -49,6 +49,13 @@ console.log(v);//25
 *    [distinct](#distinct)
 *    [distinctBy](#distinctBy)
 *    [splitBy](#splitBy)
+*    [innerJoin](#innerJoin)
+*    [leftInnerJoin](#leftInnerJoin)
+*    [rightInnerJoin](#rightInnerJoin)
+*    [outerJoin](#outerJoin)
+*    [leftOuterJoin](#leftOuterJoin)
+*    [rightOuterJoin](#rightOuterJoin)
+
 
 ## generator
 *    [range](#range)
