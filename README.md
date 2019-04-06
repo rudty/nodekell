@@ -72,6 +72,7 @@ console.log(v);//25
 *    [every](#every)
 *    [count](#count)
 *    [sum](#sum)
+*    [groupBy](#groupBy)
 
 ## util
 *    [sleep](#sleep)
@@ -674,6 +675,28 @@ console.log(n); // print 15
 const a = "abcde";
 const n = await F.sum(a);
 console.log(n); // print abcde
+```
+
+
+### groupBy
+returns a Map that is aggregated through a function. key is the return value of the function, and value is the source.
+```javascript
+const a = [
+    {type: "tea",
+        price: 1},
+    {type: "tea",
+        price: 2},
+    {type: "phone",
+        price: 3},
+    {type: "phone",
+        price: 4},
+];
+//returns new Map(... )
+const r = await F.groupBy(e => e.type, a);
+console.log(r.get("tea"));
+//print [ { type: 'tea', price: 1 }, { type: 'tea', price: 2 } ]
+console.log(r.get("phone"));
+//print [ { type: 'phone', price: 3 }, { type: 'phone', price: 4 } ]
 ```
 
 

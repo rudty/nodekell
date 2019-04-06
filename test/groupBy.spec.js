@@ -20,4 +20,13 @@ describe('test groupBy', () => {
         assert.deepStrictEqual(r.get("phone"),[ { type: 'phone', price: 3 }, { type: 'phone', price: 4 } ] );
     });
 
+    it('arr', async () => {
+        const a = [
+            [0],[1],[0]
+        ];
+
+        const r = await F.groupBy(e => e[0], a);
+        assert.deepStrictEqual(r.get(0),[[0],[0]]); 
+        assert.deepStrictEqual(r.get(1),[[1]]);
+    });
 });
