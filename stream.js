@@ -162,3 +162,5 @@ exports.errorThen = C.curry(async function*(supply, iter){
         }
     }
 });
+
+exports.then = C.curry((f, iter) => f(iter));

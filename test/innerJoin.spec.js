@@ -108,4 +108,39 @@ describe('test join', () => {
         
         assert.deepStrictEqual(r, []);
     });
+
+    it('custom class', async() => {
+        class AwesomeObject{
+            constructor(id){
+                this.id = id || 0;
+                this.m = new Map();
+            }
+            [Symbol.iterator]() {
+                return this.m.entries();
+            };
+            set(k, v) {
+                this.m.set(k,v);
+            }
+        };
+
+        const f1 = new AwesomeObject(1);
+        f1.set("f1", "a");
+        const a = [f1];
+
+        const f2 = new AwesomeObject(1);
+        f2.set("f2", "b");
+
+        const b = [f2];
+
+        const j = await F.innerJoin((v1,v2) => {
+            return v1.id === v2.id 
+        }, a, b);
+        const r = await F.collect(j); 
+
+        const k = new AwesomeObject(0);
+        k.set("f1", "a");
+        k.set("f2", "b");
+        assert.deepStrictEqual(r,[k]);
+
+    });
 });

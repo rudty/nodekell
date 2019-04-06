@@ -55,6 +55,7 @@ console.log(v);//25
 *    [outerJoin](#outerJoin)
 *    [leftOuterJoin](#leftOuterJoin)
 *    [rightOuterJoin](#rightOuterJoin)
+*    [then](#then)
 
 
 ## generator
@@ -194,12 +195,7 @@ console.log(await F.collect(f)); // print [1,2,3,4,5]
 
 
 ### flatMap
-same as fmap
-```javascript
-const a = [[1],[2],3,4,5];
-const f = F.flatMap(e => e, a);
-console.log(await F.collect(f)); // print [1,2,3,4,5]
-```
+same as [fmap](#fmap)
 
 
 ### flat
@@ -401,7 +397,7 @@ for await(const e of r) {
 
 
 ### innerJoin
-same as leftInnerJoin
+same as [leftInnerJoin](#leftInnerJoin)
 
 
 ### leftInnerJoin
@@ -432,7 +428,7 @@ console.log(r);
 
 
 ### outerJoin 
-same as leftOuterJoin
+same as [leftOuterJoin](#leftOuterJoin)
 
 
 ### leftOuterJoin
@@ -451,6 +447,7 @@ console.log(r);
 
 
 ### rightOuterJoin
+support Map, object({})
 ```javascript
 const a = [{id:1, value:3}]; 
 const b = [{id:1, name:"foo"}, {id: 1, name:"bar"}, {id: 1, name:"hoo"}];
@@ -461,6 +458,39 @@ console.log(r);
 // [{id:1, name:"foo", value:3},
 // {id:1, name:"bar", value:3},
 // {id:1, name:"hoo", value:3}]
+```
+
+
+### then
+like promise then
+```javascript
+const v = await F.run([1,2,3,4,5],
+    F.then(async function*(iter) {
+        for await(const e of iter) {
+            console.log(e);
+            yield e;
+        }
+    }),
+    F.map(e => e + 1),
+    F.collect);
+console.log(v);
+//print
+//1
+//2
+//3
+//4
+//5
+//[2,3,4,5,6]
+```
+```javascript
+const v = await F.run([1,2,3,4,5],
+    F.then(iter => {
+        return iter; //do nothing
+    }),
+    F.collect);
+console.log(v);
+// print
+// [1,2,3,4,5]
 ```
 
 
