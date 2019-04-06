@@ -595,7 +595,7 @@ console.log(sum); // print "helloworld"
 
 
 ### foldl1
-take 1 items and call foldl
+take 1 items and call [foldl](#foldl)
 ```javascript
 const a = [1,2,3,4,5];
 const sum = await F.foldl1((acc, e) => acc + e, a); 
@@ -604,7 +604,7 @@ console.log(sum); // print 15;
 
 
 ### reduce
-same as foldl1
+same as [foldl1](#foldl1)
 ```javascript
 const a = [1,2,3,4,5];
 const sum = await F.reduce((acc, e) => acc + e, a); 
