@@ -1,6 +1,6 @@
 'use strict';
-const C = require("./core");
-const P = require("./prelude");
+const C = require("./core.js");
+const P = require("./prelude.js");
 
 exports.rangeOf = (...a) => P.fmap(C.ioe, a);
 
