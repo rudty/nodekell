@@ -3,7 +3,7 @@ const C = require("./core.js");
 
 exports.groupBy = C.curry(async (f, iter) => {
     const m = new Map();
-    for await(const e of iter) {
+    for await (const e of iter) {
         const k = await f(e);
         if (m.has(k)) {
             const v = m.get(k);
@@ -15,6 +15,10 @@ exports.groupBy = C.curry(async (f, iter) => {
     return m;
 });
 
+exports.concat = C.curry(async function* (a, b) {
+    yield* a;
+    yield* b;
+});
 
 const combineMap = (a, b) => new Map([...b, ...a]);
 
@@ -29,17 +33,12 @@ const combineCollection = (a, b) => {
         r.set(...e);
     }
     for (const e of a) {
-       r.set(...e);
+        r.set(...e);
     }
     return r;
 };
 
-const combineObject = (a, b) => {
-    const c = {};
-    Object.assign(c, a);
-    Object.assign(c, b);
-    return c;
-};
+const combineObject = (a, b) => Object.assign({}, b, a);
 
 const combine = (a, b) => {
     if (a.constructor !== b.constructor) {
@@ -50,7 +49,7 @@ const combine = (a, b) => {
         return combineMap(a, b);
     }
 
-    if (a[Symbol.iterator] && a.set && typeof(a.set) === "function") {
+    if (a[Symbol.iterator] && a.set && typeof (a.set) === "function") {
         return combineCollection(a, b);
     }
 
@@ -61,9 +60,10 @@ const combine = (a, b) => {
     throw new Error("join/combine object: not support type");
 };
 
-const outerJoin = C.curry(async function*(f, a, b) {
+const outerJoin = async function* (f, iter1, iter2) {
     const cache = [];
-    start: for await(const e of a) {
+    const it = C.seq(iter2);
+    start: for await (const e of iter1) {
         for (const c of cache) {
             if (await f(e, c)) {
                 yield combine(e, c);
@@ -71,21 +71,26 @@ const outerJoin = C.curry(async function*(f, a, b) {
             }
         }
 
-        for (const c of b) {
-            if (await f(e, c)) {
-                yield combine(e, c);
-                cache.push(c);
+        while (true) {
+            const { value, done } = await it.next();
+            if (done) {
+                break;
+            }
+            if (await f(e, value)) {
+                yield combine(e, value);
+                cache.push(value);
                 continue start;
             }
         }
 
         yield e;
     }
-});
+};
 
-const innerJoin = C.curry(async function*(f, a, b) {
+const innerJoin = async function* (f, iter1, iter2) {
     const cache = [];
-    start: for await(const e of a) {
+    const it = C.seq(iter2);
+    start: for await (const e of iter1) {
         for (const c of cache) {
             if (await f(e, c)) {
                 yield combine(e, c);
@@ -93,19 +98,22 @@ const innerJoin = C.curry(async function*(f, a, b) {
             }
         }
 
-        for (const c of b) {
-            if (await f(e, c)) {
-                yield combine(e, c);
-                cache.push(c);
+        while (true) {
+            const { value, done } = await it.next();
+            if (done) {
+                break;
+            }
+            if (await f(e, value)) {
+                yield combine(e, value);
+                cache.push(value);
                 continue start;
             }
         }
     }
-});
+};
 
-exports.innerJoin = innerJoin;
-exports.leftInnerJoin = innerJoin;
+exports.leftInnerJoin = exports.innerJoin = C.curry(innerJoin);
 exports.rightInnerJoin = C.curry((f, a, b) => innerJoin(f, b, a));
-exports.outerJoin = outerJoin;
-exports.leftOuterJoin = outerJoin;
+
+exports.leftOuterJoin = exports.outerJoin = C.curry(outerJoin);
 exports.rightOuterJoin = C.curry((f, a, b) => outerJoin(f, b, a));

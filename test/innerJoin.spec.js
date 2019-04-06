@@ -18,7 +18,7 @@ describe('test join', () => {
     it('object a is 3, b is 2 ', async () => {
         const a = [{id:1, name:"foo"}, {id: 2, name:"bar"}, {id: 3, name:"hoo"}];
         const b = [{id:1, value:3}, {id: 2, value: 4}];
-        const j = await F.innerJoin((v1,v2) => v1.id === v2.id, a, b);
+        const j = await F.leftInnerJoin((v1,v2) => v1.id === v2.id, a, b);
         const r = await F.collect(j);
 
         assert.deepStrictEqual(r, [
@@ -65,5 +65,47 @@ describe('test join', () => {
             {id:1, name:"bar", value:3},
             {id:1, name:"hoo", value:3},
         ]);
+    });
+
+
+    it('overwrite obj', async () => {
+        const a = [{id:1, name:"foo", value: 1}];
+        const b = [{id:1, value:3}];
+
+        const j = await F.innerJoin((v1,v2) => v1.id === v2.id , a, b);
+        const r = await F.collect(j);
+
+        
+        assert.deepStrictEqual(r, a);
+    });
+
+    it('overwrite map', async () => {
+        const a = [new Map([["id",1], ["name","foo"], ["value",1]])];
+        const b = [new Map([["id",1], ["value",3]])];
+        const j = await F.innerJoin((v1,v2) => v1.get("id") === v2.get("id") , a, b);
+        const r = await F.collect(j);
+
+        assert.deepStrictEqual(r, a);
+    });
+
+    it('currying', async () => {
+        const a = [new Map([["id",1], ["name","foo"], ["value",1]])];
+        const b = [new Map([["id",1], ["value",3]])];
+        const j = await F.innerJoin((v1,v2) => v1.get("id") === v2.get("id"))(a)(b);
+        const r = await F.collect(j);
+
+        assert.deepStrictEqual(r, a);
+    });
+
+    
+    it('not match obj', async () => {
+        const a = [{id:1, name:"foo", value: 1}];
+        const b = [{id:5, value:3}];
+
+        const j = await F.innerJoin((v1,v2) => v1.id === v2.id , a, b);
+        const r = await F.collect(j);
+
+        
+        assert.deepStrictEqual(r, []);
     });
 });

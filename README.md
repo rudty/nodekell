@@ -78,7 +78,7 @@ console.log(v);//25
 *    [sleep](#sleep)
 *    [head](#head)
 *    [tail](#tail)
-
+---
 
 
 ### run
@@ -390,6 +390,70 @@ for await(const e of r) {
 //print 
 //hello
 //world
+```
+
+
+### innerJoin
+same as leftInnerJoin
+
+
+### leftInnerJoin
+support Map, Object({})
+```javascript
+const a = [{id:1, name:"foo"}, {id: 2, name:"bar"}, {id: 3, name:"hoo"}];
+const b = [{id:1, value:3}, {id: 2, value: 4}];
+const j = await F.innerJoin((v1,v2) => v1.id === v2.id , a, b);
+const r = await F.collect(j);
+console.log(r);
+// print
+// [{id:1, name:"foo", value:3},
+// {id:2, name:"bar", value:4}]
+```
+
+
+### rightInnerJoin
+support Map, object({})
+```javascript
+const a = [{id:1, value:3}]; 
+const b = [{id:1, name:"foo"}, {id: 2, name:"bar"}, {id: 3, name:"hoo"}];
+const j = await F.rightInnerJoin((v1,v2) => v1.id === v2.id , a, b);
+const r = await F.collect(j);
+console.log(r);
+//  print
+// [{id:1, name:"foo", value:3}]
+```
+
+
+### outerJoin 
+same as leftOuterJoin
+
+
+### leftOuterJoin
+support Map, object({})
+```javascript
+const a = [{id:1, name:"foo"}, {id: 2, name:"bar"}, {id: 3, name:"hoo"}];
+const b = [{id:1, value:3}, {id: 2, value: 4}];
+const j = await F.outerJoin((v1,v2) => v1.id === v2.id, a, b);
+const r = await F.collect(j)
+console.log(r);
+// print
+// [{id:1, name:"foo", value:3},
+// {id:2, name:"bar", value:4},
+// {id:3, name:"hoo"}]
+```
+
+
+### rightOuterJoin
+```javascript
+const a = [{id:1, value:3}]; 
+const b = [{id:1, name:"foo"}, {id: 1, name:"bar"}, {id: 1, name:"hoo"}];
+const j = await F.rightOuterJoin((v1,v2) => v1.id === v2.id , a, b);
+const r = await F.collect(j);
+console.log(r);
+// print
+// [{id:1, name:"foo", value:3},
+// {id:1, name:"bar", value:3},
+// {id:1, name:"hoo", value:3}]
 ```
 
 
