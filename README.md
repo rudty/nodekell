@@ -71,7 +71,7 @@ console.log(v);//25
 *    [foldr](#foldr)
 *    [collect](#collect)
 *    [collectMap](#collectmap)
-*    [collectSet](#collectSet)
+*    [collectSet](#collectset)
 *    [maxBy](#minby)
 *    [minBy](#maxby)
 *    [max](#max)
