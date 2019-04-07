@@ -76,9 +76,9 @@ const outerJoin = async function* (f, iter1, iter2) {
             if (done) {
                 break;
             }
+            cache.push(value);
             if (await f(e, value)) {
                 yield combine(e, value);
-                cache.push(value);
                 continue start;
             }
         }
@@ -103,9 +103,9 @@ const innerJoin = async function* (f, iter1, iter2) {
             if (done) {
                 break;
             }
+            cache.push(value);
             if (await f(e, value)) {
                 yield combine(e, value);
-                cache.push(value);
                 continue start;
             }
         }
