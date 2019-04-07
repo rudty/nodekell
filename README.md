@@ -497,7 +497,7 @@ console.log(v);
 
 
 ### concat
-merage 2 ranges 
+merge 2 ranges 
 ```javascript
 const c = F.concat([1,2,3],[4,5,6]);
 for await(const e of c) {
