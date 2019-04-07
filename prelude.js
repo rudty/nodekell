@@ -110,6 +110,17 @@ const foldl1 =  C.curry(async (f, iter) => {
 exports.foldl1 = foldl1;
 exports.reduce = foldl1;
 
+const scanl = C.curry(async (f, z, iter) => {
+    z = await z;
+    const r = [z];
+    for await (const e of iter) {
+        z = await f(z, e);
+        r.push(z);
+    } 
+    return r;
+});
+exports.scanl = scanl;
+
 const reverse = async function* (iter) {
     const a = [];
     for await (const e of iter) {

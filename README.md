@@ -57,7 +57,7 @@ console.log(v);//25
 *    [rightOuterJoin](#rightouterjoin)
 *    [then](#then)
 *    [concat](#concat)
-
+*    [scanl](#scanl)
 
 ## generator
 *    [range](#range)
@@ -511,6 +511,19 @@ const v = await F.run(
     F.collect);
 console.log(v);
 //print [1,2,3,4,5,6]
+```
+
+
+### scanl
+```javascript
+const r = await F.scanl(F.add, 0, [1,2,3]);
+console.log(r);
+//print [0,1,3,6]
+```
+```javascript
+const r = await F.scanl((a, b) => a/b, 64, [4,2,1]);
+console.log(r);
+//print [64,16,8,8]ß
 ```
 
 
