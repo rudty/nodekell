@@ -34,34 +34,34 @@ console.log(v);//25
 *    [filter](#filter)
 *    [map](#map)
 *    [take](#take)
-*    [takeWhile](#takeWhile)
+*    [takeWhile](#takewhile)
 *    [fmap](#fmap)
-*    [flatMap](#flatMap)
+*    [flatMap](#flatmap)
 *    [flat](#flat)
 *    [reverse](#reverse)
-*    [forEach](#forEach)
+*    [forEach](#foreach)
 *    [zip](#zip)
-*    [zipWith](#zipWith)
+*    [zipWith](#zipwith)
 *    [drop](#drop)
-*    [dropWhile](#dropWhile)
-*    [emptyThen](#emptyThen)
-*    [errorThen](#errorThen)
+*    [dropWhile](#dropwhile)
+*    [emptyThen](#emptythen)
+*    [errorThen](#errorthen)
 *    [distinct](#distinct)
-*    [distinctBy](#distinctBy)
-*    [splitBy](#splitBy)
-*    [innerJoin](#innerJoin)
-*    [leftInnerJoin](#leftInnerJoin)
-*    [rightInnerJoin](#rightInnerJoin)
-*    [outerJoin](#outerJoin)
-*    [leftOuterJoin](#leftOuterJoin)
-*    [rightOuterJoin](#rightOuterJoin)
+*    [distinctBy](#distinctby)
+*    [splitBy](#splitby)
+*    [innerJoin](#innerjoin)
+*    [leftInnerJoin](#leftinnerjoin)
+*    [rightInnerJoin](#rightinnerjoin)
+*    [outerJoin](#outerjoin)
+*    [leftOuterJoin](#leftouterjoin)
+*    [rightOuterJoin](#rightouterjoin)
 *    [then](#then)
 
 
 ## generator
 *    [range](#range)
 *    [seq](#seq)
-*    [rangeOf](#rangeOf)
+*    [rangeOf](#rangeof)
 *    [repeat](#repeat)
 
 ## aggregate
@@ -70,17 +70,17 @@ console.log(v);//25
 *    [reduce](#reduce)
 *    [foldr](#foldr)
 *    [collect](#collect)
-*    [collectMap](#collectMap)
+*    [collectMap](#collectmap)
 *    [collectSet](#collectSet)
-*    [maxBy](#minBy)
-*    [minBy](#maxBy)
+*    [maxBy](#minby)
+*    [minBy](#maxby)
 *    [max](#max)
 *    [min](#min)
 *    [some](#some)
 *    [every](#every)
 *    [count](#count)
 *    [sum](#sum)
-*    [groupBy](#groupBy)
+*    [groupBy](#groupby)
 
 ## util
 *    [sleep](#sleep)
@@ -397,7 +397,7 @@ for await(const e of r) {
 
 
 ### innerJoin
-same as [leftInnerJoin](#leftInnerJoin)
+same as [leftInnerJoin](#leftinnerjoin)
 
 
 ### leftInnerJoin
