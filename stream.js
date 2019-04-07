@@ -142,6 +142,15 @@ exports.count = async (iter) => {
 exports.sum = P.foldl1(C.add);
 exports.max = maxBy(C.ioe);
 exports.min = minBy(C.ioe);
+exports.average = async (iter) => {
+    let c = 0;
+    let sum = 0;
+    for await (const e of iter) {
+        c += 1;
+        sum += e;
+    }
+    return sum / c;
+};
 
 exports.splitBy = C.curry(async function*(f, any) {
     yield* await f(any);

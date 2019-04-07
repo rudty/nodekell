@@ -81,6 +81,7 @@ console.log(v);//25
 *    [every](#every)
 *    [count](#count)
 *    [sum](#sum)
+*    [average](#average)
 *    [groupBy](#groupby)
 
 ## util
@@ -496,6 +497,7 @@ console.log(v);
 
 
 ### concat
+merage 2 ranges 
 ```javascript
 const c = F.concat([1,2,3],[4,5,6]);
 for await(const e of c) {
@@ -794,6 +796,19 @@ console.log(n); // print 15
 const a = "abcde";
 const n = await F.sum(a);
 console.log(n); // print abcde
+```
+
+
+### average
+```javascript
+const a = [1,2,3,4,5];
+const s = await F.average(a);
+console.log(s); // print 3
+```
+```javascript
+const a = [1.0,2.0,3.0,4.0,5.5];
+const s = await F.average(a)
+console.log(s); //print 3.1
 ```
 
 
