@@ -56,6 +56,7 @@ console.log(v);//25
 *    [leftOuterJoin](#leftouterjoin)
 *    [rightOuterJoin](#rightouterjoin)
 *    [then](#then)
+*    [concat](#concat)
 
 
 ## generator
@@ -120,7 +121,7 @@ myAdd(1,2,3); // <- real call
 const a = [1,2,3,4,5];
 const filtered = F.filter(e=> e % 2 == 0, a)
 for await (const e of filtered) {
-       console.log(e);
+    console.log(e);
 }
 //print
 //2
@@ -132,7 +133,7 @@ const r = await F.run(
        F.filter(e => e % 2 == 0));
 
 for await (const e of r) {
- console.log(e);
+    console.log(e);
 }
 //print 
 //2
@@ -491,6 +492,23 @@ const v = await F.run([1,2,3,4,5],
 console.log(v);
 // print
 // [1,2,3,4,5]
+```
+
+
+### concat
+```javascript
+const c = F.concat([1,2,3],[4,5,6]);
+for await(const e of c) {
+    console.log(e);
+}
+//print [1,2,3,4,5,6]
+```
+```javascript
+const v = await F.run(
+    F.concat([1,2,3],[4,5,6]),
+    F.collect);
+console.log(v);
+//print [1,2,3,4,5,6]
 ```
 
 

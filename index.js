@@ -1,6 +1,6 @@
 'use strict';
-const a = require("./core.js");
-Object.assign(a, require("./prelude.js"));
-Object.assign(a, require("./stream.js"));
-Object.assign(a, require("./tsql.js"));
-module.exports = a;
+module.exports = Object.assign(
+    require("./core.js"),
+    require("./prelude.js"),
+    require("./stream.js"),
+    require("./tsql.js"));
