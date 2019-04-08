@@ -1,7 +1,7 @@
 {
   "name": "nodekell",
-  "version": "0.8.0",
-  "description": "node js functional library",
+  "version": "0.8.1",
+  "description": "async functional library",
   "repository": { 
     "type": "git",
     "url": "https://github.com/rudty/nodekell"
