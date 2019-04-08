@@ -23,6 +23,15 @@ const v = await F.run(
     F.reduce((acc, e) => acc + e)) // 1+3+5+7+9
 console.log(v);//25
 ```
+```javascript
+const v = await F.run(
+    F.repeat(2), //[2,2,2,..]
+    F.map(e => e + 1), //[3,3,3...]
+    F.take(5), // [3,3,3,3,3]
+    F.distinct, // [3]
+    F.collect); // generator to array
+console.log(v);//[3]
+```
 
 ---
 # Functions / Examples
@@ -516,14 +525,16 @@ console.log(v);
 
 ### scanl
 ```javascript
-const r = await F.scanl(F.add, 0, [1,2,3]);
+const s = F.scanl((a,b) => a + b, 0, [1,2,3]);
+const r = await F.collect(s);
 console.log(r);
 //print [0,1,3,6]
 ```
 ```javascript
-const r = await F.scanl((a, b) => a/b, 64, [4,2,1]);
+const r = F.scanl((a, b) => a/b, 64, [4,2,1]);
+const r = await F.collect(s);
 console.log(r);
-//print [64,16,8,8]ß
+//print [64,16,8,8]
 ```
 
 

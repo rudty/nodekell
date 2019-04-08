@@ -110,16 +110,24 @@ const foldl1 =  C.curry(async (f, iter) => {
 exports.foldl1 = foldl1;
 exports.reduce = foldl1;
 
-const scanl = C.curry(async (f, z, iter) => {
+const scanl = C.curry(async function*(f, z, iter) {
     z = await z;
-    const r = [z];
+    yield z;
     for await (const e of iter) {
         z = await f(z, e);
-        r.push(z);
+        yield z;
     } 
-    return r;
 });
 exports.scanl = scanl;
+
+exports.scanl1 = C.curry(async (f, iter) => {
+    const g =  C.seq(iter);
+    const h = await g.next();
+    if (h.done) {
+        throw new Error("empty iter");
+    }
+    return scanl(f, h.value, g);
+});
 
 const reverse = async function* (iter) {
     const a = [];
