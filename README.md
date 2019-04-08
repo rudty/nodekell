@@ -12,7 +12,9 @@ const F = require("nodekell");
 
 async functional library for node 
 
-all functions are curried and can be used in combination with other functions like haskell
+almost all functions support [currying](#curry)
+supports async generator
+
 
 ```javascript
 const v = await F.run(
@@ -113,6 +115,8 @@ console.log(v);//25
 
 
 ### curry
+if all arguments are not given for the function, 
+it returns the function that stored the argument
 ```javascript
 const myAdd = F.curry((a,b,c) => a + b + c);
 const myAdd1 = myAdd(1);
