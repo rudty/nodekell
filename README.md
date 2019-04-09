@@ -1,12 +1,9 @@
 # nodekell
+Functional library for nodejs
 
-```npm install nodekell```
-
-
-require module 
-```javascript
-const F = require("nodekell");
-```
+[![NPM Version](https://img.shields.io/npm/v/nodekell.svg?style=flat-square)](https://www.npmjs.com/package/nodekell)
+[![NPM Downloads](https://img.shields.io/npm/dt/nodekell.svg)](https://www.npmjs.com/package/nodekell)
+[![Build Status](https://travis-ci.org/rudty/nodekell.svg?branch=master)](https://travis-ci.org/rudty/nodekell)
 
 almost all functions support [currying](#curry)
 
@@ -14,6 +11,17 @@ supports async generator
 
 supports lazy evaluation
 
+
+### Installation
+```npm install nodekell```
+
+
+### Import Module 
+```javascript
+const F = require("nodekell");
+```
+
+### Quick Example
 ```javascript
 const v = await F.run(
     F.range(Infinity),//[0,1,2...]
@@ -33,7 +41,7 @@ const v = await F.run(
 console.log(v);//[3]
 ```
 
----
+
 # Functions / Examples
 ## currying 
 *    [run](#run)
