@@ -1,5 +1,4 @@
 # nodekell
-node js async functional library
 
 ```npm install nodekell```
 
@@ -9,12 +8,9 @@ require module
 const F = require("nodekell");
 ```
 
-
-async functional library for node 
-
 almost all functions support [currying](#curry)
 supports async generator
-
+supports lazy evaluation
 
 ```javascript
 const v = await F.run(

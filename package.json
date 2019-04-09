@@ -1,7 +1,7 @@
 {
   "name": "nodekell",
   "version": "0.8.3",
-  "description": "async functional library",
+  "description": "async lazy evaluation functional library",
   "repository": { 
     "type": "git",
     "url": "https://github.com/rudty/nodekell"
@@ -30,7 +30,9 @@
     "list",
     "fold",
     "collect",
-    "linq"
+    "linq",
+    "generator",
+    "lazy"
   ],
   "author": "rudtyz",
   "license": "MIT",
