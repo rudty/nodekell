@@ -188,8 +188,8 @@ exports.range = function* (a, ...k) {
     let begin = 0;
     let end = a;
     let n = 1;
-    let len = k.length;
-    
+    const len = k.length;
+
     if (len > 0) {
         begin = end;
         end = k[0];
