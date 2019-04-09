@@ -1,6 +1,6 @@
 {
   "name": "nodekell",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "description": "async lazy evaluation functional library",
   "repository": { 
     "type": "git",

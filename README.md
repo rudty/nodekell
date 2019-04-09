@@ -9,7 +9,9 @@ const F = require("nodekell");
 ```
 
 almost all functions support [currying](#curry)
+
 supports async generator
+
 supports lazy evaluation
 
 ```javascript
