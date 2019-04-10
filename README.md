@@ -547,6 +547,21 @@ console.log(r);
 ```
 
 
+### scanl1
+```javascript
+const s = F.scanl((a,b) => a + b, [1,2,3]);
+const r = await F.collect(s);
+console.log(r);
+//print [1,3,6]
+```
+```javascript
+const r = F.scanl1((a, b) => a/b, [64,4,2,1]);
+const r = await F.collect(s);
+console.log(r);
+//print [64,16,8,8]
+```
+
+
 ### range
 ```javascript
 for (const e of F.range(10)) {
