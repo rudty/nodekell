@@ -120,13 +120,12 @@ const scanl = C.curry(async function*(f, z, iter) {
 });
 exports.scanl = scanl;
 
-exports.scanl1 = C.curry(async (f, iter) => {
+exports.scanl1 = C.curry(async function*(f, iter) {
     const g =  C.seq(iter);
     const h = await g.next();
-    if (h.done) {
-        throw new Error("empty iter");
+    if (!h.done) {
+        yield* scanl(f, h.value, g);   
     }
-    return scanl(f, h.value, g);
 });
 
 const reverse = async function* (iter) {
