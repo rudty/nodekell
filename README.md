@@ -5,11 +5,9 @@ Functional library for nodejs
 [![NPM Downloads](https://img.shields.io/npm/dt/nodekell.svg)](https://www.npmjs.com/package/nodekell)
 [![Build Status](https://travis-ci.org/rudty/nodekell.svg?branch=master)](https://travis-ci.org/rudty/nodekell)
 
-almost all functions support [currying](#curry)
-
-supports async generator
-
-supports lazy evaluation
+- almost all functions support [currying](#curry)
+- supports async generator
+- supports lazy evaluation
 
 
 ### Installation
@@ -75,6 +73,7 @@ console.log(v);//[3]
 *    [then](#then)
 *    [concat](#concat)
 *    [scanl](#scanl)
+*    [scanl1](#scanl1)
 
 ## generator
 *    [range](#range)
