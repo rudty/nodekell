@@ -4,6 +4,7 @@ Functional library for nodejs
 [![NPM Version](https://img.shields.io/npm/v/nodekell.svg?style=flat-square)](https://www.npmjs.com/package/nodekell)
 [![NPM Downloads](https://img.shields.io/npm/dt/nodekell.svg)](https://www.npmjs.com/package/nodekell)
 [![Build Status](https://travis-ci.org/rudty/nodekell.svg?branch=master)](https://travis-ci.org/rudty/nodekell)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frudty%2Fnodekell.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Frudty%2Fnodekell?ref=badge_shield)
 
 - almost all functions support [currying](#curry)
 - supports async generator
@@ -943,3 +944,7 @@ for await (const e of a) {
 //8
 //7
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frudty%2Fnodekell.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Frudty%2Fnodekell?ref=badge_large)
