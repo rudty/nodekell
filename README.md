@@ -5,6 +5,8 @@ Functional library for nodejs
 [![NPM Downloads](https://img.shields.io/npm/dt/nodekell.svg)](https://www.npmjs.com/package/nodekell)
 [![Build Status](https://travis-ci.org/rudty/nodekell.svg?branch=master)](https://travis-ci.org/rudty/nodekell)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frudty%2Fnodekell.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Frudty%2Fnodekell?ref=badge_shield)
+[![DeepScan grade](https://deepscan.io/api/teams/3359/projects/5005/branches/38973/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=3359&pid=5005&bid=38973)
+
 
 - almost all functions support [currying](#curry)
 - supports async generator
@@ -87,6 +89,7 @@ console.log(v);//[3]
 *    [foldl1](#foldl1)
 *    [reduce](#reduce)
 *    [foldr](#foldr)
+*    [foldr1](#foldr1)
 *    [collect](#collect)
 *    [collectMap](#collectmap)
 *    [collectSet](#collectset)
@@ -437,6 +440,7 @@ console.log(r);
 
 ### rightInnerJoin
 support Map, object({})
+The result is the same as innerJoin, but the output order is right iterator
 ```javascript
 const a = [{id:1, value:3}]; 
 const b = [{id:1, name:"foo"}, {id: 2, name:"bar"}, {id: 3, name:"hoo"}];
@@ -695,6 +699,24 @@ console.log(r); // print 32
 ```javascript
 const arr = ["1","2","3","4"];
 const r = await F.foldr((a, b) => a + b, "5", arr);
+console.log(r); // print 12345
+```
+
+
+### foldr1
+```javascript
+const arr = [1,2,3,4,5];
+const r = await F.foldr1((a, b) => a + b, 0, arr);
+console.log(r); // print 15
+```
+```javascript
+const arr = [64,2,1];
+const r = await F.foldr1((a, b) => a / b, arr);
+console.log(r); // print 32
+```
+```javascript
+const arr = ["1","2","3","4","5"];
+const r = await F.foldr1((a, b) => a + b, arr);
 console.log(r); // print 12345
 ```
 
