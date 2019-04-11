@@ -68,6 +68,20 @@ describe('test join', () => {
         ]);
     });
 
+    it('less leftOuterJoin', async () => {
+        const a = [{id:1, value:3}]; 
+        const b = [{id:1, name:"foo"}, {id: 1, name:"bar"}, {id: 1, name:"hoo"}];
+        const j = await F.leftOuterJoin((v1,v2) => v1.id === v2.id , a, b);
+        const r = await F.collect(j);
+        
+        assert.deepStrictEqual(r, [
+            {id:1, name:"foo", value:3},
+            {id:1, name:"bar", value:3},
+            {id:1, name:"hoo", value:3}
+        ]);
+    });
+
+
     it('custom class', async() => {
         class AwesomeObject{
             constructor(id){
