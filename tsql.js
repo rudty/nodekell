@@ -88,10 +88,12 @@ const outerJoin = async function* (f, iter1, iter2) {
 };
 
 const innerJoin = async function* (f, iter1, iter2) {
-    const cache = [];
+    const leftCache = [];
+    const rightCache = [];
     const it = C.seq(iter2);
     start: for await (const e of iter1) {
-        for (const c of cache) {
+        leftCache.push(e);
+        for (const c of rightCache) {
             if (await f(e, c)) {
                 yield combine(e, c);
                 continue start;
@@ -103,10 +105,18 @@ const innerJoin = async function* (f, iter1, iter2) {
             if (done) {
                 break;
             }
-            cache.push(value);
+            rightCache.push(value);
             if (await f(e, value)) {
                 yield combine(e, value);
                 continue start;
+            }
+        }
+    }
+
+    for await (const e of it) {
+        for (const c of leftCache) {
+            if (await f(c, e)) {
+                yield combine(c, e);
             }
         }
     }
