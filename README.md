@@ -4,8 +4,9 @@ Functional library for nodejs
 [![NPM Version](https://img.shields.io/npm/v/nodekell.svg?style=flat-square)](https://www.npmjs.com/package/nodekell)
 [![NPM Downloads](https://img.shields.io/npm/dt/nodekell.svg)](https://www.npmjs.com/package/nodekell)
 [![Build Status](https://travis-ci.org/rudty/nodekell.svg?branch=master)](https://travis-ci.org/rudty/nodekell)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frudty%2Fnodekell.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Frudty%2Fnodekell?ref=badge_shield)
 [![DeepScan grade](https://deepscan.io/api/teams/3359/projects/5005/branches/38973/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=3359&pid=5005&bid=38973)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Frudty%2Fnodekell.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Frudty%2Fnodekell?ref=badge_shield)
+
 
 - almost all functions support [currying](#curry)
 - supports async generator
@@ -965,3 +966,7 @@ for await (const e of a) {
 //8
 //7
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frudty%2Fnodekell.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Frudty%2Fnodekell?ref=badge_large)
