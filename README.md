@@ -77,6 +77,7 @@ console.log(v);//[3]
 *    [concat](#concat)
 *    [scanl](#scanl)
 *    [scanl1](#scanl1)
+*    [buffer](#buffer)
 
 ## generator
 *    [range](#range)
@@ -567,6 +568,18 @@ console.log(r);
 //print [64,16,8,8]
 ```
 
+### buffer
+creates a list by dividing the iterator at specified interval
+```javascript
+const b = F.buffer(1, [1,2,3,4,5]);
+const c = await F.collect(b);
+console.log(c); //print [[1],[2],[3],[4],[5]]
+```
+```javascript
+const b = F.buffer(2, [1,2,3,4,5]);
+const c = await F.collect(b);
+console.log(c); //print [[1,2],[3,4],[5]]
+```
 
 ### range
 ```javascript

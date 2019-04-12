@@ -173,3 +173,27 @@ exports.errorThen = C.curry(async function*(supply, iter){
 });
 
 exports.then = C.curry((f, iter) => f(iter));
+
+exports.buffer = C.curry(async function*(supply, iter) {
+    supply = await supply;
+
+    if(supply <= 0) {
+        throw new Error("arg supply > 0 required")
+    }
+
+    let i = 0;
+    let c = [];
+    for await (const e of iter) {
+        c.push(e);
+        i += 1;
+        if (i >= supply) {
+            yield c;
+            c = [];
+            i = 0;
+        }
+    }
+
+    if (c.length !== 0) {
+        yield c;
+    }
+});
