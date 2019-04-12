@@ -440,7 +440,8 @@ console.log(r);
 
 ### rightInnerJoin
 support Map, object({})
-The result is the same as innerJoin, but the output order is right iterator
+
+the result is the same as innerJoin, but the output order is right iterator
 ```javascript
 const a = [{id:1, value:3}]; 
 const b = [{id:1, name:"foo"}, {id: 2, name:"bar"}, {id: 3, name:"hoo"}];
