@@ -197,3 +197,26 @@ exports.buffer = C.curry(async function*(supply, iter) {
         yield c;
     }
 });
+
+const errorSleep = t => new Promise((_, reject) => {
+    setTimeout(() => {
+        reject(new Error("timeout error"));
+    }, t);
+});
+
+exports.timeout = C.curry(async function*(supply, iter) {
+    supply = await supply;
+
+    if(supply <= 0) {
+        throw new Error("arg supply > 0 required")
+    }
+
+    let err = null;
+    errorSleep(supply).catch(e => { err = e; });
+    for await (const e of iter) {
+        if(err) {
+            throw err;
+        }
+        yield e;
+    }
+});

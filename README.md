@@ -78,6 +78,7 @@ console.log(v);//[3]
 *    [scanl](#scanl)
 *    [scanl1](#scanl1)
 *    [buffer](#buffer)
+*    [timeout](#timeout)
 
 ## generator
 *    [range](#range)
@@ -580,6 +581,39 @@ console.log(c); //print [[1],[2],[3],[4],[5]]
 const b = F.buffer(2, [1,2,3,4,5]);
 const c = await F.collect(b);
 console.log(c); //print [[1,2],[3,4],[5]]
+```
+
+
+### timeout
+throw an error when using generator after specified time
+```javascript
+try{
+    const iter = await F.run(
+        F.range(Infinity),
+        F.timeout(40),
+        F.map(e => e + 1),
+        F.map(async e => {
+            await F.sleep(5);
+            return e;
+        }),
+        F.take(10));
+    
+    for await (const e of iter) {
+        console.log(e);
+    }
+} catch(ex) {
+    console.log(ex);
+}
+//print
+//1
+//2
+//3
+//4
+//5
+//6
+//7
+//timeout error
+//callstack...
 ```
 
 
