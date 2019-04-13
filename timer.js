@@ -49,7 +49,7 @@ exports.timeout = C.curry((time, a) => {
     
 });
 
-exports.interval = (timerHandler, timeout, ...param) => {
+exports.interval = (timeout, timerHandler, ...param) => {
 
     if(!timeout || timeout < 10) {
         timeout = 10;

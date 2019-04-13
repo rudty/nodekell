@@ -994,14 +994,14 @@ works like built-in function setInterval
 - available async function.
 - only one function is executed at a time.
 ```javascript
-F.interval(async () => {
+F.interval(1000, async () => {
     await F.run(
         F.range(5),
         F.then(async _ =>{
             await F.sleep(10);
             console.log("WORK!");
         }));
-}, 1000);
+});
 ///print 
 //WORK!
 // 1 sec 
@@ -1010,14 +1010,14 @@ F.interval(async () => {
 //... 
 ```
 ```javascript
-F.interval(async () => {
+F.interval(10, async () => {
     await F.run(
         F.range(5),
         F.then(async _ =>{
             await F.sleep(1000);
             console.log("WORK!");
         }));
-}, 10);
+});
 ///print 
 //WORK!
 // 1 sec 
