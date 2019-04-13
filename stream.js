@@ -211,12 +211,16 @@ exports.timeout = C.curry(async function*(supply, iter) {
         throw new Error("arg supply > 0 required")
     }
 
-    let err = null;
-    errorSleep(supply).catch(e => { err = e; });
-    for await (const e of iter) {
-        if(err) {
-            throw err;
+    const g = C.seq(iter);
+    const s = errorSleep(supply);
+    
+    while(true) {
+        const it = g.next();
+        const e = await Promise.race([s, it]);
+        if(e.done) {
+            break;
         }
-        yield e;
+        yield e.value;
     }
+    s.catch( _ => {});
 });

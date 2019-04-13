@@ -3,6 +3,7 @@ const F = require("../index");
 const assert = require("assert");
 
 describe('test timeout', () => {
+    
     it('must error', async () => {
         try{
             const a = [1,2,3,4,5];
@@ -83,4 +84,21 @@ describe('test timeout', () => {
         }
     });
 
+    it('sleeping...', async () => {
+        try{
+            const v = await F.run(
+                F.range(Infinity),
+                F.map(e => e + 1),
+                F.map(async e => {
+                    await F.sleep(1000);
+                    return e;
+                }),
+                F.take(10),
+                F.timeout(1),
+                F.collect);
+            assert.fail("must error");
+        } catch(ex) {
+            // console.log(ex);
+        }
+    });
 });

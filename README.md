@@ -585,17 +585,20 @@ console.log(c); //print [[1,2],[3,4],[5]]
 
 
 ### timeout
-throw an error when using generator after specified time
+function changed
+
+It works with the old method, but it is effective to use timeout at the bottom of the run
+
 ```javascript
 try{
     const iter = await F.run(
         F.range(Infinity),
-        F.timeout(40),
         F.map(e => e + 1),
         F.map(async e => {
-            await F.sleep(5);
+            await F.sleep(100);
             return e;
         }),
+        F.timeout(200),
         F.take(10));
     
     for await (const e of iter) {
@@ -607,11 +610,28 @@ try{
 //print
 //1
 //2
-//3
-//4
-//5
-//6
-//7
+//timeout error
+//callstack...
+```
+```javascript
+try{
+    const iter = await F.run(
+        F.range(Infinity),
+        F.map(e => e + 1),
+        F.map(async e => {
+            await F.sleep(10000);
+            return e;
+        }),
+        F.timeout(200),
+        F.take(10));
+    
+    for await (const e of iter) {
+        console.log(e);
+    }
+} catch(ex) {
+    console.log(ex);
+}
+//print
 //timeout error
 //callstack...
 ```
