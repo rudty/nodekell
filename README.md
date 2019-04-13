@@ -955,7 +955,9 @@ console.log(s); //print 3.1
 
 
 ### groupBy
-returns a Map that is aggregated through a function. key is the return value of the function, and value is the source.
+returns a Map that is aggregated through a function. 
+
+key is the return value of the function, and value is the source.
 ```javascript
 const a = [
     {type: "tea",
