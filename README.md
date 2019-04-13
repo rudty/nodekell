@@ -110,6 +110,7 @@ console.log(v);//[3]
 *    [sleep](#sleep)
 *    [head](#head)
 *    [tail](#tail)
+*    [interval](#interval)
 ---
 
 
@@ -1037,6 +1038,44 @@ for await (const e of a) {
 //7
 ```
 
+
+### interval
+works like built-in function setInterval
+- timer works same time start of the function
+- available async function.
+- only one function is executed at a time.
+```javascript
+F.interval(async () => {
+    await F.run(
+        F.range(5),
+        F.then(async _ =>{
+            await F.sleep(10);
+            console.log("WORK!");
+        }));
+}, 1000);
+///print 
+//WORK!
+// 1 sec 
+//WORK!
+// 1 sec
+//... 
+```
+```javascript
+F.interval(async () => {
+    await F.run(
+        F.range(5),
+        F.then(async _ =>{
+            await F.sleep(1000);
+            console.log("WORK!");
+        }));
+}, 10);
+///print 
+//WORK!
+// 1 sec 
+//WORK!
+// 1 sec
+//... 
+```
 
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frudty%2Fnodekell.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Frudty%2Fnodekell?ref=badge_large)

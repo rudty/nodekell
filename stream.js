@@ -4,10 +4,6 @@ const P = require("./prelude.js");
 
 exports.rangeOf = (...a) => P.fmap(C.ioe, a);
 
-exports.sleep = (t) => new Promise(r => {
-    setTimeout(()=> r(), t);
-});
-
 exports.firstOrGet = C.curry(async (supply, iter) => {
     for await (const e of iter) {
         return e;
@@ -196,31 +192,4 @@ exports.buffer = C.curry(async function*(supply, iter) {
     if (c.length !== 0) {
         yield c;
     }
-});
-
-const errorSleep = t => new Promise((_, reject) => {
-    setTimeout(() => {
-        reject(new Error("timeout error"));
-    }, t);
-});
-
-exports.timeout = C.curry(async function*(supply, iter) {
-    supply = await supply;
-
-    if(supply <= 0) {
-        throw new Error("arg supply > 0 required")
-    }
-
-    const g = C.seq(iter);
-    const s = errorSleep(supply);
-    
-    while(true) {
-        const it = g.next();
-        const e = await Promise.race([s, it]);
-        if(e.done) {
-            break;
-        }
-        yield e.value;
-    }
-    s.catch( _ => {});
 });
