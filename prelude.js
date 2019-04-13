@@ -68,6 +68,7 @@ const fmap =  C.curry(async function* (fn, iter) {
     }
 });
 exports.fmap = fmap;
+exports.flatMap = fmap;
 exports.flat = fmap(C.ioe);
 
 exports.take =  C.curry(async function* (count, iter) {
