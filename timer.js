@@ -12,25 +12,41 @@ const errorSleep = t => new Promise((_, reject) => {
     }, t);
 });
 
-exports.timeout = C.curry(async function*(supply, iter) {
-    supply = await supply;
+exports.timeout = C.curry((time, a) => {
 
-    if(supply <= 0) {
-        throw new Error("arg supply > 0 required")
+    if (time <= 0) {
+        throw new Error("arg time > 0 required")
     }
-
-    const g = C.seq(iter);
-    const s = errorSleep(supply);
     
-    while(true) {
-        const it = g.next();
-        const e = await Promise.race([s, it]);
-        if(e.done) {
-            break;
-        }
-        yield e.value;
+    const s = errorSleep(time);
+
+    if (a[Symbol.iterator] || a[Symbol.asyncIterator]) { 
+        const g = C.seq(a);
+        return (async function*(){
+            while(true) {
+                const it = g.next();
+                const e = await Promise.race([s, it]);
+                if(e.done) {
+                    break;
+                }
+                yield e.value;
+            }
+            s.catch( _ => {});
+        })();
+    } 
+
+    let r;
+    if (a instanceof Function) {
+        r = Promise.race([s, a()]);
+    } else {
+        r = Promise.race([s, a]); 
     }
-    s.catch( _ => {});
+
+    return r.then(e => {
+        s.catch( _ => {});
+        return e;
+    });
+    
 });
 
 exports.interval = (timerHandler, timeout, ...param) => {

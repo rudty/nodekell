@@ -195,19 +195,22 @@ exports.repeat = async function* (supply) {
     }
 };
 
-exports.range = function* (a, ...k) {
+exports.range = function* (...k) {
     let begin = 0;
-    let end = a;
+    let end = Infinity;
     let n = 1;
     const len = k.length;
 
-    if (len > 0) {
-        begin = end;
+    switch(len) {
+    case 1:
         end = k[0];
-    }
-    
-    if (len > 1) {
-        n = k[1];
+        break;
+    case 3:
+        n = k[2];
+    case 2:
+        begin = k[0];
+        end = k[1];
+        break;
     }
 
     for (let i = begin; i !== end; i += n) {

@@ -78,7 +78,6 @@ console.log(v);//[3]
 *    [scanl](#scanl)
 *    [scanl1](#scanl1)
 *    [buffer](#buffer)
-*    [timeout](#timeout)
 
 ## generator
 *    [range](#range)
@@ -111,6 +110,7 @@ console.log(v);//[3]
 *    [head](#head)
 *    [tail](#tail)
 *    [interval](#interval)
+*    [timeout](#timeout)
 ---
 
 
@@ -585,59 +585,6 @@ console.log(c); //print [[1,2],[3,4],[5]]
 ```
 
 
-### timeout
-function changed
-
-It works with the old method, but it is effective to use timeout at the bottom of the run
-
-```javascript
-try{
-    const iter = await F.run(
-        F.range(Infinity),
-        F.map(e => e + 1),
-        F.map(async e => {
-            await F.sleep(100);
-            return e;
-        }),
-        F.timeout(200),
-        F.take(10));
-    
-    for await (const e of iter) {
-        console.log(e);
-    }
-} catch(ex) {
-    console.log(ex);
-}
-//print
-//1
-//2
-//timeout error
-//callstack...
-```
-```javascript
-try{
-    const iter = await F.run(
-        F.range(Infinity),
-        F.map(e => e + 1),
-        F.map(async e => {
-            await F.sleep(10000);
-            return e;
-        }),
-        F.timeout(200),
-        F.take(10));
-    
-    for await (const e of iter) {
-        console.log(e);
-    }
-} catch(ex) {
-    console.log(ex);
-}
-//print
-//timeout error
-//callstack...
-```
-
-
 ### range
 ```javascript
 for (const e of F.range(10)) {
@@ -1077,6 +1024,69 @@ F.interval(async () => {
 //WORK!
 // 1 sec
 //... 
+```
+### timeout
+function changed
+
+It works with the old method, but it is effective to use timeout at the bottom of the run
+
+```javascript
+try{
+    const iter = await F.run(
+        F.range(Infinity),
+        F.map(e => e + 1),
+        F.map(async e => {
+            await F.sleep(100);
+            return e;
+        }),
+        F.timeout(200),
+        F.take(10));
+    
+    for await (const e of iter) {
+        console.log(e);
+    }
+} catch(ex) {
+    console.log(ex);
+}
+//print
+//1
+//2
+//timeout error
+//callstack...
+```
+```javascript
+try{
+    const iter = await F.run(
+        F.range(Infinity),
+        F.map(e => e + 1),
+        F.map(async e => {
+            await F.sleep(10000);
+            return e;
+        }),
+        F.timeout(200),
+        F.take(10));
+    
+    for await (const e of iter) {
+        console.log(e);
+    }
+} catch(ex) {
+    console.log(ex);
+}
+//print
+//timeout error
+//callstack...
+```
+```javascript
+try{
+    await F.timeout(40, async ()=>{
+        await F.sleep(1000);
+    });
+} catch(e) {
+   console.log(e); 
+}
+//print
+//timeout error
+//callstack...
 ```
 
 ## License

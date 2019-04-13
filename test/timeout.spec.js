@@ -7,7 +7,7 @@ describe('test timeout', () => {
     it('must error', async () => {
         try{
             const a = [1,2,3,4,5];
-            const t = F.timeout(5, 
+            const t = F.timeout(50, 
                 F.map(async e => {
                     await F.sleep(5);
                     return e;
@@ -35,19 +35,21 @@ describe('test timeout', () => {
         try{
             const iter = await F.run(
                 F.range(Infinity),
-                F.timeout(40),
                 F.map(e => e + 1),
                 F.map(async e => {
                     await F.sleep(5);
                     return e;
                 }),
+                F.timeout(40),
                 F.take(10));
             
             for await (const e of iter) {
                 res.push(e);
             }
         } catch {
+            // console.log(e);
         }
+        // console.log(res);
         assert.strictEqual(true, res.length > 0);
         assert.strictEqual(true, res.length !== 10);
     });
@@ -99,6 +101,27 @@ describe('test timeout', () => {
             assert.fail("must error");
         } catch(ex) {
             // console.log(ex);
+        }
+    });
+
+    it('async func fail', async() => {
+        try{
+            await F.timeout(40, async ()=>{
+                await F.sleep(1000);
+            });
+            assert.fail("must fail");
+        } catch {
+            
+        }
+    });
+
+    it('async func ok', async() => {
+        try{
+            await F.timeout(100, async ()=>{
+                await F.sleep(1);
+            });
+        } catch {
+           
         }
     });
 });
