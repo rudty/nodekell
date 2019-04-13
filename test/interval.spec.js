@@ -33,7 +33,7 @@ describe('test interval', () => {
     });
 
     it('async function', async () =>{
-        F.interval(async () => {
+        const x = F.interval(async () => {
             await F.run(
                 F.range(5),
                 F.then(async _ =>{
