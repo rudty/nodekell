@@ -47,9 +47,9 @@ describe('test withTimeout', () => {
                 res.push(e);
             }
         } catch(ex) {
-            console.log(ex);
+            // console.log(ex);
         }
-        console.log(res);
+        // console.log(res);
         assert.strictEqual(true, res.length > 0);
         assert.strictEqual(true, res.length !== 10);
     });
