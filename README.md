@@ -1066,8 +1066,8 @@ try{
             await F.sleep(5);
             return e;
         }),
-        F.withTimeout(40),
-        F.take(10));
+        F.take(10)
+        F.withTimeout(40));
     
     for await (const e of iter) {
         res.push(e);
