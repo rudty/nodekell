@@ -1027,7 +1027,7 @@ F.interval(10, async () => {
 //... 
 ```
 ### timeout
-@changed iterator timeout use [withtimeout](#withtimeout) instead.
+@changed iterator timeout use [withTimeout](#withtimeout) instead.
 
 ```javascript
 const foo = async () => {
