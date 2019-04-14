@@ -29,6 +29,8 @@ interface AsyncIterableIterator<T> extends AsyncIterator<T> {
  */
 export function range(a?: number, b?: number, step?: number): IterableIterator<number>;
 
+export function rangeInterval(duration: number, a?: number, b?: number, step?: number): AsyncIterableIterator<number>;
+
 /**
  * make generator
  * do not need to check if iter 

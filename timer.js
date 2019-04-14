@@ -1,8 +1,9 @@
 'use strict';
 const C = require("./core.js");
+const P = require("./prelude.js")
 
 const sleep = (t) => new Promise(r => {
-    setTimeout(()=> r(), t);
+    setTimeout(r, t);
 });
 exports.sleep = sleep;
 
@@ -12,7 +13,7 @@ const errorSleep = t => new Promise((_, reject) => {
     }, t);
 });
 
-exports.withTimeout = C.curry(async function*(duration, iter) {
+const getDuration = async duration => {
     duration = await duration;
 
     if (duration instanceof Function) {
@@ -20,8 +21,13 @@ exports.withTimeout = C.curry(async function*(duration, iter) {
     } 
 
     if (duration <= 0) {
-        throw new Error("arg duration > 0 required")
+        throw new Error("duration > 0 required")
     }
+    return duration;
+};
+
+exports.withTimeout = C.curry(async function*(duration, iter) {
+    duration = await getDuration(duration);
     
     const g = C.seq(iter);
     const s = errorSleep(duration); 
@@ -37,13 +43,10 @@ exports.withTimeout = C.curry(async function*(duration, iter) {
     s.catch( _ => {});
 });
 
-exports.timeout = C.curry(async (time, a) => {
+exports.timeout = C.curry(async (duration, a) => {
+    duration = await getDuration(duration);
 
-    if (time <= 0) {
-        throw new Error("arg time > 0 required")
-    }
-    
-    const s = errorSleep(time);
+    const s = errorSleep(duration);
     
     if (a instanceof Function) {
         a = a();
@@ -73,4 +76,14 @@ exports.interval = (timeout, timerHandler, ...param) => {
         }
     })();
     return k;
+};
+
+exports.rangeInterval = async function*(duration, ...k) {
+    duration = await getDuration(duration);
+
+    await sleep(duration);
+    for (const e of P.range(...k)) {
+        yield e;
+        await sleep(duration);
+    }
 };

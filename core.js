@@ -31,4 +31,6 @@ exports.seq = async function* (iter) {
 exports.ioe = e => e;
 exports.add = (a, b) => a + b;
 exports.sub = (a, b) => a - b;
+exports.inc = a => a + 1;
+exports.dec = a => a - 1;
 exports.fnothing = () => {};

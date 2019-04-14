@@ -84,6 +84,7 @@ console.log(v);//[3]
 *    [seq](#seq)
 *    [rangeOf](#rangeof)
 *    [repeat](#repeat)
+*    [rangeInterval](#rangeinterval)
 
 ## aggregate
 *    [foldl](#foldl)
@@ -670,6 +671,44 @@ for await(const e of r) {
 //3
 //3
 //....
+```
+
+
+### rangeInterval
+first argument is set to the repeat interval 
+```javascript
+for await (const e of F.rangeInterval(100, 5)) {
+    console.log(e);
+}
+//print
+// [sleep 100]
+// 0
+// [sleep 100]
+// 1
+// [sleep 100]
+// 2
+// [sleep 100]
+// 3
+// [sleep 100]
+// 4
+// [sleep 100]
+```
+```javascript
+for await (const e of F.rangeInterval(100, 5, 0, -1)) {
+    console.log(e);
+}
+//print
+// [sleep 100]
+// 5
+// [sleep 100]
+// 4
+// [sleep 100]
+// 3
+// [sleep 100]
+// 2
+// [sleep 100]
+// 1
+// [sleep 100]
 ```
 
 
