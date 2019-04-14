@@ -52,6 +52,8 @@ export function seq<T>(iter: Iterable<T>): AsyncIterableIterator<T>
  */
 export function run<T, R>(iter: Iterable<T>, ...fn: ((f: any) => any)[]): Promise<AsyncIterableIterator<R>>
 export function run<T, R>(iter: Iterable<T>, ...fn: ((f: any) => any)[]): Promise<R>
+export function run<T, R>(iter: AsyncIterable<T>, ...fn: ((f: any) => any)[]): Promise<AsyncIterableIterator<R>>
+export function run<T, R>(iter: AsyncIterable<T>, ...fn: ((f: any) => any)[]): Promise<R>
 
 export function drop<T>(count: Number): (iter: Iterable<T>) => AsyncIterableIterator<T>
 export function drop<T>(count: Number): (iter: AsyncIterable<T>) => AsyncIterableIterator<T>
