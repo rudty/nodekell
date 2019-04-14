@@ -111,6 +111,7 @@ console.log(v);//[3]
 *    [tail](#tail)
 *    [interval](#interval)
 *    [timeout](#timeout)
+*    [withTimeout](#withtimeout)
 ---
 
 
@@ -1026,56 +1027,18 @@ F.interval(10, async () => {
 //... 
 ```
 ### timeout
-function changed
-
-It works with the old method, but it is effective to use timeout at the bottom of the run
+@changed iterator timeout use [withtimeout](#withtimeout) instead.
 
 ```javascript
-try{
-    const iter = await F.run(
-        F.range(Infinity),
-        F.map(e => e + 1),
-        F.map(async e => {
-            await F.sleep(100);
-            return e;
-        }),
-        F.timeout(200),
-        F.take(10));
-    
-    for await (const e of iter) {
-        console.log(e);
-    }
-} catch(ex) {
-    console.log(ex);
-}
-//print
-//1
-//2
-//timeout error
-//callstack...
+const foo = async () => {
+    await F.sleep(1);/*something work*/
+    return 1;
+};
+const v = await F.timeout(40, foo());
+console.log(v);
+//print 1;
 ```
-```javascript
-try{
-    const iter = await F.run(
-        F.range(Infinity),
-        F.map(e => e + 1),
-        F.map(async e => {
-            await F.sleep(10000);
-            return e;
-        }),
-        F.timeout(200),
-        F.take(10));
-    
-    for await (const e of iter) {
-        console.log(e);
-    }
-} catch(ex) {
-    console.log(ex);
-}
-//print
-//timeout error
-//callstack...
-```
+
 ```javascript
 try{
     await F.timeout(40, async ()=>{
@@ -1089,5 +1052,51 @@ try{
 //callstack...
 ```
 
+### withTimeout
+
+it is effective to use timeout at the bottom of the [run](#run)
+
+```javascript
+const res = [];
+try{
+    const iter = await F.run(
+        F.range(Infinity),
+        F.map(e => e + 1),
+        F.map(async e => {
+            await F.sleep(5);
+            return e;
+        }),
+        F.withTimeout(40),
+        F.take(10));
+    
+    for await (const e of iter) {
+        res.push(e);
+    }
+} catch(ex) {
+    console.log(ex);
+}
+console.log(res);
+//print 
+//timeout error
+//callstack...
+//[1,2,3,4,5,6]
+```
+```javascript
+try{
+    const a = [1,2,3,4,5];
+    const t = F.withTimeout(50, 
+        F.map(async e => {
+            await F.sleep(5);
+            return e;
+        }, a));
+    const v = await F.collect(t);
+    console.log(v);
+}catch(ex) {
+    console.log(ex);
+}
+//print 
+//timeout error
+//callstack....
+```
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frudty%2Fnodekell.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Frudty%2Fnodekell?ref=badge_large)

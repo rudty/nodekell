@@ -12,41 +12,47 @@ const errorSleep = t => new Promise((_, reject) => {
     }, t);
 });
 
-exports.timeout = C.curry((time, a) => {
+exports.withTimeout = C.curry(async function*(duration, iter) {
+    duration = await duration;
+
+    if (duration instanceof Function) {
+        duration = await duration();
+    } 
+
+    if (duration <= 0) {
+        throw new Error("arg duration > 0 required")
+    }
+    
+    const g = C.seq(iter);
+    const s = errorSleep(duration); 
+
+    while(true) {
+        const it = g.next();
+        const e = await Promise.race([s, it]);
+        if(e.done) {
+            break;
+        }
+        yield e.value;
+    }
+    s.catch( _ => {});
+});
+
+exports.timeout = C.curry(async (time, a) => {
 
     if (time <= 0) {
         throw new Error("arg time > 0 required")
     }
     
     const s = errorSleep(time);
-
-    if (a[Symbol.iterator] || a[Symbol.asyncIterator]) { 
-        const g = C.seq(a);
-        return (async function*(){
-            while(true) {
-                const it = g.next();
-                const e = await Promise.race([s, it]);
-                if(e.done) {
-                    break;
-                }
-                yield e.value;
-            }
-            s.catch( _ => {});
-        })();
-    } 
-
-    let r;
+    
     if (a instanceof Function) {
-        r = Promise.race([s, a()]);
-    } else {
-        r = Promise.race([s, a]); 
+        a = a();
     }
 
-    return r.then(e => {
-        s.catch( _ => {});
-        return e;
-    });
-    
+    const r = Promise.race([s, a]);
+    const e = await r;
+    s.catch(C.fnothing);
+    return e;
 });
 
 exports.interval = (timeout, timerHandler, ...param) => {
