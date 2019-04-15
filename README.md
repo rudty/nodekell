@@ -102,6 +102,7 @@ console.log(v);//25
 *    [rangeOf](#rangeof)
 *    [repeat](#repeat)
 *    [rangeInterval](#rangeinterval)
+*    [iterate](#iterate)
 
 ## aggregate
 *    [foldl](#foldl)
@@ -726,6 +727,30 @@ for await (const e of F.rangeInterval(100, 5, 0, -1)) {
 // [sleep 100]
 // 1
 // [sleep 100]
+```
+
+
+### iterate
+apply a function to an argument to produce a sequence
+```javascript
+const r = await F.run(
+            F.iterate(F.inc, 1),
+            F.take(5),
+            F.collect);
+console.log(r);
+//print 
+//[1,2,3,4,5]
+```
+```javascript
+const fibo = (a) => [a[1], a[0] + a[1]];
+const r = await F.run(
+    F.iterate(fibo, [0, 1]),//[0, 1], [1, 1], [1, 2], [2, 3] ...
+    F.map(F.head),//[0,1,1,2 ... 
+    F.take(10),//[0,1,1,2,3,5,8,13,21,34]
+    F.collect);//generator to array
+console.log(r);
+//print
+//[0,1,1,2,3,5,8,13,21,34]
 ```
 
 

@@ -69,4 +69,20 @@ describe('test repeat', () => {
 
         assert.deepStrictEqual([2,2,2,2,2], v);
     });
+
+    it('repeat count', async () => {
+        const v = await F.run(
+            F.repeat(3, 5),
+            F.collect); 
+
+        assert.deepStrictEqual([5,5,5], v);
+    });
+
+    it('repeat count', async () => {
+        const v = await F.run(
+            F.repeat(3, 5),
+            F.collect); 
+
+        assert.deepStrictEqual([5,5,5], v);
+    });
 });

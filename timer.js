@@ -1,6 +1,7 @@
 'use strict';
 const C = require("./core.js");
-const P = require("./prelude.js")
+const P = require("./prelude.js");
+const G = require("./generator.js")
 
 const sleep = (t) => new Promise(r => {
     setTimeout(r, t);
@@ -82,7 +83,7 @@ exports.rangeInterval = async function*(duration, ...k) {
     duration = await getDuration(duration);
 
     await sleep(duration);
-    for (const e of P.range(...k)) {
+    for (const e of G.range(...k)) {
         yield e;
         await sleep(duration);
     }

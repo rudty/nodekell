@@ -305,3 +305,16 @@ export function withTimeout<T>(time: number): (iter: Iterable<T>) => AsyncIterab
 export function sleep(duration: number): Promise<void>
 export function interval(timeout: number, timeHandler: (...params: any[]) => void, ...params: any[]): any
 
+export function add(a: number, b: number): number
+export function add(a: string, b: string): string
+export function add(a: string, b: number): string
+export function add(a: number, b: string): string
+
+export function sub(a: number, b: number): number
+
+export function inc(a: number): number
+
+export function dec(a: number): number
+
+export function iterate<T>(fn: (elem: T) => T, init: T): AsyncIterableIterator<T>
+export function iterate<T>(fn: (elem: T) => T): (init: T) => AsyncIterableIterator<T>

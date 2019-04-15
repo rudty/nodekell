@@ -25,12 +25,15 @@ exports.seq = async function* (iter) {
     }
 };
 
-/**
- * internal methods
- */
-exports.ioe = e => e;
 exports.add = (a, b) => a + b;
 exports.sub = (a, b) => a - b;
 exports.inc = a => a + 1;
 exports.dec = a => a - 1;
+exports.first = a => a[0];
+exports.second = a => a[1];
+
+/**
+ * internal function
+ */
+exports.ioe = e => e;
 exports.fnothing = () => {};

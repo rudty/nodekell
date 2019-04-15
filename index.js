@@ -4,4 +4,5 @@ module.exports = Object.assign(
     require("./prelude.js"),
     require("./stream.js"),
     require("./tsql.js"),
-    require("./timer"));
+    require("./timer"),
+    require("./generator"));
