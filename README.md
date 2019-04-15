@@ -11,6 +11,7 @@ Functional library for nodejs
 - almost all functions support [currying](#curry)
 - supports async generator
 - supports lazy evaluation
+- typescript support
 
 
 ### Installation
