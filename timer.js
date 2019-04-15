@@ -1,6 +1,5 @@
 'use strict';
 const C = require("./core.js");
-const P = require("./prelude.js");
 const G = require("./generator.js")
 
 const sleep = (t) => new Promise(r => {
