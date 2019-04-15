@@ -52,10 +52,8 @@ export function seq<T>(iter: Iterable<T>): AsyncIterableIterator<T>
  * result:
  * [ 2 , 3 ]
  */
-export function run<T, R>(iter: Iterable<T>, ...fn: ((f: any) => any)[]): Promise<AsyncIterableIterator<R>>
-export function run<T, R>(iter: Iterable<T>, ...fn: ((f: any) => any)[]): Promise<R>
-export function run<T, R>(iter: AsyncIterable<T>, ...fn: ((f: any) => any)[]): Promise<AsyncIterableIterator<R>>
-export function run<T, R>(iter: AsyncIterable<T>, ...fn: ((f: any) => any)[]): Promise<R>
+export function run<T, R>(iter: Iterable<T>, ...fn: ((f: any) => any)[]): Promise<any>
+export function run<T, R>(iter: AsyncIterable<T>, ...fn: ((f: any) => any)[]): Promise<any>
 
 export function drop<T>(count: Number): (iter: Iterable<T>) => AsyncIterableIterator<T>
 export function drop<T>(count: Number): (iter: AsyncIterable<T>) => AsyncIterableIterator<T>
@@ -231,8 +229,8 @@ export function minBy<T, R>(fn: (elem: T) => R): (iter: AsyncIterable<T>) => Pro
 export function count<T>(iter: Iterable<T>): Promise<number>
 export function count<T>(iter: AsyncIterable<T>): Promise<number>
 
-export function sum<T>(iter: Iterable<T>): Promise<number>
-export function sum<T>(iter: AsyncIterable<T>): Promise<number>
+export function sum<T>(iter: Iterable<T>): Promise<T>
+export function sum<T>(iter: AsyncIterable<T>): Promise<T>
 
 export function max<T>(iter: Iterable<T>): Promise<number>
 export function max<T>(iter: AsyncIterable<T>): Promise<number>
