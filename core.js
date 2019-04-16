@@ -37,3 +37,15 @@ exports.second = a => a[1];
  */
 exports.ioe = e => e;
 exports.fnothing = () => {};
+
+exports.notNil = v => {
+    if (v) {
+        return true;
+    }
+
+    switch(v){
+        case null: return false;
+        case undefined: return false;
+        default: return !Number.isNaN(v);
+    }
+};
