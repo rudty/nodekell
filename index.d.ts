@@ -59,6 +59,21 @@ export function seq<T>(iter: Iterable<T>): AsyncIterableIterator<T>
  * result:
  * [ 2 , 3 ]
  */
+export function run<A>(iter: String, f1: (f: String) => A): A
+export function run<A, B>(iter: String, f1: (f: String) => A, f2: (f: A) => B): B
+export function run<A, B, C>(iter: String, f1: (f: String) => A, f2: (f: A) => B, f3: (f: B) => C): C
+export function run<A, B, C, D>(iter: String, f1: (f: String) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D): D
+export function run<A, B, C, D, E>(iter: String, f1: (f: String) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E): E
+export function run<A, B, C, D, E, F>(iter: String, f1: (f: String) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F): F
+export function run<A, B, C, D, E, F, G>(iter: String, f1: (f: String) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G): G
+export function run<A, B, C, D, E, F, G, H>(iter: String, f1: (f: String) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H): H
+export function run<A, B, C, D, E, F, G, H, I>(iter: String, f1: (f: String) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I): I
+export function run<A, B, C, D, E, F, G, H, I, J>(iter: String, f1: (f: String) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J): J
+export function run<A, B, C, D, E, F, G, H, I, J, K>(iter: String, f1: (f: String) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K): K
+export function run<A, B, C, D, E, F, G, H, I, J, K, L>(iter: String, f1: (f: String) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K, f12: (f: K) => L): L
+export function run<A, B, C, D, E, F, G, H, I, J, K, L, M>(iter: String, f1: (f: String) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K, f12: (f: K) => L, f13: (f: L) => M): M
+export function run<A, B, C, D, E, F, G, H, I, J, K, L, M, N>(iter: String, f1: (f: String) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K, f12: (f: K) => L, f13: (f: L) => M, f14: (f: M) => N): N
+export function run<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O>(iter: String, f1: (f: String) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K, f12: (f: K) => L, f13: (f: L) => M, f14: (f: M) => N, f15: (f: N) => O): O
 export function run<T, A>(iter: Iterable<T>, f1: (f: Iterable<T>) => A): A
 export function run<T, A, B>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B): B
 export function run<T, A, B, C>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C): C
