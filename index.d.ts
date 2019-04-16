@@ -32,6 +32,13 @@ export function range(a?: number, b?: number, step?: number): IterableIterator<n
 export function rangeInterval(duration: number, a?: number, b?: number, step?: number): AsyncIterableIterator<number>;
 
 /**
+ * check nullable value
+ * @param v any value
+ * @returns false: null, NaN, undefined / true: other
+ */
+export function notNil(v: any): boolean
+
+/**
  * make generator
  * do not need to check if iter 
  * AsyncIterable or Iterable 
@@ -52,102 +59,106 @@ export function seq<T>(iter: Iterable<T>): AsyncIterableIterator<T>
  * result:
  * [ 2 , 3 ]
  */
-export function run<T, R>(iter: Iterable<T>, ...fn: ((f: any) => any)[]): Promise<any>
-export function run<T, R>(iter: AsyncIterable<T>, ...fn: ((f: any) => any)[]): Promise<any>
+export function run<T, A>(iter: Iterable<T>, f1: (f: Iterable<T>) => A): A
+export function run<T, A, B>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B): B
+export function run<T, A, B, C>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C): C
+export function run<T, A, B, C, D>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D): D
+export function run<T, A, B, C, D, E>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E): E
+export function run<T, A, B, C, D, E, F>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F): F
+export function run<T, A, B, C, D, E, F, G>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G): G
+export function run<T, A, B, C, D, E, F, G, H>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H): H
+export function run<T, A, B, C, D, E, F, G, H, I>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I): I
+export function run<T, A, B, C, D, E, F, G, H, I, J>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J): J
+export function run<T, A, B, C, D, E, F, G, H, I, J, K>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K): K
+export function run<T, A, B, C, D, E, F, G, H, I, J, K, L>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K, f12: (f: K) => L): L
+export function run<T, A, B, C, D, E, F, G, H, I, J, K, L, M>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K, f12: (f: K) => L, f13: (f: L) => M): M
+export function run<T, A, B, C, D, E, F, G, H, I, J, K, L, M, N>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K, f12: (f: K) => L, f13: (f: L) => M, f14: (f: M) => N): N
+export function run<T, A>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A): A
+export function run<T, A, B>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A, f2: (f: A) => B): B
+export function run<T, A, B, C>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C): C
+export function run<T, A, B, C, D>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D): D
+export function run<T, A, B, C, D, E>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E): E
+export function run<T, A, B, C, D, E, F>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F): F
+export function run<T, A, B, C, D, E, F, G>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G): G
+export function run<T, A, B, C, D, E, F, G, H>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H): H
+export function run<T, A, B, C, D, E, F, G, H, I>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I): I
+export function run<T, A, B, C, D, E, F, G, H, I, J>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J): J
+export function run<T, A, B, C, D, E, F, G, H, I, J, K>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K): K
+export function run<T, A, B, C, D, E, F, G, H, I, J, K, L>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K, f12: (f: K) => L): L
+export function run<T, A, B, C, D, E, F, G, H, I, J, K, L, M>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K, f12: (f: K) => L, f13: (f: L) => M): M
+export function run<T, A, B, C, D, E, F, G, H, I, J, K, L, M, N>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K, f12: (f: K) => L, f13: (f: L) => M, f14: (f: M) => N): N
 
-export function drop<T>(count: Number): (iter: Iterable<T>) => AsyncIterableIterator<T>
-export function drop<T>(count: Number): (iter: AsyncIterable<T>) => AsyncIterableIterator<T>
+export function drop<T>(count: Number): (iter: any) => AsyncIterableIterator<T>
 export function drop<T>(count: Number, iter: Iterable<T>): AsyncIterableIterator<T>
 export function drop<T>(count: Number, iter: AsyncIterable<T>): AsyncIterableIterator<T>
 
-export function dropWhile<T>(fn: (predicate: T) => boolean): (iter: Iterable<T>) => AsyncIterableIterator<T>
-export function dropWhile<T>(fn: (predicate: T) => boolean): (iter: AsyncIterable<T>) => AsyncIterableIterator<T>
+export function dropWhile<T>(fn: (predicate: T) => boolean): (iter: any) => AsyncIterableIterator<T>
 export function dropWhile<T>(fn: (predicate: T) => boolean, iter: Iterable<T>): AsyncIterableIterator<T>
 export function dropWhile<T>(fn: (predicate: T) => boolean, iter: AsyncIterable<T>): AsyncIterableIterator<T>
 
-export function take<T>(count: Number): (iter: Iterable<T>) => AsyncIterableIterator<T>
-export function take<T>(count: Number): (iter: AsyncIterable<T>) => AsyncIterableIterator<T>
+export function take<T>(count: Number): (iter: any) => AsyncIterableIterator<T>
 export function take<T>(count: Number, iter: Iterable<T>): AsyncIterableIterator<T>
 export function take<T>(count: Number, iter: AsyncIterable<T>): AsyncIterableIterator<T>
 
-export function takeWhile<T>(fn: (predicate: T) => boolean): (iter: Iterable<T>) => AsyncIterableIterator<T>
-export function takeWhile<T>(fn: (predicate: T) => boolean): (iter: AsyncIterable<T>) => AsyncIterableIterator<T>
+export function takeWhile<T>(fn: (predicate: T) => boolean): (iter: any) => AsyncIterableIterator<T>
 export function takeWhile<T>(fn: (predicate: T) => boolean, iter: Iterable<T>): AsyncIterableIterator<T>
 export function takeWhile<T>(fn: (predicate: T) => boolean, iter: AsyncIterable<T>): AsyncIterableIterator<T>
 
-export function filter<T>(fn: (predicate: T) => boolean): (iter: Iterable<T>) => AsyncIterableIterator<T>
-export function filter<T>(fn: (predicate: T) => boolean): (iter: AsyncIterable<T>) => AsyncIterableIterator<T>
+export function filter<T>(fn: (predicate: T) => boolean): (iter: any) => AsyncIterableIterator<T>
 export function filter<T>(fn: (predicate: T) => boolean, iter: Iterable<T>): AsyncIterableIterator<T>
 export function filter<T>(fn: (predicate: T) => boolean, iter: AsyncIterable<T>): AsyncIterableIterator<T>
 
-export function map<T, R>(fn: (predicate: T) => R): (iter: Iterable<T>) => AsyncIterableIterator<R>
-export function map<T, R>(fn: (predicate: T) => R): (iter: AsyncIterable<T>) => AsyncIterableIterator<R>
+export function map<T, R>(fn: (predicate: T) => R): (iter: any) => AsyncIterableIterator<R>
 export function map<T, R>(fn: (predicate: T) => R, iter: Iterable<T>): AsyncIterableIterator<R>
 export function map<T, R>(fn: (predicate: T) => R, iter: AsyncIterable<T>): AsyncIterableIterator<R>
 
-export function fmap<T, E, R>(fn: (predicate: T) => E): (iter: Iterable<T>) => AsyncIterableIterator<R>
-export function fmap<T, E, R>(fn: (predicate: T) => E): (iter: AsyncIterable<T>) => AsyncIterableIterator<R>
+export function fmap<T, E, R>(fn: (predicate: T) => E): (iter: any) => AsyncIterableIterator<R>
 export function fmap<T, E, R>(fn: (predicate: T) => E, iter: Iterable<T>): AsyncIterableIterator<R>
 export function fmap<T, E, R>(fn: (predicate: T) => E, iter: AsyncIterable<T>): AsyncIterableIterator<R>
 
-export function flatMap<T, E, R>(fn: (predicate: T) => E): (iter: Iterable<T>) => AsyncIterableIterator<R>
-export function flatMap<T, E, R>(fn: (predicate: T) => E): (iter: AsyncIterable<T>) => AsyncIterableIterator<R>
+export function flatMap<T, E, R>(fn: (predicate: T) => E): (iter: any) => AsyncIterableIterator<R>
 export function flatMap<T, E, R>(fn: (predicate: T) => E, iter: Iterable<T>): AsyncIterableIterator<R>
 export function flatMap<T, E, R>(fn: (predicate: T) => E, iter: AsyncIterable<T>): AsyncIterableIterator<R>
 
-export function foldl<T, R>(fn: (acc: R, elem: T) => R): (init: R, iter: Iterable<T>) => Promise<R>
-export function foldl<T, R>(fn: (acc: R, elem: T) => R): (init: R, iter: AsyncIterable<T>) => Promise<R>
-export function foldl<T, R>(fn: (acc: R, elem: T) => R): (init: R) => (iter: Iterable<T>) => Promise<R>
-export function foldl<T, R>(fn: (acc: R, elem: T) => R): (init: R) => (iter: AsyncIterable<T>) => Promise<R>
-export function foldl<T, R>(fn: (acc: R, elem: T) => R, init: R): (iter: Iterable<T>) => Promise<R>
-export function foldl<T, R>(fn: (acc: R, elem: T) => R, init: R): (iter: AsyncIterable<T>) => Promise<R>
+export function foldl<T, R>(fn: (acc: R, elem: T) => R): (init: R, iter: any) => Promise<R>
+export function foldl<T, R>(fn: (acc: R, elem: T) => R): (init: R) => (iter: any) => Promise<R>
+export function foldl<T, R>(fn: (acc: R, elem: T) => R, init: R): (iter: any) => Promise<R>
 export function foldl<T, R>(fn: (acc: R, elem: T) => R, init: R, iter: Iterable<T>): Promise<R>
 export function foldl<T, R>(fn: (acc: R, elem: T) => R, init: R, iter: AsyncIterable<T>): Promise<R>
 
-export function foldl1<T, R>(fn: (acc: R, elem: T) => R): (iter: Iterable<T>) => Promise<R>
-export function foldl1<T, R>(fn: (acc: R, elem: T) => R): (iter: AsyncIterable<T>) => Promise<R>
-export function foldl1<T, R>(fn: (acc: R, elem: T) => R, iter: Iterable<T>): Promise<R>
-export function foldl1<T, R>(fn: (acc: R, elem: T) => R, iter: AsyncIterable<T>): Promise<R>
+export function foldl1<T>(fn: (acc: T, elem: T) => T): (iter: any) => Promise<T>
+export function foldl1<T>(fn: (acc: T, elem: T) => T, iter: Iterable<T>): Promise<T>
+export function foldl1<T>(fn: (acc: T, elem: T) => T, iter: AsyncIterable<T>): Promise<T>
 
-export function reduce<T, R>(fn: (acc: R, elem: T) => R): (iter: Iterable<T>) => Promise<R>
-export function reduce<T, R>(fn: (acc: R, elem: T) => R): (iter: AsyncIterable<T>) => Promise<R>
-export function reduce<T, R>(fn: (acc: R, elem: T) => R, iter: Iterable<T>): Promise<R>
-export function reduce<T, R>(fn: (acc: R, elem: T) => R, iter: AsyncIterable<T>): Promise<R>
+export function reduce<T>(fn: (acc: T, elem: T) => T): (iter: any) => Promise<T>
+export function reduce<T>(fn: (acc: T, elem: T) => T, iter: Iterable<T>): Promise<T>
+export function reduce<T>(fn: (acc: T, elem: T) => T, iter: AsyncIterable<T>): Promise<T>
 
-export function scanl<T, R>(fn: (acc: R, elem: T) => R): (init: R, iter: Iterable<T>) => AsyncIterableIterator<R>
-export function scanl<T, R>(fn: (acc: R, elem: T) => R): (init: R, iter: AsyncIterable<T>) => AsyncIterableIterator<R>
-export function scanl<T, R>(fn: (acc: R, elem: T) => R): (init: R) => (iter: Iterable<T>) => AsyncIterableIterator<R>
-export function scanl<T, R>(fn: (acc: R, elem: T) => R): (init: R) => (iter: AsyncIterable<T>) => AsyncIterableIterator<R>
-export function scanl<T, R>(fn: (acc: R, elem: T) => R, init: R): (iter: Iterable<T>) => AsyncIterableIterator<R>
-export function scanl<T, R>(fn: (acc: R, elem: T) => R, init: R): (iter: AsyncIterable<T>) => AsyncIterableIterator<R>
+export function scanl<T, R>(fn: (acc: R, elem: T) => R): (init: R, iter: any) => AsyncIterableIterator<R>
+export function scanl<T, R>(fn: (acc: R, elem: T) => R): (init: R) => (iter: any) => AsyncIterableIterator<R>
+export function scanl<T, R>(fn: (acc: R, elem: T) => R, init: R): (iter: any) => AsyncIterableIterator<R>
 export function scanl<T, R>(fn: (acc: R, elem: T) => R, init: R, iter: Iterable<T>): AsyncIterableIterator<R>
 export function scanl<T, R>(fn: (acc: R, elem: T) => R, init: R, iter: AsyncIterable<T>): AsyncIterableIterator<R>
 
-export function scanl1<T, R>(fn: (acc: R, elem: T) => R): (iter: Iterable<T>) => AsyncIterableIterator<R>
-export function scanl1<T, R>(fn: (acc: R, elem: T) => R): (iter: AsyncIterable<T>) => AsyncIterableIterator<R>
+export function scanl1<T, R>(fn: (acc: R, elem: T) => R): (iter: any) => AsyncIterableIterator<R>
 export function scanl1<T, R>(fn: (acc: R, elem: T) => R, iter: Iterable<T>): AsyncIterableIterator<R>
 export function scanl1<T, R>(fn: (acc: R, elem: T) => R, iter: AsyncIterable<T>): AsyncIterableIterator<R>
 
-export function foldr<T, R>(fn: (acc: R, elem: T) => R): (init: R, iter: Iterable<T>) => Promise<R>
-export function foldr<T, R>(fn: (acc: R, elem: T) => R): (init: R, iter: AsyncIterable<T>) => Promise<R>
-export function foldr<T, R>(fn: (acc: R, elem: T) => R): (init: R) => (iter: Iterable<T>) => Promise<R>
-export function foldr<T, R>(fn: (acc: R, elem: T) => R): (init: R) => (iter: AsyncIterable<T>) => Promise<R>
-export function foldr<T, R>(fn: (acc: R, elem: T) => R, init: R): (iter: Iterable<T>) => Promise<R>
-export function foldr<T, R>(fn: (acc: R, elem: T) => R, init: R): (iter: AsyncIterable<T>) => Promise<R>
+export function foldr<T, R>(fn: (acc: R, elem: T) => R): (init: R, iter: any) => Promise<R>
+export function foldr<T, R>(fn: (acc: R, elem: T) => R): (init: R) => (iter: any) => Promise<R>
+export function foldr<T, R>(fn: (acc: R, elem: T) => R, init: R): (iter: any) => Promise<R>
 export function foldr<T, R>(fn: (acc: R, elem: T) => R, init: R, iter: Iterable<T>): Promise<R>
 export function foldr<T, R>(fn: (acc: R, elem: T) => R, init: R, iter: AsyncIterable<T>): Promise<R>
 
-export function foldr1<T, R>(fn: (acc: R, elem: T) => R): (iter: Iterable<T>) => Promise<R>
-export function foldr1<T, R>(fn: (acc: R, elem: T) => R): (iter: AsyncIterable<T>) => Promise<R>
+export function foldr1<T, R>(fn: (acc: R, elem: T) => R): (iter: any) => Promise<R>
 export function foldr1<T, R>(fn: (acc: R, elem: T) => R, iter: Iterable<T>): Promise<R>
 export function foldr1<T, R>(fn: (acc: R, elem: T) => R, iter: AsyncIterable<T>): Promise<R>
 
 export function reverse<T>(iter: AsyncIterable<T>): AsyncIterableIterator<T>
 export function reverse<T>(iter: Iterable<T>): AsyncIterableIterator<T>
 
-export function zip<T, R>(iter1: Iterable<T>): (iter2: Iterable<T>) => AsyncIterableIterator<[T, R]>
-export function zip<T, R>(iter1: AsyncIterable<T>): (iter2: Iterable<T>) => AsyncIterableIterator<[T, R]>
-export function zip<T, R>(iter1: AsyncIterable<T>): (iter2: AsyncIterable<T>) => AsyncIterableIterator<[T, R]>
+export function zip<T, R>(iter1: Iterable<T>): (iter2: any) => AsyncIterableIterator<[T, R]>
+export function zip<T, R>(iter1: AsyncIterable<T>): (iter2: any) => AsyncIterableIterator<[T, R]>
 export function zip<T, R>(iter1: Iterable<T>, iter2: Iterable<T>): AsyncIterableIterator<[T, R]>
 export function zip<T, R>(iter1: Iterable<T>, iter2: AsyncIterable<T>): AsyncIterableIterator<[T, R]>
 export function zip<T, R>(iter1: AsyncIterable<T>, iter2: Iterable<T>): AsyncIterableIterator<[T, R]>
@@ -178,14 +189,10 @@ export function emptyThen<T>(supply: Iterable<T>, iter: Iterable<T>): AsyncItera
 export function emptyThen<T>(supply: AsyncIterable<T>, iter: Iterable<T>): AsyncIterableIterator<T>
 export function emptyThen<T>(supply: Iterable<T>, iter: AsyncIterable<T>): AsyncIterableIterator<T>
 export function emptyThen<T>(supply: AsyncIterable<T>, iter: AsyncIterable<T>): AsyncIterableIterator<T>
-export function emptyThen<T>(supply: () => Iterable<T>): (iter: AsyncIterable<T>) => AsyncIterableIterator<T>
-export function emptyThen<T>(supply: () => AsyncIterable<T>): (iter: AsyncIterable<T>) => AsyncIterableIterator<T>
-export function emptyThen<T>(supply: () => Iterable<T>): (iter: Iterable<T>) => AsyncIterableIterator<T>
-export function emptyThen<T>(supply: () => AsyncIterable<T>): (iter: Iterable<T>) => AsyncIterableIterator<T>
-export function emptyThen<T>(supply: Iterable<T>): (iter: Iterable<T>) => AsyncIterableIterator<T>
-export function emptyThen<T>(supply: AsyncIterable<T>): (iter: Iterable<T>) => AsyncIterableIterator<T>
-export function emptyThen<T>(supply: Iterable<T>): (iter: AsyncIterable<T>) => AsyncIterableIterator<T>
-export function emptyThen<T>(supply: AsyncIterable<T>): (iter: AsyncIterable<T>) => AsyncIterableIterator<T>
+export function emptyThen<T>(supply: () => Iterable<T>): (iter: any) => AsyncIterableIterator<T>
+export function emptyThen<T>(supply: () => AsyncIterable<T>): (iter: any) => AsyncIterableIterator<T>
+export function emptyThen<T>(supply: Iterable<T>): (iter: any) => AsyncIterableIterator<T>
+export function emptyThen<T>(supply: AsyncIterable<T>): (iter: any) => AsyncIterableIterator<T>
 
 export function collectMap<K, V>(iter: AsyncIterable<[K, V]>): Map<K, V>
 export function collectMap<K, V>(iter: Iterable<[K, V]>): Map<K, V>
@@ -198,8 +205,7 @@ export function forEach<T, R>(action: (elem: T) => R, iter: Iterable<T>): Promis
 export function forEach<T, R>(action: (elem: T) => R): (iter: AsyncIterable<T>) => Promise<[R]>
 export function forEach<T, R>(action: (elem: T) => R): (iter: Iterable<T>) => Promise<[R]>
 
-export function distinctBy<T>(fn: (elem: T) => boolean): (iter: Iterable<T>) => AsyncIterableIterator<T>
-export function distinctBy<T>(fn: (elem: T) => boolean): (iter: AsyncIterable<T>) => AsyncIterableIterator<T>
+export function distinctBy<T>(fn: (elem: T) => boolean): (iter: any) => AsyncIterableIterator<T>
 export function distinctBy<T>(fn: (elem: T) => boolean, iter: Iterable<T>): AsyncIterableIterator<T>
 export function distinctBy<T>(fn: (elem: T) => boolean, iter: AsyncIterable<T>): AsyncIterableIterator<T>
 
@@ -208,23 +214,19 @@ export function distinct<T>(iter: AsyncIterable<T>): AsyncIterableIterator<T>
 
 export function some<T>(fn: (elem: T) => boolean, iter: Iterable<T>): Promise<boolean>
 export function some<T>(fn: (elem: T) => boolean, iter: AsyncIterable<T>): Promise<boolean>
-export function some<T>(fn: (elem: T) => boolean): (iter: Iterable<T>) => Promise<boolean>
-export function some<T>(fn: (elem: T) => boolean): (iter: AsyncIterable<T>) => Promise<boolean>
+export function some<T>(fn: (elem: T) => boolean): (iter: any) => Promise<boolean>
 
 export function every<T>(fn: (elem: T) => boolean, iter: Iterable<T>): Promise<boolean>
 export function every<T>(fn: (elem: T) => boolean, iter: AsyncIterable<T>): Promise<boolean>
-export function every<T>(fn: (elem: T) => boolean): (iter: Iterable<T>) => Promise<boolean>
-export function every<T>(fn: (elem: T) => boolean): (iter: AsyncIterable<T>) => Promise<boolean>
+export function every<T>(fn: (elem: T) => boolean): (iter: any) => Promise<boolean>
 
 export function maxBy<T, R>(fn: (elem: T) => R, iter: Iterable<T>): Promise<T>
 export function maxBy<T, R>(fn: (elem: T) => R, iter: AsyncIterable<T>): Promise<T>
-export function maxBy<T, R>(fn: (elem: T) => R): (iter: Iterable<T>) => Promise<T>
-export function maxBy<T, R>(fn: (elem: T) => R): (iter: AsyncIterable<T>) => Promise<T>
+export function maxBy<T, R>(fn: (elem: T) => R): (iter: any) => Promise<T>
 
 export function minBy<T, R>(fn: (elem: T) => R, iter: Iterable<T>): Promise<T>
 export function minBy<T, R>(fn: (elem: T) => R, iter: AsyncIterable<T>): Promise<T>
-export function minBy<T, R>(fn: (elem: T) => R): (iter: Iterable<T>) => Promise<T>
-export function minBy<T, R>(fn: (elem: T) => R): (iter: AsyncIterable<T>) => Promise<T>
+export function minBy<T, R>(fn: (elem: T) => R): (iter: any) => Promise<T>
 
 export function count<T>(iter: Iterable<T>): Promise<number>
 export function count<T>(iter: AsyncIterable<T>): Promise<number>
@@ -251,19 +253,15 @@ export function errorThen<T>(supply: Iterable<T>, iter: Iterable<T>): AsyncItera
 export function errorThen<T>(supply: AsyncIterable<T>, iter: Iterable<T>): AsyncIterableIterator<T>
 export function errorThen<T>(supply: Iterable<T>, iter: AsyncIterable<T>): AsyncIterableIterator<T>
 export function errorThen<T>(supply: AsyncIterable<T>, iter: AsyncIterable<T>): AsyncIterableIterator<T>
-export function errorThen<T>(supply: () => Iterable<T>): (iter: AsyncIterable<T>) => AsyncIterableIterator<T>
-export function errorThen<T>(supply: () => AsyncIterable<T>): (iter: AsyncIterable<T>) => AsyncIterableIterator<T>
-export function errorThen<T>(supply: () => Iterable<T>): (iter: Iterable<T>) => AsyncIterableIterator<T>
-export function errorThen<T>(supply: () => AsyncIterable<T>): (iter: Iterable<T>) => AsyncIterableIterator<T>
-export function errorThen<T>(supply: Iterable<T>): (iter: Iterable<T>) => AsyncIterableIterator<T>
-export function errorThen<T>(supply: AsyncIterable<T>): (iter: Iterable<T>) => AsyncIterableIterator<T>
-export function errorThen<T>(supply: Iterable<T>): (iter: AsyncIterable<T>) => AsyncIterableIterator<T>
-export function errorThen<T>(supply: AsyncIterable<T>): (iter: AsyncIterable<T>) => AsyncIterableIterator<T>
+export function errorThen<T>(supply: () => Iterable<T>): (iter: any) => AsyncIterableIterator<T>
+export function errorThen<T>(supply: () => AsyncIterable<T>): (iter: any) => AsyncIterableIterator<T>
+export function errorThen<T>(supply: Iterable<T>): (iter: any) => AsyncIterableIterator<T>
+export function errorThen<T>(supply: AsyncIterable<T>): (iter: any) => AsyncIterableIterator<T>
 
-export function then<T, R>(fn: (iter: Iterable<T>) => Iterable<R>): (iter: Iterable<T>) => AsyncIterableIterator<R>
-export function then<T, R>(fn: (iter: Iterable<T>) => AsyncIterable<R>): (iter: Iterable<T>) => AsyncIterableIterator<R>
-export function then<T, R>(fn: (iter: AsyncIterable<T>) => Iterable<R>): (iter: AsyncIterable<T>) => AsyncIterableIterator<R>
-export function then<T, R>(fn: (iter: AsyncIterable<T>) => AsyncIterable<R>): (iter: AsyncIterable<T>) => AsyncIterableIterator<R>
+export function then<T, R>(fn: (iter: Iterable<T>) => Iterable<R>): (iter: any) => AsyncIterableIterator<R>
+export function then<T, R>(fn: (iter: Iterable<T>) => AsyncIterable<R>): (iter: any) => AsyncIterableIterator<R>
+export function then<T, R>(fn: (iter: AsyncIterable<T>) => Iterable<R>): (iter: any) => AsyncIterableIterator<R>
+export function then<T, R>(fn: (iter: AsyncIterable<T>) => AsyncIterable<R>): (iter: any) => AsyncIterableIterator<R>
 export function then<T, R>(fn: (iter: Iterable<T>) => Iterable<R>, iter: Iterable<T>): AsyncIterableIterator<R>
 export function then<T, R>(fn: (iter: Iterable<T>) => AsyncIterable<R>, iter: Iterable<T>): AsyncIterableIterator<R>
 export function then<T, R>(fn: (iter: AsyncIterable<T>) => Iterable<R>, iter: AsyncIterable<T>): AsyncIterableIterator<R>
@@ -273,34 +271,30 @@ export function buffer<T>(supply: number, iter: Iterable<T>): AsyncIterableItera
 export function buffer<T>(supply: Promise<number>, iter: Iterable<T>): AsyncIterableIterator<[T]>
 export function buffer<T>(supply: number, iter: AsyncIterable<T>): AsyncIterableIterator<[T]>
 export function buffer<T>(supply: Promise<number>, iter: AsyncIterable<T>): AsyncIterableIterator<[T]>
-export function buffer<T>(supply: number): (iter: Iterable<T>) => AsyncIterableIterator<[T]>
-export function buffer<T>(supply: Promise<number>): (iter: Iterable<T>) => AsyncIterableIterator<[T]>
-export function buffer<T>(supply: number): (iter: AsyncIterable<T>) => AsyncIterableIterator<[T]>
-export function buffer<T>(supply: Promise<number>): (iter: AsyncIterable<T>) => AsyncIterableIterator<[T]>
+export function buffer<T>(supply: number): (iter: any) => AsyncIterableIterator<[T]>
+export function buffer<T>(supply: Promise<number>): (iter: any) => AsyncIterableIterator<[T]>
 
 export function groupBy<K, V>(group: (elem: V) => K, iter: Iterable<V>): Map<K, V>
 export function groupBy<K, V>(group: (elem: V) => Promise<K>, iter: Iterable<V>): Map<K, V>
 export function groupBy<K, V>(group: (elem: V) => K, iter: AsyncIterable<V>): Map<K, V>
 export function groupBy<K, V>(group: (elem: V) => Promise<K>, iter: AsyncIterable<V>): Map<K, V>
-export function groupBy<K, V>(group: (elem: V) => K): (iter: Iterable<V>) => Map<K, V>
-export function groupBy<K, V>(group: (elem: V) => Promise<K>): (iter: Iterable<V>) => Map<K, V>
-export function groupBy<K, V>(group: (elem: V) => K): (iter: AsyncIterable<V>) => Map<K, V>
-export function groupBy<K, V>(group: (elem: V) => Promise<K>): (iter: AsyncIterable<V>) => Map<K, V>
+export function groupBy<K, V>(group: (elem: V) => K): (iter: any) => Map<K, V>
+export function groupBy<K, V>(group: (elem: V) => Promise<K>): (iter: any) => Map<K, V>
 
 export function concat<T>(iter1: Iterable<T>, iter2: Iterable<T>): AsyncIterableIterator<T>
 export function concat<T>(iter1: Iterable<T>, iter2: AsyncIterable<T>): AsyncIterableIterator<T>
 export function concat<T>(iter1: AsyncIterable<T>, iter2: Iterable<T>): AsyncIterableIterator<T>
 export function concat<T>(iter1: AsyncIterable<T>, iter2: AsyncIterable<T>): AsyncIterableIterator<T>
+export function concat<T>(iter1: Iterable<T>): (iter2: any) => AsyncIterableIterator<T>
+export function concat<T>(iter1: AsyncIterable<T>): (iter2: Iterable<T>) => AsyncIterableIterator<T>
 
 export function timeout<T>(time: number, fn: () => Promise<T>): Promise<T>
 export function timeout<T>(time: number, fn: Promise<T>): Promise<T>
-export function timeout<T>(time: number): (fn: () => Promise<T>) => Promise<T>
-export function timeout<T>(time: number): (fn: Promise<T>) => Promise<T>
+export function timeout<T>(time: number): (fn: any) => Promise<T>
 
 export function withTimeout<T>(time: number, iter: AsyncIterable<T>): AsyncIterableIterator<T>
 export function withTimeout<T>(time: number, iter: Iterable<T>): AsyncIterableIterator<T>
-export function withTimeout<T>(time: number): (iter: AsyncIterable<T>) => AsyncIterableIterator<T>
-export function withTimeout<T>(time: number): (iter: Iterable<T>) => AsyncIterableIterator<T>
+export function withTimeout<T>(time: number): (iter: any) => AsyncIterableIterator<T>
 
 export function sleep(duration: number): Promise<void>
 export function interval(timeout: number, timeHandler: (...params: any[]) => void, ...params: any[]): any
