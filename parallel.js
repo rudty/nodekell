@@ -9,7 +9,7 @@ exports.parallel_set_fetch_count = (count) => {
 
 const object_is_not_iterable = () => { throw new Error("object is not iterable"); }
 
-const fetch_values_iterator = (gen, fetch_count) => {
+const fetch_iterator = (gen, fetch_count) => {
     const v = [];
     for (let i = fetch_count; i > 0; --i) {
         const e = gen.next();
@@ -18,7 +18,7 @@ const fetch_values_iterator = (gen, fetch_count) => {
     return v;
 };
 
-const fetch_values_asyncIterator = (gen, fetch_count) => await Promise.all(fetch_values_iterator(gen, fetch_count));
+const fetch_asyncIterator = (gen, fetch_count) => await Promise.all(fetch_iterator(gen, fetch_count));
 
 const parallel_filter_internal = async function* (fn, g, fetch_operator) {
     const fetch_count = global_fetch_count;
@@ -67,15 +67,35 @@ const parallel_map_internal = async function* (fn, g, fetch_operator) {
     }
 };
 
+
+const parallel_foreach_internal = async function* (fn, g, fetch_operator) {
+    const fetch_count = global_fetch_count;
+    const wait = [];
+    while (true) {
+        const v = fetch_operator(g, fetch_count);
+        for (let i = 0; i < fetch_count; ++i) {
+            if (v[i].done) {
+                break;
+            }
+            wait.push(fn(v[i].value));
+        };
+
+        if (r.length !== fetch_count) {
+            break;
+        }
+    }
+    return await Promise.all(wait);
+};
+
 const parallel_call = (parallel_fn, fn, iter) => {
     const async_it = iter[Symbol.asyncIterator];
     if (async_it) {
-        return parallel_fn(fn, async_it(), fetch_values_asyncIterator);
+        return parallel_fn(fn, async_it(), fetch_asyncIterator);
     }
 
     const it = iter[Symbol.iterator];
     if (it) {
-        return parallel_fn(fn, it(), fetch_values_iterator);
+        return parallel_fn(fn, it(), fetch_iterator);
     }
 
     object_is_not_iterable();
@@ -83,3 +103,4 @@ const parallel_call = (parallel_fn, fn, iter) => {
 
 exports.parallel_map = C.curry((fn, iter) => parallel_call(parallel_map_internal, fn, iter));
 exports.parallel_filter = C.curry((fn, iter) => parallel_call(parallel_filter_internal, fn, iter));
+exports.parallel_filter = C.curry((fn, iter) => parallel_call(parallel_foreach_internal, fn, iter));
