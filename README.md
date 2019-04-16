@@ -45,7 +45,7 @@ console.log(v);//[3]
 
 
 ### Typescript Support
-Tested with typescript version ESNEXT.
+Tested with typescript version ES2018.
 
 if you are using an earlier version, uncomment AsyncIterator in node_modules/nodekell/index.d.ts for compile
 ```typescript
