@@ -1,3 +1,4 @@
+'use strict';
 /**
  * currying function wrapper
  * ex)
@@ -5,8 +6,7 @@
  *
  * var mySum1 = mySum(1) 
  * var mySum2 = mySum1(2)
- * var sum = mySum2(3) // <-- real call 
- * 
+ * var sum = mySum2(3) // <-- real call
  */
 const curry = fn => (...a) => {
     if (fn.length <= a.length) return fn(...a);
@@ -16,8 +16,8 @@ exports.curry = curry;
 
 /**
  * make generator
- * do not need to check if iter 
- * Symbol.asyncIterator or Symbol.iterator 
+ * do not need to check if iter
+ * Symbol.asyncIterator or Symbol.iterator
  */
 exports.seq = async function* (iter) {
     for await (const e of iter) {

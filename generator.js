@@ -1,3 +1,4 @@
+'use strict';
 const C = require("./core.js");
 
 exports.repeat = async function* (a, ...b) {
@@ -47,7 +48,7 @@ exports.range = function* (...k) {
 
 exports.iterate = C.curry(async function*(fn, v) {
     v = await v;
-    yield v; 
+    yield v;
     while(true) {
         v = await fn(v);
         yield v;

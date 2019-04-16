@@ -1,6 +1,6 @@
 'use strict';
 const C = require("./core.js");
-const G = require("./generator.js")
+const G = require("./generator.js");
 
 const sleep = (t) => new Promise(r => {
     setTimeout(r, t);
@@ -18,7 +18,7 @@ const getDuration = async duration => {
 
     if (duration instanceof Function) {
         duration = await duration();
-    } 
+    }
 
     if (duration <= 0) {
         throw new Error("duration > 0 required")
@@ -28,9 +28,9 @@ const getDuration = async duration => {
 
 exports.withTimeout = C.curry(async function*(duration, iter) {
     duration = await getDuration(duration);
-    
+
     const g = C.seq(iter);
-    const s = errorSleep(duration); 
+    const s = errorSleep(duration);
 
     while(true) {
         const it = g.next();
@@ -47,7 +47,7 @@ exports.timeout = C.curry(async (duration, a) => {
     duration = await getDuration(duration);
 
     const s = errorSleep(duration);
-    
+
     if (a instanceof Function) {
         a = a();
     }
@@ -63,7 +63,7 @@ exports.interval = (timeout, timerHandler, ...param) => {
     if(!timeout || timeout < 10) {
         timeout = 10;
     }
-    const k = { run: true }; 
+    const k = { run: true };
     (async () =>{
         while (k.run) {
             try{

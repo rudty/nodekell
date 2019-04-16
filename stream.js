@@ -21,12 +21,12 @@ exports.emptyThen = C.curry(async function*(supply, iter) {
         yield* iter;
         return;
     }
-    
+
     supply = await supply;
     if (supply instanceof Function) {
         yield* await supply();
     } else {
-        yield* supply; 
+        yield* supply;
     }
 });
 
@@ -53,7 +53,7 @@ exports.forEach = C.curry(async (f, iter) => {
         if (r) {
             wait.push(r);
         }
-    } 
+    }
     return Promise.all(wait);
 });
 
@@ -157,7 +157,7 @@ exports.errorThen = C.curry(async function*(supply, iter){
         yield* iter;
     } catch(e) {
         supply = await supply;
-        
+
         if (supply instanceof Function) {
             supply = await supply(e);
         }

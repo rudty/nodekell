@@ -117,7 +117,7 @@ const scanl = C.curry(async function*(f, z, iter) {
     for await (const e of iter) {
         z = await f(z, e);
         yield z;
-    } 
+    }
 });
 exports.scanl = scanl;
 
@@ -125,7 +125,7 @@ exports.scanl1 = C.curry(async function*(f, iter) {
     const g =  C.seq(iter);
     const h = await g.next();
     if (!h.done) {
-        yield* scanl(f, h.value, g);   
+        yield* scanl(f, h.value, g);
     }
 });
 
@@ -150,7 +150,7 @@ exports.foldr =  C.curry(async (f, z, iter) => {
 
 exports.foldr1 =  C.curry(async (f, iter) => {
     const g =  reverse(C.seq(iter));
-    const h = await g.next(); 
+    const h = await g.next();
     if (h.done) {
         throw new Error("empty iter");
     }
@@ -185,13 +185,13 @@ exports.zipWith =  C.curry(async function* (f, a, b) {
 
 /**
  * like `$` or `.`
- * 
+ *
  *  let a = [1,2,3,4,5];
- *  let r = run(a, 
+ *  let r = run(a,
  *              map(e => e + 1), // a = [2,3,4,5,6]
  *              filter(e => e < 4), // a = [2,3]
- *              take(Infinity)); 
- * 
+ *              take(Infinity));
+ *
  * result:
  * [ 2 , 3 ]
  */
