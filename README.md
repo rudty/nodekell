@@ -131,6 +131,7 @@ console.log(v);//25
 *    [interval](#interval)
 *    [timeout](#timeout)
 *    [withTimeout](#withtimeout)
+*    [notNil](#notnil)
 ---
 
 
@@ -1179,5 +1180,19 @@ try{
 //timeout error
 //callstack....
 ```
+
+### notNil
+return false null, undefined, NaN true otherwise
+```javascript
+console.log(F.notNil(NaN)); // false
+console.log(F.notNil(undefined)); //false
+console.log(F.notNil(null)); //false
+console.log(F.notNil("null")); // true
+console.log(F.notNil("NaN")); //true
+console.log(F.notNil(0)); // true
+console.log(F.notNil(false)); // true
+```
+
+
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frudty%2Fnodekell.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Frudty%2Fnodekell?ref=badge_large)
