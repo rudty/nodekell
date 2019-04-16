@@ -74,7 +74,7 @@ exports.flat = fmap(C.ioe);
 exports.take =  C.curry(async function* (count, iter) {
     let it = 0;
     for await (const e of iter) {
-        it += 1;
+        ++it;
         if (it > count) {
             break;
         }

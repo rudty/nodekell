@@ -130,7 +130,7 @@ exports.minBy = minBy;
 exports.count = async (iter) => {
     let c = 0;
     for await (const _ of iter) {
-        c += 1;
+        ++c;
     }
     return c;
 };
@@ -142,7 +142,7 @@ exports.average = async (iter) => {
     let c = 0;
     let sum = 0;
     for await (const e of iter) {
-        c += 1;
+        ++c;
         sum += e;
     }
     return sum / c;
@@ -181,7 +181,7 @@ exports.buffer = C.curry(async function*(supply, iter) {
     let c = [];
     for await (const e of iter) {
         c.push(e);
-        i += 1;
+        ++i;
         if (i >= supply) {
             yield c;
             c = [];
