@@ -5,4 +5,5 @@ module.exports = Object.assign(
     require("./stream.js"),
     require("./tsql.js"),
     require("./timer"),
-    require("./generator"));
+    require("./generator"),
+    require("./parallel.js"));

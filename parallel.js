@@ -1,106 +1,123 @@
 'use strict';
 const C = require("./core.js");
-const default_fetch_count = 50;
+const default_fetch_count = 10;
 let global_fetch_count = default_fetch_count;
 
 exports.parallel_set_fetch_count = (count) => {
     global_fetch_count = Number(count) | default_fetch_count;
 };
 
-const object_is_not_iterable = () => { throw new Error("object is not iterable"); }
-
-const fetch_iterator = (gen, fetch_count) => {
-    const v = [];
-    for (let i = fetch_count; i > 0; --i) {
-        const e = gen.next();
-        v.push(e);
-    }
-    return v;
-};
-
-const fetch_asyncIterator = (gen, fetch_count) => await Promise.all(fetch_iterator(gen, fetch_count));
-
-const parallel_filter_internal = async function* (fn, g, fetch_operator) {
-    const fetch_count = global_fetch_count;
-    while (true) {
-        const v = fetch_operator(g, fetch_count);
+const loader_iterator = {
+    fetch: (gen, fetch_count) => {
         const f = [];
-        for (let i = 0; i < fetch_count; ++i) {
-            if (v[i].done) {
+        for (let i = fetch_count; i > 0; --i) {
+            const e = gen.next();
+            if (e.done) {
                 break;
             }
-            f.push(fn(v[i].value));
-        };
-
-        const r = await Promise.all(f);
-        for (let i = 0; i < r.length; ++i) {
-            if (r[i]) {
-                yield v[i].value;
-            }
+            f.push(e);
         }
-
-        if (r.length !== fetch_count) {
-            return;
+        return f;
+    },
+    call: async (fn, fetch_values) => {
+        const f = [];
+        for (let i = 0; i < fetch_values.length; ++i) {
+            const e = await fetch_values[i];
+            const v = await e.value;
+            fetch_values[i] = v;
+            f.push(fn(v));
         }
+        return f;
     }
 };
 
-const parallel_map_internal = async function* (fn, g, fetch_operator) {
-    const fetch_count = global_fetch_count;
-
-    while (true) {
-        const v = fetch_operator(g, fetch_count);
+const loader_asyncIterator = {
+    fetch: (gen, fetch_count) => {
         const f = [];
-        for (let i = 0; i < fetch_count; ++i) {
-            if (v[i].done) {
+        for (let i = fetch_count; i > 0; --i) {
+            const e = gen.next();
+            f.push(e);
+        }
+        return f;
+    },
+    call: async (fn, fetch_values) => {
+        const f = [];
+        for (let i = 0; i < fetch_values.length; ++i) {
+            const e = await fetch_values[i];
+            if (e.done) {
                 break;
             }
-            f.push(fn(v[i].value));
-        };
+            const v = await e.value;
+            fetch_values[i] = v;
+            f.push(fn(v));
+        }
+        return f;
+    }
+};
 
-        const r = await Promise.all(f);
-        yield* r;
+const parallel_filter_internal = async function* (fn, g, loader) {
+    const fetch_count = global_fetch_count;
+    while (true) {
+        const f = loader.fetch(g, fetch_count);
+        const c = await loader.call(fn, f);
 
-        if (r.length !== fetch_count) {
-            return;
+        let i = 0;
+        for await (const e of c) {
+            if (e) {
+                yield f[i];
+            }
+            ++i;
+        }
+
+        if (c.length !== fetch_count) {
+            break;
         }
     }
 };
 
-
-const parallel_foreach_internal = async function* (fn, g, fetch_operator) {
+const parallel_foreach_internal = async (fn, g, loader) => {
     const fetch_count = global_fetch_count;
     const wait = [];
     while (true) {
-        const v = fetch_operator(g, fetch_count);
-        for (let i = 0; i < fetch_count; ++i) {
-            if (v[i].done) {
-                break;
-            }
-            wait.push(fn(v[i].value));
-        };
+        const f = loader.fetch(g, fetch_count);
+        const c = await loader.call(fn, f);
 
-        if (r.length !== fetch_count) {
+        for (let i = c.length - 1; i >= 0; --i) {
+            wait.push(c[i]);
+        }
+
+        if (c.length !== fetch_count) {
             break;
         }
     }
     return await Promise.all(wait);
 };
 
-const parallel_call = (parallel_fn, fn, iter) => {
-    const async_it = iter[Symbol.asyncIterator];
-    if (async_it) {
-        return parallel_fn(fn, async_it(), fetch_asyncIterator);
-    }
+const parallel_map_internal = async function* (fn, g, loader) {
+    const fetch_count = global_fetch_count;
 
-    const it = iter[Symbol.iterator];
-    if (it) {
-        return parallel_fn(fn, it(), fetch_iterator);
-    }
+    while (true) {
+        const f = loader.fetch(g, fetch_count);
+        const c = await loader.call(fn, f);
 
-    object_is_not_iterable();
+        for await (const e of c) {
+            yield e;
+        }
+
+        if (c.length !== fetch_count) {
+            break;
+        }
+    }
 };
 
-exports.parallel_map = C.curry((fn, iter) => parallel_call(parallel_map_internal, fn, iter));
-exports.parallel_filter = C.curry((fn, iter) => parallel_call(parallel_filter_internal, fn, iter));
-exports.parallel_filter = C.curry((fn, iter) => parallel_call(parallel_foreach_internal, fn, iter));
+const parallel_call_internal = (parallel_fn, fn, iter) => {
+    const async_it = iter[Symbol.asyncIterator];
+    if (async_it) {
+        return parallel_fn(fn, iter[Symbol.asyncIterator](), loader_asyncIterator);
+    }
+    return parallel_fn(fn, iter[Symbol.iterator](), loader_iterator);
+};
+
+exports.pmap = C.curry((fn, iter) => parallel_call_internal(parallel_map_internal, fn, iter));
+exports.pfilter = C.curry((fn, iter) => parallel_call_internal(parallel_filter_internal, fn, iter));
+exports.pforEach = C.curry((fn, iter) => parallel_call_internal(parallel_foreach_internal, fn, iter));
