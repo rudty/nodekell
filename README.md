@@ -96,7 +96,7 @@ console.log(v + 1);//26
 *    [buffer](#buffer)
 
 ### functional / parallel 
-*    [parallel_set_fetch_count](#parallelsetfetchcount)
+*    [parallel_set_fetch_count](#parallel_set_fetch_count)
 *    [pfilter](#pfilter)
 *    [pmap](#pmap)
 
@@ -656,7 +656,7 @@ await F.run(
 
 
 ### pfilter
-Same as [filter](#filter), but calls a [fetch count](#parallelsetfetchcount) of functions concurrently. 
+Same as [filter](#filter), but calls a [fetch count](#parallel_set_fetch_count) of functions concurrently. 
 
 
 useful for async function or return promise.
@@ -682,7 +682,7 @@ console.log(v);
 
 
 ### pmap
-Same as [map](#map), but calls a [fetch count](#parallelsetfetchcount) of functions concurrently. 
+Same as [map](#map), but calls a [fetch count](#parallel_set_fetch_count) of functions concurrently. 
 
 
 useful for async function or return promise.
