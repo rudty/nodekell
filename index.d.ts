@@ -304,7 +304,7 @@ export function concat<T>(iter1: Iterable<T>, iter2: AsyncIterable<T>): AsyncIte
 export function concat<T>(iter1: AsyncIterable<T>, iter2: Iterable<T>): AsyncIterableIterator<T>
 export function concat<T>(iter1: AsyncIterable<T>, iter2: AsyncIterable<T>): AsyncIterableIterator<T>
 export function concat<T>(iter1: Iterable<T>): (iter2: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<T>
-export function concat<T>(iter1: AsyncIterable<T>): (iter2: Iterable<T>) => AsyncIterableIterator<T>
+export function concat<T>(iter1: AsyncIterable<T>): (iter2: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<T>
 
 export function timeout<T>(time: number, fn: () => Promise<T>): Promise<T>
 export function timeout<T>(time: number, fn: Promise<T>): Promise<T>
