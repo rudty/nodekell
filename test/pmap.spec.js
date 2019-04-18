@@ -37,9 +37,34 @@ describe('test pmap', () => {
                    yield e;
                }
         })();
-        const mapped = F.pmap(e=> Promise.resolve(e + 1), a)
+        const mapped = F.pmap(async e=> Promise.resolve(e + 1), a)
         const result = await F.collect(mapped);
         assert.deepEqual(result, [2,3,4,5,6]);
     });
 
+    it('custom object', async () => {
+        const it = new Object();
+        it[Symbol.asyncIterator] = async function* (){
+            yield 1;
+            yield 1;
+            yield 1;
+        };
+
+        const mapped = F.pmap(e=> Promise.resolve(e + 1), it)
+        const r = await F.collect(mapped);
+        assert.deepEqual(r, [2,2,2]);
+    });
+
+    it('with run', async () => {
+        const v = await F.run(
+            F.range(Infinity),
+            F.pmap(async e =>{
+                // console.log(e);
+                return e + 1;
+            }),
+            F.take(2),
+            F.collect);
+        // console.log(v);
+        assert.deepStrictEqual(v, [1,2]);
+    });
 });

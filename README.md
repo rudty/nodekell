@@ -95,6 +95,11 @@ console.log(v + 1);//26
 *    [scanl1](#scanl1)
 *    [buffer](#buffer)
 
+### functional / parallel 
+*    [parallel_set_fetch_count](#parallelsetfetchcount)
+*    [pfilter](#pfilter)
+*    [pmap](#pmap)
+
 ## generator
 *    [range](#range)
 *    [seq](#seq)
@@ -602,6 +607,103 @@ console.log(c); //print [[1],[2],[3],[4],[5]]
 const b = F.buffer(2, [1,2,3,4,5]);
 const c = await F.collect(b);
 console.log(c); //print [[1,2],[3,4],[5]]
+```
+
+
+### parallel_set_fetch_count
+Set the fetch count of the parallel functions. 
+
+after setting, the parallel function is called by count at the same time.
+*default fetch count is 100*
+```javascript
+F.parallel_set_fetch_count(3);
+
+await F.run(
+    F.range(Infinity),
+    F.pmap(async e =>{
+        console.log(e);
+        return e + 1;
+    }),
+    F.take(1),
+    F.collect);
+//print
+//0
+//1
+//2
+```
+```javascript
+F.parallel_set_fetch_count(200);
+
+await F.run(
+    F.range(Infinity),
+    F.pmap(async e =>{
+        console.log(e);
+        return e + 1;
+    }),
+    F.take(1),
+    F.collect);
+//print
+//1
+//2
+//3
+//4
+//5
+//...
+//...
+//198
+//199
+```
+
+
+### pfilter
+Same as [filter](#filter), but calls a [fetch count](#parallelsetfetchcount) of functions concurrently. 
+
+
+useful for async function or return promise.
+```javascript
+const v = await F.run(
+    F.range(Infinity),
+    F.pfilter(async e =>{
+        console.log(e);
+        return e % 2 === 0;
+    }),
+    F.take(2),
+    F.collect);
+console.log(v);
+//print
+//1
+//2
+//3
+//...
+//...
+//99
+//[0,2]
+```
+
+
+### pmap
+Same as [map](#map), but calls a [fetch count](#parallelsetfetchcount) of functions concurrently. 
+
+
+useful for async function or return promise.
+```javascript
+const v = await F.run(
+    F.range(Infinity),
+    F.pmap(async e =>{
+        console.log(e);
+        return e + 1;
+    }),
+    F.take(2),
+    F.collect);
+console.log(v);
+//print
+//1
+//2
+//3
+//...
+//...
+//99
+//[1,2]
 ```
 
 

@@ -47,4 +47,28 @@ describe('test pfilter', () => {
         const result = await F.collect(filtered);
         assert.deepEqual(result, [2,4]);
     });
+
+    it('async generator', async () => {
+        const a = (async function*(){
+               for await (const e of [Promise.resolve(1),2,3,4,5]){
+                   yield e;
+               }
+        })();
+        const filtered = F.pfilter(e=> Promise.resolve(e % 2 == 0), a)
+        const result = await F.collect(filtered);
+        assert.deepEqual(result, [2,4]);
+    });
+
+    it('with run', async () => {
+        const v = await F.run(
+            F.range(Infinity),
+            F.pfilter(async e =>{
+                // console.log(e);
+                return e % 2 === 0;
+            }),
+            F.take(2),
+            F.collect);
+        // console.log(v);
+        assert.deepStrictEqual(v, [0,2]);
+    });
 });

@@ -124,7 +124,6 @@ export function takeWhile<T>(fn: (predicate: T) => boolean, iter: Iterable<T>): 
 export function takeWhile<T>(fn: (predicate: T) => boolean, iter: AsyncIterable<T>): AsyncIterableIterator<T>
 
 export function filter<T>(fn: (predicate: T) => boolean): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<T>
-export function filter<T>(fn: (predicate: T) => boolean): (iter: AsyncIterable<T>) => AsyncIterableIterator<T>
 export function filter<T>(fn: (predicate: T) => boolean, iter: Iterable<T>): AsyncIterableIterator<T>
 export function filter<T>(fn: (predicate: T) => boolean, iter: AsyncIterable<T>): AsyncIterableIterator<T>
 
@@ -222,8 +221,7 @@ export function collectSet<T>(iter: Iterable<T>): Set<T>
 
 export function forEach<T, R>(action: (elem: T) => R, iter: AsyncIterable<T>): Promise<[R]>
 export function forEach<T, R>(action: (elem: T) => R, iter: Iterable<T>): Promise<[R]>
-export function forEach<T, R>(action: (elem: T) => R): (iter: AsyncIterable<T>) => Promise<[R]>
-export function forEach<T, R>(action: (elem: T) => R): (iter: Iterable<T>) => Promise<[R]>
+export function forEach<T, R>(action: (elem: T) => R): (iter: Iterable<T> | AsyncIterable<T>) => Promise<[R]>
 
 export function distinctBy<T>(fn: (elem: T) => boolean): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<T>
 export function distinctBy<T>(fn: (elem: T) => boolean, iter: Iterable<T>): AsyncIterableIterator<T>
@@ -332,3 +330,13 @@ export function dec(a: number): number
 
 export function iterate<T>(fn: (elem: T) => T, init: T): AsyncIterableIterator<T>
 export function iterate<T>(fn: (elem: T) => T): (init: T) => AsyncIterableIterator<T>
+
+export function parallel_set_fetch_count(count: number): void
+
+export function pmap<T, R>(fn: (predicate: T) => R): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<R>
+export function pmap<T, R>(fn: (predicate: T) => R, iter: Iterable<T>): AsyncIterableIterator<R>
+export function pmap<T, R>(fn: (predicate: T) => R, iter: AsyncIterable<T>): AsyncIterableIterator<R>
+
+export function pfilter<T>(fn: (predicate: T) => boolean): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<T>
+export function pfilter<T>(fn: (predicate: T) => boolean, iter: Iterable<T>): AsyncIterableIterator<T>
+export function pfilter<T>(fn: (predicate: T) => boolean, iter: AsyncIterable<T>): AsyncIterableIterator<T>
