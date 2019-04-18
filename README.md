@@ -9,6 +9,7 @@ Functional library for nodejs
 
 
 - almost all functions support [currying](#curry)
+- supports [parallel functions](#pfilter)
 - supports async generator
 - supports lazy evaluation
 - typescript support
