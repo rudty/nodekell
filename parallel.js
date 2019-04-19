@@ -1,6 +1,6 @@
 'use strict';
 const C = require("./core.js");
-const default_fetch_count = 100;
+const default_fetch_count = 1;
 let global_fetch_count = default_fetch_count;
 
 exports.parallel_set_fetch_count = (count) => {
@@ -24,6 +24,7 @@ const parallel_filter_internal = async function* (fn, iter) {
                 }
             }
             f.splice(0, f.length);
+            v.splice(0, v.length);
             i = 0;
         }
     }
