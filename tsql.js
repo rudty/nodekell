@@ -15,10 +15,12 @@ exports.groupBy = C.curry(async (f, iter) => {
     return m;
 });
 
-exports.concat = C.curry(async function* (a, b) {
+const concat = C.curry(async function* (a, b) {
     yield* a;
     yield* b;
 });
+exports.concat = concat;
+exports.union = concat;
 
 const combineMap = (a, b) => new Map([...b, ...a]);
 

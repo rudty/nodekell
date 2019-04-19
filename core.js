@@ -9,8 +9,11 @@
  * var sum = mySum2(3) // <-- real call
  */
 const curry = fn => (...a) => {
-    if (fn.length <= a.length) return fn(...a);
-    else return (...b) => curry(fn)(...a, ...b);
+    if (fn.length <= a.length) {
+        return fn(...a);
+    } else {
+        return (...b) => curry(fn)(...a, ...b);
+    }
 };
 exports.curry = curry;
 

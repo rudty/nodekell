@@ -92,6 +92,7 @@ console.log(v + 1);//26
 *    [rightOuterJoin](#rightouterjoin)
 *    [then](#then)
 *    [concat](#concat)
+*    [union](#union)
 *    [scanl](#scanl)
 *    [scanl1](#scanl1)
 *    [buffer](#buffer)
@@ -567,6 +568,10 @@ console.log(v);
 ```
 
 
+### union
+same as [concat](#concat)
+
+
 ### scanl
 ```javascript
 const s = F.scanl((a,b) => a + b, 0, [1,2,3]);
@@ -617,7 +622,7 @@ Set the fetch count of the parallel functions.
 after setting, the parallel function is called by count at the same time.
 
 
-default fetch count is **100**
+**default fetch count is 100**
 ```javascript
 F.parallel_set_fetch_count(3);
 
