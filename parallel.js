@@ -23,7 +23,7 @@ const parallel_filter_internal = async function* (fn, iter) {
                     yield v[j];
                 }
             }
-            f.slice(0, f.length);
+            f.splice(0, f.length);
             i = 0;
         }
     }
@@ -45,7 +45,7 @@ const parallel_map_internal = async function* (fn, iter) {
         ++i;
         if(i >= fetch_count) {
             yield* f;
-            f.slice(0, f.length);
+            f.splice(0, f.length);
             i = 0;
         }
     }
