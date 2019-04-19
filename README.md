@@ -615,7 +615,9 @@ console.log(c); //print [[1,2],[3,4],[5]]
 Set the fetch count of the parallel functions. 
 
 after setting, the parallel function is called by count at the same time.
-*default fetch count is 100*
+
+
+default fetch count is **100**
 ```javascript
 F.parallel_set_fetch_count(3);
 

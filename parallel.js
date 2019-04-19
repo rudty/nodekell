@@ -7,36 +7,33 @@ exports.parallel_set_fetch_count = (count) => {
     global_fetch_count = Number(count) || default_fetch_count;
 };
 
-const parallel_filter_internal = async function* (fn, iter) {
-    const fetch_count = global_fetch_count;
-
-    let i = 0;
-    const f = [];
-    const v = [];
-    for await(const e of iter) {
-        f.push(fn(e));
-        v.push(e);
-        ++i;
-        if(i >= fetch_count) {
-            for (let j = 0; j < f.length; j++) {
-                if(await f[j]) {
-                    yield v[j];
-                }
-            }
-            f.splice(0, f.length);
-            v.splice(0, v.length);
-            i = 0;
-        }
-    }
-
-    for (let j = 0; j < f.length; j++) {
-        if(await f[j]) {
-            yield v[j];
+const filter_each_internal = async function*(f) {
+    for(let i = 0; i < f.length; ++i) {
+        if(await f[i][0]) {
+            yield f[i][1];
         }
     }
 };
 
-const parallel_map_internal = async function* (fn, iter) {
+const pfilter_internal = async function* (fn, iter) {
+    const fetch_count = global_fetch_count;
+
+    let i = 0;
+    let f = [];
+    for await(const e of iter) {
+        f.push([fn(e), e]);
+        ++i;
+        if(i >= fetch_count) {
+            yield* filter_each_internal(f); 
+            f = [];
+            i = 0;
+        }
+    }
+
+    yield* filter_each_internal(f);
+};
+
+const pmap_internal = async function* (fn, iter) {
     const fetch_count = global_fetch_count;
 
     let i = 0;
@@ -46,7 +43,7 @@ const parallel_map_internal = async function* (fn, iter) {
         ++i;
         if(i >= fetch_count) {
             yield* f;
-            f.splice(0, f.length);
+            f = [];
             i = 0;
         }
     }
@@ -54,5 +51,5 @@ const parallel_map_internal = async function* (fn, iter) {
     yield* f;
 };
 
-exports.pmap = C.curry((fn, iter) => parallel_map_internal(fn, iter));
-exports.pfilter = C.curry((fn, iter) => parallel_filter_internal(fn, iter));
+exports.pmap = C.curry((fn, iter) => pmap_internal(fn, iter));
+exports.pfilter = C.curry((fn, iter) => pfilter_internal(fn, iter));
