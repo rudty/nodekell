@@ -1,6 +1,6 @@
 'use strict';
 const C = require("./core.js");
-const default_fetch_count = 1;
+const default_fetch_count = 100;
 let global_fetch_count = default_fetch_count;
 
 exports.parallel_set_fetch_count = (count) => {
