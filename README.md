@@ -96,7 +96,7 @@ console.log(v + 1);//26
 *    [scanl1](#scanl1)
 *    [buffer](#buffer)
 
-### functional / parallel 
+## parallel function
 *    [parallel_set_fetch_count](#parallel_set_fetch_count)
 *    [pfilter](#pfilter)
 *    [pmap](#pmap)
