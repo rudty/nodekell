@@ -37,7 +37,7 @@ const pmap_internal = async function* (fn, iter) {
     const fetch_count = global_fetch_count;
 
     let i = 0;
-    const f = [];
+    let f = [];
     for await(const e of iter) {
         f.push(fn(e));
         ++i;
