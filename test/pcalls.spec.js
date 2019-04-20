@@ -25,7 +25,7 @@ describe('test pcalls', () => {
         yield _ => Promise.resolve(1);
         yield _ => 2;
         yield async _ => await Promise.resolve(3);
-        yield async _ => await 4;
+        yield async _ => 4;
     };
     
     it('vaarg fetch 999', async () => {
