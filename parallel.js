@@ -57,3 +57,29 @@ exports.pfilter = C.curry(async function* (fn, iter) {
 
     yield* pfilter_call_internal(f, v);
 });
+
+const pcalls_internal = async function* (iter) {
+    const fetch_count = global_fetch_count;
+    let f = [];
+    let i = 0;
+    for await(const e of iter) {
+        f.push(e());
+        ++i;
+        if(i >= fetch_count) {
+            yield* f;
+            f = [];
+            i = 0;
+        }
+    } 
+    yield* f;
+};
+
+exports.pcalls = C.curry(async function* (...a) {
+    if (a.length === 1) {
+        if (a[0][Symbol.iterator] || a[0][Symbol.asyncIterator]) {
+            yield* pcalls_internal(a[0]);
+            return;
+        }
+    }
+    yield* pcalls_internal(a);
+});

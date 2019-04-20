@@ -101,6 +101,7 @@ console.log(v + 1);//26
 *    [parallel_set_fetch_count](#parallel_set_fetch_count)
 *    [pfilter](#pfilter)
 *    [pmap](#pmap)
+*    [pcalls](#pcalls)
 
 ## generator
 *    [range](#range)
@@ -712,6 +713,40 @@ console.log(v);
 //...
 //99
 //[1,2]
+```
+
+
+### pcalls
+* async function generator
+```javascript
+const gfn2 = async function* () {
+    yield _ => Promise.resolve(1);
+    yield _ => 2;
+    yield async _ => await Promise.resolve(3);
+    yield async _ => await 4;
+};
+const c = F.pcalls(gfn2());
+const r = await F.collect(c);
+console.log(r);
+//print [1,2,3,4]
+```
+* call vaarg async functions
+```javascript
+const fn1 = () => {
+    return 1;
+};
+const fn2 = () => {
+    return Promise.resolve(2);
+};
+const fn3 = async () => {
+    return 3;
+};
+const fn4 = async () => {
+    return Promise.resolve(4);
+};
+const c = F.pcalls(fn1, fn2, fn3, fn4);
+const r = await F.collect(c);
+console.log(r); //print [1,2,3,4]
 ```
 
 

@@ -347,3 +347,6 @@ export function pmap<T, R>(fn: (predicate: T) => R, iter: AsyncIterable<T>): Asy
 export function pfilter<T>(fn: (predicate: T) => boolean): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<T>
 export function pfilter<T>(fn: (predicate: T) => boolean, iter: Iterable<T>): AsyncIterableIterator<T>
 export function pfilter<T>(fn: (predicate: T) => boolean, iter: AsyncIterable<T>): AsyncIterableIterator<T>
+
+export function pcalls<R>(iter: Iterable<() => Promise<R>> | AsyncIterable<() => Promise<R>>): AsyncIterableIterator<R>
+export function pcalls<R>(...fn: (() => Promise<R>)[] ) : AsyncIterableIterator<R> 
