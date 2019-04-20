@@ -97,7 +97,7 @@ console.log(v + 1);//26
 *    [scanl1](#scanl1)
 *    [buffer](#buffer)
 
-## parallel function
+## functional / parallel
 *    [parallel_set_fetch_count](#parallel_set_fetch_count)
 *    [pfilter](#pfilter)
 *    [pmap](#pmap)
@@ -717,7 +717,7 @@ console.log(v);
 
 
 ### pcalls
-* async function generator
+1. async function generator
 ```javascript
 const gfn2 = async function* () {
     yield _ => Promise.resolve(1);
@@ -730,7 +730,10 @@ const r = await F.collect(c);
 console.log(r);
 //print [1,2,3,4]
 ```
-* call vaarg async functions
+2. call vaarg async functions
+```javascript
+/*same as */Promise.all([fn1(),fn2(),fn3(),fn4()])
+```
 ```javascript
 const fn1 = () => {
     return 1;
