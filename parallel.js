@@ -4,36 +4,14 @@ const default_fetch_count = 100;
 let global_fetch_count = default_fetch_count;
 
 exports.parallel_set_fetch_count = (count) => {
-    global_fetch_count = Number(count) || default_fetch_count;
-};
-
-const filter_each_internal = async function*(f) {
-    for(let i = 0; i < f.length; ++i) {
-        if(await f[i][0]) {
-            yield f[i][1];
-        }
+    count = Number(count);
+    if (count <= 0) {
+        throw new Error("count > 0 required");
     }
+    global_fetch_count = count || default_fetch_count;
 };
 
-const pfilter_internal = async function* (fn, iter) {
-    const fetch_count = global_fetch_count;
-
-    let i = 0;
-    let f = [];
-    for await(const e of iter) {
-        f.push([fn(e), e]);
-        ++i;
-        if(i >= fetch_count) {
-            yield* filter_each_internal(f); 
-            f = [];
-            i = 0;
-        }
-    }
-
-    yield* filter_each_internal(f);
-};
-
-const pmap_internal = async function* (fn, iter) {
+exports.pmap = C.curry(async function* (fn, iter) {
     const fetch_count = global_fetch_count;
 
     let i = 0;
@@ -49,7 +27,33 @@ const pmap_internal = async function* (fn, iter) {
     }
 
     yield* f;
+});
+
+const pfilter_call_internal = async function* (f, v) {
+    for(let i = 0; i < f.length; ++i) {
+        if (await f[i]) {
+            yield v[i];
+        }
+    }
 };
 
-exports.pmap = C.curry((fn, iter) => pmap_internal(fn, iter));
-exports.pfilter = C.curry((fn, iter) => pfilter_internal(fn, iter));
+exports.pfilter = C.curry(async function* (fn, iter) {
+    const fetch_count = global_fetch_count;
+
+    let i = 0;
+    let f = [];
+    let v = [];
+    for await(const e of iter) {
+        f.push(fn(e));
+        v.push(e);
+        ++i;
+        if(i >= fetch_count) {
+            yield* pfilter_call_internal(f, v); 
+            f = [];
+            v = [];
+            i = 0;
+        }
+    }
+
+    yield* pfilter_call_internal(f, v);
+});
