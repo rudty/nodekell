@@ -854,6 +854,7 @@ for await(const e of F.seq(a)) {
 **deprecated** 
 deprecated. use flat or dflat instead.
 
+
 ### repeat
 
 ```javascript
