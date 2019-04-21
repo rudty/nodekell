@@ -131,6 +131,12 @@ export function map<T, R>(fn: (predicate: T) => R): (iter: Iterable<T> | AsyncIt
 export function map<T, R>(fn: (predicate: T) => R, iter: Iterable<T>): AsyncIterableIterator<R>
 export function map<T, R>(fn: (predicate: T) => R, iter: AsyncIterable<T>): AsyncIterableIterator<R>
 
+export function dflat<T>(...iter: Iterable<T>[]): AsyncIterableIterator<T>
+export function dflat<T>(...iter: AsyncIterable<T>[]): AsyncIterableIterator<T>
+
+export function flat<T>(iter: Iterable<T>): AsyncIterableIterator<T>
+export function flat<T>(iter: AsyncIterable<T>): AsyncIterableIterator<T>
+
 export function fmap<T, E, R>(fn: (predicate: T) => E): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<R>
 export function fmap<T, E, R>(fn: (predicate: T) => E, iter: Iterable<T>): AsyncIterableIterator<R>
 export function fmap<T, E, R>(fn: (predicate: T) => E, iter: AsyncIterable<T>): AsyncIterableIterator<R>

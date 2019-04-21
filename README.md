@@ -73,6 +73,7 @@ console.log(v + 1);//26
 *    [fmap](#fmap)          [**change**]
 *    [flatMap](#flatmap)    [**change**]
 *    [flat](#flat)
+*    [dflat](#dflat)
 *    [reverse](#reverse)
 *    [forEach](#foreach)
 *    [zip](#zip)
@@ -107,7 +108,7 @@ console.log(v + 1);//26
 ## generator
 *    [range](#range)
 *    [seq](#seq)
-*    [rangeOf](#rangeof)
+*    [rangeOf](#rangeof) [**deprecated**]
 *    [repeat](#repeat)
 *    [rangeInterval](#rangeinterval)
 *    [iterate](#iterate)
@@ -280,6 +281,15 @@ const a = [
         5];
 const f = F.flat(a);
 console.log(await F.collect(f)); // print [1,2,3,4,5]
+```
+
+
+### dflat
+Similar to flat, but works recursively
+```javascript
+const r = await F.dflat([[[1],[2]]],[[3]],[4]);
+const c = await F.collect(r);
+console.log(c);//print [1,2,3,4]
 ```
 
 
@@ -841,22 +851,8 @@ for await(const e of F.seq(a)) {
 
 
 ### rangeOf
-make flatten range
-```javascript
-const r = await F.rangeOf(1,2,3);
-for await(const e of r) {
-    console.log(e);
-}
-//print 1,2,3
-```
-```javascript
-const r = await F.rangeOf([1,2,3],4,5);
-for await(const e of r) {
-    console.log(e);
-}
-//print 1,2,3,4,5
-```
-
+**deprecated** 
+deprecated. use flat or dflat instead.
 
 ### repeat
 

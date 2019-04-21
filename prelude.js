@@ -80,6 +80,20 @@ exports.flat = async function* (iter) {
     }
 };
 
+const dflat = async function*(...iters) {
+    for await (const it of iters) {
+        if(it && (it[Symbol.iterator] || it[Symbol.asyncIterator])) {
+            for await (const e of it) {
+                yield* dflat(e);
+            }
+        } else {
+            yield it;
+        }
+    }
+};
+
+exports.dflat = dflat;
+
 exports.take =  C.curry(async function* (count, iter) {
     let it = 0;
     for await (const e of iter) {
