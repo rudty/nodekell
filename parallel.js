@@ -29,6 +29,27 @@ exports.pmap = C.curry(async function* (fn, iter) {
     yield* f;
 });
 
+const pfmap = C.curry(async function* (fn, iter) {
+    const fetch_count = global_fetch_count;
+
+    let f = [];
+    for await (const e of iter) {
+        const len = f.push(fn(e));
+        if(len >= fetch_count) {
+            for (let i = 0; i < f.length; ++i) {
+                yield* await f[i];
+            }
+            f = [];
+        }
+    }
+
+    for (let i = 0; i < f.length; ++i) {
+        yield* await f[i];
+    }
+});
+exports.pfmap = pfmap;
+exports.pflatMap = pfmap;
+
 const pfilter_call_internal = async function* (f, v) {
     for(let i = 0; i < f.length; ++i) {
         if (await f[i]) {

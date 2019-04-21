@@ -101,6 +101,7 @@ console.log(v + 1);//26
 *    [parallel_set_fetch_count](#parallel_set_fetch_count)
 *    [pfilter](#pfilter)
 *    [pmap](#pmap)
+*    [pfmap](#pfmap)
 *    [pcalls](#pcalls)
 
 ## generator
@@ -238,12 +239,17 @@ console.log(await F.collect(t)); // print 1, 2
 
 ### fmap
 ```javascript
-const a = [[1],[2],3,4,5];
+const a = [[1],[2],[3],[4],[5]];
 const f = F.fmap(e => e, a);
 console.log(await F.collect(f)); // print [1,2,3,4,5]
 ```
 ```javascript
-const a = [[Promise.resolve(1)],Promise.resolve([2]),3,4,5];
+const a = [ 
+        [Promise.resolve(1)],
+        Promise.resolve([2]),
+        [3],
+        [4],
+        [5]];
 const f = F.fmap(e => e, a);
 console.log(await F.collect(f)); // print [1,2,3,4,5]
 ```
@@ -255,7 +261,12 @@ same as [fmap](#fmap)
 
 ### flat
 ```javascript
-const a = [[1],[2],3,4,5];
+const a = [ 
+        [Promise.resolve(1)],
+        Promise.resolve([2]),
+        [3],
+        [4],
+        [5]];
 const f = F.flat(a);
 console.log(await F.collect(f)); // print [1,2,3,4,5]
 ```
@@ -670,6 +681,7 @@ Same as [filter](#filter), but calls a [fetch count](#parallel_set_fetch_count) 
 
 useful for async function or return promise.
 ```javascript
+//F.parallel_set_fetch_count(100);  default is 100
 const v = await F.run(
     F.range(Infinity),
     F.pfilter(async e =>{
@@ -696,6 +708,7 @@ Same as [map](#map), but calls a [fetch count](#parallel_set_fetch_count) of fun
 
 useful for async function or return promise.
 ```javascript
+//F.parallel_set_fetch_count(100); default is 100
 const v = await F.run(
     F.range(Infinity),
     F.pmap(async e =>{
@@ -706,13 +719,42 @@ const v = await F.run(
     F.collect);
 console.log(v);
 //print
+//0
 //1
 //2
-//3
 //...
 //...
 //99
 //[1,2]
+```
+
+
+### pfmap
+Same as [fmap](#fmap), but calls a [fetch count](#parallel_set_fetch_count) of functions concurrently. 
+
+
+useful for async function or return promise.
+```javascript
+// F.parallel_set_fetch_count(100); default is 100
+const v = await F.run(
+    F.range(Infinity),  //0,1,2,...
+    F.map(e=> [e]),     //[0],[1],[2]...
+    F.pfmap(async e =>{
+        console.log(e); //print [0] ...
+        e.push(42);     // [0,42],[1,42],[2,42]... 
+        return e ;
+    }),
+    F.take(5),          //[0,42,1,42,2]
+    F.collect);         //iterator to array
+console.log(v);
+//print
+//[0]
+//[1]
+//[2]
+//...
+//...
+//[99]
+//[0,42,1,42,2]
 ```
 
 
