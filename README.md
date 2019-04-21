@@ -70,8 +70,8 @@ console.log(v + 1);//26
 *    [map](#map)
 *    [take](#take)
 *    [takeWhile](#takewhile)
-*    [fmap](#fmap)          **change**
-*    [flatMap](#flatmap)    **change**
+*    [fmap](#fmap)          [**change**]
+*    [flatMap](#flatmap)    [**change**]
 *    [flat](#flat)
 *    [reverse](#reverse)
 *    [forEach](#foreach)
