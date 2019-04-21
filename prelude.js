@@ -179,7 +179,7 @@ exports.zipWith =  C.curry(async function* (f, a, b) {
         if (done) {
             break;
         }
-        yield f(value, e);
+        yield await f(value, e);
     }
 });
 
