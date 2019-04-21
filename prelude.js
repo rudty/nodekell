@@ -69,7 +69,16 @@ const fmap =  C.curry(async function* (fn, iter) {
 });
 exports.fmap = fmap;
 exports.flatMap = fmap;
-exports.flat = fmap(C.ioe);
+
+exports.flat = async function* (iter) {
+    for await (const e of iter) {
+        if (e && (e[Symbol.iterator] || e[Symbol.asyncIterator])) {
+            yield* await e;
+        } else {
+            yield e;
+        }
+    }
+};
 
 exports.take =  C.curry(async function* (count, iter) {
     let it = 0;
