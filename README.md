@@ -140,7 +140,8 @@ console.log(v + 1);//26
 *    [interval](#interval)
 *    [timeout](#timeout)
 *    [withTimeout](#withtimeout)
-*    [notNil](#notnil)
+*    [notNil](#notnil) [**change/rename**]
+*    [isNil](#isNil)
 ---
 
 
@@ -1378,16 +1379,24 @@ try{
 //callstack....
 ```
 
+
 ### notNil
+**change/rename**
+rename. use [isNil](#isNil) instead.
+
+
+### isNil
 return false null, undefined, NaN true otherwise
 ```javascript
-console.log(F.notNil(NaN)); // false
-console.log(F.notNil(undefined)); //false
-console.log(F.notNil(null)); //false
-console.log(F.notNil("null")); // true
-console.log(F.notNil("NaN")); //true
-console.log(F.notNil(0)); // true
-console.log(F.notNil(false)); // true
+console.log(F.isNil(NaN)); // false
+console.log(F.isNil(undefined)); //false
+console.log(F.isNil(null)); //false
+console.log(F.isNil("null")); // true
+console.log(F.isNil("NaN")); //true
+console.log(F.isNil(0)); // true
+console.log(F.isNil(false)); // true
+console.log(F.isNil([])); // true
+console.log(F.isNil({})); // true
 ```
 
 

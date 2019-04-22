@@ -41,7 +41,7 @@ exports.second = a => a[1];
 exports.ioe = e => e;
 exports.fnothing = () => {};
 
-exports.notNil = v => {
+const isNil = v => {
     if (v) {
         return true;
     }
@@ -52,3 +52,8 @@ exports.notNil = v => {
         default: return !Number.isNaN(v);
     }
 };
+
+exports.isNil = isNil;
+
+//use isNill instead.
+exports.notNil = isNil;
