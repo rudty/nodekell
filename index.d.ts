@@ -1,362 +1,1262 @@
-//target ES2019 or ESNEXT
-//if you are using an earlier version, uncomment code.
+/** 
+ * Type definitions for nodekell 1.2
+ * TypeScript Version: 3.4
+ */
+
+export type Iter<T> = Iterable<T> | AsyncIterable<T>; // | IterableIterator<T> | AsyncIterableIterator<T> | T[];
+
+export type IterOnly<T> = T extends Iter<any> ? T : T[];
+
+export type ExtractPromise<T> = T extends Promise<infer PT> ? PT : T;
+export type EP<T> = ExtractPromise<T>;
+
+export type ExtractMap<T> = T extends Map<infer K, infer V> ? [K, V] : unknown;
+
+/**
+ * Non-Promise Iter Flat
+ */
+export type Flat<T> = T extends Iter<infer E0> ? E0 : T;
+
+/**
+ * Promise Iter Flat
+ */
+export type PFlat<T> = EP<Flat<EP<T>>>; // Promise Flat
+
+/**
+ * Non-Promise Iter Deep Flat
+ */
+export type DFlat<T> = // Deep Flat
+    T extends Iter<infer E0> ?
+    E0 extends Iter<infer E1> ?
+    E1 extends Iter<infer E2> ?
+    E2 extends Iter<infer E3> ?
+    E3 extends Iter<infer E4> ?
+    E4 extends Iter<infer E5> ?
+    E5 extends Iter<infer E6> ?
+    E6 extends Iter<infer E7> ?
+    E7 extends Iter<infer E8> ?
+    E8 extends Iter<infer E9> ?
+    E9 extends Iter<infer E10> ?
+    E10 extends Iter<infer E11> ?
+    E11 : // 12
+    E10 :
+    E9 :
+    E8 :
+    E7 :
+    E6 :
+    E5 :
+    E4 :
+    E3 :
+    E2 :
+    E1 :
+    E0 :
+    T;
+
+/**
+ * Promise Iter Deep Flat
+ */
+export type PDFlat<T> = // Promise Deep Flat
+    EP<DFlat<
+    EP<DFlat<
+    EP<DFlat<
+    EP<DFlat<
+    EP<DFlat<
+    EP<DFlat<
+    EP<DFlat< // 7
+    EP<T>>>>>>>>>>>>>>>;
+
+export interface CurriedFunction2<T1, T2, R> {
+    (t1: T1): (t2: T2) => R;
+    (t1: T1, t2: T2): R;
+}
+
+export interface CurriedFunction3<T1, T2, T3, R> {
+    (t1: T1): CurriedFunction2<T2, T3, R>; // t1 => t2 => t3 => r | t1 => t2 t3 =>
+    (t1: T1, t2: T2): (t3: T3) => R;
+    (t1: T1, t2: T2, t3: T3): R;
+}
+
+export interface CurriedFunction4<T1, T2, T3, T4, R> {
+    (t1: T1): CurriedFunction3<T2, T3, T4, R>;
+    (t1: T1, t2: T2): CurriedFunction2<T3, T4, R>;
+    (t1: T1, t2: T2, t3: T3): (t4: T4) => R;
+    (t1: T1, t2: T2, t3: T3, t4: T4): R;
+}
+
+export interface CurriedFunction5<T1, T2, T3, T4, T5, R> {
+    (t1: T1): CurriedFunction4<T2, T3, T4, T5, R>;
+    (t1: T1, t2: T2): CurriedFunction3<T3, T4, T5, R>;
+    (t1: T1, t2: T2, t3: T3): CurriedFunction2<T4, T5, R>;
+    (t1: T1, t2: T2, t3: T3, t4: T4): (t5: T5) => R;
+    (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5): R;
+}
+
+export interface CurriedFunction6<T1, T2, T3, T4, T5, T6, R> {
+    (t1: T1): CurriedFunction5<T2, T3, T4, T5, T6, R>;
+    (t1: T1, t2: T2): CurriedFunction4<T3, T4, T5, T6, R>;
+    (t1: T1, t2: T2, t3: T3): CurriedFunction3<T4, T5, T6, R>;
+    (t1: T1, t2: T2, t3: T3, t4: T4): CurriedFunction2<T5, T6, R>;
+    (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5): (t6: T6) => R;
+    (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6): R;
+}
+
+export interface CurriedFunction7<T1, T2, T3, T4, T5, T6, T7, R> {
+    (t1: T1): CurriedFunction6<T2, T3, T4, T5, T6, T7, R>;
+    (t1: T1, t2: T2): CurriedFunction5<T3, T4, T5, T6, T7, R>;
+    (t1: T1, t2: T2, t3: T3): CurriedFunction4<T4, T5, T6, T7, R>;
+    (t1: T1, t2: T2, t3: T3, t4: T4): CurriedFunction3<T5, T6, T7, R>;
+    (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5): CurriedFunction2<T6, T7, R>;
+    (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6): (t7: T7) => R;
+    (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7): R;
+}
+
+export interface CurriedFunction8<T1, T2, T3, T4, T5, T6, T7, T8, R> {
+    (t1: T1): CurriedFunction7<T2, T3, T4, T5, T6, T7, T8, R>;
+    (t1: T1, t2: T2): CurriedFunction6<T3, T4, T5, T6, T7, T8, R>;
+    (t1: T1, t2: T2, t3: T3): CurriedFunction5<T4, T5, T6, T7, T8, R>;
+    (t1: T1, t2: T2, t3: T3, t4: T4): CurriedFunction4<T5, T6, T7, T8, R>;
+    (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5): CurriedFunction3<T6, T7, T8, R>;
+    (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6): CurriedFunction2<T7, T8, R>;
+    (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7): (t8: T8) => R;
+    (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8): R;
+}
+
+//
+// core.js
+//
+
+/**
+ * https://github.com/rudty/nodekell#curry
+ *
+ * please arguments length 8 or less
+ *
+ * @param f
+ */
+export function curry<T1, T2, R>(f: (t1: T1, t2: T2) => R): CurriedFunction2<T1, T2, R>;
+export function curry<T1, T2, T3, R>(f: (t1: T1, t2: T2, T3: T3) => R): CurriedFunction3<T1, T2, T3, R>;
+export function curry<T1, T2, T3, T4, R>(f: (t1: T1, t2: T2, t3: T3, t4: T4) => R): CurriedFunction4<T1, T2, T3, T4, R>;
+export function curry<T1, T2, T3, T4, T5, R>(f: (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) => R): CurriedFunction5<T1, T2, T3, T4, T5, R>;
+export function curry<T1, T2, T3, T4, T5, T6, R>(f: (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6) => R): CurriedFunction6<T1, T2, T3, T4, T5, T6, R>;
+export function curry<T1, T2, T3, T4, T5, T6, T7, R>(f: (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7) => R): CurriedFunction7<T1, T2, T3, T4, T5, T6, T7, R>;
+export function curry<T1, T2, T3, T4, T5, T6, T7, T8, R>(f: (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8) => R): CurriedFunction8<T1, T2, T3, T4, T5, T6, T7, T8, R>;
+
+/**
+ * https://github.com/rudty/nodekell#seq
+ *
+ * make generator
+ *
+ * do not need to check if iter
+ *
+ * Symbol.asyncIterator or Symbol.iterator
+ */
+export function seq<T>(iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+export function seq<T>(iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+
+/**
+ * internal function
+ *
+ * ```ts
+ * ioe('hello') === 'hello';
+ * ioe(1234) === 1234;
+ * ```
+ */
+export function ioe<T>(e: T): T;
+
+/**
+ * internal function
+ *
+ * do nothing
+ */
+export function fnothing(): void;
+
+/**
+ * ```ts
+ * add(1, 2) === 3;
+ * add('hello', 'world') === 'helloworld';
+ * ```
+ */
+export function add(a: number, b: number): number;
+export function add(a: string, b: string): string;
+
+/**
+ * ```ts
+ * sub(2, 1) === 1;
+ * ```
+ */
+export function sub(a: number, b: number): number;
+
+/**
+ * ```ts
+ * inc(1) === 2;
+ * ```
+ */
+export function inc(a: number): number;
+
+/**
+ * ```ts
+ * dec(2) === 1;
+ * ```
+ */
+export function dec(a: number): number;
+
+/**
+ * ```ts
+ * first([0,1,2,3]) === 0;
+ * ```
+ */
+export function first<T extends any[]>(a: T): T[0];
+
+/**
+ * ```ts
+ * second([0,1,2,3]) === 1;
+ * ```
+ */
+export function second<T extends any[]>(a: T): T[1];
+
+/**
+ * ```ts
+ * notNil(undefined) === false;
+ * notNil(false) === true;
+ * ```
+ */
+export function notNil(a: any): boolean;
+
+//
+// prelude.js
+//
+
+/**
+ * https://github.com/rudty/nodekell#run
+ *
+ * **Note**
+ * - originally allow Promise wrapped functions. but that is complicated. so don't support Promise wrapped functions type.
+ * - please functions length 20 or less
+ * - run implement with foldl
+ *
+ * ```ts
+ * // like `$` or `.`
+ *
+ * const a = [1,2,3,4,5];
+ * const r = run(a,
+ *               map(e => e + 1), // a = [2,3,4,5,6]
+ *               filter(e => e < 4), // a = [2,3]
+ *               take(Infinity));
+ * result:
+ * [ 2 , 3 ]
+ * ```
+ *
+ * @param t
+ * @param ...f
+ */
+export function run<T>(t: T | Promise<T>): Promise<T>;
+export function run<T, R0>(t: T | Promise<T>, f0: (t: T) => (R0 | Promise<R0>)): Promise<R0>;
+export function run<T, R0, R1>(t: T | Promise<T>, f0: (t: T) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>)): Promise<R1>;
+export function run<T, R0, R1, R2>(t: T | Promise<T>, f0: (t: T) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>)): Promise<R2>;
+export function run<T, R0, R1, R2, R3>(t: T | Promise<T>, f0: (t: T) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>), f3: (r2: R2) => (R3 | Promise<R3>)): Promise<R3>;
+export function run<T, R0, R1, R2, R3, R4>(t: T | Promise<T>, f0: (t: T) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>), f3: (r2: R2) => (R3 | Promise<R3>), f4: (r3: R3) => (R4 | Promise<R4>)): Promise<R4>;
+export function run<T, R0, R1, R2, R3, R4, R5>(t: T | Promise<T>, f0: (t: T) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>), f3: (r2: R2) => (R3 | Promise<R3>), f4: (r3: R3) => (R4 | Promise<R4>), f5: (r4: R4) => (R5 | Promise<R5>)): Promise<R5>;
+export function run<T, R0, R1, R2, R3, R4, R5, R6>(t: T | Promise<T>, f0: (t: T) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>), f3: (r2: R2) => (R3 | Promise<R3>), f4: (r3: R3) => (R4 | Promise<R4>), f5: (r4: R4) => (R5 | Promise<R5>), f6: (r5: R5) => (R6 | Promise<R6>)): Promise<R6>;
+export function run<T, R0, R1, R2, R3, R4, R5, R6, R7>(t: T | Promise<T>, f0: (t: T) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>), f3: (r2: R2) => (R3 | Promise<R3>), f4: (r3: R3) => (R4 | Promise<R4>), f5: (r4: R4) => (R5 | Promise<R5>), f6: (r5: R5) => (R6 | Promise<R6>), f7: (r6: R6) => (R7 | Promise<R7>)): Promise<R7>;
+export function run<T, R0, R1, R2, R3, R4, R5, R6, R7, R8>(t: T | Promise<T>, f0: (t: T) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>), f3: (r2: R2) => (R3 | Promise<R3>), f4: (r3: R3) => (R4 | Promise<R4>), f5: (r4: R4) => (R5 | Promise<R5>), f6: (r5: R5) => (R6 | Promise<R6>), f7: (r6: R6) => (R7 | Promise<R7>), f8: (r7: R7) => (R8 | Promise<R8>)): Promise<R8>;
+export function run<T, R0, R1, R2, R3, R4, R5, R6, R7, R8, R9>(t: T | Promise<T>, f0: (t: T) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>), f3: (r2: R2) => (R3 | Promise<R3>), f4: (r3: R3) => (R4 | Promise<R4>), f5: (r4: R4) => (R5 | Promise<R5>), f6: (r5: R5) => (R6 | Promise<R6>), f7: (r6: R6) => (R7 | Promise<R7>), f8: (r7: R7) => (R8 | Promise<R8>), f9: (r8: R8) => (R9 | Promise<R9>)): Promise<R9>;
+export function run<T, R0, R1, R2, R3, R4, R5, R6, R7, R8, R9, R10>(t: T | Promise<T>, f0: (t: T) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>), f3: (r2: R2) => (R3 | Promise<R3>), f4: (r3: R3) => (R4 | Promise<R4>), f5: (r4: R4) => (R5 | Promise<R5>), f6: (r5: R5) => (R6 | Promise<R6>), f7: (r6: R6) => (R7 | Promise<R7>), f8: (r7: R7) => (R8 | Promise<R8>), f9: (r8: R8) => (R9 | Promise<R9>), f10: (r9: R9) => (R10 | Promise<R10>)): Promise<R10>;
+export function run<T, R0, R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11>(t: T | Promise<T>, f0: (t: T) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>), f3: (r2: R2) => (R3 | Promise<R3>), f4: (r3: R3) => (R4 | Promise<R4>), f5: (r4: R4) => (R5 | Promise<R5>), f6: (r5: R5) => (R6 | Promise<R6>), f7: (r6: R6) => (R7 | Promise<R7>), f8: (r7: R7) => (R8 | Promise<R8>), f9: (r8: R8) => (R9 | Promise<R9>), f10: (r9: R9) => (R10 | Promise<R10>), f11: (r10: R10) => (R11 | Promise<R11>)): Promise<R11>;
+export function run<T, R0, R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12>(t: T | Promise<T>, f0: (t: T) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>), f3: (r2: R2) => (R3 | Promise<R3>), f4: (r3: R3) => (R4 | Promise<R4>), f5: (r4: R4) => (R5 | Promise<R5>), f6: (r5: R5) => (R6 | Promise<R6>), f7: (r6: R6) => (R7 | Promise<R7>), f8: (r7: R7) => (R8 | Promise<R8>), f9: (r8: R8) => (R9 | Promise<R9>), f10: (r9: R9) => (R10 | Promise<R10>), f11: (r10: R10) => (R11 | Promise<R11>), f12: (r11: R11) => (R12 | Promise<R12>)): Promise<R12>;
+export function run<T, R0, R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13>(t: T | Promise<T>, f0: (t: T) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>), f3: (r2: R2) => (R3 | Promise<R3>), f4: (r3: R3) => (R4 | Promise<R4>), f5: (r4: R4) => (R5 | Promise<R5>), f6: (r5: R5) => (R6 | Promise<R6>), f7: (r6: R6) => (R7 | Promise<R7>), f8: (r7: R7) => (R8 | Promise<R8>), f9: (r8: R8) => (R9 | Promise<R9>), f10: (r9: R9) => (R10 | Promise<R10>), f11: (r10: R10) => (R11 | Promise<R11>), f12: (r11: R11) => (R12 | Promise<R12>), f13: (r12: R12) => (R13 | Promise<R13>)): Promise<R13>;
+export function run<T, R0, R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14>(t: T | Promise<T>, f0: (t: T) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>), f3: (r2: R2) => (R3 | Promise<R3>), f4: (r3: R3) => (R4 | Promise<R4>), f5: (r4: R4) => (R5 | Promise<R5>), f6: (r5: R5) => (R6 | Promise<R6>), f7: (r6: R6) => (R7 | Promise<R7>), f8: (r7: R7) => (R8 | Promise<R8>), f9: (r8: R8) => (R9 | Promise<R9>), f10: (r9: R9) => (R10 | Promise<R10>), f11: (r10: R10) => (R11 | Promise<R11>), f12: (r11: R11) => (R12 | Promise<R12>), f13: (r12: R12) => (R13 | Promise<R13>), f14: (r13: R13) => (R14 | Promise<R14>)): Promise<R14>;
+export function run<T, R0, R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15>(t: T | Promise<T>, f0: (t: T) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>), f3: (r2: R2) => (R3 | Promise<R3>), f4: (r3: R3) => (R4 | Promise<R4>), f5: (r4: R4) => (R5 | Promise<R5>), f6: (r5: R5) => (R6 | Promise<R6>), f7: (r6: R6) => (R7 | Promise<R7>), f8: (r7: R7) => (R8 | Promise<R8>), f9: (r8: R8) => (R9 | Promise<R9>), f10: (r9: R9) => (R10 | Promise<R10>), f11: (r10: R10) => (R11 | Promise<R11>), f12: (r11: R11) => (R12 | Promise<R12>), f13: (r12: R12) => (R13 | Promise<R13>), f14: (r13: R13) => (R14 | Promise<R14>), f15: (r14: R14) => (R15 | Promise<R15>)): Promise<R15>;
+export function run<T, R0, R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16>(t: T | Promise<T>, f0: (t: T) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>), f3: (r2: R2) => (R3 | Promise<R3>), f4: (r3: R3) => (R4 | Promise<R4>), f5: (r4: R4) => (R5 | Promise<R5>), f6: (r5: R5) => (R6 | Promise<R6>), f7: (r6: R6) => (R7 | Promise<R7>), f8: (r7: R7) => (R8 | Promise<R8>), f9: (r8: R8) => (R9 | Promise<R9>), f10: (r9: R9) => (R10 | Promise<R10>), f11: (r10: R10) => (R11 | Promise<R11>), f12: (r11: R11) => (R12 | Promise<R12>), f13: (r12: R12) => (R13 | Promise<R13>), f14: (r13: R13) => (R14 | Promise<R14>), f15: (r14: R14) => (R15 | Promise<R15>), f16: (r15: R15) => (R16 | Promise<R16>)): Promise<R16>;
+export function run<T, R0, R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17>(t: T | Promise<T>, f0: (t: T) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>), f3: (r2: R2) => (R3 | Promise<R3>), f4: (r3: R3) => (R4 | Promise<R4>), f5: (r4: R4) => (R5 | Promise<R5>), f6: (r5: R5) => (R6 | Promise<R6>), f7: (r6: R6) => (R7 | Promise<R7>), f8: (r7: R7) => (R8 | Promise<R8>), f9: (r8: R8) => (R9 | Promise<R9>), f10: (r9: R9) => (R10 | Promise<R10>), f11: (r10: R10) => (R11 | Promise<R11>), f12: (r11: R11) => (R12 | Promise<R12>), f13: (r12: R12) => (R13 | Promise<R13>), f14: (r13: R13) => (R14 | Promise<R14>), f15: (r14: R14) => (R15 | Promise<R15>), f16: (r15: R15) => (R16 | Promise<R16>), f17: (r16: R16) => (R17 | Promise<R17>)): Promise<R17>;
+export function run<T, R0, R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17, R18>(t: T | Promise<T>, f0: (t: T) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>), f3: (r2: R2) => (R3 | Promise<R3>), f4: (r3: R3) => (R4 | Promise<R4>), f5: (r4: R4) => (R5 | Promise<R5>), f6: (r5: R5) => (R6 | Promise<R6>), f7: (r6: R6) => (R7 | Promise<R7>), f8: (r7: R7) => (R8 | Promise<R8>), f9: (r8: R8) => (R9 | Promise<R9>), f10: (r9: R9) => (R10 | Promise<R10>), f11: (r10: R10) => (R11 | Promise<R11>), f12: (r11: R11) => (R12 | Promise<R12>), f13: (r12: R12) => (R13 | Promise<R13>), f14: (r13: R13) => (R14 | Promise<R14>), f15: (r14: R14) => (R15 | Promise<R15>), f16: (r15: R15) => (R16 | Promise<R16>), f17: (r16: R16) => (R17 | Promise<R17>), f18: (r17: R17) => (R18 | Promise<R18>)): Promise<R18>;
+export function run<T, R0, R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17, R18, R19>(t: T | Promise<T>, f0: (t: T) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>), f3: (r2: R2) => (R3 | Promise<R3>), f4: (r3: R3) => (R4 | Promise<R4>), f5: (r4: R4) => (R5 | Promise<R5>), f6: (r5: R5) => (R6 | Promise<R6>), f7: (r6: R6) => (R7 | Promise<R7>), f8: (r7: R7) => (R8 | Promise<R8>), f9: (r8: R8) => (R9 | Promise<R9>), f10: (r9: R9) => (R10 | Promise<R10>), f11: (r10: R10) => (R11 | Promise<R11>), f12: (r11: R11) => (R12 | Promise<R12>), f13: (r12: R12) => (R13 | Promise<R13>), f14: (r13: R13) => (R14 | Promise<R14>), f15: (r14: R14) => (R15 | Promise<R15>), f16: (r15: R15) => (R16 | Promise<R16>), f17: (r16: R16) => (R17 | Promise<R17>), f18: (r17: R17) => (R18 | Promise<R18>), f19: (r18: R18) => (R19 | Promise<R19>)): Promise<R19>;
+
+/**
+ * https://github.com/rudty/nodekell#head
+ *
+ * @param iter
+ */
+export function head<T>(iter: Iter<T | Promise<T>>): Promise<T>;
+export function head<T>(iter: Iter<T>): Promise<EP<T>>;
+
+/**
+ * https://github.com/rudty/nodekell#tail
+ *
+ * @param iter
+ */
+export function tail<T>(iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+export function tail<T>(iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+
+/**
+ * https://github.com/rudty/nodekell#drop
+ *
+ * @param count
+ * @param iter
+ */
+export function drop<T>(count: number): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+export function drop<T>(count: number): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
+
+export function drop<T>(count: number, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+export function drop<T>(count: number, iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+
+/**
+ * https://github.com/rudty/nodekell#dropwhile
+ *
+ * @param f
+ * @param iter
+ */
+export function dropWhile<T>(f: (elem: T) => (boolean | Promise<boolean>)): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+export function dropWhile<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>)): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
+
+export function dropWhile<T>(f: (elem: T) => (boolean | Promise<boolean>), iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+export function dropWhile<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+
+/**
+ * https://github.com/rudty/nodekell#filter
+ *
+ * @param f
+ * @param iter
+ */
+export function filter<T>(f: (elem: T) => (boolean | Promise<boolean>)): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+export function filter<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>)): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
+
+export function filter<T>(f: (elem: T) => (boolean | Promise<boolean>), iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+export function filter<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+
+/**
+ * https://github.com/rudty/nodekell#map
+ *
+ * @param f
+ * @param iter
+ */
+export function map<T, R>(f: (elem: T) => (R | Promise<R>)): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<R>;
+export function map<T, R>(f: (elem: EP<T>) => (R | Promise<R>)): (iter: Iter<T>) => AsyncIterableIterator<R>;
+
+export function map<T, R>(f: (elem: T) => (R | Promise<R>), iter: Iter<T | Promise<T>>): AsyncIterableIterator<R>;
+export function map<T, R>(f: (elem: EP<T>) => (R | Promise<R>), iter: Iter<T>): AsyncIterableIterator<R>;
+
+/**
+ * https://github.com/rudty/nodekell#fmap
+ *
+ * @param f
+ * @param iter
+ */
+export function fmap<T, R>(f: (elem: IterOnly<PFlat<T>>) => (Iter<R> | Promise<Iter<R>>)): (iter: T) => AsyncIterableIterator<PFlat<Iter<R>>>;
+export function fmap<T, R>(f: (elem: IterOnly<PFlat<T>>) => R): (iter: T) => AsyncIterableIterator<PFlat<EP<R>>>;
+
+export function fmap<T, R>(f: (elem: IterOnly<PFlat<T>>) => (Iter<R> | Promise<Iter<R>>), iter: T): AsyncIterableIterator<PFlat<Iter<R>>>;
+export function fmap<T, R>(f: (elem: IterOnly<PFlat<T>>) => R, iter: T): AsyncIterableIterator<PFlat<EP<R>>>;
+
+/**
+ * https://github.com/rudty/nodekell#flatMap
+ *
+ * as fmap
+ *
+ * @param f
+ * @param iter
+ */
+export function flatMap<T, R>(f: (elem: IterOnly<PFlat<T>>) => (Iter<R> | Promise<Iter<R>>)): (iter: T) => AsyncIterableIterator<PFlat<Iter<R>>>;
+export function flatMap<T, R>(f: (elem: IterOnly<PFlat<T>>) => R): (iter: T) => AsyncIterableIterator<PFlat<EP<R>>>;
+
+export function flatMap<T, R>(f: (elem: IterOnly<PFlat<T>>) => (Iter<R> | Promise<Iter<R>>), iter: T): AsyncIterableIterator<PFlat<Iter<R>>>;
+export function flatMap<T, R>(f: (elem: IterOnly<PFlat<T>>) => R, iter: T): AsyncIterableIterator<PFlat<EP<R>>>;
+
+/**
+ * https://github.com/rudty/nodekell#flat
+ *
+ * @param iter
+ */
+export function flat<T>(iter: Iter<T>): AsyncIterableIterator<PFlat<T>>;
+
+/**
+ * https://github.com/rudty/nodekell#dflat
+ *
+ * **Note**
+ * - don't use too deep iter
+ * - please use arguments length 10 or less (if over 10, forces first argment type or any type)
+ *
+ * @param t
+ */
+export function dflat<T1>(a: T1): AsyncIterableIterator<PDFlat<T1>>;
+export function dflat<T1, T2>(a: T1, b: T2): AsyncIterableIterator<PDFlat<T1 | T2>>;
+export function dflat<T1, T2, T3>(a: T1, b: T2, c: T3): AsyncIterableIterator<PDFlat<T1 | T2 | T3>>;
+export function dflat<T1, T2, T3, T4>(a: T1, b: T2, c: T3, d: T4): AsyncIterableIterator<PDFlat<T1 | T2 | T3 | T4>>;
+export function dflat<T1, T2, T3, T4, T5>(a: T1, b: T2, c: T3, d: T4, e: T5): AsyncIterableIterator<PDFlat<T1 | T2 | T3 | T4 | T5>>;
+export function dflat<T1, T2, T3, T4, T5, T6>(a: T1, b: T2, c: T3, d: T4, e: T5, f: T6): AsyncIterableIterator<PDFlat<T1 | T2 | T3 | T4 | T5 | T6>>;
+export function dflat<T1, T2, T3, T4, T5, T6, T7>(a: T1, b: T2, c: T3, d: T4, e: T5, f: T6, g: T7): AsyncIterableIterator<PDFlat<T1 | T2 | T3 | T4 | T5 | T6 | T7>>;
+export function dflat<T1, T2, T3, T4, T5, T6, T7, T8>(a: T1, b: T2, c: T3, d: T4, e: T5, f: T6, g: T7, h: T8): AsyncIterableIterator<PDFlat<T1 | T2 | T3 | T4 | T5 | T6 | T7 | T8>>;
+export function dflat<T1, T2, T3, T4, T5, T6, T7, T8, T9>(a: T1, b: T2, c: T3, d: T4, e: T5, f: T6, g: T7, h: T8, i: T9): AsyncIterableIterator<PDFlat<T1 | T2 | T3 | T4 | T5 | T6 | T7 | T8 | T9>>;
+export function dflat<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(a: T1, b: T2, c: T3, d: T4, e: T5, f: T6, g: T7, h: T8, i: T9, j: T10): AsyncIterableIterator<PDFlat<T1 | T2 | T3 | T4 | T5 | T6 | T7 | T8 | T9 | T10>>;
+export function dflat<T>(...a: T[]): AsyncIterableIterator<PDFlat<T>>;
+export function dflat(...a: any[]): AsyncIterableIterator<any>;
+
+/**
+ * https://github.com/rudty/nodekell#take
+ *
+ * @param count
+ * @param iter
+ */
+export function take<T>(count: number): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+export function take<T>(count: number): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
+
+export function take<T>(count: number, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+export function take<T>(count: number, iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+
+/**
+ * https://github.com/rudty/nodekell#takewhile
+ *
+ * @param f
+ * @param iter
+ */
+export function takeWhile<T>(f: (elem: T) => (boolean | Promise<boolean>)): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+export function takeWhile<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>)): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
+
+export function takeWhile<T>(f: (elem: T) => (boolean | Promise<boolean>), iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+export function takeWhile<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+
+/**
+ * https://github.com/rudty/nodekell#foldl
+ *
+ * @param f
+ * @param init
+ * @param iter
+ */
+
+// export function foldl<T>(f: (acc: T, elem: T) => (T | Promise<T>)): (init: T | Promise<T>) => (iter: Iter<T | Promise<T>>) => Promise<T>;
+
+// export function foldl<T>(f: (acc: T, elem: T) => (T | Promise<T>)): (init: T | Promise<T>, iter: Iter<T | Promise<T>>) => Promise<T>;
+
+export function foldl<T>(f: (acc: T, elem: T) => (T | Promise<T>)): CurriedFunction2<T | Promise<T>, Iter<T | Promise<T>>, Promise<T>>;
+export function foldl<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>)): CurriedFunction2<T, Iter<T>, Promise<EP<T>>>;
+
+export function foldl<T>(f: (acc: T, elem: T) => (T | Promise<T>), init: T | Promise<T>): (iter: Iter<T | Promise<T>>) => Promise<T>;
+export function foldl<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>), init: T): (iter: Iter<T>) => Promise<EP<T>>;
+
+export function foldl<T>(f: (acc: T, elem: T) => (T | Promise<T>), init: T | Promise<T>, iter: Iter<T | Promise<T>>): Promise<T>;
+export function foldl<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>), init: T, iter: Iter<T>): Promise<EP<T>>;
+
+/**
+ * https://github.com/rudty/nodekell#foldl1
+ *
+ * @param f
+ * @param iter
+ */
+export function foldl1<T>(f: (acc: T, elem: T) => (T | Promise<T>)): (iter: Iter<T | Promise<T>>) => Promise<T>;
+export function foldl1<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>)): (iter: Iter<T>) => Promise<EP<T>>;
+
+export function foldl1<T>(f: (acc: T, elem: T) => (T | Promise<T>), iter: Iter<T | Promise<T>>): Promise<T>;
+export function foldl1<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>), iter: Iter<T>): Promise<EP<T>>;
+
+/**
+ * https://github.com/rudty/nodekell#reduce
+ *
+ * as foldl1
+ *
+ * @param f
+ * @param iter
+ */
+export function reduce<T>(f: (acc: T, elem: T) => (T | Promise<T>)): (iter: Iter<T | Promise<T>>) => Promise<T>;
+export function reduce<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>)): (iter: Iter<T>) => Promise<EP<T>>;
+
+export function reduce<T>(f: (acc: T, elem: T) => (T | Promise<T>), iter: Iter<T | Promise<T>>): Promise<T>;
+export function reduce<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>), iter: Iter<T>): Promise<EP<T>>;
+
+/**
+ * https://github.com/rudty/nodekell#scanl
+ *
+ * @param f
+ * @param init
+ * @param iter
+ */
+// export function scanl<T>(f: (a: T, b: T) => (T | Promise<T>)): (init: T | Promise<T>) => (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+
+// export function scanl<T>(f: (a: T, b: T) => (T | Promise<T>)): (init: T | Promise<T>, iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+
+export function scanl<T>(f: (a: T, b: T) => (T | Promise<T>)): CurriedFunction2<T | Promise<T>, Iter<T | Promise<T>>, AsyncIterableIterator<T>>;
+export function scanl<T>(f: (a: EP<T>, b: EP<T>) => (EP<T> | Promise<EP<T>>)): CurriedFunction2<T, Iter<T>, AsyncIterableIterator<EP<T>>>;
+
+export function scanl<T>(f: (a: T, b: T) => (T | Promise<T>), init: T | Promise<T>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+export function scanl<T>(f: (a: EP<T>, b: EP<T>) => (EP<T> | Promise<EP<T>>), init: T): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
+
+export function scanl<T>(f: (a: T, b: T) => (T | Promise<T>), init: T | Promise<T>, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+export function scanl<T>(f: (a: EP<T>, b: EP<T>) => (EP<T> | Promise<EP<T>>), init: T, iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+
+/**
+ * https://github.com/rudty/nodekell#scanl1
+ *
+ * @param f
+ * @param iter
+ */
+export function scanl1<T>(f: (a: T, b: T) => (T | Promise<T>)): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+export function scanl1<T>(f: (a: EP<T>, b: EP<T>) => (EP<T> | Promise<EP<T>>)): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
+
+export function scanl1<T>(f: (a: T, b: T) => (T | Promise<T>), iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+export function scanl1<T>(f: (a: EP<T>, b: EP<T>) => (EP<T> | Promise<EP<T>>), iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+
+/**
+ * https://github.com/rudty/nodekell#reverse
+ *
+ * @param iter
+ */
+export function reverse<T>(iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+export function reverse<T>(iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+
+/**
+ * https://github.com/rudty/nodekell#foldr
+ *
+ * @param f
+ * @param init
+ * @param iter
+ */
+// export function foldr<T>(f: (acc: T, elem: T) => (T | Promise<T>)): (init: T | Promise<T>) => (iter: Iter<T | Promise<T>>) => Promise<T>;
+
+// export function foldr<T>(f: (acc: T, elem: T) => (T | Promise<T>)): (init: T | Promise<T>, iter: Iter<T | Promise<T>>) => Promise<T>;
+
+export function foldr<T>(f: (acc: T, elem: T) => (T | Promise<T>)): CurriedFunction2<T | Promise<T>, Iter<T | Promise<T>>, Promise<T>>;
+export function foldr<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>)): CurriedFunction2<T, Iter<T>, Promise<EP<T>>>;
+
+export function foldr<T>(f: (acc: T, elem: T) => (T | Promise<T>), init: T | Promise<T>): (iter: Iter<T | Promise<T>>) => Promise<T>;
+export function foldr<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>), init: T): (iter: Iter<T>) => Promise<EP<T>>;
+
+export function foldr<T>(f: (acc: T, elem: T) => (T | Promise<T>), init: T | Promise<T>, iter: Iter<T | Promise<T>>): Promise<T>;
+export function foldr<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>), init: T, iter: Iter<T>): Promise<EP<T>>;
+
+/**
+ * https://github.com/rudty/nodekell#foldr1
+ *
+ * @param f
+ * @param iter
+ */
+export function foldr1<T>(f: (acc: T, elem: T) => (T | Promise<T>)): (iter: Iter<T | Promise<T>>) => Promise<T>;
+export function foldr1<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>)): (iter: Iter<T>) => Promise<EP<T>>;
+
+export function foldr1<T>(f: (acc: T, elem: T) => (T | Promise<T>), iter: Iter<T | Promise<T>>): Promise<T>;
+export function foldr1<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>), iter: Iter<T>): Promise<EP<T>>;
+
+/**
+ * https://github.com/rudty/nodekell#zip
+ *
+ * @param iter1
+ * @param iter2
+ */
+export function zip<T, Y>(iter1: Iter<T | Promise<T>>): (iter2: Iter<Y | Promise<Y>>) => AsyncIterableIterator<[T, Y]>;
+export function zip<T, Y>(iter1: Iter<T>): (iter2: Iter<Y>) => AsyncIterableIterator<[EP<T>, EP<Y>]>;
+
+export function zip<T, Y>(iter1: Iter<T | Promise<T>>, iter2: Iter<Y | Promise<Y>>): AsyncIterableIterator<[EP<T>, EP<Y>]>;
+export function zip<T, Y>(iter1: Iter<T>, iter2: Iter<Y>): AsyncIterableIterator<[EP<T>, EP<Y>]>;
+
+/**
+ * https://github.com/rudty/nodekell#zipwith
+ *
+ * **Note**
+ * - if f is promise function, modify not zip type in typescript. but return type is zip.
+ *
+ * @param f
+ * @param iter1
+ * @param iter2
+ */
+// export function zipWith<T, Y, R1, R2>(f: (a: T, b: Y) => [R1, R2]): (a: Iter<T | Promise<T>>) => (b: Iter<Y | Promise<Y>>) => AsyncIterableIterator<[R1, R2]>;
+// export function zipWith<T, Y, R1, R2>(f: (a: T, b: Y) => (Promise<[R1, R2]> | Promise<(R1 | R2)[]>)): (a: Iter<T | Promise<T>>) => (b: Iter<Y | Promise<Y>>) => AsyncIterableIterator<[R1, R2]>;
+
+// export function zipWith<T, Y, R1, R2>(f: (a: T, b: Y) => [R1, R2]): (a: Iter<T | Promise<T>>, b: Iter<Y | Promise<Y>>) => AsyncIterableIterator<[R1, R2]>;
+// export function zipWith<T, Y, R1, R2>(f: (a: T, b: Y) => (Promise<[R1, R2]> | Promise<(R1 | R2)[]>)): (a: Iter<T | Promise<T>>, b: Iter<Y | Promise<Y>>) => AsyncIterableIterator<[R1, R2]>;
+
+export function zipWith<T, Y, R1, R2>(f: (a: T, b: Y) => ([R1, R2] | Promise<[R1, R2]> | Promise<(R1 | R2)[]>)): CurriedFunction2<Iter<T | Promise<T>>, Iter<Y | Promise<Y>>, AsyncIterableIterator<[R1, R2]>>;
+export function zipWith<T, Y, R1, R2>(f: (a: EP<T>, b: EP<Y>) => ([R1, R2] | Promise<[R1, R2]> | Promise<(R1 | R2)[]>)): CurriedFunction2<Iter<T>, Iter<Y>, AsyncIterableIterator<[R1, R2]>>;
+
+export function zipWith<T, Y, R1, R2>(f: (a: T, b: Y) => ([R1, R2] | Promise<[R1, R2]> | Promise<(R1 | R2)[]>), iter1: Iter<T | Promise<T>>): (iter2: Iter<Y | Promise<Y>>) => AsyncIterableIterator<[R1, R2]>;
+export function zipWith<T, Y, R1, R2>(f: (a: EP<T>, b: EP<Y>) => ([R1, R2] | Promise<[R1, R2]> | Promise<(R1 | R2)[]>), iter1: Iter<T>): (iter2: Iter<Y>) => AsyncIterableIterator<[R1, R2]>;
+
+export function zipWith<T, Y, R1, R2>(f: (a: T, b: Y) => ([R1, R2] | Promise<[R1, R2]> | Promise<(R1 | R2)[]>), iter1: Iter<T | Promise<T>>, iter2: Iter<Y | Promise<Y>>): AsyncIterableIterator<[R1, R2]>;
+export function zipWith<T, Y, R1, R2>(f: (a: EP<T>, b: EP<Y>) => ([R1, R2] | Promise<[R1, R2]> | Promise<(R1 | R2)[]>), iter1: Iter<T>, iter2: Iter<Y>): AsyncIterableIterator<[R1, R2]>;
+
+//
+// stream.js
+//
+
+/**
+ * https://github.com/rudty/nodekell#rangeof
+ *
+ * @deprecated use `flat` or `dflat` instead
+ * @param a
+ */
+export function rangeOf<T>(...a: T[]): AsyncIterableIterator<PFlat<T>>;
+
+/**
+ * No Document
+ *
+ * @param supply
+ * @param iter
+ */
+export function firstOrGet<T, Y>(supply: () => (Y | Promise<Y>)): (iter: Iter<T | Promise<T>>) => Promise<T | Y>;
+export function firstOrGet<T, Y>(supply: () => Y): (iter: Iter<T>) => Promise<EP<T> | EP<Y>>;
+
+export function firstOrGet<T, Y>(supply: Promise<() => (Y | Promise<Y>)>): (iter: Iter<T | Promise<T>>) => Promise<T | Y>;
+export function firstOrGet<T, Y>(supply: Promise<() => Y>): (iter: Iter<T>) => Promise<EP<T> | EP<Y>>;
+
+export function firstOrGet<T, Y>(supply: Y | Promise<Y>): (iter: Iter<T | Promise<T>>) => Promise<T | Y>;
+export function firstOrGet<T, Y>(supply: Y): (iter: Iter<T>) => Promise<EP<T> | EP<Y>>;
+
+export function firstOrGet<T, Y>(supply: () => (Y | Promise<Y>), iter: Iter<T | Promise<T>>): Promise<T | Y>;
+export function firstOrGet<T, Y>(supply: () => Y, iter: Iter<T>): Promise<EP<T> | EP<Y>>;
+
+export function firstOrGet<T, Y>(supply: Promise<() => (Y | Promise<Y>)>, iter: Iter<T | Promise<T>>): Promise<T | Y>;
+export function firstOrGet<T, Y>(supply: Promise<() => Y>, iter: Iter<T>): Promise<EP<T> | EP<Y>>;
+
+export function firstOrGet<T, Y>(supply: Y | Promise<Y>, iter: Iter<T | Promise<T>>): Promise<T | Y>;
+export function firstOrGet<T, Y>(supply: Y, iter: Iter<T>): Promise<EP<T> | EP<Y>>;
+
+/**
+ * https://github.com/rudty/nodekell#emptythen
+ *
+ * @param supply
+ * @param iter
+ */
+export function emptyThen<T, Y>(supply: () => (Iter<Y | Promise<Y>> | Promise<Iter<Y | Promise<Y>>>)): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T | Y>;
+export function emptyThen<T, Y>(supply: () => (Iter<Y> | Promise<Iter<Y>>)): (iter: Iter<T>) => AsyncIterableIterator<EP<T> | EP<Y>>;
+
+export function emptyThen<T, Y>(supply: Promise<() => (Iter<Y | Promise<Y>> | Promise<Iter<Y | Promise<Y>>>)>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T | Y>;
+export function emptyThen<T, Y>(supply: Promise<() => (Iter<Y> | Promise<Iter<Y>>)>): (iter: Iter<T>) => AsyncIterableIterator<EP<T> | EP<Y>>;
+
+export function emptyThen<T, Y>(supply: Iter<Y | Promise<Y>> | Promise<Iter<Y | Promise<Y>>>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T | Y>;
+export function emptyThen<T, Y>(supply: Iter<Y> | Promise<Iter<Y>>): (iter: Iter<T>) => AsyncIterableIterator<EP<T> | EP<Y>>;
+
+export function emptyThen<T, Y>(supply: () => (Iter<Y | Promise<Y>> | Promise<Iter<Y | Promise<Y>>>), iter: Iter<T | Promise<T>>): AsyncIterableIterator<T | Y>;
+export function emptyThen<T, Y>(supply: () => (Iter<Y> | Promise<Iter<Y>>), iter: Iter<T>): AsyncIterableIterator<EP<T> | EP<Y>>;
+
+export function emptyThen<T, Y>(supply: Promise<() => (Iter<Y | Promise<Y>> | Promise<Iter<Y | Promise<Y>>>)>, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T | Y>;
+export function emptyThen<T, Y>(supply: Promise<() => (Iter<Y> | Promise<Iter<Y>>)>, iter: Iter<T>): AsyncIterableIterator<EP<T> | EP<Y>>;
+
+export function emptyThen<T, Y>(supply: Iter<Y | Promise<Y>> | Promise<Iter<Y | Promise<Y>>>, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T | Y>;
+export function emptyThen<T, Y>(supply: Iter<Y> | Promise<Iter<Y>>, iter: Iter<T>): AsyncIterableIterator<EP<T> | EP<Y>>;
+
+/**
+ * https://github.com/rudty/nodekell#
+ *
+ * **Note**
+ * - if you use collect with run or run like function, please use collect with function or lambda expression
+ * ```ts
+ * const a = [1,2,3,4,5];
+ * const r0 = await run(seq(a), collect); // ExpectType unknown[]
+ * const r1 = await run(seq(a), e => collect(e)); // ExpectType number[]
+ * ```
+ *
+ * @param iter
+ */
+export function collect<T>(iter: Iter<T | Promise<T>>): Promise<T[]>;
+export function collect<T>(iter: Iter<T>): Promise<EP<T>[]>;
+
+/**
+ * https://github.com/rudty/nodekell#collectmap
+ *
+ * **Note**
+ * - if want you high quality type, use type assertion
+ * ```ts
+ * const a = [['a', 0], ['b', 1]] as [string, number][];
+ * const r = await collectMap(a); // Map<string, number>
+ * ```
+ *
+ * @param iter
+ */
+export function collectMap<T extends any[]>(iter: Iter<T | Promise<T>>): Promise<Map<T[0], T[1]>>;
+// export function collectMap<K, V>(iter: Iter<[K, V] | Promise<[K, V]>>): Promise<Map<K, V>>;
+// export function collectMap<K, V>(iter: Iter<[K, V]>): Promise<Map<K, V>>;
+
+/**
+ * https://github.com/rudty/nodekell#collectset
+ *
+ * @param iter
+ */
+export function collectSet<T>(iter: Iter<T | Promise<T>>): Promise<Set<T>>;
+export function collectSet<T>(iter: Iter<T>): Promise<Set<EP<T>>>;
+
+/**
+ * https://github.com/rudty/nodekell#foreach
+ *
+ * @param f
+ * @param iter
+ */
+export function forEach<T, R>(f: (elem: T) => (R | Promise<R>)): (iter: Iter<T | Promise<T>>) => Promise<R[]>;
+export function forEach<T, R>(f: (elem: EP<T>) => (R | Promise<R>)): (iter: Iter<T>) => Promise<R[]>;
+
+export function forEach<T, R>(f: (elem: T) => (R | Promise<R>), iter: Iter<T | Promise<T>>): Promise<R[]>;
+export function forEach<T, R>(f: (elem: EP<T>) => (R | Promise<R>), iter: Iter<T>): Promise<R[]>;
+
+/**
+ * https://github.com/rudty/nodekell#distinctby
+ *
+ * @param f
+ * @param iter
+ */
+// export function distinctBy<T, Y>(f: (elem: T) => (Y | Promise<Y>)): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+
+// export function distinctBy<T, Y>(f: (elem: T) => (Y | Promise<Y>), iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+
+export function distinctBy<T>(f: (elem: T) => any): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+export function distinctBy<T>(f: (elem: EP<T>) => any): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
+
+export function distinctBy<T>(f: (elem: T) => any, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+export function distinctBy<T>(f: (elem: EP<T>) => any, iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+
+/**
+ * https://github.com/rudty/nodekell#distinct
+ *
+ * @param iter
+ */
+export function distinct<T>(iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+export function distinct<T>(iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+
+/**
+ * https://github.com/rudty/nodekell#some
+ *
+ * @param f
+ * @param iter
+ */
+export function some<T>(f: (elem: T) => (boolean | Promise<boolean>)): (iter: Iter<T | Promise<T>>) => Promise<boolean>;
+export function some<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>)): (iter: Iter<T>) => Promise<boolean>;
+
+export function some<T>(f: (elem: T) => (boolean | Promise<boolean>), iter: Iter<T | Promise<T>>): Promise<boolean>;
+export function some<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), iter: Iter<T>): Promise<boolean>;
+
+/**
+ * https://github.com/rudty/nodekell#every
+ *
+ * @param f
+ * @param iter
+ */
+export function every<T>(f: (elem: T) => (boolean | Promise<boolean>)): (iter: Iter<T | Promise<T>>) => Promise<boolean>;
+export function every<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>)): (iter: Iter<T>) => Promise<boolean>;
+
+export function every<T>(f: (elem: T) => (boolean | Promise<boolean>), iter: Iter<T | Promise<T>>): Promise<boolean>;
+export function every<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), iter: Iter<T>): Promise<boolean>;
+
+/**
+ * https://github.com/rudty/nodekell#maxby
+ *
+ * @param f
+ * @param iter
+ */
+/* export function maxBy<T extends object, Y extends T[keyof T]>(f: (elem: T) => (Y | Promise<Y>)): (iter: Iter<T | Promise<T>>) => Promise<T>;
+
+export function maxBy<T extends object, Y extends T[keyof T]>(f: (elem: T) => (Y | Promise<Y>), iter: Iter<T | Promise<T>>): Promise<T>; */
+
+export function maxBy<T>(f: (elem: T) => any): (iter: Iter<T | Promise<T>>) => Promise<T>;
+
+export function maxBy<T>(f: (elem: T) => any, iter: Iter<T | Promise<T>>): Promise<T>;
+
+/**
+ * https://github.com/rudty/nodekell#minby
+ *
+ * @param f
+ * @param iter
+ */
+/* export function minBy<T extends object, Y extends T[keyof T]>(f: (elem: T) => (Y | Promise<Y>)): (iter: Iter<T | Promise<T>>) => Promise<T>;
+
+export function minBy<T extends object, Y extends T[keyof T]>(f: (elem: T) => (Y | Promise<Y>), iter: Iter<T | Promise<T>>): Promise<T>; */
+
+export function minBy<T>(f: (elem: T) => any): (iter: Iter<T | Promise<T>>) => Promise<T>;
+
+export function minBy<T>(f: (elem: T) => any, iter: Iter<T | Promise<T>>): Promise<T>;
+
+/**
+ * https://github.com/rudty/nodekell#count
+ *
+ * @param iter
+ */
+export function count(iter: Iter<any>): Promise<number>;
+// export function count<T>(iter: Iter<T>): Promise<number>;
+
+/**
+ * https://github.com/rudty/nodekell#sum
+ *
+ * **Note**
+ * - please use can summed value
+ *
+ * @param iter
+ */
+// export function sum(iter: string): Promise<string>;
+export function sum<T>(iter: Iter<T | Promise<T>>): Promise<T>;
+// export function sum(iter: Iter<number | Promise<number>>): Promise<number>;
+
+/**
+ * https://github.com/rudty/nodekell#max
+ *
+ * **Note**
+ * - please use can ordered value
+ *
+ * @param iter
+ */
+// export function max(iter: string): Promise<string>;
+export function max<T>(iter: Iter<T | Promise<T>>): Promise<T>;
+// export function max(iter: Iter<string | Promise<string>>): Promise<string>;
+
+/**
+ * https://github.com/rudty/nodekell#min
+ *
+ * **Note**
+ * - please use can ordered value
+ *
+ * @param iter
+ */
+// export function min(iter: string): Promise<string>;
+export function min<T>(iter: Iter<T | Promise<T>>): Promise<T>;
+// export function min(iter: Iter<string | Promise<string>>): Promise<string>;
+
+/**
+ * https://github.com/rudty/nodekell#average
+ *
+ * @param iter
+ */
+export function average(iter: Iter<number | Promise<number>>): Promise<number>;
+// export function average(iter: Iter<number>): Promise<number>;
+
+/**
+ * https://github.com/rudty/nodekell#splitby
+ *
+ * @param f
+ * @param any
+ */
+export function splitBy<T, R>(f: (elem: T) => (Iter<R> | Promise<Iter<R>>)): (any: T) => AsyncIterableIterator<R>;
+
+export function splitBy<T, R>(f: (elem: T) => (Iter<R> | Promise<Iter<R>>), any: T): AsyncIterableIterator<R>;
+
+/**
+ * https://github.com/rudty/nodekell#errorthen
+ *
+ * @param supply
+ * @param iter
+ */
+export function errorThen<T, Y>(supply: (error: any) => (Iter<Y | Promise<Y>> | Promise<Iter<Y | Promise<Y>>>)): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T | Y>;
+export function errorThen<T, Y>(supply: (error: any) => (Iter<Y> | Promise<Iter<Y>>)): (iter: Iter<T>) => AsyncIterableIterator<EP<T> | EP<Y>>;
+
+export function errorThen<T, Y>(supply: Promise<(error: any) => (Iter<Y | Promise<Y>> | Promise<Iter<Y | Promise<Y>>>)>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T | Y>;
+export function errorThen<T, Y>(supply: Promise<(error: any) => (Iter<Y> | Promise<Iter<Y>>)>): (iter: Iter<T>) => AsyncIterableIterator<EP<T> | EP<Y>>;
+
+export function errorThen<T, Y>(supply: Iter<Y | Promise<Y>> | Promise<Iter<Y | Promise<Y>>>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T | Y>;
+export function errorThen<T, Y>(supply: Iter<Y> | Promise<Iter<Y>>): (iter: Iter<T>) => AsyncIterableIterator<EP<T> | EP<Y>>;
+
+export function errorThen<T, Y>(supply: (error: any) => (Iter<Y | Promise<Y>> | Promise<Iter<Y | Promise<Y>>>), iter: Iter<T | Promise<T>>): AsyncIterableIterator<T | Y>;
+export function errorThen<T, Y>(supply: (error: any) => (Iter<Y> | Promise<Iter<Y>>), iter: Iter<T>): AsyncIterableIterator<EP<T> | EP<Y>>;
+
+export function errorThen<T, Y>(supply: Promise<(error: any) => (Iter<Y | Promise<Y>> | Promise<Iter<Y | Promise<Y>>>)>, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T | Y>;
+export function errorThen<T, Y>(supply: Promise<(error: any) => (Iter<Y> | Promise<Iter<Y>>)>, iter: Iter<T>): AsyncIterableIterator<EP<T> | EP<Y>>;
+
+export function errorThen<T, Y>(supply: Iter<Y | Promise<Y>> | Promise<Iter<Y | Promise<Y>>>, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T | Y>;
+export function errorThen<T, Y>(supply: Iter<Y> | Promise<Iter<Y>>, iter: Iter<T>): AsyncIterableIterator<EP<T> | EP<Y>>;
+
+/**
+ * https://github.com/rudty/nodekell#then
+ *
+ * @param f
+ * @param t
+ */
+export function then<T, R>(f: (t: T) => R): (t: T) => R;
+
+export function then<T, R>(f: (t: T) => R, t: T): R;
+
+/**
+ * https://github.com/rudty/nodekell#buffer
+ *
+ * @param supply
+ * @param iter
+ */
+export function buffer<T>(supply: number | Promise<number>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<[T]>;
+export function buffer<T>(supply: number | Promise<number>): (iter: Iter<T>) => AsyncIterableIterator<[EP<T>]>;
+
+export function buffer<T>(supply: number | Promise<number>, iter: Iter<T | Promise<T>>): AsyncIterableIterator<[T]>;
+export function buffer<T>(supply: number | Promise<number>, iter: Iter<T>): AsyncIterableIterator<[EP<T>]>;
+
+//
+// tsql.js
+//
+
+/**
+ * https://github.com/rudty/nodekell#groupby
+ *
+ * **TODO**
+ * - remove EP
+ *
+ * @param f
+ * @param iter
+ */
+/* export function groupBy<V extends object, K extends V[keyof V]>(f: (elem: V) => (K | Promise<K>)): (iter: Iter<V | Promise<V>>) => Promise<Map<K, V>>;
+
+export function groupBy<V extends object, K extends V[keyof V]>(f: (elem: V) => (K | Promise<K>), iter: Iter<V | Promise<V>>): Promise<Map<K, V>>; */
+
+export function groupBy<K, V>(f: (elem: V) => (K | Promise<K>)): (iter: Iter<V | Promise<V>>) => Promise<Map<K, V[]>>;
+export function groupBy<K, V>(f: (elem: EP<V>) => (K | Promise<K>)): (iter: Iter<V>) => Promise<Map<K, EP<V>[]>>;
+
+export function groupBy<K, V>(f: (elem: V) => (K | Promise<K>), iter: Iter<V | Promise<V>>): Promise<Map<K, V[]>>;
+export function groupBy<K, V>(f: (elem: EP<V>) => (K | Promise<K>), iter: Iter<V>): Promise<Map<K, EP<V>[]>>;
+
+/**
+ * https://github.com/rudty/nodekell#concat
+ *
+ * @param iter1
+ * @param iter2
+ */
+export function concat<T, Y>(iter1: Iter<T | Promise<T>>): (iter2: Iter<Y | Promise<Y>>) => AsyncIterableIterator<T | Y>;
+export function concat<T, Y>(iter1: Iter<T>): (iter2: Iter<Y>) => AsyncIterableIterator<EP<T> | EP<Y>>;
+
+export function concat<T, Y>(iter1: Iter<T | Promise<T>>, iter2: Iter<Y | Promise<Y>>): AsyncIterableIterator<T | Y>;
+export function concat<T, Y>(iter1: Iter<T>, iter2: Iter<Y>): AsyncIterableIterator<EP<T> | EP<Y>>;
+
+/**
+ * https://github.com/rudty/nodekell#union
+ *
+ * @param iter1
+ * @param iter2
+ */
+export function union<T, Y>(iter1: Iter<T | Promise<T>>): (iter2: Iter<Y | Promise<Y>>) => AsyncIterableIterator<T | Y>;
+export function union<T, Y>(iter1: Iter<T>): (iter2: Iter<Y>) => AsyncIterableIterator<EP<T> | EP<Y>>;
+
+export function union<T, Y>(iter1: Iter<T | Promise<T>>, iter2: Iter<Y | Promise<Y>>): AsyncIterableIterator<T | Y>;
+export function union<T, Y>(iter1: Iter<T>, iter2: Iter<Y>): AsyncIterableIterator<EP<T> | EP<Y>>;
+
+export type InnerJoinObject<T1 extends object, T2 extends object> = { [P in keyof T1 | keyof T2]: P extends keyof T1 ? T1[P] : P extends keyof T2 ? T2[P] : unknown };
+export type InnerJoinMap<T1, T2> = Map<T1 extends Map<infer K1, infer V1> ? T2 extends Map<infer K2, infer V2> ? K1 | K2 : unknown : unknown, T1 extends Map<infer K1, infer V1> ? T2 extends Map<infer K2, infer V2> ? V1 | V2 : unknown : unknown>;
+// export type InnerJoinCustomIterable<T1 extends { set: (...arg: any[]) => any; } & Iter<any>, T2 extends { set: (...arg: any[]) => any; } & Iter<any>> = AsyncIterableIterator<T1 | T2>;
+
+// type InnerJoinObjectTest1 = InnerJoinObject<{ id: number; name: string; }, { id: number; length: number; }>;
+// type InnerJoinObjectTest2 = InnerJoinObject<{ id: number; length: number; }, { id: number; name: string; }>;
+
+// type InnerJoinMapTest1 = InnerJoinMap<Map<"string" | "number" | "object", (string | number | null)[]>, Map<"string" | "number", (string | number)[]>>;
+// type InnerJoinMapTest2 = InnerJoinMap<Map<"string" | "number", (string | number)[]>, Map<"string" | "number" | "object", (string | number | null)[]>>;
+
+/**
+ * https://github.com/rudty/nodekell#innerjoin
+ *
+ * @param f
+ * @param iter1
+ * @param iter2
+ */
+export function innerJoin<T1 extends Map<ExtractMap<T1>[0], ExtractMap<T1>[1]>, T2 extends Map<ExtractMap<T2>[0], ExtractMap<T2>[1]>>(f: (elem1: T1 | Promise<T1>, elem2: T2 | Promise<T2>) => (boolean | Promise<boolean>)): CurriedFunction2<Iter<T1 | Promise<T1>>, Iter<T2 | Promise<T2>>, AsyncIterableIterator<InnerJoinMap<T1, T2>>>;
+
+export function innerJoin<T1 extends Map<ExtractMap<T1>[0], ExtractMap<T1>[1]>, T2 extends Map<ExtractMap<T2>[0], ExtractMap<T2>[1]>>(f: (elem1: T1 | Promise<T1>, elem2: T2 | Promise<T2>) => (boolean | Promise<boolean>), iter1: Iter<T1 | Promise<T1>>): (iter2: Iter<T2 | Promise<T2>>) => AsyncIterableIterator<InnerJoinMap<T1, T2>>;
+
+export function innerJoin<T1 extends Map<ExtractMap<T1>[0], ExtractMap<T1>[1]>, T2 extends Map<ExtractMap<T2>[0], ExtractMap<T2>[1]>>(f: (elem1: T1 | Promise<T1>, elem2: T2 | Promise<T2>) => (boolean | Promise<boolean>), iter1: Iter<T1 | Promise<T1>>, iter2: Iter<T2 | Promise<T2>>): AsyncIterableIterator<InnerJoinMap<T1, T2>>;
+
+export function innerJoin<T1 extends object, T2 extends object>(f: (elem1: T2, elem2: T2) => (boolean | Promise<boolean>)): CurriedFunction2<Iter<T1 | Promise<T1>>, Iter<T2 | Promise<T2>>, AsyncIterableIterator<InnerJoinObject<T1, T2>>>;
+
+export function innerJoin<T1 extends object, T2 extends object>(f: (elem1: T1, elem2: T2) => (boolean | Promise<boolean>), iter1: Iter<T1 | Promise<T1>>): (iter2: Iter<T2 | Promise<T2>>) => AsyncIterableIterator<InnerJoinObject<T1, T2>>;
+
+export function innerJoin<T1 extends object, T2 extends object>(f: (elem1: T1, elem2: T2) => (boolean | Promise<boolean>), iter1: Iter<T1 | Promise<T1>>, iter2: Iter<T2 | Promise<T2>>): AsyncIterableIterator<InnerJoinObject<T1, T2>>;
+
+/**
+ * https://github.com/rudty/nodekell#leftinnerjoin
+ *
+ * as innerJoin
+ *
+ * @param f
+ * @param iter1
+ * @param iter2
+ */
+export function leftInnerJoin<T1 extends Map<ExtractMap<T1>[0], ExtractMap<T1>[1]>, T2 extends Map<ExtractMap<T2>[0], ExtractMap<T2>[1]>>(f: (elem1: T1 | Promise<T1>, elem2: T2 | Promise<T2>) => (boolean | Promise<boolean>)): CurriedFunction2<Iter<T1 | Promise<T1>>, Iter<T2 | Promise<T2>>, AsyncIterableIterator<InnerJoinMap<T1, T2>>>;
+
+export function leftInnerJoin<T1 extends Map<ExtractMap<T1>[0], ExtractMap<T1>[1]>, T2 extends Map<ExtractMap<T2>[0], ExtractMap<T2>[1]>>(f: (elem1: T1 | Promise<T1>, elem2: T2 | Promise<T2>) => (boolean | Promise<boolean>), iter1: Iter<T1 | Promise<T1>>): (iter2: Iter<T2 | Promise<T2>>) => AsyncIterableIterator<InnerJoinMap<T1, T2>>;
+
+export function leftInnerJoin<T1 extends Map<ExtractMap<T1>[0], ExtractMap<T1>[1]>, T2 extends Map<ExtractMap<T2>[0], ExtractMap<T2>[1]>>(f: (elem1: T1 | Promise<T1>, elem2: T2 | Promise<T2>) => (boolean | Promise<boolean>), iter1: Iter<T1 | Promise<T1>>, iter2: Iter<T2 | Promise<T2>>): AsyncIterableIterator<InnerJoinMap<T1, T2>>;
+
+export function leftInnerJoin<T1 extends object, T2 extends object>(f: (elem1: T2, elem2: T2) => (boolean | Promise<boolean>)): CurriedFunction2<Iter<T1 | Promise<T1>>, Iter<T2 | Promise<T2>>, AsyncIterableIterator<InnerJoinObject<T1, T2>>>;
+
+export function leftInnerJoin<T1 extends object, T2 extends object>(f: (elem1: T1, elem2: T2) => (boolean | Promise<boolean>), iter1: Iter<T1 | Promise<T1>>): (iter2: Iter<T2 | Promise<T2>>) => AsyncIterableIterator<InnerJoinObject<T1, T2>>;
+
+export function leftInnerJoin<T1 extends object, T2 extends object>(f: (elem1: T1, elem2: T2) => (boolean | Promise<boolean>), iter1: Iter<T1 | Promise<T1>>, iter2: Iter<T2 | Promise<T2>>): AsyncIterableIterator<InnerJoinObject<T1, T2>>;
+
+/**
+ * https://github.com/rudty/nodekell#rightinnerjoin
+ *
+ * @param f
+ * @param iter1
+ * @param iter2
+ */
+export function rightInnerJoin<T1 extends Map<ExtractMap<T1>[0], ExtractMap<T1>[1]>, T2 extends Map<ExtractMap<T2>[0], ExtractMap<T2>[1]>>(f: (elem2: T2 | Promise<T2>, elem1: T1 | Promise<T1>) => (boolean | Promise<boolean>)): CurriedFunction2<Iter<T1 | Promise<T1>>, Iter<T2 | Promise<T2>>, AsyncIterableIterator<InnerJoinMap<T2, T1>>>;
+
+export function rightInnerJoin<T1 extends Map<ExtractMap<T1>[0], ExtractMap<T1>[1]>, T2 extends Map<ExtractMap<T2>[0], ExtractMap<T2>[1]>>(f: (elem2: T2 | Promise<T2>, elem1: T1 | Promise<T1>) => (boolean | Promise<boolean>), iter1: Iter<T1 | Promise<T1>>): (iter2: Iter<T2 | Promise<T2>>) => AsyncIterableIterator<InnerJoinMap<T2, T1>>;
+
+export function rightInnerJoin<T1 extends Map<ExtractMap<T1>[0], ExtractMap<T1>[1]>, T2 extends Map<ExtractMap<T2>[0], ExtractMap<T2>[1]>>(f: (elem2: T2 | Promise<T2>, elem1: T1 | Promise<T1>) => (boolean | Promise<boolean>), iter1: Iter<T1 | Promise<T1>>, iter2: Iter<T2 | Promise<T2>>): AsyncIterableIterator<InnerJoinMap<T2, T1>>;
+
+export function rightInnerJoin<T1 extends object, T2 extends object>(f: (elem2: T2, elem1: T1) => (boolean | Promise<boolean>)): CurriedFunction2<Iter<T1 | Promise<T1>>, Iter<T2 | Promise<T2>>, AsyncIterableIterator<InnerJoinObject<T2, T1>>>;
+
+export function rightInnerJoin<T1 extends object, T2 extends object>(f: (elem2: T2, elem1: T1) => (boolean | Promise<boolean>), iter1: Iter<T1 | Promise<T1>>): (iter2: Iter<T2 | Promise<T2>>) => AsyncIterableIterator<InnerJoinObject<T2, T1>>;
+
+export function rightInnerJoin<T1 extends object, T2 extends object>(f: (elem2: T2, elem1: T1) => (boolean | Promise<boolean>), iter1: Iter<T1 | Promise<T1>>, iter2: Iter<T2 | Promise<T2>>): AsyncIterableIterator<InnerJoinObject<T2, T1>>;
+
+export type OuterJoinObject<T1 extends object, T2 extends object> = { [P in keyof T1 | keyof T2]: P extends keyof T1 ? T1[P] : P extends keyof T2 ? T2[P] | undefined : unknown };
+/**
+ * K2, V2 is optional, but I can't implementation that type.
+ */
+export type OuterJoinMap<T1, T2> = Map<T1 extends Map<infer K1, infer V1> ? T2 extends Map<infer K2, infer V2> ? K1 | K2 : unknown : unknown, T1 extends Map<infer K1, infer V1> ? T2 extends Map<infer K2, infer V2> ? V1 | V2 : unknown : unknown>;
+
+// type OuterJoinObjectTest = OuterJoinObject<{ id: number; value: number; }, { id: number; name: string; }>;
+// type OuterJoinMapTest = OuterJoinMap<Map<string | number, string | number>, Map<string, number>>;
+
 /*
-interface AsyncIterator<T> {
-    next(value?: any): IteratorResult<Promise<T>>;
-    return?(value?: any): IteratorResult<Promise<T>>;
-    throw?(e?: any): IteratorResult<Promise<T>>;
-}
-
-interface AsyncIterable<T> {
-    [Symbol.iterator](): AsyncIterator<T>;
-}
-
-interface AsyncIterableIterator<T> extends AsyncIterator<T> {
-    [Symbol.iterator](): AsyncIterableIterator<T>;
+ExpectType OuterJoinObjectTest
+{
+  id: number;
+  value: number;
+  name: string | undefined;
 }
 */
 
+/**
+ * https://github.com/rudty/nodekell#outerjoin
+ *
+ * @param f
+ * @param iter1
+ * @param iter2
+ */
+export function outerJoin<T1 extends Map<ExtractMap<T1>[0], ExtractMap<T1>[1]>, T2 extends Map<ExtractMap<T2>[0], ExtractMap<T2>[1]>>(f: (elem1: T1, elem2: T2) => (boolean | Promise<boolean>)): CurriedFunction2<Iter<T1 | Promise<T1>>, Iter<T2 | Promise<T2>>, AsyncIterableIterator<OuterJoinMap<T1, T2>>>;
 
+export function outerJoin<T1 extends Map<ExtractMap<T1>[0], ExtractMap<T1>[1]>, T2 extends Map<ExtractMap<T2>[0], ExtractMap<T2>[1]>>(f: (elem1: T1, elem2: T2) => (boolean | Promise<boolean>), iter1: Iter<T1 | Promise<T1>>): (iter2: Iter<T2 | Promise<T2>>) => AsyncIterableIterator<OuterJoinMap<T1, T2>>;
+
+export function outerJoin<T1 extends Map<ExtractMap<T1>[0], ExtractMap<T1>[1]>, T2 extends Map<ExtractMap<T2>[0], ExtractMap<T2>[1]>>(f: (elem1: T1, elem2: T2) => (boolean | Promise<boolean>), iter1: Iter<T1 | Promise<T1>>, iter2: Iter<T2 | Promise<T2>>): AsyncIterableIterator<OuterJoinMap<T1, T2>>;
+
+export function outerJoin<T1 extends object, T2 extends object>(f: (elem1: T1, elem2: T2) => (boolean | Promise<boolean>)): CurriedFunction2<Iter<T1 | Promise<T1>>, Iter<T2 | Promise<T2>>, AsyncIterableIterator<OuterJoinObject<T1, T2>>>;
+
+export function outerJoin<T1 extends object, T2 extends object>(f: (elem1: T1, elem2: T2) => (boolean | Promise<boolean>), iter1: Iter<T1 | Promise<T1>>): (iter2: Iter<T2 | Promise<T2>>) => AsyncIterableIterator<OuterJoinObject<T1, T2>>;
+
+export function outerJoin<T1 extends object, T2 extends object>(f: (elem1: T1, elem2: T2) => (boolean | Promise<boolean>), iter1: Iter<T1 | Promise<T1>>, iter2: Iter<T2 | Promise<T2>>): AsyncIterableIterator<OuterJoinObject<T1, T2>>;
 
 /**
- * arg0: range 0 ~ Infinity 
- * arg1: range 0 ~ < b
- * arg2: range a ~ < b
- * arg3: range a ~ < b, a += n
- * @param a end or begin
- * @param b end
- * @param step increase or decrease
+ * https://github.com/rudty/nodekell#leftouterjoin
+ *
+ * as outerJoin
+ *
+ * @param f
+ * @param iter1
+ * @param iter2
  */
-export function range(a?: number, b?: number, step?: number): IterableIterator<number>;
+export function leftOuterJoin<T1 extends Map<ExtractMap<T1>[0], ExtractMap<T1>[1]>, T2 extends Map<ExtractMap<T2>[0], ExtractMap<T2>[1]>>(f: (elem1: T1, elem2: T2) => (boolean | Promise<boolean>)): CurriedFunction2<Iter<T1 | Promise<T1>>, Iter<T2 | Promise<T2>>, AsyncIterableIterator<OuterJoinMap<T1, T2>>>;
 
-export function rangeInterval(duration: number, a?: number, b?: number, step?: number): AsyncIterableIterator<number>;
+export function leftOuterJoin<T1 extends Map<ExtractMap<T1>[0], ExtractMap<T1>[1]>, T2 extends Map<ExtractMap<T2>[0], ExtractMap<T2>[1]>>(f: (elem1: T1, elem2: T2) => (boolean | Promise<boolean>), iter1: Iter<T1 | Promise<T1>>): (iter2: Iter<T2 | Promise<T2>>) => AsyncIterableIterator<OuterJoinMap<T1, T2>>;
+
+export function leftOuterJoin<T1 extends Map<ExtractMap<T1>[0], ExtractMap<T1>[1]>, T2 extends Map<ExtractMap<T2>[0], ExtractMap<T2>[1]>>(f: (elem1: T1, elem2: T2) => (boolean | Promise<boolean>), iter1: Iter<T1 | Promise<T1>>, iter2: Iter<T2 | Promise<T2>>): AsyncIterableIterator<OuterJoinMap<T1, T2>>;
+
+export function leftOuterJoin<T1 extends object, T2 extends object>(f: (elem1: T1, elem2: T2) => (boolean | Promise<boolean>)): CurriedFunction2<Iter<T1 | Promise<T1>>, Iter<T2 | Promise<T2>>, AsyncIterableIterator<OuterJoinObject<T1, T2>>>;
+
+export function leftOuterJoin<T1 extends object, T2 extends object>(f: (elem1: T1, elem2: T2) => (boolean | Promise<boolean>), iter1: Iter<T1 | Promise<T1>>): (iter2: Iter<T2 | Promise<T2>>) => AsyncIterableIterator<OuterJoinObject<T1, T2>>;
+
+export function leftOuterJoin<T1 extends object, T2 extends object>(f: (elem1: T1, elem2: T2) => (boolean | Promise<boolean>), iter1: Iter<T1 | Promise<T1>>, iter2: Iter<T2 | Promise<T2>>): AsyncIterableIterator<OuterJoinObject<T1, T2>>;
 
 /**
- * check nullable value
- * @param v any value
- * @returns false: null, NaN, undefined / true: other
+ * https://github.com/rudty/nodekell#rightouterjoin
+ *
+ * @param f
+ * @param iter1
+ * @param iter2
  */
-export function notNil(v: any): boolean
+export function rightOuterJoin<T1 extends Map<ExtractMap<T1>[0], ExtractMap<T1>[1]>, T2 extends Map<ExtractMap<T2>[0], ExtractMap<T2>[1]>>(f: (elem2: T2, elem1: T1) => (boolean | Promise<boolean>)): CurriedFunction2<Iter<T1 | Promise<T1>>, Iter<T2 | Promise<T2>>, AsyncIterableIterator<OuterJoinMap<T2, T1>>>;
+
+export function rightOuterJoin<T1 extends Map<ExtractMap<T1>[0], ExtractMap<T1>[1]>, T2 extends Map<ExtractMap<T2>[0], ExtractMap<T2>[1]>>(f: (elem2: T2, elem1: T1) => (boolean | Promise<boolean>), iter1: Iter<T1 | Promise<T1>>): (iter2: Iter<T2 | Promise<T2>>) => AsyncIterableIterator<OuterJoinMap<T2, T1>>;
+
+export function rightOuterJoin<T1 extends Map<ExtractMap<T1>[0], ExtractMap<T1>[1]>, T2 extends Map<ExtractMap<T2>[0], ExtractMap<T2>[1]>>(f: (elem2: T2, elem1: T1) => (boolean | Promise<boolean>), iter1: Iter<T1 | Promise<T1>>, iter2: Iter<T2 | Promise<T2>>): AsyncIterableIterator<OuterJoinMap<T2, T1>>;
+
+export function rightOuterJoin<T1 extends object, T2 extends object>(f: (elem2: T2, elem1: T1) => (boolean | Promise<boolean>)): CurriedFunction2<Iter<T1 | Promise<T1>>, Iter<T2 | Promise<T2>>, AsyncIterableIterator<OuterJoinObject<T2, T1>>>;
+
+export function rightOuterJoin<T1 extends object, T2 extends object>(f: (elem2: T2, elem1: T1) => (boolean | Promise<boolean>), iter1: Iter<T1 | Promise<T1>>): (iter2: Iter<T2 | Promise<T2>>) => AsyncIterableIterator<OuterJoinObject<T2, T1>>;
+
+export function rightOuterJoin<T1 extends object, T2 extends object>(f: (elem2: T2, elem1: T1) => (boolean | Promise<boolean>), iter1: Iter<T1 | Promise<T1>>, iter2: Iter<T2 | Promise<T2>>): AsyncIterableIterator<OuterJoinObject<T2, T1>>;
+
+//
+// timer.js
+//
 
 /**
- * make generator
- * do not need to check if iter 
- * AsyncIterable or Iterable 
- * @param a any iterable
+ * https://github.com/rudty/nodekell#sleep
+ *
+ * @param t milliseconds
  */
-export function seq<T>(iter: AsyncIterable<T>): AsyncIterableIterator<T>
-export function seq<T>(iter: Iterable<T>): AsyncIterableIterator<T>
+export function sleep(t: number): Promise<void>;
 
 /**
- * like `$` or `.`
- * 
- *  let a = [1,2,3,4,5];
- *  let r = run(a, 
- *              map(e => e + 1), // a = [2,3,4,5,6]
- *              filter(e => e < 4), // a = [2,3]
- *              take(Infinity)); 
- * 
- * result:
- * [ 2 , 3 ]
+ * https://github.com/rudty/nodekell#withtimeout
+ *
+ * @param duration
+ * @param iter
  */
-export function run<A>(iter: String, f1: (f: String) => A): A
-export function run<A, B>(iter: String, f1: (f: String) => A, f2: (f: A) => B): B
-export function run<A, B, C>(iter: String, f1: (f: String) => A, f2: (f: A) => B, f3: (f: B) => C): C
-export function run<A, B, C, D>(iter: String, f1: (f: String) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D): D
-export function run<A, B, C, D, E>(iter: String, f1: (f: String) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E): E
-export function run<A, B, C, D, E, F>(iter: String, f1: (f: String) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F): F
-export function run<A, B, C, D, E, F, G>(iter: String, f1: (f: String) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G): G
-export function run<A, B, C, D, E, F, G, H>(iter: String, f1: (f: String) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H): H
-export function run<A, B, C, D, E, F, G, H, I>(iter: String, f1: (f: String) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I): I
-export function run<A, B, C, D, E, F, G, H, I, J>(iter: String, f1: (f: String) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J): J
-export function run<A, B, C, D, E, F, G, H, I, J, K>(iter: String, f1: (f: String) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K): K
-export function run<A, B, C, D, E, F, G, H, I, J, K, L>(iter: String, f1: (f: String) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K, f12: (f: K) => L): L
-export function run<A, B, C, D, E, F, G, H, I, J, K, L, M>(iter: String, f1: (f: String) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K, f12: (f: K) => L, f13: (f: L) => M): M
-export function run<A, B, C, D, E, F, G, H, I, J, K, L, M, N>(iter: String, f1: (f: String) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K, f12: (f: K) => L, f13: (f: L) => M, f14: (f: M) => N): N
-export function run<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O>(iter: String, f1: (f: String) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K, f12: (f: K) => L, f13: (f: L) => M, f14: (f: M) => N, f15: (f: N) => O): O
-export function run<T, A>(iter: Iterable<T>, f1: (f: Iterable<T>) => A): A
-export function run<T, A, B>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B): B
-export function run<T, A, B, C>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C): C
-export function run<T, A, B, C, D>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D): D
-export function run<T, A, B, C, D, E>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E): E
-export function run<T, A, B, C, D, E, F>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F): F
-export function run<T, A, B, C, D, E, F, G>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G): G
-export function run<T, A, B, C, D, E, F, G, H>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H): H
-export function run<T, A, B, C, D, E, F, G, H, I>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I): I
-export function run<T, A, B, C, D, E, F, G, H, I, J>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J): J
-export function run<T, A, B, C, D, E, F, G, H, I, J, K>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K): K
-export function run<T, A, B, C, D, E, F, G, H, I, J, K, L>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K, f12: (f: K) => L): L
-export function run<T, A, B, C, D, E, F, G, H, I, J, K, L, M>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K, f12: (f: K) => L, f13: (f: L) => M): M
-export function run<T, A, B, C, D, E, F, G, H, I, J, K, L, M, N>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K, f12: (f: K) => L, f13: (f: L) => M, f14: (f: M) => N): N
-export function run<T, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O>(iter: Iterable<T>, f1: (f: Iterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K, f12: (f: K) => L, f13: (f: L) => M, f14: (f: M) => N, f15: (f: N) => O): O
-export function run<T, A>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A): A
-export function run<T, A, B>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A, f2: (f: A) => B): B
-export function run<T, A, B, C>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C): C
-export function run<T, A, B, C, D>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D): D
-export function run<T, A, B, C, D, E>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E): E
-export function run<T, A, B, C, D, E, F>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F): F
-export function run<T, A, B, C, D, E, F, G>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G): G
-export function run<T, A, B, C, D, E, F, G, H>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H): H
-export function run<T, A, B, C, D, E, F, G, H, I>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I): I
-export function run<T, A, B, C, D, E, F, G, H, I, J>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J): J
-export function run<T, A, B, C, D, E, F, G, H, I, J, K>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K): K
-export function run<T, A, B, C, D, E, F, G, H, I, J, K, L>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K, f12: (f: K) => L): L
-export function run<T, A, B, C, D, E, F, G, H, I, J, K, L, M>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K, f12: (f: K) => L, f13: (f: L) => M): M
-export function run<T, A, B, C, D, E, F, G, H, I, J, K, L, M, N>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K, f12: (f: K) => L, f13: (f: L) => M, f14: (f: M) => N): N
-export function run<T, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O>(iter: AsyncIterable<T>, f1: (f: AsyncIterable<T>) => A, f2: (f: A) => B, f3: (f: B) => C, f4: (f: C) => D, f5: (f: D) => E, f6: (f: E) => F, f7: (f: F) => G, f8: (f: G) => H, f9: (f: H) => I, f10: (f: I) => J, f11: (f: J) => K, f12: (f: K) => L, f13: (f: L) => M, f14: (f: M) => N, f15: (f: N) => O): O
-export function run<T>(iter: AsyncIterable<T>, ...f1: ((f: any) => any)[]): any
-export function run<T>(iter: Iterable<T>, ...f1: ((f: any) => any)[]): any
+export function withTimeout<T>(duration: () => (number | Promise<number>)): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+export function withTimeout<T>(duration: () => (number | Promise<number>)): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
 
-export function drop<T>(count: Number): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<T>
-export function drop<T>(count: Number, iter: Iterable<T>): AsyncIterableIterator<T>
-export function drop<T>(count: Number, iter: AsyncIterable<T>): AsyncIterableIterator<T>
+export function withTimeout<T>(duration: number | Promise<number>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+export function withTimeout<T>(duration: number | Promise<number>): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
 
-export function dropWhile<T>(fn: (predicate: T) => boolean): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<T>
-export function dropWhile<T>(fn: (predicate: T) => boolean, iter: Iterable<T>): AsyncIterableIterator<T>
-export function dropWhile<T>(fn: (predicate: T) => boolean, iter: AsyncIterable<T>): AsyncIterableIterator<T>
+export function withTimeout<T>(duration: () => (number | Promise<number>), iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+export function withTimeout<T>(duration: () => (number | Promise<number>), iter: Iter<T>): AsyncIterableIterator<EP<T>>;
 
-export function take<T>(count: Number): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<T>
-export function take<T>(count: Number, iter: Iterable<T>): AsyncIterableIterator<T>
-export function take<T>(count: Number, iter: AsyncIterable<T>): AsyncIterableIterator<T>
+export function withTimeout<T>(duration: number | Promise<number>, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+export function withTimeout<T>(duration: number | Promise<number>, iter: Iter<T>): AsyncIterableIterator<EP<T>>;
 
-export function takeWhile<T>(fn: (predicate: T) => boolean): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<T>
-export function takeWhile<T>(fn: (predicate: T) => boolean, iter: Iterable<T>): AsyncIterableIterator<T>
-export function takeWhile<T>(fn: (predicate: T) => boolean, iter: AsyncIterable<T>): AsyncIterableIterator<T>
+/**
+ * https://github.com/rudty/nodekell#timeout
+ *
+ * @param duration
+ * @param job
+ */
+export function timeout<T>(duration: number | Promise<number>): (job: Promise<T>) => Promise<T>;
+export function timeout<T>(duration: number | Promise<number>): (job: () => Promise<T>) => Promise<T>;
 
-export function filter<T>(fn: (predicate: T) => boolean): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<T>
-export function filter<T>(fn: (predicate: T) => boolean, iter: Iterable<T>): AsyncIterableIterator<T>
-export function filter<T>(fn: (predicate: T) => boolean, iter: AsyncIterable<T>): AsyncIterableIterator<T>
+export function timeout<T>(duration: () => (number | Promise<number>)): (job: Promise<T>) => Promise<T>;
+export function timeout<T>(duration: () => (number | Promise<number>)): (job: () => Promise<T>) => Promise<T>;
 
-export function map<T, R>(fn: (predicate: T) => R): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<R>
-export function map<T, R>(fn: (predicate: T) => R, iter: Iterable<T>): AsyncIterableIterator<R>
-export function map<T, R>(fn: (predicate: T) => R, iter: AsyncIterable<T>): AsyncIterableIterator<R>
+export function timeout<T>(duration: number | Promise<number>, job: Promise<T>): Promise<T>;
+export function timeout<T>(duration: number | Promise<number>, job: () => Promise<T>): Promise<T>;
 
-export function dflat<T>(...iter: Iterable<T>[]): AsyncIterableIterator<T>
-export function dflat<T>(...iter: AsyncIterable<T>[]): AsyncIterableIterator<T>
+export function timeout<T>(duration: () => (number | Promise<number>), job: Promise<T>): Promise<T>;
+export function timeout<T>(duration: () => (number | Promise<number>), job: () => Promise<T>): Promise<T>;
 
-export function flat<T>(iter: Iterable<T>): AsyncIterableIterator<T>
-export function flat<T>(iter: AsyncIterable<T>): AsyncIterableIterator<T>
+/**
+ * https://github.com/rudty/nodekell#interval
+ *
+ * **Note**
+ * - if you want stop interval, set false the run in return value
+ * ```ts
+ * const timer = interval(1000, () => fnothing());
+ * timer.run = false;
+ * ```
+ *
+ * @param timeout
+ * @param timerHandler
+ * @param params
+ */
+export function interval<A extends any[]>(timeout: number, timerHandler: (...args: A) => any, ...args: A): { run: boolean; };
 
-export function fmap<T, E, R>(fn: (predicate: T) => E): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<R>
-export function fmap<T, E, R>(fn: (predicate: T) => E, iter: Iterable<T>): AsyncIterableIterator<R>
-export function fmap<T, E, R>(fn: (predicate: T) => E, iter: AsyncIterable<T>): AsyncIterableIterator<R>
+/**
+ * https://github.com/rudty/nodekell#rangeinterval
+ *
+ * @param duration
+ * @param endOrBegin
+ * @param end
+ * @param step
+ */
+export function rangeInterval(duration: number | Promise<number>, end?: number): AsyncIterableIterator<number>;
+export function rangeInterval(duration: () => (number | Promise<number>), end?: number): AsyncIterableIterator<number>;
 
-export function flatMap<T, E, R>(fn: (predicate: T) => E): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<R>
-export function flatMap<T, E, R>(fn: (predicate: T) => E, iter: Iterable<T>): AsyncIterableIterator<R>
-export function flatMap<T, E, R>(fn: (predicate: T) => E, iter: AsyncIterable<T>): AsyncIterableIterator<R>
+export function rangeInterval(duration: number | Promise<number>, begin: number, end: number): AsyncIterableIterator<number>;
+export function rangeInterval(duration: () => (number | Promise<number>), begin: number, end: number): AsyncIterableIterator<number>;
 
-export function foldl<T, R>(fn: (acc: R, elem: T) => R): (init: R, iter: Iterable<T> | AsyncIterable<T>) => Promise<R>
-export function foldl<T, R>(fn: (acc: R, elem: T) => R): (init: R) => (iter: Iterable<T> | AsyncIterable<T>) => Promise<R>
-export function foldl<T, R>(fn: (acc: R, elem: T) => R, init: R): (iter: Iterable<T> | AsyncIterable<T>) => Promise<R>
-export function foldl<T, R>(fn: (acc: R, elem: T) => R, init: R, iter: Iterable<T>): Promise<R>
-export function foldl<T, R>(fn: (acc: R, elem: T) => R, init: R, iter: AsyncIterable<T>): Promise<R>
+export function rangeInterval(duration: number | Promise<number>, begin: number, end: number, step: number): AsyncIterableIterator<number>;
+export function rangeInterval(duration: () => (number | Promise<number>), begin: number, end: number, step: number): AsyncIterableIterator<number>;
 
-export function foldl1<T>(fn: (acc: T, elem: T) => T): (iter: Iterable<T> | AsyncIterable<T>) => Promise<T>
-export function foldl1<T>(fn: (acc: T, elem: T) => T, iter: Iterable<T>): Promise<T>
-export function foldl1<T>(fn: (acc: T, elem: T) => T, iter: AsyncIterable<T>): Promise<T>
+///
+/// generator.js
+///
 
-export function reduce<T>(fn: (acc: T, elem: T) => T): (iter: Iterable<T> | AsyncIterable<T>) => Promise<T>
-export function reduce<T>(fn: (acc: T, elem: T) => T, iter: Iterable<T>): Promise<T>
-export function reduce<T>(fn: (acc: T, elem: T) => T, iter: AsyncIterable<T>): Promise<T>
+/**
+ * https://github.com/rudty/nodekell#repeat
+ *
+ * @param supply
+ */
+export function repeat<T>(supply: Promise<() => T>): AsyncIterableIterator<EP<T>>;
+export function repeat<T>(supply: () => T): AsyncIterableIterator<EP<T>>;
+export function repeat<T>(supply: T): AsyncIterableIterator<EP<T>>;
 
-export function scanl<T, R>(fn: (acc: R, elem: T) => R): (init: R, iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<R>
-export function scanl<T, R>(fn: (acc: R, elem: T) => R): (init: R) => (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<R>
-export function scanl<T, R>(fn: (acc: R, elem: T) => R, init: R): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<R>
-export function scanl<T, R>(fn: (acc: R, elem: T) => R, init: R, iter: Iterable<T>): AsyncIterableIterator<R>
-export function scanl<T, R>(fn: (acc: R, elem: T) => R, init: R, iter: AsyncIterable<T>): AsyncIterableIterator<R>
+/* export function repeat<T>(supply: Promise<() => (T | Promise<T>)>): AsyncIterableIterator<T>;
+export function repeat<T>(supply: () => (T | Promise<T>)): AsyncIterableIterator<T>;
+export function repeat<T>(supply: T | Promise<T>): AsyncIterableIterator<T>; */
 
-export function scanl1<T, R>(fn: (acc: R, elem: T) => R): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<R>
-export function scanl1<T, R>(fn: (acc: R, elem: T) => R, iter: Iterable<T>): AsyncIterableIterator<R>
-export function scanl1<T, R>(fn: (acc: R, elem: T) => R, iter: AsyncIterable<T>): AsyncIterableIterator<R>
+export function repeat<T>(length: number | Promise<number>, supply: Promise<() => T>): AsyncIterableIterator<EP<T>>;
+export function repeat<T>(length: number | Promise<number>, supply: () => T): AsyncIterableIterator<EP<T>>;
+export function repeat<T>(length: number | Promise<number>, supply: T): AsyncIterableIterator<EP<T>>;
 
-export function foldr<T, R>(fn: (acc: R, elem: T) => R): (init: R, iter: Iterable<T> | AsyncIterable<T>) => Promise<R>
-export function foldr<T, R>(fn: (acc: R, elem: T) => R): (init: R) => (iter: Iterable<T> | AsyncIterable<T>) => Promise<R>
-export function foldr<T, R>(fn: (acc: R, elem: T) => R, init: R): (iter: Iterable<T> | AsyncIterable<T>) => Promise<R>
-export function foldr<T, R>(fn: (acc: R, elem: T) => R, init: R, iter: Iterable<T>): Promise<R>
-export function foldr<T, R>(fn: (acc: R, elem: T) => R, init: R, iter: AsyncIterable<T>): Promise<R>
+/* export function repeat<T>(length: number | Promise<number>, supply: Promise<() => (T | Promise<T>)>): AsyncIterableIterator<T>;
+export function repeat<T>(length: number | Promise<number>, supply: () => (T | Promise<T>)): AsyncIterableIterator<T>;
+export function repeat<T>(length: number | Promise<number>, supply: T | Promise<T>): AsyncIterableIterator<T>; */
 
-export function foldr1<T, R>(fn: (acc: R, elem: T) => R): (iter: Iterable<T> | AsyncIterable<T>) => Promise<R>
-export function foldr1<T, R>(fn: (acc: R, elem: T) => R, iter: Iterable<T>): Promise<R>
-export function foldr1<T, R>(fn: (acc: R, elem: T) => R, iter: AsyncIterable<T>): Promise<R>
+/**
+ * https://github.com/rudty/nodekell#range
+ *
+ * @param endOrBegin
+ * @param end
+ * @param step
+ */
+export function range(end?: number): IterableIterator<number>;
+export function range(begin: number, end: number): IterableIterator<number>;
+export function range(begin: number, end: number, step: number): IterableIterator<number>;
 
-export function reverse<T>(iter: AsyncIterable<T>): AsyncIterableIterator<T>
-export function reverse<T>(iter: Iterable<T>): AsyncIterableIterator<T>
+/**
+ * https://github.com/rudty/nodekell#iterate
+ *
+ * @param f
+ * @param value
+ */
+export function iterate<T>(f: (value: T) => (T | Promise<T>)): (value: T | Promise<T>) => AsyncIterableIterator<T>;
 
-export function zip<T, R>(iter1: Iterable<T>): (iter2: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<[T, R]>
-export function zip<T, R>(iter1: AsyncIterable<T>): (iter2: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<[T, R]>
-export function zip<T, R>(iter1: Iterable<T>, iter2: Iterable<T>): AsyncIterableIterator<[T, R]>
-export function zip<T, R>(iter1: Iterable<T>, iter2: AsyncIterable<T>): AsyncIterableIterator<[T, R]>
-export function zip<T, R>(iter1: AsyncIterable<T>, iter2: Iterable<T>): AsyncIterableIterator<[T, R]>
-export function zip<T, R>(iter1: AsyncIterable<T>, iter2: AsyncIterable<T>): AsyncIterableIterator<[T, R]>
+export function iterate<T>(f: (value: T) => (T | Promise<T>), value: T | Promise<T>): AsyncIterableIterator<T>;
 
-export function repeat<T>(supply: () => T): AsyncIterableIterator<T>
-export function repeat<T>(supply: () => Promise<T>): AsyncIterableIterator<T>
-export function repeat<T>(supply: T): AsyncIterableIterator<T>
-export function repeat<T>(supply: Promise<T>): AsyncIterableIterator<T>
+//
+// parallel.js
+//
 
-export function collect<T>(iter: Iterable<T>): Promise<[T]>
-export function collect<T>(iter: AsyncIterable<T>): Promise<[T]>
+/**
+ * https://github.com/rudty/nodekell#parallel_set_fetch_count
+ *
+ * @param count
+ */
+export function parallel_set_fetch_count(count: number): void;
 
-export function head<T>(iter: Iterable<T>): Promise<T>
-export function head<T>(iter: AsyncIterable<T>): Promise<T>
+/**
+ * https://github.com/rudty/nodekell#pmap
+ *
+ * @param f
+ * @param iter
+ */
+export function pmap<T, R>(f: (elem: T) => (R | Promise<R>)): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<R>;
+export function pmap<T, R>(f: (elem: EP<T>) => (R | Promise<R>)): (iter: Iter<T>) => AsyncIterableIterator<R>;
 
-export function tail<T>(iter: Iterable<T>): AsyncIterableIterator<T>
-export function tail<T>(iter: AsyncIterable<T>): AsyncIterableIterator<T>
+export function pmap<T, R>(f: (elem: T) => (R | Promise<R>), iter: Iter<T | Promise<T>>): AsyncIterableIterator<R>;
+export function pmap<T, R>(f: (elem: EP<T>) => (R | Promise<R>), iter: Iter<T>): AsyncIterableIterator<R>;
 
-export function rangeOf<T>(...iter: Iterable<T>[]): AsyncIterableIterator<T>
-export function rangeOf<T>(...iter: AsyncIterable<T>[]): AsyncIterableIterator<T>
+/**
+ * https://github.com/rudty/nodekell#pfilter
+ *
+ * @param f
+ * @param iter
+ */
+export function pfilter<T>(f: (elem: T) => (boolean | Promise<boolean>)): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+export function pfilter<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>)): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
 
-export function emptyThen<T>(supply: () => Iterable<T>, iter: AsyncIterable<T>): AsyncIterableIterator<T>
-export function emptyThen<T>(supply: () => AsyncIterable<T>, iter: AsyncIterable<T>): AsyncIterableIterator<T>
-export function emptyThen<T>(supply: () => Iterable<T>, iter: Iterable<T>): AsyncIterableIterator<T>
-export function emptyThen<T>(supply: () => AsyncIterable<T>, iter: Iterable<T>): AsyncIterableIterator<T>
-export function emptyThen<T>(supply: Iterable<T>, iter: Iterable<T>): AsyncIterableIterator<T>
-export function emptyThen<T>(supply: AsyncIterable<T>, iter: Iterable<T>): AsyncIterableIterator<T>
-export function emptyThen<T>(supply: Iterable<T>, iter: AsyncIterable<T>): AsyncIterableIterator<T>
-export function emptyThen<T>(supply: AsyncIterable<T>, iter: AsyncIterable<T>): AsyncIterableIterator<T>
-export function emptyThen<T>(supply: () => Iterable<T>): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<T>
-export function emptyThen<T>(supply: () => AsyncIterable<T>): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<T>
-export function emptyThen<T>(supply: Iterable<T>): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<T>
-export function emptyThen<T>(supply: AsyncIterable<T>): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<T>
+export function pfilter<T>(f: (elem: T) => (boolean | Promise<boolean>), iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+export function pfilter<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), iter: Iter<T>): AsyncIterableIterator<EP<T>>;
 
-export function collectMap<K, V>(iter: AsyncIterable<[K, V]>): Map<K, V>
-export function collectMap<K, V>(iter: Iterable<[K, V]>): Map<K, V>
+/**
+ * https://github.com/rudty/nodekell#pcalls
+ *
+ * **Note**
+ * - if arguments length unknown or over 10 and use union type, please use generic
+ * ```ts
+ * const a = await run(repeat(5, () => () => 1));
+ * const b = await run(repeat(5, () => () => 'a'));
+ * const c = await run(repeat(5, () => async () => 2));
+ * const d = await run(repeat(5, () => async () => 'b'));
+ * const abcd = await run(concat(a, b), concat(c), concat(d), e => collect(e));
+ * const r = pcalls<string | number>(...abcd);
+ * ```
+ *
+ * @param f
+ */
+export function pcalls<R>(f: Iter<() => (R | Promise<R>)>): AsyncIterableIterator<R>;
+export function pcalls<T extends () => any>(f: Iter<T>): AsyncIterableIterator<EP<ReturnType<T>>>;
 
-export function collectSet<T>(iter: AsyncIterable<T>): Set<T>
-export function collectSet<T>(iter: Iterable<T>): Set<T>
+export function pcalls<R0>(f0: (() => R0 | Promise<R0>)): AsyncIterableIterator<R0>;
+export function pcalls<R0, R1>(f0: (() => R0 | Promise<R0>), f1: (() => R1 | Promise<R1>)): AsyncIterableIterator<R0 | R1>;
+export function pcalls<R0, R1, R2>(f0: (() => R0 | Promise<R0>), f1: (() => R1 | Promise<R1>), f2: (() => R2 | Promise<R2>)): AsyncIterableIterator<R0 | R1 | R2>;
+export function pcalls<R0, R1, R2, R3>(f0: (() => R0 | Promise<R0>), f1: (() => R1 | Promise<R1>), f2: (() => R2 | Promise<R2>), f3: (() => R3 | Promise<R3>)): AsyncIterableIterator<R0 | R1 | R2 | R3>;
+export function pcalls<R0, R1, R2, R3, R4>(f0: (() => R0 | Promise<R0>), f1: (() => R1 | Promise<R1>), f2: (() => R2 | Promise<R2>), f3: (() => R3 | Promise<R3>), f4: (() => R4 | Promise<R4>)): AsyncIterableIterator<R0 | R1 | R2 | R3 | R4>;
+export function pcalls<R0, R1, R2, R3, R4, R5>(f0: (() => R0 | Promise<R0>), f1: (() => R1 | Promise<R1>), f2: (() => R2 | Promise<R2>), f3: (() => R3 | Promise<R3>), f4: (() => R4 | Promise<R4>), f5: (() => R5 | Promise<R5>)): AsyncIterableIterator<R0 | R1 | R2 | R3 | R4 | R5>;
+export function pcalls<R0, R1, R2, R3, R4, R5, R6>(f0: (() => R0 | Promise<R0>), f1: (() => R1 | Promise<R1>), f2: (() => R2 | Promise<R2>), f3: (() => R3 | Promise<R3>), f4: (() => R4 | Promise<R4>), f5: (() => R5 | Promise<R5>), f6: (() => R6 | Promise<R6>)): AsyncIterableIterator<R0 | R1 | R2 | R3 | R4 | R5 | R6>;
+export function pcalls<R0, R1, R2, R3, R4, R5, R6, R7>(f0: (() => R0 | Promise<R0>), f1: (() => R1 | Promise<R1>), f2: (() => R2 | Promise<R2>), f3: (() => R3 | Promise<R3>), f4: (() => R4 | Promise<R4>), f5: (() => R5 | Promise<R5>), f6: (() => R6 | Promise<R6>), f7: (() => R7 | Promise<R7>)): AsyncIterableIterator<R0 | R1 | R2 | R3 | R4 | R5 | R6 | R7>;
+export function pcalls<R0, R1, R2, R3, R4, R5, R6, R7, R8>(f0: (() => R0 | Promise<R0>), f1: (() => R1 | Promise<R1>), f2: (() => R2 | Promise<R2>), f3: (() => R3 | Promise<R3>), f4: (() => R4 | Promise<R4>), f5: (() => R5 | Promise<R5>), f6: (() => R6 | Promise<R6>), f7: (() => R7 | Promise<R7>), f8: (() => R8 | Promise<R8>)): AsyncIterableIterator<R0 | R1 | R2 | R3 | R4 | R5 | R6 | R7 | R8>;
+export function pcalls<R0, R1, R2, R3, R4, R5, R6, R7, R8, R9>(f0: (() => R0 | Promise<R0>), f1: (() => R1 | Promise<R1>), f2: (() => R2 | Promise<R2>), f3: (() => R3 | Promise<R3>), f4: (() => R4 | Promise<R4>), f5: (() => R5 | Promise<R5>), f6: (() => R6 | Promise<R6>), f7: (() => R7 | Promise<R7>), f8: (() => R8 | Promise<R8>), f9: (() => R9 | Promise<R9>)): AsyncIterableIterator<R0 | R1 | R2 | R3 | R4 | R5 | R6 | R7 | R8 | R9>;
+export function pcalls<R>(...f: (() => (R | Promise<R>))[]): AsyncIterableIterator<R>;
+// export function pcalls<T extends () => any>(...f: T[]): AsyncIterableIterator<EP<ReturnType<T>>>
 
-export function forEach<T, R>(action: (elem: T) => R, iter: AsyncIterable<T>): Promise<[R]>
-export function forEach<T, R>(action: (elem: T) => R, iter: Iterable<T>): Promise<[R]>
-export function forEach<T, R>(action: (elem: T) => R): (iter: Iterable<T> | AsyncIterable<T>) => Promise<[R]>
+/**
+ * https://github.com/rudty/nodekell#pfmap
+ *
+ * @param f
+ * @param iter
+ */
+export function pfmap<T extends Iter<any>, R>(f: (elem: PFlat<T>) => (R | Promise<R>)): (iter: T) => AsyncIterableIterator<PFlat<R>>;
 
-export function distinctBy<T>(fn: (elem: T) => boolean): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<T>
-export function distinctBy<T>(fn: (elem: T) => boolean, iter: Iterable<T>): AsyncIterableIterator<T>
-export function distinctBy<T>(fn: (elem: T) => boolean, iter: AsyncIterable<T>): AsyncIterableIterator<T>
-
-export function distinct<T>(iter: Iterable<T>): AsyncIterableIterator<T>
-export function distinct<T>(iter: AsyncIterable<T>): AsyncIterableIterator<T>
-
-export function some<T>(fn: (elem: T) => boolean, iter: Iterable<T>): Promise<boolean>
-export function some<T>(fn: (elem: T) => boolean, iter: AsyncIterable<T>): Promise<boolean>
-export function some<T>(fn: (elem: T) => boolean): (iter: Iterable<T> | AsyncIterable<T>) => Promise<boolean>
-
-export function every<T>(fn: (elem: T) => boolean, iter: Iterable<T>): Promise<boolean>
-export function every<T>(fn: (elem: T) => boolean, iter: AsyncIterable<T>): Promise<boolean>
-export function every<T>(fn: (elem: T) => boolean): (iter: Iterable<T> | AsyncIterable<T>) => Promise<boolean>
-
-export function maxBy<T, R>(fn: (elem: T) => R, iter: Iterable<T>): Promise<T>
-export function maxBy<T, R>(fn: (elem: T) => R, iter: AsyncIterable<T>): Promise<T>
-export function maxBy<T, R>(fn: (elem: T) => R): (iter: Iterable<T> | AsyncIterable<T>) => Promise<T>
-
-export function minBy<T, R>(fn: (elem: T) => R, iter: Iterable<T>): Promise<T>
-export function minBy<T, R>(fn: (elem: T) => R, iter: AsyncIterable<T>): Promise<T>
-export function minBy<T, R>(fn: (elem: T) => R): (iter: Iterable<T> | AsyncIterable<T>) => Promise<T>
-
-export function count<T>(iter: Iterable<T>): Promise<number>
-export function count<T>(iter: AsyncIterable<T>): Promise<number>
-
-export function sum<T>(iter: Iterable<T>): Promise<T>
-export function sum<T>(iter: AsyncIterable<T>): Promise<T>
-
-export function max<T>(iter: Iterable<T>): Promise<number>
-export function max<T>(iter: AsyncIterable<T>): Promise<number>
-
-export function average<T>(iter: Iterable<T>): Promise<number>
-export function average<T>(iter: AsyncIterable<T>): Promise<number>
-
-export function splitBy<T, R>(fn: (elem: T) => Iterable<R>): (dist: T) => AsyncIterableIterator<R>
-export function splitBy<T, R>(fn: (elem: T) => AsyncIterable<R>): (dist: T) => AsyncIterableIterator<R>
-export function splitBy<T, R>(fn: (elem: T) => Iterable<R>, dist: T): AsyncIterableIterator<R>
-export function splitBy<T, R>(fn: (elem: T) => AsyncIterable<R>, dist: T): AsyncIterableIterator<R>
-
-export function errorThen<T>(supply: () => Iterable<T>, iter: AsyncIterable<T>): AsyncIterableIterator<T>
-export function errorThen<T>(supply: () => AsyncIterable<T>, iter: AsyncIterable<T>): AsyncIterableIterator<T>
-export function errorThen<T>(supply: () => Iterable<T>, iter: Iterable<T>): AsyncIterableIterator<T>
-export function errorThen<T>(supply: () => AsyncIterable<T>, iter: Iterable<T>): AsyncIterableIterator<T>
-export function errorThen<T>(supply: Iterable<T>, iter: Iterable<T>): AsyncIterableIterator<T>
-export function errorThen<T>(supply: AsyncIterable<T>, iter: Iterable<T>): AsyncIterableIterator<T>
-export function errorThen<T>(supply: Iterable<T>, iter: AsyncIterable<T>): AsyncIterableIterator<T>
-export function errorThen<T>(supply: AsyncIterable<T>, iter: AsyncIterable<T>): AsyncIterableIterator<T>
-export function errorThen<T>(supply: () => Iterable<T>): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<T>
-export function errorThen<T>(supply: () => AsyncIterable<T>): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<T>
-export function errorThen<T>(supply: Iterable<T>): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<T>
-export function errorThen<T>(supply: AsyncIterable<T>): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<T>
-
-export function then<T, R>(fn: (iter: Iterable<T>) => Iterable<R>): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<R>
-export function then<T, R>(fn: (iter: Iterable<T>) => AsyncIterable<R>): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<R>
-export function then<T, R>(fn: (iter: AsyncIterable<T>) => Iterable<R>): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<R>
-export function then<T, R>(fn: (iter: AsyncIterable<T>) => AsyncIterable<R>): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<R>
-export function then<T, R>(fn: (iter: Iterable<T>) => Iterable<R>, iter: Iterable<T>): AsyncIterableIterator<R>
-export function then<T, R>(fn: (iter: Iterable<T>) => AsyncIterable<R>, iter: Iterable<T>): AsyncIterableIterator<R>
-export function then<T, R>(fn: (iter: AsyncIterable<T>) => Iterable<R>, iter: AsyncIterable<T>): AsyncIterableIterator<R>
-export function then<T, R>(fn: (iter: AsyncIterable<T>) => AsyncIterable<R>, iter: AsyncIterable<T>): AsyncIterableIterator<R>
-
-export function buffer<T>(supply: number, iter: Iterable<T>): AsyncIterableIterator<[T]>
-export function buffer<T>(supply: Promise<number>, iter: Iterable<T>): AsyncIterableIterator<[T]>
-export function buffer<T>(supply: number, iter: AsyncIterable<T>): AsyncIterableIterator<[T]>
-export function buffer<T>(supply: Promise<number>, iter: AsyncIterable<T>): AsyncIterableIterator<[T]>
-export function buffer<T>(supply: number): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<[T]>
-export function buffer<T>(supply: Promise<number>): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<[T]>
-
-export function groupBy<K, V>(group: (elem: V) => K, iter: Iterable<V>): Map<K, V>
-export function groupBy<K, V>(group: (elem: V) => Promise<K>, iter: Iterable<V>): Map<K, V>
-export function groupBy<K, V>(group: (elem: V) => K, iter: AsyncIterable<V>): Map<K, V>
-export function groupBy<K, V>(group: (elem: V) => Promise<K>, iter: AsyncIterable<V>): Map<K, V>
-export function groupBy<K, V>(group: (elem: V) => K): (iter: Iterable<V> | AsyncIterable<V>) => Map<K, V>
-export function groupBy<K, V>(group: (elem: V) => Promise<K>): (iter: Iterable<V> | AsyncIterable<V>) => Map<K, V>
-
-export function concat<T>(iter1: Iterable<T>, iter2: Iterable<T>): AsyncIterableIterator<T>
-export function concat<T>(iter1: Iterable<T>, iter2: AsyncIterable<T>): AsyncIterableIterator<T>
-export function concat<T>(iter1: AsyncIterable<T>, iter2: Iterable<T>): AsyncIterableIterator<T>
-export function concat<T>(iter1: AsyncIterable<T>, iter2: AsyncIterable<T>): AsyncIterableIterator<T>
-export function concat<T>(iter1: Iterable<T>): (iter2: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<T>
-export function concat<T>(iter1: AsyncIterable<T>): (iter2: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<T>
-
-export function union<T>(iter1: Iterable<T>, iter2: Iterable<T>): AsyncIterableIterator<T>
-export function union<T>(iter1: Iterable<T>, iter2: AsyncIterable<T>): AsyncIterableIterator<T>
-export function union<T>(iter1: AsyncIterable<T>, iter2: Iterable<T>): AsyncIterableIterator<T>
-export function union<T>(iter1: AsyncIterable<T>, iter2: AsyncIterable<T>): AsyncIterableIterator<T>
-export function union<T>(iter1: Iterable<T>): (iter2: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<T>
-export function union<T>(iter1: AsyncIterable<T>): (iter2: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<T>
-
-export function timeout<T>(time: number, fn: () => Promise<T>): Promise<T>
-export function timeout<T>(time: number, fn: Promise<T>): Promise<T>
-export function timeout<T>(time: number): (fn: any) => Promise<T>
-
-export function withTimeout<T>(time: number, iter: AsyncIterable<T>): AsyncIterableIterator<T>
-export function withTimeout<T>(time: number, iter: Iterable<T>): AsyncIterableIterator<T>
-export function withTimeout<T>(time: number): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<T>
-
-export function sleep(duration: number): Promise<void>
-export function interval(timeout: number, timeHandler: (...params: any[]) => void, ...params: any[]): any
-
-export function add(a: number, b: number): number
-export function add(a: string, b: string): string
-export function add(a: string, b: number): string
-export function add(a: number, b: string): string
-
-export function sub(a: number, b: number): number
-
-export function inc(a: number): number
-
-export function dec(a: number): number
-
-export function iterate<T>(fn: (elem: T) => T, init: T): AsyncIterableIterator<T>
-export function iterate<T>(fn: (elem: T) => T): (init: T) => AsyncIterableIterator<T>
-
-export function parallel_set_fetch_count(count: number): void
-
-export function pmap<T, R>(fn: (predicate: T) => R): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<R>
-export function pmap<T, R>(fn: (predicate: T) => R, iter: Iterable<T>): AsyncIterableIterator<R>
-export function pmap<T, R>(fn: (predicate: T) => R, iter: AsyncIterable<T>): AsyncIterableIterator<R>
-
-export function pfilter<T>(fn: (predicate: T) => boolean): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<T>
-export function pfilter<T>(fn: (predicate: T) => boolean, iter: Iterable<T>): AsyncIterableIterator<T>
-export function pfilter<T>(fn: (predicate: T) => boolean, iter: AsyncIterable<T>): AsyncIterableIterator<T>
-
-export function pcalls<R>(iter: Iterable<() => Promise<R>> | AsyncIterable<() => Promise<R>>): AsyncIterableIterator<R>
-export function pcalls<R>(...fn: (() => Promise<R>)[] ) : AsyncIterableIterator<R> 
-
-export function pfmap<T, E, R>(fn: (predicate: T) => E): (iter: Iterable<T> | AsyncIterable<T>) => AsyncIterableIterator<R>
-export function pfmap<T, E, R>(fn: (predicate: T) => E, iter: Iterable<T>): AsyncIterableIterator<R>
-export function pfmap<T, E, R>(fn: (predicate: T) => E, iter: AsyncIterable<T>): AsyncIterableIterator<R>
+export function pfmap<T extends Iter<any>, R>(f: (elem: PFlat<T>) => (R | Promise<R>), iter: T): AsyncIterableIterator<PFlat<R>>;
