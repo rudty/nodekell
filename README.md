@@ -140,7 +140,7 @@ console.log(v + 1);//26
 *    [interval](#interval)
 *    [timeout](#timeout)
 *    [withTimeout](#withtimeout)
-*    [notNil](#notnil) [**change/rename**]
+*    [notNil](#notnil) [**deprecated**]
 *    [isNil](#isNil)
 ---
 
@@ -1381,22 +1381,22 @@ try{
 
 
 ### notNil
-**change/rename**
-rename. use [isNil](#isNil) instead.
+**deprecated**
+use [isNil](#isNil) instead.(change true/false)
 
 
 ### isNil
 return false null, undefined, NaN true otherwise
 ```javascript
-console.log(F.isNil(NaN)); // false
-console.log(F.isNil(undefined)); //false
-console.log(F.isNil(null)); //false
-console.log(F.isNil("null")); // true
-console.log(F.isNil("NaN")); //true
-console.log(F.isNil(0)); // true
-console.log(F.isNil(false)); // true
-console.log(F.isNil([])); // true
-console.log(F.isNil({})); // true
+console.log(F.isNil(NaN)); // true
+console.log(F.isNil(undefined)); //true
+console.log(F.isNil(null)); //true
+console.log(F.isNil("null")); // false 
+console.log(F.isNil("NaN")); //false
+console.log(F.isNil(0)); // false
+console.log(F.isNil(false)); // false
+console.log(F.isNil([])); // false
+console.log(F.isNil({})); // false
 ```
 
 

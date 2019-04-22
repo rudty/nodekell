@@ -43,17 +43,17 @@ exports.fnothing = () => {};
 
 const isNil = v => {
     if (v) {
-        return true;
+        return false;
     }
 
     switch(v){
-        case null: return false;
-        case undefined: return false;
-        default: return !Number.isNaN(v);
+        case null: return true;
+        case undefined: return true;
+        default: return Number.isNaN(v);
     }
 };
 
 exports.isNil = isNil;
 
-//use isNill instead.
-exports.notNil = isNil;
+//deprecated / use isNill instead.
+exports.notNil = (a) => !isNil(a);
