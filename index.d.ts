@@ -1,4 +1,4 @@
-/** 
+/**
  * Type definitions for nodekell 1.2
  * TypeScript Version: 3.4
  */
@@ -20,12 +20,12 @@ export type Flat<T> = T extends Iter<infer E0> ? E0 : T;
 /**
  * Promise Iter Flat
  */
-export type PFlat<T> = EP<Flat<EP<T>>>; // Promise Flat
+export type PFlat<T> = EP<Flat<EP<T>>>;
 
 /**
  * Non-Promise Iter Deep Flat
  */
-export type DFlat<T> = // Deep Flat
+export type DFlat<T> =
     T extends Iter<infer E0> ?
     E0 extends Iter<infer E1> ?
     E1 extends Iter<infer E2> ?
@@ -55,7 +55,7 @@ export type DFlat<T> = // Deep Flat
 /**
  * Promise Iter Deep Flat
  */
-export type PDFlat<T> = // Promise Deep Flat
+export type PDFlat<T> =
     EP<DFlat<
     EP<DFlat<
     EP<DFlat<
@@ -71,7 +71,7 @@ export interface CurriedFunction2<T1, T2, R> {
 }
 
 export interface CurriedFunction3<T1, T2, T3, R> {
-    (t1: T1): CurriedFunction2<T2, T3, R>; // t1 => t2 => t3 => r | t1 => t2 t3 =>
+    (t1: T1): CurriedFunction2<T2, T3, R>;
     (t1: T1, t2: T2): (t3: T3) => R;
     (t1: T1, t2: T2, t3: T3): R;
 }
@@ -128,7 +128,7 @@ export interface CurriedFunction8<T1, T2, T3, T4, T5, T6, T7, T8, R> {
 /**
  * https://github.com/rudty/nodekell#curry
  *
- * please arguments length 8 or less
+ * please use arguments length 8 or less
  *
  * @param f
  */
@@ -230,7 +230,7 @@ export function notNil(a: any): boolean;
  *
  * **Note**
  * - originally allow Promise wrapped functions. but that is complicated. so don't support Promise wrapped functions type.
- * - please functions length 20 or less
+ * - please use functions length 20 or less
  * - run implement with foldl
  *
  * ```ts
@@ -372,7 +372,7 @@ export function flat<T>(iter: Iter<T>): AsyncIterableIterator<PFlat<T>>;
  *
  * **Note**
  * - don't use too deep iter
- * - please use arguments length 10 or less (if over 10, forces first argment type or any type)
+ * - please use arguments length 10 or less (if over 10, please use generic)
  *
  * @param t
  */
@@ -547,9 +547,6 @@ export function zip<T, Y>(iter1: Iter<T>, iter2: Iter<Y>): AsyncIterableIterator
 /**
  * https://github.com/rudty/nodekell#zipwith
  *
- * **Note**
- * - if f is promise function, modify not zip type in typescript. but return type is zip.
- *
  * @param f
  * @param iter1
  * @param iter2
@@ -659,7 +656,6 @@ export function collect<T>(iter: Iter<T>): Promise<EP<T>[]>;
  */
 export function collectMap<T extends any[]>(iter: Iter<T | Promise<T>>): Promise<Map<T[0], T[1]>>;
 // export function collectMap<K, V>(iter: Iter<[K, V] | Promise<[K, V]>>): Promise<Map<K, V>>;
-// export function collectMap<K, V>(iter: Iter<[K, V]>): Promise<Map<K, V>>;
 
 /**
  * https://github.com/rudty/nodekell#collectset
@@ -687,10 +683,6 @@ export function forEach<T, R>(f: (elem: EP<T>) => (R | Promise<R>), iter: Iter<T
  * @param f
  * @param iter
  */
-// export function distinctBy<T, Y>(f: (elem: T) => (Y | Promise<Y>)): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
-
-// export function distinctBy<T, Y>(f: (elem: T) => (Y | Promise<Y>), iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
-
 export function distinctBy<T>(f: (elem: T) => any): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
 export function distinctBy<T>(f: (elem: EP<T>) => any): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
 
@@ -735,10 +727,6 @@ export function every<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), iter:
  * @param f
  * @param iter
  */
-/* export function maxBy<T extends object, Y extends T[keyof T]>(f: (elem: T) => (Y | Promise<Y>)): (iter: Iter<T | Promise<T>>) => Promise<T>;
-
-export function maxBy<T extends object, Y extends T[keyof T]>(f: (elem: T) => (Y | Promise<Y>), iter: Iter<T | Promise<T>>): Promise<T>; */
-
 export function maxBy<T>(f: (elem: T) => any): (iter: Iter<T | Promise<T>>) => Promise<T>;
 
 export function maxBy<T>(f: (elem: T) => any, iter: Iter<T | Promise<T>>): Promise<T>;
@@ -749,10 +737,6 @@ export function maxBy<T>(f: (elem: T) => any, iter: Iter<T | Promise<T>>): Promi
  * @param f
  * @param iter
  */
-/* export function minBy<T extends object, Y extends T[keyof T]>(f: (elem: T) => (Y | Promise<Y>)): (iter: Iter<T | Promise<T>>) => Promise<T>;
-
-export function minBy<T extends object, Y extends T[keyof T]>(f: (elem: T) => (Y | Promise<Y>), iter: Iter<T | Promise<T>>): Promise<T>; */
-
 export function minBy<T>(f: (elem: T) => any): (iter: Iter<T | Promise<T>>) => Promise<T>;
 
 export function minBy<T>(f: (elem: T) => any, iter: Iter<T | Promise<T>>): Promise<T>;
@@ -763,7 +747,14 @@ export function minBy<T>(f: (elem: T) => any, iter: Iter<T | Promise<T>>): Promi
  * @param iter
  */
 export function count(iter: Iter<any>): Promise<number>;
-// export function count<T>(iter: Iter<T>): Promise<number>;
+
+/*
+  about types of sum, max, min
+
+  set type number or string, an bug occurs
+
+  so use generic
+*/
 
 /**
  * https://github.com/rudty/nodekell#sum
@@ -773,9 +764,7 @@ export function count(iter: Iter<any>): Promise<number>;
  *
  * @param iter
  */
-// export function sum(iter: string): Promise<string>;
 export function sum<T>(iter: Iter<T | Promise<T>>): Promise<T>;
-// export function sum(iter: Iter<number | Promise<number>>): Promise<number>;
 
 /**
  * https://github.com/rudty/nodekell#max
@@ -785,9 +774,7 @@ export function sum<T>(iter: Iter<T | Promise<T>>): Promise<T>;
  *
  * @param iter
  */
-// export function max(iter: string): Promise<string>;
 export function max<T>(iter: Iter<T | Promise<T>>): Promise<T>;
-// export function max(iter: Iter<string | Promise<string>>): Promise<string>;
 
 /**
  * https://github.com/rudty/nodekell#min
@@ -797,9 +784,7 @@ export function max<T>(iter: Iter<T | Promise<T>>): Promise<T>;
  *
  * @param iter
  */
-// export function min(iter: string): Promise<string>;
 export function min<T>(iter: Iter<T | Promise<T>>): Promise<T>;
-// export function min(iter: Iter<string | Promise<string>>): Promise<string>;
 
 /**
  * https://github.com/rudty/nodekell#average
@@ -807,7 +792,6 @@ export function min<T>(iter: Iter<T | Promise<T>>): Promise<T>;
  * @param iter
  */
 export function average(iter: Iter<number | Promise<number>>): Promise<number>;
-// export function average(iter: Iter<number>): Promise<number>;
 
 /**
  * https://github.com/rudty/nodekell#splitby
@@ -872,16 +856,9 @@ export function buffer<T>(supply: number | Promise<number>, iter: Iter<T>): Asyn
 /**
  * https://github.com/rudty/nodekell#groupby
  *
- * **TODO**
- * - remove EP
- *
  * @param f
  * @param iter
  */
-/* export function groupBy<V extends object, K extends V[keyof V]>(f: (elem: V) => (K | Promise<K>)): (iter: Iter<V | Promise<V>>) => Promise<Map<K, V>>;
-
-export function groupBy<V extends object, K extends V[keyof V]>(f: (elem: V) => (K | Promise<K>), iter: Iter<V | Promise<V>>): Promise<Map<K, V>>; */
-
 export function groupBy<K, V>(f: (elem: V) => (K | Promise<K>)): (iter: Iter<V | Promise<V>>) => Promise<Map<K, V[]>>;
 export function groupBy<K, V>(f: (elem: EP<V>) => (K | Promise<K>)): (iter: Iter<V>) => Promise<Map<K, EP<V>[]>>;
 
@@ -1151,17 +1128,9 @@ export function repeat<T>(supply: Promise<() => T>): AsyncIterableIterator<EP<T>
 export function repeat<T>(supply: () => T): AsyncIterableIterator<EP<T>>;
 export function repeat<T>(supply: T): AsyncIterableIterator<EP<T>>;
 
-/* export function repeat<T>(supply: Promise<() => (T | Promise<T>)>): AsyncIterableIterator<T>;
-export function repeat<T>(supply: () => (T | Promise<T>)): AsyncIterableIterator<T>;
-export function repeat<T>(supply: T | Promise<T>): AsyncIterableIterator<T>; */
-
 export function repeat<T>(length: number | Promise<number>, supply: Promise<() => T>): AsyncIterableIterator<EP<T>>;
 export function repeat<T>(length: number | Promise<number>, supply: () => T): AsyncIterableIterator<EP<T>>;
 export function repeat<T>(length: number | Promise<number>, supply: T): AsyncIterableIterator<EP<T>>;
-
-/* export function repeat<T>(length: number | Promise<number>, supply: Promise<() => (T | Promise<T>)>): AsyncIterableIterator<T>;
-export function repeat<T>(length: number | Promise<number>, supply: () => (T | Promise<T>)): AsyncIterableIterator<T>;
-export function repeat<T>(length: number | Promise<number>, supply: T | Promise<T>): AsyncIterableIterator<T>; */
 
 /**
  * https://github.com/rudty/nodekell#range
@@ -1249,7 +1218,7 @@ export function pcalls<R0, R1, R2, R3, R4, R5, R6, R7>(f0: (() => R0 | Promise<R
 export function pcalls<R0, R1, R2, R3, R4, R5, R6, R7, R8>(f0: (() => R0 | Promise<R0>), f1: (() => R1 | Promise<R1>), f2: (() => R2 | Promise<R2>), f3: (() => R3 | Promise<R3>), f4: (() => R4 | Promise<R4>), f5: (() => R5 | Promise<R5>), f6: (() => R6 | Promise<R6>), f7: (() => R7 | Promise<R7>), f8: (() => R8 | Promise<R8>)): AsyncIterableIterator<R0 | R1 | R2 | R3 | R4 | R5 | R6 | R7 | R8>;
 export function pcalls<R0, R1, R2, R3, R4, R5, R6, R7, R8, R9>(f0: (() => R0 | Promise<R0>), f1: (() => R1 | Promise<R1>), f2: (() => R2 | Promise<R2>), f3: (() => R3 | Promise<R3>), f4: (() => R4 | Promise<R4>), f5: (() => R5 | Promise<R5>), f6: (() => R6 | Promise<R6>), f7: (() => R7 | Promise<R7>), f8: (() => R8 | Promise<R8>), f9: (() => R9 | Promise<R9>)): AsyncIterableIterator<R0 | R1 | R2 | R3 | R4 | R5 | R6 | R7 | R8 | R9>;
 export function pcalls<R>(...f: (() => (R | Promise<R>))[]): AsyncIterableIterator<R>;
-// export function pcalls<T extends () => any>(...f: T[]): AsyncIterableIterator<EP<ReturnType<T>>>
+export function pcalls(...f: (() => any)[]): AsyncIterableIterator<any>;
 
 /**
  * https://github.com/rudty/nodekell#pfmap
