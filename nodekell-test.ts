@@ -2541,7 +2541,6 @@ describe('pcalls', () => {
         const fn3 = async () => (async () => 'b')();
 
         const r0 = F.pcalls(gfn0()); // $ExpectType AsyncIterableIterator<string | number>
-
         const r1 = F.pcalls(fn0, fn1, fn2, fn3); // $ExpectType AsyncIterableIterator<string | number>
     });
 
@@ -2553,6 +2552,7 @@ describe('pcalls', () => {
         const abcd = await F.run(F.concat(a, b), F.concat(c), F.concat(d), e => F.collect(e));
 
         const r0 = F.pcalls<number | string>(...abcd); // $ExpectType AsyncIterableIterator<string | number>
+        const r1 = F.pcalls(...abcd); // $ExpectType AsyncIterableIterator<any>
     });
 });
 
