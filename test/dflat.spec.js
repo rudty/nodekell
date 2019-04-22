@@ -39,4 +39,25 @@ describe('test dflat', () => {
         const c = await F.collect(r);
         assert.deepStrictEqual(c, [1,2,3,4]);
     });
+
+    it('string1',async () => {
+        const a = 'a';
+        const v = await F.run(a, F.dflat, F.collect);
+        assert.deepStrictEqual(v, ['a']);
+    });
+    it('string2',async () => {
+        const a = 'ab';
+        const v = await F.run(a, F.dflat, F.collect);
+        assert.deepStrictEqual(v, ['a','b']);
+    });
+    it('new string1',async () => {
+        const a = new String('a');
+        const v = await F.run(a, F.dflat, F.collect);
+        assert.deepStrictEqual(v, ['a']);
+    });
+    it('new string2',async () => {
+        const a = new String('ab');
+        const v = await F.run(a, F.dflat, F.collect);
+        assert.deepStrictEqual(v, ['a','b']);
+    });
 });
