@@ -1,26 +1,5 @@
 import * as F from './';
 
-/*
-https://github.com/Microsoft/TypeScript/pull/30215
-
-declare function pipe<A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C;
-
-declare function list<T>(a: T): T[];
-declare function box<V>(x: V): { value: V };
-
-const listBox = pipe(list, box);  // <T>(a: T) => { value: T[] }
-const boxList = pipe(box, list);  // <V>(x: V) => { value: V }[]
-
-const x1 = listBox(42);  // { value: number[] }
-const x2 = boxList("hello");  // { value: string }[]
-
-const flip = <A, B, C>(f: (a: A, b: B) => C) => (b: B, a: A) => f(a, b);
-const zip = <T, U>(x: T, y: U): [T, U] => [x, y];
-const flipped = flip(zip);  // <T, U>(b: U, a: T) => [T, U]
-
-const t1 = flipped(10, "hello");  // [string, number]
-const t2 = flipped(true, 0);  // [number, boolean] */
-
 const describe = (str: string, f: () => any) => {
     f();
 };
@@ -1320,9 +1299,9 @@ describe('max', () => {
     });
 
     it('from Promise Number', async () => {
-        const a = ['he', Promise.resolve('ll'), 'o'];
+        const a = [1, Promise.resolve(5), 2, 4, Promise.resolve(3)];
 
-        const r0 = await F.max(a); // $ExpectType string
+        const r0 = await F.max(a); // $ExpectType number
     });
 
     it('from String', async () => {
@@ -1371,29 +1350,21 @@ describe('splitBy', () => {
         // const a = [1,2,3,4,5];
         const a = 1;
 
-        const r0 = F.splitBy<number, number>(e => [e, 0])(a); // $ExpectType AsyncIterableIterator<number>
-        const r1 = F.splitBy(e => [0, e], a); // $ExpectType AsyncIterableIterator<number>
+        const ar0 = F.splitBy<number, number>(e => [e, 0])(a); // $ExpectType AsyncIterableIterator<number>
+        const ar1 = F.splitBy(e => [0, e], a); // $ExpectType AsyncIterableIterator<number>
+
+        const br0 = F.splitBy<number, number>(async e => [e, 0])(a); // $ExpectType AsyncIterableIterator<number>
+        const br1 = F.splitBy(async e => [0, e], a); // $ExpectType AsyncIterableIterator<number>
     });
 
     it('from String', async () => {
         const a = 'hello world';
 
-        const r0 = F.splitBy<string, string>(e => e.split(' '))(a); // $ExpectType AsyncIterableIterator<string>
-        const r1 = F.splitBy(e => e.split(' '), a); // $ExpectType AsyncIterableIterator<string>
-    });
+        const ar0 = F.splitBy<string, string>(e => e.split(' '))(a); // $ExpectType AsyncIterableIterator<string>
+        const ar1 = F.splitBy(e => e.split(' '), a); // $ExpectType AsyncIterableIterator<string>
 
-    it('from Number to Promise Function', async () => {
-        const a = 1;
-
-        const r0 = F.splitBy<number, number>(async e => [e, 0])(a); // $ExpectType AsyncIterableIterator<number>
-        const r1 = F.splitBy(async e => [0, e], a); // $ExpectType AsyncIterableIterator<number>
-    });
-
-    it('from String to Promise Function', async () => {
-        const a = 'hello world';
-
-        const r0 = F.splitBy<string, string>(async e => e.split(' '))(a); // $ExpectType AsyncIterableIterator<string>
-        const r1 = F.splitBy(async e => e.split(' '), a); // $ExpectType AsyncIterableIterator<string>
+        const br0 = F.splitBy<string, string>(async e => e.split(' '))(a); // $ExpectType AsyncIterableIterator<string>
+        const br1 = F.splitBy(async e => e.split(' '), a); // $ExpectType AsyncIterableIterator<string>
     });
 });
 
@@ -1464,7 +1435,7 @@ describe('errorThen', () => {
 
 describe('then', () => {
     it('from Normal Value', () => {
-        const generatorFunction = function *(iter: Iterable<number>) {
+        const gfn0 = function *(iter: Iterable<number>) {
             for (const e of iter) {
                 yield e;
             }
@@ -1472,9 +1443,8 @@ describe('then', () => {
 
         const a = [1, 2, 3, 4, 5];
 
-        // const r0 = F.then(iter => iter)(a); // unknown;
-        const ar0 = F.then(generatorFunction)(a); // $ExpectType IterableIterator<number>
-        const ar1 = F.then(generatorFunction, a); // $ExpectType IterableIterator<number>
+        const ar0 = F.then(gfn0)(a); // $ExpectType IterableIterator<number>
+        const ar1 = F.then(gfn0, a); // $ExpectType IterableIterator<number>
 
         const br0 = F.then<number[], number[]>(iter => iter)(a); // $ExpectType number[]
         const br1 = F.then(iter => iter, a); // $ExpectType number[]
@@ -1488,16 +1458,16 @@ describe('then', () => {
     });
 
     it('from Promise Value', async () => {
-        const generatorFunction = async function *(iter: AsyncIterable<number | Promise<number>>) {
+        const gfn0 = async function *(iter: AsyncIterable<number | Promise<number>>) {
             for await (const e of iter) {
-            yield await e;
+                yield await e;
             }
         };
 
         const a = [1, 2, Promise.resolve(3), 4, 5];
 
-        const ar0 = F.then(generatorFunction)(F.seq(a)); // $ExpectType AsyncIterableIterator<number>
-        const ar1 = F.then(generatorFunction, F.seq(a)); // $ExpectType AsyncIterableIterator<number>
+        const ar0 = F.then(gfn0)(F.seq(a)); // $ExpectType AsyncIterableIterator<number>
+        const ar1 = F.then(gfn0, F.seq(a)); // $ExpectType AsyncIterableIterator<number>
 
         const br0 = await F.then<AsyncIterableIterator<number>, Promise<AsyncIterableIterator<number>>>(async iter => iter)(F.seq(a)); // $ExpectType AsyncIterableIterator<number>
         const br1 = await F.then(async iter => iter, F.seq(a)); // $ExpectType AsyncIterableIterator<number>
@@ -1564,13 +1534,10 @@ describe('groupBy', () => {
 
         const r0 = await F.groupBy<string, { type: string; name: string; }>(async e => e.type)(a); // $ExpectType Map<string, { type: string; name: string; }[]>
         const r1 = await F.groupBy(async e => e.type, a); // $ExpectType Map<string, { type: string; name: string; }[]>
-        // Map<string, { type: string; name: string; }>
     });
 
     it('from Promise Array', async () => {
         const a = ['h', 1, Promise.resolve('e'), 2, 'l', Promise.resolve(3), 'l', 4, 'o', 5];
-        // const b = [1,2,3,Promise.resolve(4),5];
-        // const c = [Promise.resolve('h'), 'ello']
 
         const r0 = await F.groupBy<'string' | 'number', string | number>(e => typeof e === 'string' ? 'string' : 'number')(a); // $ExpectType Map<"string" | "number", (string | number)[]>
         const r1 = await F.groupBy(async e => typeof e === 'string' ? 'string' : 'number', a); // $ExpectType Map<"string" | "number", (string | number)[]>
@@ -1765,54 +1732,6 @@ describe('innerJoin', () => {
         rr3[0].length; // $ExpectType number
         rr3[0].name; // $ExpectType string
     });
-
-/* 	it('from Custom Iterable + set Method', () => {
-        class CustomIterable<T, Y> {
-            constructor(id?: number) {
-                this.id = id || 0;
-                this.m = new Map<T, Y>();
-            }
-            [Symbol.iterator]() {
-                return this.m.entries();
-            }
-            id: number;
-            m: Map<T, Y>;
-
-            set(k: T, v: Y) {
-                this.m.set(k, v);
-            }
-        }
-
-        type isIter<T> = T extends F.Iter<infer X> ? T : unknown;
-        type isIterTest1 = isIter<CustomIterable<string, string>>;
-        type isIterTest2 = isIter<number>;
-
-        const c0 = new CustomIterable<string, string>(1);
-        const c1 = new CustomIterable<string, number>(1);
-
-        c0.set('k1', 'v1');
-        c0.set('k2', 'v2');
-        c1.set('k2', 2);
-        c1.set('k3', 3);
-
-        const a = [c0];
-        const b = [c1];
-
-        const r2 = F.innerJoin<CustomIterable<string, string>>
-        const r3 = F.innerJoin<CustomIterable<string, string>, CustomIterable<string, number>>((a, b) => a.id === b.id, a, b);
-
-        const rr3 = await F.collect(r3);
-
-        // I want Map<string, string | number>
-        rr3[0].m; // ExpectType Map<string, string>
-    }) */
-
-/* 	it('from String', () => {
-        const a = 'Etiam elementum iaculis ipsum a vehicula. Donec pellentesque rutrum laoreet. Praesent a lectus neque. Maecenas bibendum nulla commodo felis pharetra dapibus. Pellentesque ipsum lorem, mollis molestie venenatis vitae, pulvinar vitae mauris. Pellentesque feugiat orci sed justo pulvinar cursus. Sed placerat lacus sit amet lectus rhoncus, non dapibus sem sollicitudin. In varius lectus at ante commodo faucibus.';
-        const b = 'Morbi lorem mi, congue in viverra id, auctor nec magna. Ut lectus leo, scelerisque ac placerat ut, scelerisque quis dui. Aenean ut tempor augue. Nulla fermentum leo id risus consequat aliquam. Nam non feugiat neque, sed maximus ipsum. Maecenas consectetur convallis ornare. Nunc egestas non massa in sagittis. Pellentesque rhoncus lacinia pretium. Maecenas viverra risus at tellus rhoncus rhoncus. Mauris quis ligula facilisis, placerat turpis nec, finibus elit. Proin cursus lectus nibh, eget finibus justo scelerisque eu. Suspendisse in facilisis nunc. In sollicitudin eget sem et sodales.';
-
-        const r3 = F.innerJoin((a, b) => a === b, a, b);
-    }) */
 });
 
 describe('leftInnerJoin', () => {
@@ -2430,6 +2349,11 @@ describe('interval', () => {
 
 describe('rangeInterval', () => {
     it('', () => {
+        F.rangeInterval(50); // $ExpectType AsyncIterableIterator<number>
+        F.rangeInterval(Promise.resolve(50)); // $ExpectType AsyncIterableIterator<number>
+        F.rangeInterval(() => 50); // $ExpectType AsyncIterableIterator<number>
+        F.rangeInterval(async () => 50); // $ExpectType AsyncIterableIterator<number>
+
         F.rangeInterval(50, 5); // $ExpectType AsyncIterableIterator<number>
         F.rangeInterval(Promise.resolve(50), 5); // $ExpectType AsyncIterableIterator<number>
         F.rangeInterval(() => 50, 5); // $ExpectType AsyncIterableIterator<number>
@@ -2484,21 +2408,20 @@ describe('repeat', () => {
 
 describe('range', () => {
     it('', async () => {
-        const r0 = F.range(5); // $ExpectType IterableIterator<number>
-        const r1 = F.range(0, 5); // $ExpectType IterableIterator<number>
-        const r2 = F.range(0, 5, 1); // $ExpectType IterableIterator<number>
+        const r0 = F.range(); // $ExpectType IterableIterator<number>
+        const r1 = F.range(5); // $ExpectType IterableIterator<number>
+        const r2 = F.range(0, 5); // $ExpectType IterableIterator<number>
+        const r3 = F.range(0, 5, 1); // $ExpectType IterableIterator<number>
     });
 });
 
 describe('iterate', () => {
     it('from Normal Value', async () => {
-        // const r0 = F.iterate<number>(e => e + 1)(0);
         const r0 = F.iterate(F.inc, 0); // $ExpectType AsyncIterableIterator<number>
         const r1 = F.iterate(F.inc, 0); // $ExpectType AsyncIterableIterator<number>
     });
 
     it('from Promise Value', async () => {
-        // const r0 = F.iterate(F.inc)(Promise.resolve(0));
         const r0 = F.iterate<number>(F.inc)(Promise.resolve(0)); // $ExpectType AsyncIterableIterator<number>
         const r1 = F.iterate(F.inc, Promise.resolve(0)); // $ExpectType AsyncIterableIterator<number>
     });
@@ -2529,8 +2452,6 @@ describe('parallel_set_fetch_count', () => {
 
 describe('pmap', () => {
     it('from Normal Value', async () => {
-        F.parallel_set_fetch_count(6);
-
         const a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
         const r0 = F.pmap<number, number>(e => e ** e)(a); // $ExpectType AsyncIterableIterator<number>
@@ -2538,8 +2459,6 @@ describe('pmap', () => {
     });
 
     it('from String', async () => {
-        F.parallel_set_fetch_count(6);
-
         const a = 'hello world';
 
         const r0 = F.pmap<string, string>(e => e + e)(a); // $ExpectType AsyncIterableIterator<string>
@@ -2547,43 +2466,15 @@ describe('pmap', () => {
     });
 
     it('from Promise Value', async () => {
-        F.parallel_set_fetch_count(6);
-
         const a = [Promise.resolve(1), 2, 3, 4, 5, 6, 7, 8, 9, Promise.resolve(10)];
 
         const r0 = F.pmap<number, number>(e => e ** e)(a); // $ExpectType AsyncIterableIterator<number>
         const r1 = F.pmap(e => e ** e, a); // $ExpectType AsyncIterableIterator<number>
     });
-
-    it('from Custom Iterable', async () => {
-        const a = {
-            // tslint:disable-next-line: object-literal-shorthand
-            [Symbol.iterator]: function *() {
-                yield* F.range(50);
-            },
-        };
-
-        const b = {
-            // tslint:disable-next-line: object-literal-shorthand
-            [Symbol.asyncIterator]: async function *() {
-                yield* F.range(50);
-            }
-        };
-
-        F.parallel_set_fetch_count(6);
-
-        const ar0 = F.pmap<number, number>(e => e ** e)(a); // $ExpectType AsyncIterableIterator<number>
-        const ar1 = F.pmap(e => e ** e, a); // $ExpectType AsyncIterableIterator<number>
-
-        const br0 = F.pmap<number, number>(e => e ** e)(b); // $ExpectType AsyncIterableIterator<number>
-        const br1 = F.pmap(e => e ** e, b); // $ExpectType AsyncIterableIterator<number>
-    });
 });
 
 describe('pfilter', () => {
     it('from Normal Value', async () => {
-        F.parallel_set_fetch_count(6);
-
         const a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
         const r0 = F.pfilter<number>(e => e % 2 === 0)(a); // $ExpectType AsyncIterableIterator<number>
@@ -2591,8 +2482,6 @@ describe('pfilter', () => {
     });
 
     it('from String', async () => {
-        F.parallel_set_fetch_count(6);
-
         const a = 'hello world';
 
         const r0 = F.pfilter<string>(e => e === 'l')(a); // $ExpectType AsyncIterableIterator<string>
@@ -2600,36 +2489,10 @@ describe('pfilter', () => {
     });
 
     it('from Promise Value', async () => {
-        F.parallel_set_fetch_count(6);
-
         const a = [Promise.resolve(1), 2, 3, 4, 5, 6, 7, 8, 9, Promise.resolve(10)];
 
         const r0 = F.pfilter<number>(e => e % 2 === 0)(a); // $ExpectType AsyncIterableIterator<number>
         const r1 = F.pfilter(e => e % 2 === 0, a); // $ExpectType AsyncIterableIterator<number>
-    });
-
-    it('from Custom Iterable', async () => {
-        const a = {
-            // tslint:disable-next-line: object-literal-shorthand
-            [Symbol.iterator]: function *() {
-                yield* F.range(50);
-            },
-        };
-
-        const b = {
-            // tslint:disable-next-line: object-literal-shorthand
-            [Symbol.asyncIterator]: async function *() {
-                yield* F.range(50);
-            }
-        };
-
-        F.parallel_set_fetch_count(6);
-
-        const ar0 = F.pfilter<number>(e => e > 2)(a); // $ExpectType AsyncIterableIterator<number>
-        const ar1 = F.pfilter(e => e > 2, a); // $ExpectType AsyncIterableIterator<number>
-
-        const br0 = F.pfilter<number>(e => e > 2)(b); // $ExpectType AsyncIterableIterator<number>
-        const br1 = F.pfilter(e => e > 2, b); // $ExpectType AsyncIterableIterator<number>
     });
 });
 
@@ -2680,10 +2543,9 @@ describe('pcalls', () => {
         const r0 = F.pcalls(gfn0()); // $ExpectType AsyncIterableIterator<string | number>
 
         const r1 = F.pcalls(fn0, fn1, fn2, fn3); // $ExpectType AsyncIterableIterator<string | number>
-        // const r2 = F.pcalls(fn0, fn1, fn2, fn3);
     });
 
-    it('from Parameter Length Over 10 and Union Type', async () => {
+    it('from Parameter Length Unknown or Over 10 and Union Type', async () => {
         const a = await F.run(F.repeat(5, () => () => 1));
         const b = await F.run(F.repeat(5, () => () => 'a'));
         const c = await F.run(F.repeat(5, () => async () => 2));
