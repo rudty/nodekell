@@ -244,7 +244,7 @@ console.log(await F.collect(t)); // print 1, 2
 
 support for an iterable with non-iterable elements is deprecated.
 
-example) F.fmap([[1],[2],3,4,5])
+example) F.fmap(e => e, [[1],[2],3,4,5])
 
 current: [1,2,3,4,5]
 
