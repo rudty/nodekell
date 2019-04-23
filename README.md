@@ -288,10 +288,16 @@ console.log(await F.collect(f)); // print [1,2,3,4,5]
 ### dflat
 Similar to flat, but works recursively
 ```javascript
-const r = await F.dflat([[[1],[2]]],[[3]],[4]);
+const r = F.dflat([[[1],[2]]],[[3]],[4]);
 const c = await F.collect(r);
 console.log(c);//print [1,2,3,4]
 ```
+```javascript
+const r = F.dflat("HELLO");
+const c = await F.collect(r);
+console.log(c);//print ["H","E","L","L","O"]
+```
+
 
 
 ### reverse

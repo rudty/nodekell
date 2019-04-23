@@ -55,9 +55,16 @@ describe('test dflat', () => {
         const v = await F.run(a, F.dflat, F.collect);
         assert.deepStrictEqual(v, ['a']);
     });
+    
     it('new string2',async () => {
         const a = new String('ab');
         const v = await F.run(a, F.dflat, F.collect);
         assert.deepStrictEqual(v, ['a','b']);
+    });
+
+    it('regex',async () => {
+        const a = /hello world/;
+        const v = await F.run(a, F.dflat, F.collect);
+        assert.deepStrictEqual(v, [/hello world/]);
     });
 });
