@@ -1,3 +1,5 @@
+// TypeScript Version: 3.4
+
 /**
  * Type definitions for nodekell 1.2
  */
@@ -214,9 +216,18 @@ export function second<T extends any[]>(a: T): T[1];
 
 /**
  * ```ts
+ * isNil(undefined) === true;
+ * isNil(false) === false;
+ * ```
+ */
+export function isNil(a: any): boolean;
+
+/**
+ * ```ts
  * notNil(undefined) === false;
  * notNil(false) === true;
  * ```
+ * @deprecated use isNil instead
  */
 export function notNil(a: any): boolean;
 
@@ -274,7 +285,7 @@ export function run<T, R0, R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R1
  *
  * @param iter
  */
-export function head<T>(iter: Iter<T | Promise<T>>): Promise<T>;
+// export function head<T>(iter: Iter<T | Promise<T>>): Promise<T>;
 export function head<T>(iter: Iter<T>): Promise<EP<T>>;
 
 /**
@@ -282,7 +293,7 @@ export function head<T>(iter: Iter<T>): Promise<EP<T>>;
  *
  * @param iter
  */
-export function tail<T>(iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+// export function tail<T>(iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
 export function tail<T>(iter: Iter<T>): AsyncIterableIterator<EP<T>>;
 
 /**
@@ -339,11 +350,11 @@ export function map<T, R>(f: (elem: EP<T>) => (R | Promise<R>), iter: Iter<T>): 
  * @param f
  * @param iter
  */
-export function fmap<T, R>(f: (elem: IterOnly<PFlat<T>>) => (Iter<R> | Promise<Iter<R>>)): (iter: T) => AsyncIterableIterator<PFlat<Iter<R>>>;
 export function fmap<T, R>(f: (elem: IterOnly<PFlat<T>>) => R): (iter: T) => AsyncIterableIterator<PFlat<EP<R>>>;
+export function fmap<T, R>(f: (elem: IterOnly<PFlat<T>>) => (Iter<R> | Promise<Iter<R>>)): (iter: T) => AsyncIterableIterator<PFlat<Iter<R>>>;
 
-export function fmap<T, R>(f: (elem: IterOnly<PFlat<T>>) => (Iter<R> | Promise<Iter<R>>), iter: T): AsyncIterableIterator<PFlat<Iter<R>>>;
 export function fmap<T, R>(f: (elem: IterOnly<PFlat<T>>) => R, iter: T): AsyncIterableIterator<PFlat<EP<R>>>;
+export function fmap<T, R>(f: (elem: IterOnly<PFlat<T>>) => (Iter<R> | Promise<Iter<R>>), iter: T): AsyncIterableIterator<PFlat<Iter<R>>>;
 
 /**
  * https://github.com/rudty/nodekell#flatMap
@@ -496,8 +507,8 @@ export function scanl1<T>(f: (a: EP<T>, b: EP<T>) => (EP<T> | Promise<EP<T>>), i
  *
  * @param iter
  */
-export function reverse<T>(iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
 export function reverse<T>(iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+// export function reverse<T>(iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
 
 /**
  * https://github.com/rudty/nodekell#foldr
@@ -653,7 +664,7 @@ export function collectMap<T extends any[]>(iter: Iter<T | Promise<T>>): Promise
  *
  * @param iter
  */
-export function collectSet<T>(iter: Iter<T | Promise<T>>): Promise<Set<T>>;
+// export function collectSet<T>(iter: Iter<T | Promise<T>>): Promise<Set<T>>;
 export function collectSet<T>(iter: Iter<T>): Promise<Set<EP<T>>>;
 
 /**
@@ -685,7 +696,7 @@ export function distinctBy<T>(f: (elem: EP<T>) => any, iter: Iter<T>): AsyncIter
  *
  * @param iter
  */
-export function distinct<T>(iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+// export function distinct<T>(iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
 export function distinct<T>(iter: Iter<T>): AsyncIterableIterator<EP<T>>;
 
 /**
@@ -1077,7 +1088,7 @@ export function timeout<T>(duration: () => (number | Promise<number>), job: () =
  * https://github.com/rudty/nodekell#interval
  *
  * **Note**
- * - if you want stop interval, set false the run in return value
+ * - if you want stop interval, set false timer.run
  * ```ts
  * const timer = interval(1000, () => fnothing());
  * timer.run = false;
@@ -1113,6 +1124,13 @@ export function rangeInterval(duration: () => (number | Promise<number>), begin:
 /**
  * https://github.com/rudty/nodekell#repeat
  *
+ * **Note**
+ * - if use with run or run like function, please use lambda or function expression
+ * ```ts
+ * const a = Promise.resolve('a');
+ * const r0 = await F.run(a, e => repeat(e));
+ * const r1 = await F.run(a, e => repeat(10, e));
+ * ```
  * @param supply
  */
 export function repeat<T>(supply: Promise<() => T>): AsyncIterableIterator<EP<T>>;
@@ -1220,3 +1238,13 @@ export function pcalls(...f: (() => any)[]): AsyncIterableIterator<any>;
 export function pfmap<T extends Iter<any>, R>(f: (elem: PFlat<T>) => (R | Promise<R>)): (iter: T) => AsyncIterableIterator<PFlat<R>>;
 
 export function pfmap<T extends Iter<any>, R>(f: (elem: PFlat<T>) => (R | Promise<R>), iter: T): AsyncIterableIterator<PFlat<R>>;
+
+/**
+ * https://github.com/rudty/nodekell#pflatmap
+ *
+ * @param f
+ * @param iter
+ */
+export function pflatMap<T extends Iter<any>, R>(f: (elem: PFlat<T>) => (R | Promise<R>)): (iter: T) => AsyncIterableIterator<PFlat<R>>;
+
+export function pflatMap<T extends Iter<any>, R>(f: (elem: PFlat<T>) => (R | Promise<R>), iter: T): AsyncIterableIterator<PFlat<R>>;
