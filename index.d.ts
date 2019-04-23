@@ -1,6 +1,5 @@
 /**
  * Type definitions for nodekell 1.2
- * TypeScript Version: 3.4
  */
 
 export type Iter<T> = Iterable<T> | AsyncIterable<T>; // | IterableIterator<T> | AsyncIterableIterator<T> | T[];
@@ -629,17 +628,9 @@ export function emptyThen<T, Y>(supply: Iter<Y> | Promise<Iter<Y>>, iter: Iter<T
 /**
  * https://github.com/rudty/nodekell#
  *
- * **Note**
- * - if you use collect with run or run like function, please use collect with function or lambda expression
- * ```ts
- * const a = [1,2,3,4,5];
- * const r0 = await run(seq(a), collect); // ExpectType unknown[]
- * const r1 = await run(seq(a), e => collect(e)); // ExpectType number[]
- * ```
- *
  * @param iter
  */
-export function collect<T>(iter: Iter<T | Promise<T>>): Promise<T[]>;
+// export function collect<T>(iter: Iter<T | Promise<T>>): Promise<T[]>;
 export function collect<T>(iter: Iter<T>): Promise<EP<T>[]>;
 
 /**

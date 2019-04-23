@@ -122,6 +122,7 @@ describe('run', () => {
         const run11 = await F.run(e, F.flat, F.flat, F.max);
         const run12 = await F.run(e, F.flat, F.flat, F.min);
         const run13 = await F.run(e, F.flat, F.flat, F.sum);
+        const run14 = await F.run(F.seq(c), F.collect);
     });
 
     it('normal', async () => {
@@ -1001,6 +1002,12 @@ describe('collect', () => {
 
         const r0 = await F.collect(a); // $ExpectType (string | number)[]
     });
+
+    it('with run', async () => {
+        const a = [1,2,3,Promise.resolve(4),'a', Promise.resolve('b')];
+
+        const r0 = await F.run(F.seq(a), F.collect); // $ExpectType (string | number)[]
+    })
 });
 
 describe('collectMap', () => {
