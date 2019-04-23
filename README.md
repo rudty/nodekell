@@ -1382,7 +1382,17 @@ try{
 
 ### notNil
 **deprecated**
-use [isNil](#isNil) instead.(change true/false)
+use [isNil](#isNil) instead.
+return false null, undefined, NaN true otherwise
+```javascript
+console.log(F.notNil(NaN)); // false
+console.log(F.notNil(undefined)); //false
+console.log(F.notNil(null)); //false
+console.log(F.notNil("null")); // true
+console.log(F.notNil("NaN")); //true
+console.log(F.notNil(0)); // true
+console.log(F.notNil(false)); // true
+```
 
 
 ### isNil
