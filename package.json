@@ -11,7 +11,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "dtslint": "dtslint"
   },
   "keywords": [
     "haskell",
@@ -42,5 +43,8 @@
   "engines": {
     "node": ">=10.15.3"
   },
-  "bugs": "https://github.com/rudty/nodekell/issues"
+  "bugs": "https://github.com/rudty/nodekell/issues",
+  "devDependencies": {
+    "dtslint": "^0.7.0"
+  }
 }
