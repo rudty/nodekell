@@ -80,16 +80,11 @@ exports.flat = async function* (iter) {
     }
 };
 
-const isChar = a => (a.constructor === String && a.length <= 1);
-
 const dflat = async function* (...iters) {
     for await (const it of iters) {
         if (it) {
-            if (isChar(it)) {
-                // if without this code dflat(new String('a')) 
-                // returns [new String('a')]
-                // require ['a']
-                yield it.valueOf();
+            if (it.constructor === String) {
+                yield* it.split("");
                 continue;
             } else if (it[Symbol.asyncIterator] || it[Symbol.iterator]) {
                 for await (const e of it) {
@@ -99,7 +94,6 @@ const dflat = async function* (...iters) {
             }
         }
         yield it;
-
     }
 };
 
