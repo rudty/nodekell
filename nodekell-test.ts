@@ -1,4 +1,4 @@
-import * as F from './';
+import * as F from 'nodekell';
 
 const describe = (str: string, f: () => any) => {
     f();
@@ -12,7 +12,7 @@ const it = (str: string, f: () => any) => {
 // core.js
 //
 describe('util functions', () => {
-    it('seq', () => {
+    it('seq', async () => {
         const range0 = F.range(0, 5, 1); // $ExpectType IterableIterator<number>
         const range1 = F.range(5); // $ExpectType IterableIterator<number>
 
@@ -21,6 +21,8 @@ describe('util functions', () => {
         const seq2 = F.seq(seq1); // $ExpectType AsyncIterableIterator<number>
         const seq3 = F.seq('hello'); // $ExpectType AsyncIterableIterator<string>
         const seq4 = F.seq([Promise.resolve(1), 2, 'a', Promise.resolve('b'), 3, 4]); // $ExpectType AsyncIterableIterator<string | number>
+
+        const seq5 = await F.run([Promise.resolve(1), 2, 'a', Promise.resolve('b'), 3, 4], F.seq); // $ExpectType AsyncIterableIterator<string | number>
     });
 
     it('ioe', () => {

@@ -2,7 +2,6 @@
     "extends": "dtslint/dtslint.json",
     "rules": {
         "no-redundant-jsdoc": false,
-        "no-relative-import-in-test": false,
         "unified-signatures": false,
         "no-void-expression": false,
         "max-line-length": false,

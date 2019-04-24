@@ -15,6 +15,9 @@
         "typeRoots": [
             "./"
         ],
+        "paths": {
+            "nodekell": ["./"]
+        },
         "types": [],
         "forceConsistentCasingInFileNames": true
     },

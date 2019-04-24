@@ -1,8 +1,6 @@
 // TypeScript Version: 3.4
 
-/**
- * Type definitions for nodekell 1.2
- */
+/* Type definitions for nodekell 1.2 */
 
 export type Iter<T> = Iterable<T> | AsyncIterable<T>; // | IterableIterator<T> | AsyncIterableIterator<T> | T[];
 
@@ -150,7 +148,7 @@ export function curry<T1, T2, T3, T4, T5, T6, T7, T8, R>(f: (t1: T1, t2: T2, t3:
  *
  * Symbol.asyncIterator or Symbol.iterator
  */
-export function seq<T>(iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+// export function seq<T>(iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
 export function seq<T>(iter: Iter<T>): AsyncIterableIterator<EP<T>>;
 
 /**
@@ -551,7 +549,7 @@ export function foldr1<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>
 export function zip<T, Y>(iter1: Iter<T | Promise<T>>): (iter2: Iter<Y | Promise<Y>>) => AsyncIterableIterator<[T, Y]>;
 export function zip<T, Y>(iter1: Iter<T>): (iter2: Iter<Y>) => AsyncIterableIterator<[EP<T>, EP<Y>]>;
 
-export function zip<T, Y>(iter1: Iter<T | Promise<T>>, iter2: Iter<Y | Promise<Y>>): AsyncIterableIterator<[EP<T>, EP<Y>]>;
+export function zip<T, Y>(iter1: Iter<T | Promise<T>>, iter2: Iter<Y | Promise<Y>>): AsyncIterableIterator<[T, Y]>;
 export function zip<T, Y>(iter1: Iter<T>, iter2: Iter<Y>): AsyncIterableIterator<[EP<T>, EP<Y>]>;
 
 /**
@@ -862,10 +860,10 @@ export function buffer<T>(supply: number | Promise<number>, iter: Iter<T>): Asyn
  * @param iter
  */
 export function groupBy<K, V>(f: (elem: V) => (K | Promise<K>)): (iter: Iter<V | Promise<V>>) => Promise<Map<K, V[]>>;
-export function groupBy<K, V>(f: (elem: EP<V>) => (K | Promise<K>)): (iter: Iter<V>) => Promise<Map<K, EP<V>[]>>;
+export function groupBy<K, V>(f: (elem: EP<V>) => K): (iter: Iter<V>) => Promise<Map<EP<K>, EP<V>[]>>;
 
 export function groupBy<K, V>(f: (elem: V) => (K | Promise<K>), iter: Iter<V | Promise<V>>): Promise<Map<K, V[]>>;
-export function groupBy<K, V>(f: (elem: EP<V>) => (K | Promise<K>), iter: Iter<V>): Promise<Map<K, EP<V>[]>>;
+export function groupBy<K, V>(f: (elem: EP<V>) => K, iter: Iter<V>): Promise<Map<EP<K>, EP<V>[]>>;
 
 /**
  * https://github.com/rudty/nodekell#concat
@@ -1125,7 +1123,7 @@ export function rangeInterval(duration: () => (number | Promise<number>), begin:
  * https://github.com/rudty/nodekell#repeat
  *
  * **Note**
- * - if use with run or run like function, please use lambda or function expression
+ * - if use with run or run like function, please use lambda expression or function
  * ```ts
  * const a = Promise.resolve('a');
  * const r0 = await F.run(a, e => repeat(e));
@@ -1203,10 +1201,10 @@ export function pfilter<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), ite
  * **Note**
  * - if arguments length unknown or over 10 and use union type, please use generic
  * ```ts
- * const a = await run(repeat(5, () => () => 1));
- * const b = await run(repeat(5, () => () => 'a'));
- * const c = await run(repeat(5, () => async () => 2));
- * const d = await run(repeat(5, () => async () => 'b'));
+ * const a = repeat(5, () => () => 1);
+ * const b = repeat(5, () => () => 'a');
+ * const c = repeat(5, () => async () => 2);
+ * const d = repeat(5, () => async () => 'b');
  * const abcd = await run(concat(a, b), concat(c), concat(d), e => collect(e));
  * const r = pcalls<string | number>(...abcd);
  * ```
