@@ -2464,6 +2464,8 @@ describe('repeat', () => {
         const ar0 = await F.run(F.repeat(5, () => () => 1)); // $ExpectType AsyncIterableIterator<() => 1>
         const ar1 = await F.run(F.repeat(5, () => () => () => 'a')); // $ExpectType AsyncIterableIterator<() => () => "a">
         const ar2 = await F.run(F.repeat(5, () => () => () => () => 2)); // $ExpectType AsyncIterableIterator<() => () => () => 2>
+        const ar3 = await F.run(F.repeat(5, () => () => () => () => () => () => () => 2)); // $ExpectType AsyncIterableIterator<() => () => () => () => () => () => 2>
+
         const br0 = await F.run(F.repeat(5, () => async () => 3)); // $ExpectType AsyncIterableIterator<() => Promise<number>>
         const br1 = await F.run(F.repeat(5, () => async () => async () => 'c' as string)); // $ExpectType AsyncIterableIterator<() => Promise<() => Promise<string>>>
         const br2 = await F.run(F.repeat(5, () => () => async () => async () => 4 as number)); // $ExpectType AsyncIterableIterator<() => () => Promise<() => Promise<number>>>
