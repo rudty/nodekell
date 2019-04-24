@@ -7,6 +7,7 @@
     "url": "https://github.com/rudty/nodekell"
   },
   "main": "index.js",
+  "types": "./index.d.ts",
   "directories": {
     "test": "test"
   },
@@ -45,7 +46,6 @@
   },
   "bugs": "https://github.com/rudty/nodekell/issues",
   "devDependencies": {
-    "dtslint": "^0.7.0",
-    "tslint": "^5.16.0"
+    "dtslint": "latest"
   }
 }
