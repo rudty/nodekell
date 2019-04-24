@@ -1,5 +1,5 @@
 # nodekell
-Functional library for nodejs
+Functional library for nodejs 
 
 [![NPM Version](https://img.shields.io/npm/v/nodekell.svg?style=flat-square)](https://www.npmjs.com/package/nodekell)
 [![NPM Downloads](https://img.shields.io/npm/dt/nodekell.svg)](https://www.npmjs.com/package/nodekell)
