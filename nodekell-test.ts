@@ -310,29 +310,38 @@ describe('fmap', () => {
     it('from Normal Value', async () => {
         const a = [[1], [2], [3], [4], [5]];
 
-        const r0 = F.fmap<typeof a, number>(e => e)(a); // $ExpectType AsyncIterableIterator<number>
+        const r0 = F.fmap<number[]>(e => e)(a); // $ExpectType AsyncIterableIterator<number>
         const r1 = F.fmap(e => e, a); // $ExpectType AsyncIterableIterator<number>
     });
 
     it('from Promise Value', async () => {
         const a = [[1], [Promise.resolve(2)], Promise.resolve([3]), [4], [5]];
 
-        const r0 = F.fmap<typeof a, number>(async e => F.fmap(async e1 => e1, e))(a); // $ExpectType AsyncIterableIterator<number>
-        const r1 = F.fmap(async e => F.fmap(async e1 => F.fmap(async e2 => e2, e1), e), a); // $ExpectType AsyncIterableIterator<number>
+        const r0 = F.fmap<F.Flat<typeof a>>(async e => e)(a); // $ExpectType AsyncIterableIterator<number>
+        const r1 = F.fmap(async e => e, a); // $ExpectType AsyncIterableIterator<number>
     });
 
     it('from String', async () => {
         const a = 'hello world';
 
-        const r0 = F.fmap<typeof a, string>(e => F.fmap(e1 => e1, e))(a); // $ExpectType AsyncIterableIterator<string>
-        const r1 = F.fmap(e => F.fmap(e1 => e1, e), a); // $ExpectType AsyncIterableIterator<string>
+        const r0 = F.fmap<F.Flat<typeof a>>(e => e)(a); // ExpectType AsyncIterableIterator<string>
+        const r1 = F.fmap(e => e, a); // ExpectType AsyncIterableIterator<string>
     });
 
     it('from Normal / Promise Union', async () => {
         const a = [[1], [Promise.resolve('a')], [2], [Promise.resolve(3)], Promise.resolve([4]), Promise.resolve(['b'])];
 
-        const r0 = F.fmap<typeof a, number[] | string[] | Promise<string>[] | Promise<number>[]>(e => e)(a); // $ExpectType AsyncIterableIterator<string | number>
+        const r0 = F.fmap<F.Flat<typeof a>>(e => e)(a); // $ExpectType AsyncIterableIterator<string | number>
         const r1 = F.fmap(e => e, a); // $ExpectType AsyncIterableIterator<string | number>
+    });
+
+    it('with run', async () => {
+        const a = [[1], Promise.resolve(['a']), [4], [5]];
+        const b = [[1], Promise.resolve([2]), Promise.resolve([3]), [4], [5]];
+
+        const ar0 = await F.run(a, e0 => F.fmap(e1 => e1, e0)); // $ExpectType AsyncIterableIterator<string | number>
+
+        const br0 = await F.run(b, F.fmap(e => e)); // $ExpectType AsyncIterableIterator<number>
     });
 });
 
@@ -340,29 +349,38 @@ describe('flatMap', () => {
     it('from Normal Value', async () => {
         const a = [[1], [2], [3], [4], [5]];
 
-        const r0 = F.fmap<typeof a, number>(e => e)(a); // $ExpectType AsyncIterableIterator<number>
-        const r1 = F.fmap(e => e, a); // $ExpectType AsyncIterableIterator<number>
+        const r0 = F.flatMap<number[]>(e => e)(a); // $ExpectType AsyncIterableIterator<number>
+        const r1 = F.flatMap(e => e, a); // $ExpectType AsyncIterableIterator<number>
     });
 
     it('from Promise Value', async () => {
         const a = [[1], [Promise.resolve(2)], Promise.resolve([3]), [4], [5]];
 
-        const r0 = F.fmap<typeof a, number>(async e => F.fmap(async e1 => e1, e))(a); // $ExpectType AsyncIterableIterator<number>
-        const r1 = F.fmap(async e => F.fmap(async e1 => F.fmap(async e2 => e2, e1), e), a); // $ExpectType AsyncIterableIterator<number>
+        const r0 = F.flatMap<F.Flat<typeof a>>(async e => e)(a); // $ExpectType AsyncIterableIterator<number>
+        const r1 = F.flatMap(async e => e, a); // $ExpectType AsyncIterableIterator<number>
     });
 
     it('from String', async () => {
         const a = 'hello world';
 
-        const r0 = F.fmap<typeof a, string>(e => F.fmap(e1 => e1, e))(a); // $ExpectType AsyncIterableIterator<string>
-        const r1 = F.fmap(e => F.fmap(e1 => e1, e), a); // $ExpectType AsyncIterableIterator<string>
+        const r0 = F.flatMap<F.Flat<typeof a>>(e => e)(a); // ExpectType AsyncIterableIterator<string>
+        const r1 = F.flatMap(e => e, a); // ExpectType AsyncIterableIterator<string>
     });
 
     it('from Normal / Promise Union', async () => {
         const a = [[1], [Promise.resolve('a')], [2], [Promise.resolve(3)], Promise.resolve([4]), Promise.resolve(['b'])];
 
-        const r0 = F.fmap<typeof a, number[] | string[] | Promise<string>[] | Promise<number>[]>(e => e)(a); // $ExpectType AsyncIterableIterator<string | number>
-        const r1 = F.fmap(e => e, a); // $ExpectType AsyncIterableIterator<string | number>
+        const r0 = F.flatMap<F.Flat<typeof a>>(e => e)(a); // $ExpectType AsyncIterableIterator<string | number>
+        const r1 = F.flatMap(e => e, a); // $ExpectType AsyncIterableIterator<string | number>
+    });
+
+    it('with run', async () => {
+        const a = [[1], Promise.resolve(['a']), [4], [5]];
+        const b = [[1], Promise.resolve([2]), Promise.resolve([3]), [4], [5]];
+
+        const ar0 = await F.run(a, e0 => F.flatMap(e1 => e1, e0)); // $ExpectType AsyncIterableIterator<string | number>
+
+        const br0 = await F.run(b, F.flatMap(e => e)); // $ExpectType AsyncIterableIterator<number>
     });
 });
 
@@ -2621,7 +2639,7 @@ describe('pcalls', () => {
         const b = await F.run(F.repeat(5, () => () => 'a'));
         const c = await F.run(F.repeat(5, () => async () => 2));
         const d = await F.run(F.repeat(5, () => async () => 'b'));
-        const abcd = await F.run(F.concat(a, b), F.concat(c), F.concat(d), e => F.collect(e));
+        const abcd = await F.run(F.concat(a, b), F.concat(c), F.concat(d), F.collect);
 
         const r0 = F.pcalls<number | string>(...abcd); // $ExpectType AsyncIterableIterator<string | number>
         const r1 = F.pcalls(...abcd); // $ExpectType AsyncIterableIterator<any>
@@ -2632,28 +2650,76 @@ describe('pfmap', () => {
     it('from Normal Value', async () => {
         const a = [[1], [2], [3], [4], [5]];
 
-        const r0 = F.pfmap<typeof a, number[]>(e => e)(a); // $ExpectType AsyncIterableIterator<number>
+        const r0 = F.pfmap<F.Flat<typeof a>>(e => e)(a); // $ExpectType AsyncIterableIterator<number>
         const r1 = F.pfmap(e => e, a); // $ExpectType AsyncIterableIterator<number>
     });
 
     it('from Promise Value', async () => {
         const a = [Promise.resolve([1]), [Promise.resolve(2)], [3], [4], [5]];
 
-        const r0 = F.pfmap<typeof a, F.PFlat<typeof a>>(e => e)(a); // $ExpectType AsyncIterableIterator<number>
-        const r1 = F.pfmap(e => e, a); // $ExpectType AsyncIterableIterator<number>
+        const r0 = F.pfmap<F.Flat<typeof a>>(async e => e)(a); // $ExpectType AsyncIterableIterator<number>
+        const r1 = F.pfmap(async e => e, a); // $ExpectType AsyncIterableIterator<number>
     });
 
     it('from String', async () => {
         const a = 'hello world';
 
-        const r0 = F.pfmap<typeof a, string>(e => e)(a); // $ExpectType AsyncIterableIterator<string>
+        const r0 = F.pfmap<F.Flat<typeof a>>(e => e)(a); // $ExpectType AsyncIterableIterator<string>
         const r1 = F.pfmap(e => [[e]], a); // $ExpectType AsyncIterableIterator<string[]>
     });
 
     it('from Normal / Promise Union', async () => {
         const a = [[1], [Promise.resolve('a')], [2], [Promise.resolve(3)], Promise.resolve([4]), Promise.resolve(['b'])];
 
-        const r0 = F.pfmap<typeof a, F.PFlat<typeof a>>(e => e)(a); // $ExpectType AsyncIterableIterator<string | number>
+        const r0 = F.pfmap<F.Flat<typeof a>>(e => e)(a); // $ExpectType AsyncIterableIterator<string | number>
         const r1 = F.pfmap(e => e, a); // $ExpectType AsyncIterableIterator<string | number>
+    });
+
+    it('with run', async () => {
+        const a = [[1], Promise.resolve(['a']), [4], [5]];
+        const b = [[1], Promise.resolve([2]), Promise.resolve([3]), [4], [5]];
+
+        const ar0 = await F.run(a, e0 => F.pfmap(e1 => e1, e0)); // $ExpectType AsyncIterableIterator<string | number>
+
+        const br0 = await F.run(b, F.pfmap(e => e)); // $ExpectType AsyncIterableIterator<number>
+    });
+});
+
+describe('pflatMap', () => {
+    it('from Normal Value', async () => {
+        const a = [[1], [2], [3], [4], [5]];
+
+        const r0 = F.pflatMap<F.Flat<typeof a>>(e => e)(a); // $ExpectType AsyncIterableIterator<number>
+        const r1 = F.pflatMap(e => e, a); // $ExpectType AsyncIterableIterator<number>
+    });
+
+    it('from Promise Value', async () => {
+        const a = [Promise.resolve([1]), [Promise.resolve(2)], [3], [4], [5]];
+
+        const r0 = F.pflatMap<F.Flat<typeof a>>(async e => e)(a); // $ExpectType AsyncIterableIterator<number>
+        const r1 = F.pflatMap(async e => e, a); // $ExpectType AsyncIterableIterator<number>
+    });
+
+    it('from String', async () => {
+        const a = 'hello world';
+
+        const r0 = F.pflatMap<F.Flat<typeof a>>(e => e)(a); // $ExpectType AsyncIterableIterator<string>
+        const r1 = F.pflatMap(e => [[e]], a); // $ExpectType AsyncIterableIterator<string[]>
+    });
+
+    it('from Normal / Promise Union', async () => {
+        const a = [[1], [Promise.resolve('a')], [2], [Promise.resolve(3)], Promise.resolve([4]), Promise.resolve(['b'])];
+
+        const r0 = F.pflatMap<F.Flat<typeof a>>(e => e)(a); // $ExpectType AsyncIterableIterator<string | number>
+        const r1 = F.pflatMap(e => e, a); // $ExpectType AsyncIterableIterator<string | number>
+    });
+
+    it('with run', async () => {
+        const a = [[1], Promise.resolve(['a']), [4], [5]];
+        const b = [[1], Promise.resolve([2]), Promise.resolve([3]), [4], [5]];
+
+        const ar0 = await F.run(a, e0 => F.pflatMap(e1 => e1, e0)); // $ExpectType AsyncIterableIterator<string | number>
+
+        const br0 = await F.run(b, F.pflatMap(e => e)); // $ExpectType AsyncIterableIterator<number>
     });
 });
