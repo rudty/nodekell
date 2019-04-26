@@ -73,7 +73,7 @@ exports.flatMap = fmap;
 exports.flat = async function* (iter) {
     for await (const e of iter) {
         if (e && (e[Symbol.iterator] || e[Symbol.asyncIterator])) {
-            yield* await e;
+            yield* e;
         } else {
             yield e;
         }
