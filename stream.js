@@ -177,15 +177,12 @@ exports.buffer = C.curry(async function*(supply, iter) {
         throw new Error("arg supply > 0 required")
     }
 
-    let i = 0;
     let c = [];
     for await (const e of iter) {
-        c.push(e);
-        ++i;
-        if (i >= supply) {
+        const len = c.push(e);
+        if (len >= supply) {
             yield c;
             c = [];
-            i = 0;
         }
     }
 
