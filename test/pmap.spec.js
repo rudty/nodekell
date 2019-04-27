@@ -146,4 +146,19 @@ describe('test pmap', () => {
         // console.log(v);
         assert.deepStrictEqual(v, [1,2]);
     });
+
+    it('with run fetch 200', async () => {
+        F.parallel_set_fetch_count(200);
+
+        const v = await F.run(
+            F.range(Infinity),
+            F.pmap(async e =>{
+                // console.log(e);
+                return e + 1;
+            }),
+            F.take(2),
+            F.collect);
+            // console.log(v);
+        assert.deepStrictEqual(v, [1,2]);
+    });
 });

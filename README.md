@@ -689,10 +689,11 @@ await F.run(
     F.pmap(async e =>{
         console.log(e);
         return e + 1;
-    }),
-    F.take(1),
+    }), // fetch and execute first [0..199]
+    F.take(1), // take 0 and execute 200 [1..200]
     F.collect);
 //print
+//0
 //1
 //2
 //3
@@ -702,6 +703,7 @@ await F.run(
 //...
 //198
 //199
+//200
 ```
 
 
@@ -716,6 +718,9 @@ const v = await F.run(
     F.range(Infinity),
     F.pfilter(async e =>{
         console.log(e);
+
+        //somthing async work...
+
         return e % 2 === 0;
     }),
     F.take(2),
@@ -743,9 +748,12 @@ const v = await F.run(
     F.range(Infinity),
     F.pmap(async e =>{
         console.log(e);
+
+        //somthing async work...
+
         return e + 1;
-    }),
-    F.take(2),
+    }), // fetch and execute first [0..99]
+    F.take(2), // fetch 0, 1, excute 100, 101 [2..101]
     F.collect);
 console.log(v);
 //print
@@ -755,6 +763,8 @@ console.log(v);
 //...
 //...
 //99
+//100
+//101
 //[1,2]
 ```
 
@@ -771,6 +781,9 @@ const v = await F.run(
     F.map(e=> [e]),     //[0],[1],[2]...
     F.pfmap(async e =>{
         console.log(e); //print [0] ...
+
+        //somthing async work...
+
         e.push(42);     // [0,42],[1,42],[2,42]... 
         return e ;
     }),
