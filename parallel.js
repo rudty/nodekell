@@ -81,22 +81,41 @@ const pfilter_call_internal = async function* (f, v) {
     }
 };
 
-exports.pfilter = C.curry(async function* (fn, iter) {
-    const fetch_count = global_fetch_count;
-
-    let f = [];
-    let v = [];
-    for await(const e of iter) {
-        const len = f.push(fn(e));
-        v.push(e);
-        if(len >= fetch_count) {
-            yield* pfilter_call_internal(f, v); 
-            f = [];
-            v = [];
+const fetch_filter_internal = async (f, v, fn, iter) => {
+    //fetch (n - 1) here
+    const fetch_count = global_fetch_count - 1;
+    const g = C.seq(iter);
+    for (let i = fetch_count; i > 0; --i) {
+        const { done, value } = await g.next();
+        if (done) {
+            break;
         }
+        f.push(fn(value));
+        v.push(value);
+    }
+    return g;
+};
+
+exports.pfilter = C.curry(async function* (fn, iter) {
+    const f = [];
+    const v = [];
+    const g = await fetch_filter_internal(f, v, fn, iter);
+    for await (const e of g) {
+        const c = v.shift();
+        if (await f.shift()) {
+            yield c;
+        }
+
+        f.push(fn(e));
+        v.push(e);
     }
 
-    yield* pfilter_call_internal(f, v);
+    while (v.length > 0) {
+        const c = v.shift();
+        if (await f.shift()) {
+            yield c;
+        }
+    }
 });
 
 const pcalls_internal = async function* (iter) {

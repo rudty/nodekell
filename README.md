@@ -690,7 +690,7 @@ await F.run(
         console.log(e);
         return e + 1;
     }), // fetch and execute first [0..199]
-    F.take(1), // take 0 and execute 200 [1..200]
+    F.take(1), // take 0 and execute 200. in pmap:[3..102]
     F.collect);
 //print
 //0
@@ -722,8 +722,8 @@ const v = await F.run(
         //somthing async work...
 
         return e % 2 === 0;
-    }),
-    F.take(2),
+    }),// fetch and execute first [0..99]
+    F.take(2),// take 2 and execute 100, 101, 102 in pmap:[3..102]
     F.collect);
 console.log(v);
 //print
@@ -753,7 +753,7 @@ const v = await F.run(
 
         return e + 1;
     }), // fetch and execute first [0..99]
-    F.take(2), // fetch 0, 1, excute 100, 101 [2..101]
+    F.take(2), // fetch 0, 1, excute 100, 101 in pmap:[2..101]
     F.collect);
 console.log(v);
 //print
