@@ -52,7 +52,7 @@ describe('test pmap', () => {
         const it = new Object();
         it[Symbol.asyncIterator] = async function* (){
             yield 1;
-            yield 1;
+            yield Promise.resolve(1);
             yield 1;
         };
 
