@@ -73,14 +73,6 @@ const pfmap = C.curry(async function* (fn, iter) {
 exports.pfmap = pfmap;
 exports.pflatMap = pfmap;
 
-const pfilter_call_internal = async function* (f, v) {
-    for(let i = 0; i < f.length; ++i) {
-        if (await f[i]) {
-            yield v[i];
-        }
-    }
-};
-
 const fetch_filter_internal = async (f, v, fn, iter) => {
     //fetch (n - 1) here
     const fetch_count = global_fetch_count - 1;
