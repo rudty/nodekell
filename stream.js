@@ -136,8 +136,9 @@ exports.count = async (iter) => {
 };
 
 exports.sum = P.foldl1(C.add);
-exports.max = maxBy(C.ioe);
-exports.min = minBy(C.ioe);
+exports.max = maxBy(C.identity);
+exports.min = minBy(C.identity);
+
 exports.average = async (iter) => {
     let c = 0;
     let sum = 0;

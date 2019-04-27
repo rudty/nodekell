@@ -50,7 +50,7 @@ describe('util functions', () => {
     });
 
     it('isNil', () => {
-        // const isNil = F.isNil(false); // $ExpectType boolean
+        const isNil = F.isNil(false); // $ExpectType boolean
     });
 
     it('notNil', () => {
