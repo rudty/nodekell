@@ -1283,7 +1283,7 @@ F.interval(1000, async () => {
     await F.run(
         F.range(5),
         F.then(async _ =>{
-            await F.sleep(10);
+            await F.sleep(100);
             console.log("WORK!");
         }));
 });
