@@ -40,7 +40,7 @@ exports.withTimeout = C.curry(async function*(duration, iter) {
         }
         yield e.value;
     }
-    s.catch( _ => {});
+    s.catch(C.fnothing);
 });
 
 exports.timeout = C.curry(async (duration, a) => {
