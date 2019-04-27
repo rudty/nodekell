@@ -7,12 +7,12 @@
     "url": "https://github.com/rudty/nodekell"
   },
   "main": "index.js",
-  "types": "./index.d.ts",
+  "types": "index.d.ts",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "mocha -r ts-node/register test/**/*.js test/**/*.ts",
     "dtslint": "dtslint"
   },
   "keywords": [
@@ -44,8 +44,5 @@
   "engines": {
     "node": ">=10.15.3"
   },
-  "bugs": "https://github.com/rudty/nodekell/issues",
-  "devDependencies": {
-    "dtslint": "latest"
-  }
+  "bugs": "https://github.com/rudty/nodekell/issues"
 }

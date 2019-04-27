@@ -1,10 +1,8 @@
 // TypeScript Version: 3.4
 
-/* Type definitions for nodekell 1.2 */
+/* Type definitions for nodekell */
 
 export type Iter<T> = Iterable<T> | AsyncIterable<T>; // | IterableIterator<T> | AsyncIterableIterator<T> | T[];
-
-export type IterOnly<T> = T extends Iter<any> ? T : T[];
 
 export type ExtractPromise<T> = T extends Promise<infer PT> ? PT : T;
 export type EP<T> = ExtractPromise<T>;

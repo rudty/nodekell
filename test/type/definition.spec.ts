@@ -1,12 +1,9 @@
-import * as F from 'nodekell';
+import * as F from '../..';
 
-const describe = (str: string, f: () => any) => {
-    f();
-};
+type Done = () => any;
 
-const it = (str: string, f: () => any) => {
-    f();
-};
+declare function describe(s: string, f: () => any): void;
+declare function it(s: string, f: (done: Done) => any): void;
 
 //
 // core.js
@@ -53,7 +50,7 @@ describe('util functions', () => {
     });
 
     it('isNil', () => {
-        const isNil = F.isNil(false); // $ExpectType boolean
+        // const isNil = F.isNil(false); // $ExpectType boolean
     });
 
     it('notNil', () => {
@@ -2298,7 +2295,7 @@ describe('rightOuterJoin', () => {
 /// timer.js
 ///
 describe('sleep', () => {
-    it('', async () => {
+    it('sleep', async () => {
         await F.sleep(50); // $ExpectType void
     });
 });
@@ -2342,7 +2339,7 @@ describe('withTimeout', () => {
 });
 
 describe('timeout', () => {
-    it('from Normal Duration', async () => {
+    it('from Normal Duration', () => {
         const testDurationFunction = (t: number) => () => t;
 
         const testTimeoutFuncA = async (t: number) => {
@@ -2359,25 +2356,29 @@ describe('timeout', () => {
             })();
         };
 
-        try {
-            const ar0 = await F.timeout<string>(50)(testTimeoutFuncA(42)).then(F.ioe); // $ExpectType string
-            const ar1 = await F.timeout<string>(testDurationFunction(50))(testTimeoutFuncA(43)).then(F.ioe); // $ExpectType string
-            const ar2 = await F.timeout(50, testTimeoutFuncA(48)).then(F.ioe); // $ExpectType string
-            const ar3 = await F.timeout(testDurationFunction(50), testTimeoutFuncA(46)).then(F.ioe); // $ExpectType string
+		return new Promise(async (resolve, reject) => {
+			try {
+				const ar0 = await F.timeout<string>(100)(testTimeoutFuncA(42)).then(F.ioe); // $ExpectType string
+				const ar1 = await F.timeout<string>(testDurationFunction(100))(testTimeoutFuncA(43)).then(F.ioe); // $ExpectType string
+				const ar2 = await F.timeout(100, testTimeoutFuncA(48)).then(F.ioe); // $ExpectType string
+				const ar3 = await F.timeout(testDurationFunction(100), testTimeoutFuncA(46)).then(F.ioe); // $ExpectType string
 
-            const br0 = await F.timeout<AsyncIterableIterator<number>>(38)(testTimeoutFuncB(27)).then(F.ioe); // $ExpectType AsyncIterableIterator<number>
-            const br1 = await F.timeout<AsyncIterableIterator<number>>(testDurationFunction(49))(testTimeoutFuncB(84)).then(F.ioe); // $ExpectType AsyncIterableIterator<number>
-            const br2 = await F.timeout(53, testTimeoutFuncB(23)).then(F.ioe); // $ExpectType AsyncIterableIterator<number>
-            const br3 = await F.timeout(testDurationFunction(59), testTimeoutFuncB(51)).then(F.ioe); // $ExpectType AsyncIterableIterator<number>
-        } catch (e) {
-            if (e.message === 'timeout error') {
-                return;
-            }
-            throw e;
-        }
+				const br0 = await F.timeout<AsyncIterableIterator<number>>(100)(testTimeoutFuncB(27)).then(F.ioe); // $ExpectType AsyncIterableIterator<number>
+				const br1 = await F.timeout<AsyncIterableIterator<number>>(testDurationFunction(100))(testTimeoutFuncB(84)).then(F.ioe); // $ExpectType AsyncIterableIterator<number>
+				const br2 = await F.timeout(100, testTimeoutFuncB(23)).then(F.ioe); // $ExpectType AsyncIterableIterator<number>
+				const br3 = await F.timeout(testDurationFunction(20), testTimeoutFuncB(51)).then(F.ioe); // $ExpectType AsyncIterableIterator<number>
+
+				resolve();
+			} catch (e) {
+				if (e.message === 'timeout error') {
+					resolve();
+				}
+				reject(e);
+			}
+		});
     });
 
-    it('from Promise Duration', async () => {
+    it('from Promise Duration', () => {
         const testDurationFunction = (t: number) => async () => t;
 
         const testTimeoutFuncA = async (t: number) => {
@@ -2394,27 +2395,31 @@ describe('timeout', () => {
             })();
         };
 
-        try {
-            const ar0 = await F.timeout<string>(50)(testTimeoutFuncA(42)).then(F.ioe); // $ExpectType string
-            const ar1 = await F.timeout<string>(testDurationFunction(50))(testTimeoutFuncA(43)).then(F.ioe); // $ExpectType string
-            const ar2 = await F.timeout(50, testTimeoutFuncA(48)).then(F.ioe); // $ExpectType string
-            const ar3 = await F.timeout(testDurationFunction(50), testTimeoutFuncA(46)).then(F.ioe); // $ExpectType string
+		return new Promise(async (resolve, reject) => {
+			try {
+				const ar0 = await F.timeout<string>(100)(testTimeoutFuncA(42)).then(F.ioe); // $ExpectType string
+				const ar1 = await F.timeout<string>(testDurationFunction(100))(testTimeoutFuncA(43)).then(F.ioe); // $ExpectType string
+				const ar2 = await F.timeout(100, testTimeoutFuncA(48)).then(F.ioe); // $ExpectType string
+				const ar3 = await F.timeout(testDurationFunction(100), testTimeoutFuncA(46)).then(F.ioe); // $ExpectType string
 
-            const br0 = await F.timeout<AsyncIterableIterator<number>>(38)(testTimeoutFuncB(27)).then(F.ioe); // $ExpectType AsyncIterableIterator<number>
-            const br1 = await F.timeout<AsyncIterableIterator<number>>(testDurationFunction(49))(testTimeoutFuncB(84)).then(F.ioe); // $ExpectType AsyncIterableIterator<number>
-            const br2 = await F.timeout(53, testTimeoutFuncB(23)).then(F.ioe); // $ExpectType AsyncIterableIterator<number>
-            const br3 = await F.timeout(testDurationFunction(59), testTimeoutFuncB(51)).then(F.ioe); // $ExpectType AsyncIterableIterator<number>
-        } catch (e) {
-            if (e.message !== 'timeout error') {
-                return;
-            }
-            throw e;
-        }
+				const br0 = await F.timeout<AsyncIterableIterator<number>>(100)(testTimeoutFuncB(50)).then(F.ioe); // $ExpectType AsyncIterableIterator<number>
+				const br1 = await F.timeout<AsyncIterableIterator<number>>(testDurationFunction(100))(testTimeoutFuncB(50)).then(F.ioe); // $ExpectType AsyncIterableIterator<number>
+				const br2 = await F.timeout(100, testTimeoutFuncB(23)).then(F.ioe); // $ExpectType AsyncIterableIterator<number>
+				const br3 = await F.timeout(testDurationFunction(20), testTimeoutFuncB(51)).then(F.ioe); // $ExpectType AsyncIterableIterator<number>
+
+				resolve();
+			} catch (e) {
+				if (e.message === 'timeout error') {
+					resolve();
+				}
+				reject(e);
+			}
+		});
     });
 });
 
 describe('interval', () => {
-    it('', () => {
+    it('interval', () => {
         let intervalCount = 0;
 
         const r0 = F.interval(50, async (a: number, b: string, c: number) => { // $ExpectType { run: boolean; }
@@ -2430,7 +2435,7 @@ describe('interval', () => {
 });
 
 describe('rangeInterval', () => {
-    it('', () => {
+    it('rangeInterval', () => {
         F.rangeInterval(50); // $ExpectType AsyncIterableIterator<number>
         F.rangeInterval(Promise.resolve(50)); // $ExpectType AsyncIterableIterator<number>
         F.rangeInterval(() => 50); // $ExpectType AsyncIterableIterator<number>
@@ -2497,7 +2502,7 @@ describe('repeat', () => {
 });
 
 describe('range', () => {
-    it('', async () => {
+    it('range', async () => {
         const r0 = F.range(); // $ExpectType IterableIterator<number>
         const r1 = F.range(5); // $ExpectType IterableIterator<number>
         const r2 = F.range(0, 5); // $ExpectType IterableIterator<number>
@@ -2535,8 +2540,8 @@ describe('iterate', () => {
 // parellel.js
 //
 describe('parallel_set_fetch_count', () => {
-    it('', () => {
-        F.parallel_set_fetch_count(200);
+    it('parallel_set_fetch_count', () => {
+        F.parallel_set_fetch_count(200); // $ExpectType void
     });
 });
 
