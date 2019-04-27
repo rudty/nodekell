@@ -35,10 +35,7 @@ exports.dec = a => a - 1;
 exports.first = a => a[0];
 exports.second = a => a[1];
 
-/**
- * internal function
- */
-exports.ioe = e => e;
+exports.identity = e => e;
 exports.fnothing = () => {};
 
 const isNil = v => {

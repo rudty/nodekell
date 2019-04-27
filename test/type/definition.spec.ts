@@ -22,8 +22,8 @@ describe('util functions', () => {
         const seq5 = await F.run([Promise.resolve(1), 2, 'a', Promise.resolve('b'), 3, 4], F.seq); // $ExpectType AsyncIterableIterator<string | number>
     });
 
-    it('ioe', () => {
-        const ioe = F.ioe(null); // $ExpectType null
+    it('identity', () => {
+        const identity = F.identity(null); // $ExpectType null
     });
 
     it('fnothing', () => {
@@ -2358,15 +2358,15 @@ describe('timeout', () => {
 
 		return new Promise(async (resolve, reject) => {
 			try {
-				const ar0 = await F.timeout<string>(100)(testTimeoutFuncA(42)).then(F.ioe); // $ExpectType string
-				const ar1 = await F.timeout<string>(testDurationFunction(100))(testTimeoutFuncA(43)).then(F.ioe); // $ExpectType string
-				const ar2 = await F.timeout(100, testTimeoutFuncA(48)).then(F.ioe); // $ExpectType string
-				const ar3 = await F.timeout(testDurationFunction(100), testTimeoutFuncA(46)).then(F.ioe); // $ExpectType string
+				const ar0 = await F.timeout<string>(100)(testTimeoutFuncA(42)).then(F.identity); // $ExpectType string
+				const ar1 = await F.timeout<string>(testDurationFunction(100))(testTimeoutFuncA(43)).then(F.identity); // $ExpectType string
+				const ar2 = await F.timeout(100, testTimeoutFuncA(48)).then(F.identity); // $ExpectType string
+				const ar3 = await F.timeout(testDurationFunction(100), testTimeoutFuncA(46)).then(F.identity); // $ExpectType string
 
-				const br0 = await F.timeout<AsyncIterableIterator<number>>(100)(testTimeoutFuncB(27)).then(F.ioe); // $ExpectType AsyncIterableIterator<number>
-				const br1 = await F.timeout<AsyncIterableIterator<number>>(testDurationFunction(100))(testTimeoutFuncB(84)).then(F.ioe); // $ExpectType AsyncIterableIterator<number>
-				const br2 = await F.timeout(100, testTimeoutFuncB(23)).then(F.ioe); // $ExpectType AsyncIterableIterator<number>
-				const br3 = await F.timeout(testDurationFunction(20), testTimeoutFuncB(51)).then(F.ioe); // $ExpectType AsyncIterableIterator<number>
+				const br0 = await F.timeout<AsyncIterableIterator<number>>(100)(testTimeoutFuncB(27)).then(F.identity); // $ExpectType AsyncIterableIterator<number>
+				const br1 = await F.timeout<AsyncIterableIterator<number>>(testDurationFunction(100))(testTimeoutFuncB(84)).then(F.identity); // $ExpectType AsyncIterableIterator<number>
+				const br2 = await F.timeout(100, testTimeoutFuncB(23)).then(F.identity); // $ExpectType AsyncIterableIterator<number>
+				const br3 = await F.timeout(testDurationFunction(20), testTimeoutFuncB(51)).then(F.identity); // $ExpectType AsyncIterableIterator<number>
 
 				resolve();
 			} catch (e) {
@@ -2397,15 +2397,15 @@ describe('timeout', () => {
 
 		return new Promise(async (resolve, reject) => {
 			try {
-				const ar0 = await F.timeout<string>(100)(testTimeoutFuncA(42)).then(F.ioe); // $ExpectType string
-				const ar1 = await F.timeout<string>(testDurationFunction(100))(testTimeoutFuncA(43)).then(F.ioe); // $ExpectType string
-				const ar2 = await F.timeout(100, testTimeoutFuncA(48)).then(F.ioe); // $ExpectType string
-				const ar3 = await F.timeout(testDurationFunction(100), testTimeoutFuncA(46)).then(F.ioe); // $ExpectType string
+				const ar0 = await F.timeout<string>(100)(testTimeoutFuncA(42)).then(F.identity); // $ExpectType string
+				const ar1 = await F.timeout<string>(testDurationFunction(100))(testTimeoutFuncA(43)).then(F.identity); // $ExpectType string
+				const ar2 = await F.timeout(100, testTimeoutFuncA(48)).then(F.identity); // $ExpectType string
+				const ar3 = await F.timeout(testDurationFunction(100), testTimeoutFuncA(46)).then(F.identity); // $ExpectType string
 
-				const br0 = await F.timeout<AsyncIterableIterator<number>>(100)(testTimeoutFuncB(50)).then(F.ioe); // $ExpectType AsyncIterableIterator<number>
-				const br1 = await F.timeout<AsyncIterableIterator<number>>(testDurationFunction(100))(testTimeoutFuncB(50)).then(F.ioe); // $ExpectType AsyncIterableIterator<number>
-				const br2 = await F.timeout(100, testTimeoutFuncB(23)).then(F.ioe); // $ExpectType AsyncIterableIterator<number>
-				const br3 = await F.timeout(testDurationFunction(20), testTimeoutFuncB(51)).then(F.ioe); // $ExpectType AsyncIterableIterator<number>
+				const br0 = await F.timeout<AsyncIterableIterator<number>>(100)(testTimeoutFuncB(50)).then(F.identity); // $ExpectType AsyncIterableIterator<number>
+				const br1 = await F.timeout<AsyncIterableIterator<number>>(testDurationFunction(100))(testTimeoutFuncB(50)).then(F.identity); // $ExpectType AsyncIterableIterator<number>
+				const br2 = await F.timeout(100, testTimeoutFuncB(23)).then(F.identity); // $ExpectType AsyncIterableIterator<number>
+				const br3 = await F.timeout(testDurationFunction(20), testTimeoutFuncB(51)).then(F.identity); // $ExpectType AsyncIterableIterator<number>
 
 				resolve();
 			} catch (e) {

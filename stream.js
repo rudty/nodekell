@@ -2,7 +2,7 @@
 const C = require("./core.js");
 const P = require("./prelude.js");
 
-exports.rangeOf = (...a) => P.fmap(C.ioe, a);
+exports.rangeOf = (...a) => P.fmap(C.identity, a);
 
 exports.firstOrGet = C.curry(async (supply, iter) => {
     for await (const e of iter) {
@@ -68,7 +68,7 @@ const distinctBy = C.curry(async function*(f, iter) {
     }
 });
 exports.distinctBy = distinctBy;
-exports.distinct = (iter) => distinctBy(C.ioe, iter);
+exports.distinct = (iter) => distinctBy(C.identity, iter);
 
 exports.some = C.curry(async (f, iter) => {
     for await (const e of iter) {

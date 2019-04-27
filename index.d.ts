@@ -153,11 +153,11 @@ export function seq<T>(iter: Iter<T>): AsyncIterableIterator<EP<T>>;
  * internal function
  *
  * ```ts
- * ioe('hello') === 'hello';
- * ioe(1234) === 1234;
+ * identity('hello') === 'hello';
+ * identity(1234) === 1234;
  * ```
  */
-export function ioe<T>(e: T): T;
+export function identity<T>(e: T): T;
 
 /**
  * internal function
