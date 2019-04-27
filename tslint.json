@@ -1,0 +1,11 @@
+{
+    "extends": "dtslint/dtslint.json",
+    "rules": {
+        "no-relative-import-in-test": false,
+        "no-redundant-jsdoc": false,
+        "unified-signatures": false,
+        "no-void-expression": false,
+        "max-line-length": false,
+        "array-type": [true, "array"]
+    }
+}
