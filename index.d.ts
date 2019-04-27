@@ -242,10 +242,10 @@ export function notNil(a: any): boolean;
  * // like `$` or `.`
  *
  * const a = [1,2,3,4,5];
- * const r = run(a,
- *               map(e => e + 1), // a = [2,3,4,5,6]
- *               filter(e => e < 4), // a = [2,3]
- *               take(Infinity));
+ * const r = F.run(a,
+ *               F.map(e => e + 1), // a = [2,3,4,5,6]
+ *               F.filter(e => e < 4), // a = [2,3]
+ *               F.take(Infinity));
  * result:
  * [ 2 , 3 ]
  * ```

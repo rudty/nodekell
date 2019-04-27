@@ -215,10 +215,10 @@ exports.zipWith =  C.curry(async function* (f, a, b) {
  * like `$` or `.`
  *
  *  let a = [1,2,3,4,5];
- *  let r = run(a,
- *              map(e => e + 1), // a = [2,3,4,5,6]
- *              filter(e => e < 4), // a = [2,3]
- *              take(Infinity));
+ *  let r = F.run(a,
+ *              F.map(e => e + 1), // a = [2,3,4,5,6]
+ *              F.filter(e => e < 4), // a = [2,3]
+ *              F.take(Infinity));
  *
  * result:
  * [ 2 , 3 ]
