@@ -150,7 +150,6 @@ export function curry<T1, T2, T3, T4, T5, T6, T7, T8, R>(f: (t1: T1, t2: T2, t3:
 export function seq<T>(iter: Iter<T>): AsyncIterableIterator<EP<T>>;
 
 /**
- * internal function
  *
  * ```ts
  * identity('hello') === 'hello';

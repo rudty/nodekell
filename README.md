@@ -12,9 +12,8 @@ Functional library for nodejs
 - supports [parallel functions](#pfilter)
 - supports async generator
 - supports lazy evaluation
-- typescript support 
+- typescript support (ver:3.4, target:es2018)
  
-
 
 
 ### Installation
@@ -44,22 +43,6 @@ const v = await F.run(
     F.distinct, // [3]
     F.collect); // generator to array
 console.log(v);//[3]
-```
-
-
-### Typescript Support
-Tested with typescript version ES2018.
-
-if you are using an earlier version, uncomment AsyncIterator in node_modules/nodekell/index.d.ts for compile
-```typescript
-const v = await F.run(   
-    F.range(Infinity),//[0,1,2...]
-    F.filter(e => e % 2 == 0), //[0,2,4...] 
-    F.map((e) => e + 1), //[1,3,5...]
-    F.take(5), // [1,3,5,7,9]  
-    F.reduce((acc, e) => acc + e)) // 1+3+5+7+9
-//v = 25, number type   
-console.log(v + 1);//26 
 ```
 
 # Functions / Examples
