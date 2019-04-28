@@ -227,3 +227,4 @@ exports.zipWith =  C.curry(async function* (f, a, b) {
  * [ 2 , 3 ]
  */
 exports.run =  C.curry(async (iter, ...f) => foldl((z, fn) => fn(z), iter, f));
+exports.pipe = (...f) => iter => foldl((z, fn) => fn(z), iter, f);
