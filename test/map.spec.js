@@ -23,6 +23,16 @@ describe('test map', () => {
         assert.deepEqual(result, [2,3,4,5,6]);
     });
 
+    it('Promise Value async mapper', async () => {
+        const a = [Promise.resolve(1),2,3,4,5];
+        const mapped = F.map(async e => e + 1, a)
+        const result = []
+        for await (const e of mapped) {
+           result.push(e); 
+        }
+        assert.deepEqual(result, [2,3,4,5,6]);
+    });
+
     it('generator', async () => {
         const a = (function*(){
                for (const e of [Promise.resolve(1),2,3,4,5]){

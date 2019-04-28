@@ -57,7 +57,7 @@ exports.filter =  C.curry(async function* (fn, iter) {
 
 exports.map =  C.curry(async function* (fn, iter) {
     for await (const e of iter) {
-        yield await fn(e);
+        yield fn(e);
     }
 });
 
