@@ -32,7 +32,7 @@ const v = await F.run(
     F.filter(e => e % 2 == 0), //[0,2,4...] 
     F.map(e => e + 1), //[1,3,5...]
     F.take(5), // [1,3,5,7,9]
-    F.reduce((acc, e) => acc + e)) // 1+3+5+7+9
+    F.reduce((acc, e) => acc + e)); // 1+3+5+7+9
 console.log(v);//25
 ```
 ```javascript
