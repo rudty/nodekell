@@ -23,6 +23,6 @@ describe('test min', () => {
             F.take(5), 
             F.min);
 
-        assert.deepEqual(1, v);
+        assert.deepStrictEqual(1, v);
     });
 });

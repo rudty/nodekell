@@ -6,13 +6,13 @@ describe('test collectMap', () => {
     it('default', async () => {
         const a = [[1,2],[3,4]];
         const m = await F.collectMap(a);
-        assert.deepEqual(m, new Map([[1,2],[3,4]]));
+        assert.deepStrictEqual(m, new Map([[1,2],[3,4]]));
     });
 
     it('async', async () => {
         const a = F.seq([[1,2],[3,4]]);
         const m = await F.collectMap(a);
-        assert.deepEqual(m, new Map([[1,2],[3,4]]));
+        assert.deepStrictEqual(m, new Map([[1,2],[3,4]]));
     });
 
     it('zip_tail_and_map', async () => {
@@ -21,7 +21,7 @@ describe('test collectMap', () => {
             F.tail,
             F.map(e => [e[0], e[1] + 1]),
             F.collectMap);
-        assert.deepEqual(m, new Map([["b",2],["c",3]]));
+        assert.deepStrictEqual(m, new Map([["b",2],["c",3]]));
     });
 
     it('fail1', async () => {

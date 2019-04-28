@@ -10,7 +10,7 @@ describe('test take', () => {
         for await (const e of r) {
            result.push(e); 
         }
-        assert.deepEqual(result, [1]);
+        assert.deepStrictEqual(result, [1]);
     });
 
     it('==', async () => {
@@ -20,7 +20,7 @@ describe('test take', () => {
         for await (const e of r) {
            result.push(e); 
         }
-        assert.deepEqual(result, [1,2,3,4,5]);
+        assert.deepStrictEqual(result, [1,2,3,4,5]);
     });
 
 
@@ -31,7 +31,7 @@ describe('test take', () => {
         for await (const e of r) {
            result.push(e); 
         }
-        assert.deepEqual(result, [1,2,3,4,5]);
+        assert.deepStrictEqual(result, [1,2,3,4,5]);
     });
 
     it('0', async () => {
@@ -41,6 +41,6 @@ describe('test take', () => {
         for await (const e of r) {
            result.push(e); 
         }
-        assert.deepEqual(result, []);
+        assert.deepStrictEqual(result, []);
     });
 });

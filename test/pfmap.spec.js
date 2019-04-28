@@ -11,7 +11,7 @@ describe('test pfmap', () => {
             return e;
         },a);
         const result = await F.collect(m);
-        assert.deepEqual(result, [1,2,3,4,5]);
+        assert.deepStrictEqual(result, [1,2,3,4,5]);
     });
     it('array fetch 1', async () => {
         F.parallel_set_fetch_count(1);
@@ -21,7 +21,7 @@ describe('test pfmap', () => {
             return e;
         },a);
         const result = await F.collect(m);
-        assert.deepEqual(result, [1,2,3,4,5]);
+        assert.deepStrictEqual(result, [1,2,3,4,5]);
     });
 
     it('array append fetch 999', async () => {
@@ -32,7 +32,7 @@ describe('test pfmap', () => {
             return e;
         },a);
         const result = await F.collect(m);
-        assert.deepEqual(result, [1,1,2,1,3,1,4,1,5,1]);
+        assert.deepStrictEqual(result, [1,1,2,1,3,1,4,1,5,1]);
     });
 
     it('array append fetch 1', async () => {
@@ -43,7 +43,7 @@ describe('test pfmap', () => {
             return e;
         },a);
         const result = await F.collect(m);
-        assert.deepEqual(result, [1,1,2,1,3,1,4,1,5,1]);
+        assert.deepStrictEqual(result, [1,1,2,1,3,1,4,1,5,1]);
     });
 
     it('array and num: not support', async () => {

@@ -11,7 +11,7 @@ describe('test pfilter', () => {
         for await (const e of filtered) {
            result.push(e); 
         }
-        assert.deepEqual(result, [2,4]);
+        assert.deepStrictEqual(result, [2,4]);
     });
 
     it('Promise Value fetch 999', async () => {
@@ -22,7 +22,7 @@ describe('test pfilter', () => {
         for await (const e of filtered) {
            result.push(e); 
         }
-        assert.deepEqual(result, [2,4]);
+        assert.deepStrictEqual(result, [2,4]);
     });
 
     it('generator fetch 999', async () => {
@@ -37,7 +37,7 @@ describe('test pfilter', () => {
         for await (const e of filtered) {
            result.push(e); 
         }
-        assert.deepEqual(result, [2,4]);
+        assert.deepStrictEqual(result, [2,4]);
     });
 
     it('async generator fetch 999', async () => {
@@ -49,7 +49,7 @@ describe('test pfilter', () => {
         })();
         const filtered = F.pfilter(e=> Promise.resolve(e % 2 == 0), a)
         const result = await F.collect(filtered);
-        assert.deepEqual(result, [2,4]);
+        assert.deepStrictEqual(result, [2,4]);
     });
 
     it('async generator fetch 999', async () => {
@@ -61,7 +61,7 @@ describe('test pfilter', () => {
         })();
         const filtered = F.pfilter(e=> Promise.resolve(e % 2 == 0), a)
         const result = await F.collect(filtered);
-        assert.deepEqual(result, [2,4]);
+        assert.deepStrictEqual(result, [2,4]);
     });
 
     it('with run fetch 999', async () => {
@@ -86,7 +86,7 @@ describe('test pfilter', () => {
         for await (const e of filtered) {
            result.push(e); 
         }
-        assert.deepEqual(result, [2,4]);
+        assert.deepStrictEqual(result, [2,4]);
     });
 
     it('Promise Value fetch 1', async () => {
@@ -97,7 +97,7 @@ describe('test pfilter', () => {
         for await (const e of filtered) {
            result.push(e); 
         }
-        assert.deepEqual(result, [2,4]);
+        assert.deepStrictEqual(result, [2,4]);
     });
 
     it('generator fetch 1', async () => {
@@ -112,7 +112,7 @@ describe('test pfilter', () => {
         for await (const e of filtered) {
            result.push(e); 
         }
-        assert.deepEqual(result, [2,4]);
+        assert.deepStrictEqual(result, [2,4]);
     });
 
     it('async generator fetch 1', async () => {
@@ -124,7 +124,7 @@ describe('test pfilter', () => {
         })();
         const filtered = F.pfilter(e=> Promise.resolve(e % 2 == 0), a)
         const result = await F.collect(filtered);
-        assert.deepEqual(result, [2,4]);
+        assert.deepStrictEqual(result, [2,4]);
     });
 
     it('async generator fetch 1', async () => {
@@ -136,7 +136,7 @@ describe('test pfilter', () => {
         })();
         const filtered = F.pfilter(e=> Promise.resolve(e % 2 == 0), a)
         const result = await F.collect(filtered);
-        assert.deepEqual(result, [2,4]);
+        assert.deepStrictEqual(result, [2,4]);
     });
 
     it('with run fetch 1', async () => {

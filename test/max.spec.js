@@ -23,6 +23,6 @@ describe('test max', () => {
             F.take(5), 
             F.max);
 
-        assert.deepEqual(13, v);
+        assert.deepStrictEqual(13, v);
     });
 });

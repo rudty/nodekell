@@ -10,7 +10,7 @@ describe('test module', () => {
             F.map(e => e + 1), //[1,3,5,7,9]
             F.reduce((acc, e) => acc + e)) // 1+3+5+7+9
 
-        assert.equal(25, v);
+        assert.strictEqual(25, v);
     });
 
     it('2', async () => {
@@ -21,7 +21,7 @@ describe('test module', () => {
             F.take(5), // 5 elem
             F.collect);  // generator => array
 
-        assert.deepEqual([1,4,7,10,13], v);
+        assert.deepStrictEqual([1,4,7,10,13], v);
     });
 
 });

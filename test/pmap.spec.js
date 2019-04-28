@@ -24,7 +24,7 @@ describe('test pmap', () => {
         for await (const e of mapped) {
            result.push(e); 
         }
-        assert.deepEqual(result, [2,3,4,5,6]);
+        assert.deepStrictEqual(result, [2,3,4,5,6]);
     });
 
     it('Promise Value fetch 999', async () => {
@@ -32,7 +32,7 @@ describe('test pmap', () => {
         const a = [Promise.resolve(1),2,3,4,5];
         const mapped = F.pmap(e=> Promise.resolve(e + 1), a)
         const result = await F.collect(mapped);
-        assert.deepEqual(result, [2,3,4,5,6]);
+        assert.deepStrictEqual(result, [2,3,4,5,6]);
     });
 
     it('generator fetch 999', async () => {
@@ -44,7 +44,7 @@ describe('test pmap', () => {
         })();
         const mapped = F.pmap(async e=> Promise.resolve(e + 1), a)
         const result = await F.collect(mapped);
-        assert.deepEqual(result, [2,3,4,5,6]);
+        assert.deepStrictEqual(result, [2,3,4,5,6]);
     });
 
     it('custom object fetch 999', async () => {
@@ -58,7 +58,7 @@ describe('test pmap', () => {
 
         const mapped = F.pmap(e=> Promise.resolve(e + 1), it)
         const r = await F.collect(mapped);
-        assert.deepEqual(r, [2,2,2]);
+        assert.deepStrictEqual(r, [2,2,2]);
     });
 
     it('with run fetch 999', async () => {
@@ -96,7 +96,7 @@ describe('test pmap', () => {
         for await (const e of mapped) {
            result.push(e); 
         }
-        assert.deepEqual(result, [2,3,4,5,6]);
+        assert.deepStrictEqual(result, [2,3,4,5,6]);
     });
 
     it('Promise Value fetch 1', async () => {
@@ -104,7 +104,7 @@ describe('test pmap', () => {
         const a = [Promise.resolve(1),2,3,4,5];
         const mapped = F.pmap(e=> Promise.resolve(e + 1), a)
         const result = await F.collect(mapped);
-        assert.deepEqual(result, [2,3,4,5,6]);
+        assert.deepStrictEqual(result, [2,3,4,5,6]);
     });
 
     it('generator fetch 1', async () => {
@@ -116,7 +116,7 @@ describe('test pmap', () => {
         })();
         const mapped = F.pmap(async e=> Promise.resolve(e + 1), a)
         const result = await F.collect(mapped);
-        assert.deepEqual(result, [2,3,4,5,6]);
+        assert.deepStrictEqual(result, [2,3,4,5,6]);
     });
 
     it('custom object fetch 1', async () => {
@@ -130,7 +130,7 @@ describe('test pmap', () => {
 
         const mapped = F.pmap(e=> Promise.resolve(e + 1), it)
         const r = await F.collect(mapped);
-        assert.deepEqual(r, [2,2,2]);
+        assert.deepStrictEqual(r, [2,2,2]);
     });
 
     it('with run fetch 1', async () => {

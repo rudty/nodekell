@@ -10,7 +10,7 @@ describe('test map', () => {
         for await (const e of mapped) {
            result.push(e); 
         }
-        assert.deepEqual(result, [2,3,4,5,6]);
+        assert.deepStrictEqual(result, [2,3,4,5,6]);
     });
 
     it('Promise Value', async () => {
@@ -20,7 +20,7 @@ describe('test map', () => {
         for await (const e of mapped) {
            result.push(e); 
         }
-        assert.deepEqual(result, [2,3,4,5,6]);
+        assert.deepStrictEqual(result, [2,3,4,5,6]);
     });
 
     it('Promise Value async mapper', async () => {
@@ -30,7 +30,7 @@ describe('test map', () => {
         for await (const e of mapped) {
            result.push(e); 
         }
-        assert.deepEqual(result, [2,3,4,5,6]);
+        assert.deepStrictEqual(result, [2,3,4,5,6]);
     });
 
     it('generator', async () => {
@@ -44,7 +44,7 @@ describe('test map', () => {
         for await (const e of mapped) {
            result.push(e); 
         }
-        assert.deepEqual(result, [2,3,4,5,6]);
+        assert.deepStrictEqual(result, [2,3,4,5,6]);
     });
 
     it('async generator', async () => {
@@ -58,6 +58,6 @@ describe('test map', () => {
         for await (const e of mapped) {
            result.push(e); 
         }
-        assert.deepEqual(result, [2,3,4,5,6]);
+        assert.deepStrictEqual(result, [2,3,4,5,6]);
     });
 });

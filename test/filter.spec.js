@@ -10,7 +10,7 @@ describe('test filter', () => {
         for await (const e of filtered) {
            result.push(e); 
         }
-        assert.deepEqual(result, [2,4]);
+        assert.deepStrictEqual(result, [2,4]);
     });
 
     it('Promise Value', async () => {
@@ -20,7 +20,7 @@ describe('test filter', () => {
         for await (const e of filtered) {
            result.push(e); 
         }
-        assert.deepEqual(result, [2,4]);
+        assert.deepStrictEqual(result, [2,4]);
     });
 
     it('generator', async () => {
@@ -34,7 +34,7 @@ describe('test filter', () => {
         for await (const e of filtered) {
            result.push(e); 
         }
-        assert.deepEqual(result, [2,4]);
+        assert.deepStrictEqual(result, [2,4]);
     });
 
     it('async generator', async () => {
@@ -48,6 +48,6 @@ describe('test filter', () => {
         for await (const e of filtered) {
            result.push(e); 
         }
-        assert.deepEqual(result, [2,4]);
+        assert.deepStrictEqual(result, [2,4]);
     });
 });

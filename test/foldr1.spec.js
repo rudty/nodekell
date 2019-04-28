@@ -6,19 +6,19 @@ describe('test foldlr1', () => {
     it('add', async () => {
         const arr = [1,2,3,4,5];
         const r = await F.foldr1((a, b) => a + b, arr);
-        assert.deepEqual(r, 15);
+        assert.deepStrictEqual(r, 15);
     });
 
     it('div', async () => {
         const arr = [64,2,1];
         const r = await F.foldr1((a, b) => a / b, arr);
-        assert.deepEqual(r, 32);
+        assert.deepStrictEqual(r, 32);
     });
 
     it('add3', async () => {
         const arr = ["1","2","3","4","5"];
         const r = await F.foldr1((a, b) => a + b, arr);
-        assert.deepEqual(r, "12345");
+        assert.deepStrictEqual(r, "12345");
     });
 
     it('empty', async () => {
@@ -34,6 +34,6 @@ describe('test foldlr1', () => {
     it('single', async () => {
         const arr = [3];
         const r = await F.foldr1((a, b) => a + b, arr);
-        assert.deepEqual(r, 3);
+        assert.deepStrictEqual(r, 3);
     });
 });

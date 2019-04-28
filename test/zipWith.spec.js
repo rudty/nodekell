@@ -11,6 +11,6 @@ describe('test zipWith', () => {
         for await (const e of r) {
            result.push(e); 
         }
-        assert.deepEqual(result, [5,7,9]);
+        assert.deepStrictEqual(result, [5,7,9]);
     });
 });
