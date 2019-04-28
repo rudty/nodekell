@@ -11,22 +11,9 @@ exports.parallel_set_fetch_count = (count) => {
     global_fetch_count = count || default_fetch_count;
 };
 
-const fetch_map_iterator = async (f, fn, iter) => {
+const fetch_map_internal = async (f, fn, iter) => {
     const fetch_count = global_fetch_count - 1; 
-    const g = iter[Symbol.iterator]();
-    for (let i = fetch_count; i > 0; --i) {
-        const e = g.next();
-        if (e.done) {
-            break;
-        }
-        f.push(fn(await e.value));
-    }
-    return g;
-};
-
-const fetch_map_asyncIterator = async (f, fn, iter) => {
-    const fetch_count = global_fetch_count - 1; 
-    const g = iter[Symbol.asyncIterator]();
+    const g = C.seq(iter);
     for (let i = fetch_count; i > 0; --i) {
         const e = await g.next();
         if (e.done) {
@@ -35,13 +22,6 @@ const fetch_map_asyncIterator = async (f, fn, iter) => {
         f.push(fn(e.value));
     }
     return g;
-};
-
-const fetch_map_internal = (f, fn, iter) => {
-    if (iter[Symbol.asyncIterator]) {
-        return fetch_map_asyncIterator(f, fn, iter);
-    }
-    return fetch_map_iterator(f, fn, iter);
 };
 
 exports.pmap = C.curry(async function* (fn, iter) {
