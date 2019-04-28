@@ -33,15 +33,18 @@ exports.drop =  C.curry(async function* (count, iter) {
 
 exports.dropWhile =  C.curry(async function* (f, iter) {
     const g =  C.seq(iter);
-    let drop = true;
-    for await (const e of g) {
-        if (drop && (await f(e))) {
-            continue;
-        } else {
-            drop = false;
+    while (true) {
+        const e = await g.next();
+        if (e.done) {
+            return;
         }
-        yield e;
+
+        if(!(await f(e.value))) {
+            yield e.value;
+            break;
+        }
     }
+    yield* g;
 });
 
 exports.filter =  C.curry(async function* (fn, iter) {
