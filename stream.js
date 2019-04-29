@@ -46,13 +46,10 @@ exports.collect = collect;
 exports.collectMap = async (iter) => new Map(await collect(iter));
 exports.collectSet = async (iter) => new Set(await collect(iter));
 
-exports.forEach = C.curry(async (f, iter) => {
+exports.forEach = C.curry(async (fn, iter) => {
     const wait = [];
     for await (const e of iter) {
-        const r = f(e);
-        if (r) {
-            wait.push(r);
-        }
+        wait.push(fn(e));
     }
     return Promise.all(wait);
 });
