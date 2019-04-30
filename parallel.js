@@ -37,8 +37,7 @@ exports.pmap = C.curry(async function* (fn, iter) {
 });
 
 const pfmap = C.curry(async function* (fn, iter) {
-
-    let f = [];
+    const f = [];
     const g = await fetch_map_internal(f, fn, iter);
 
     for await (const e of g) {
