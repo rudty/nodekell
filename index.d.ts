@@ -246,7 +246,7 @@ export function notNil(a: any): boolean;
  *           F.filter(e => e < 4), // a = [2,3]
  *           F.take(Infinity),
  *           F.collect);
- *  
+ *
  *  console.log(r); // print [2,3]
  *
  * ```
