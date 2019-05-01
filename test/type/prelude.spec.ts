@@ -831,29 +831,39 @@ describe('pipe', () => {
 		const r3 = await pipe3(b); // $ExpectType number[]
 
 		const pipe4 = F.pipe((t: number[]) => Promise.all(t.map(async e => e + e)));
-		const r4 = await pipe4(a); // $ExpectType number[]
-	});
+        const r4 = await pipe4(a); // $ExpectType number[]
+    });
+
+    it('multiple parameter', async () => {
+        const pipe0 = F.pipe((a: number, b: number, c: string, d: Promise<number>, e: Promise<string>) => [a, b, c, d, e]);
+        const r0 = await pipe0(1, 2, 'a', Promise.resolve(3), Promise.resolve('b')); // $ExpectType (string | number | Promise<number> | Promise<string>)[]
+
+        const a0 = [1, 'a', Promise.resolve(2), Promise.resolve('b')];
+        const b0 = [null, Symbol('abc'), undefined, Promise.resolve('a'), 1, Promise.resolve(2)];
+        const pipe1 = F.pipe((a: typeof a0, b: typeof b0, c: typeof b0, d: typeof a0) => [a, b, c, d]);
+        const r1 = await pipe1(a0, b0, b0, a0); // $ExpectType ((string | number | Promise<number> | Promise<string>)[] | (number | symbol | Promise<number> | Promise<string> | null | undefined)[])[]
+    });
 
 	it('all pattern types', async () => {
-		const p0 = F.pipe((e: number) => e); // $ExpectType (t: number) => Promise<number>
-		const p1 = F.pipe((e: number) => e, toString); // $ExpectType (t: number) => Promise<string>
-		const p2 = F.pipe((e: number) => e, toString, e => parseInt(e, 10)); // $ExpectType (t: number) => Promise<number>
-		const p3 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString); // $ExpectType (t: number) => Promise<string>
-		const p4 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10)); // $ExpectType (t: number) => Promise<number>
-		const p5 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString); // $ExpectType (t: number) => Promise<string>
-		const p6 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType (t: number) => Promise<number>
-		const p7 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType (t: number) => Promise<string>
-		const p8 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType (t: number) => Promise<number>
-		const p9 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType (t: number) => Promise<string>
-		const p10 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType (t: number) => Promise<number>
-		const p11 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType (t: number) => Promise<string>
-		const p12 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType (t: number) => Promise<number>
-		const p13 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType (t: number) => Promise<string>
-		const p14 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType (t: number) => Promise<number>
-		const p15 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType (t: number) => Promise<string>
-		const p16 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType (t: number) => Promise<number>
-		const p17 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType (t: number) => Promise<string>
-		const p18 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType (t: number) => Promise<number>
-		const p19 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType (t: number) => Promise<string>
+		const p0 = F.pipe((e: number) => e); // $ExpectType (e: number) => Promise<number>
+		const p1 = F.pipe((e: number) => e, toString); // $ExpectType (e: number) => Promise<string>
+		const p2 = F.pipe((e: number) => e, toString, e => parseInt(e, 10)); // $ExpectType (e: number) => Promise<number>
+		const p3 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString); // $ExpectType (e: number) => Promise<string>
+		const p4 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10)); // $ExpectType (e: number) => Promise<number>
+		const p5 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString); // $ExpectType (e: number) => Promise<string>
+		const p6 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType (e: number) => Promise<number>
+		const p7 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType (e: number) => Promise<string>
+		const p8 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType (e: number) => Promise<number>
+		const p9 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType (e: number) => Promise<string>
+		const p10 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType (e: number) => Promise<number>
+		const p11 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType (e: number) => Promise<string>
+		const p12 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType (e: number) => Promise<number>
+		const p13 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType (e: number) => Promise<string>
+		const p14 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType (e: number) => Promise<number>
+		const p15 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType (e: number) => Promise<string>
+		const p16 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType (e: number) => Promise<number>
+		const p17 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType (e: number) => Promise<string>
+		const p18 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType (e: number) => Promise<number>
+		const p19 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType (e: number) => Promise<string>
 	});
 });
