@@ -80,4 +80,14 @@ describe('test pipe', () => {
         assert.deepStrictEqual(r1, [2,4,6,8]);
         assert.deepStrictEqual(r2, [2,4,6,8]);
     });
+
+    it('sort and reverse', async () => {
+        const rs = F.pipe(
+            e => e.sort(), 
+            F.reverse,
+            F.collect);
+
+        const a = [1,5,4,3,2];
+        assert.deepStrictEqual(await rs(a),[5,4,3,2,1]);
+    });
 });

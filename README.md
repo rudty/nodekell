@@ -48,6 +48,7 @@ console.log(v);//[3]
 # Functions / Examples
 ## currying 
 *    [run](#run)
+*    [pipe](#pipe)
 *    [curry](#curry)
 
 ## functional
@@ -131,7 +132,7 @@ console.log(v);//[3]
 
 
 ### run
-combination functions like haskell $ or .
+combination functions like haskell `$` or `.`
 ```javascript
 const v = await F.run(
             F.range(10),//[0~9]
@@ -139,6 +140,34 @@ const v = await F.run(
             F.map(e => e + 1), //[1,3,5,7,9]
             F.reduce((acc, e) => acc + e)) // 1+3+5+7+9
 console.log(v);//25
+```
+
+
+### pipe
+```javascript
+const rs = F.pipe(
+    e => e.sort(), //[1,2,3,4,5]
+    F.reverse, //[5,4,3,2,1]
+    F.collect); //generator to array
+const a = [1,5,4,3,2];
+const result = await rs(a);//call
+console.log(result); //[5,4,3,2,1]
+```
+```javascript
+const double1 = F.pipe(
+    F.map(e => e + e), //[2,4,6,8]
+    F.collect);
+const a = [1,2,3,4];
+const r1 = await double1(a);
+console.log(r1); // [2,4,6,8]
+```
+```javascript
+const double2 = F.pipe(
+    t => t.map(e => e + e)); // Array.map
+
+const a = [1,2,3,4];
+const r2 = await double2(a);
+console.log(r2); // [2,4,6,8]
 ```
 
 
