@@ -122,26 +122,26 @@ describe('run', () => {
 	});
 
 	it('all pattern types', async () => {
-		const r0 = await F.run(1, e => e); // $ExpectType number
-		const r1 = await F.run(1, e => e, toString); // $ExpectType string
-		const r2 = await F.run(1, e => e, toString, e => parseInt(e, 10)); // $ExpectType number
-		const r3 = await F.run(1, e => e, toString, e => parseInt(e, 10), asyncToString); // $ExpectType string
-		const r4 = await F.run(1, e => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10)); // $ExpectType number
-		const r5 = await F.run(1, e => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString); // $ExpectType string
-		const r6 = await F.run(1, e => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType number
-		const r7 = await F.run(1, e => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType string
-		const r8 = await F.run(1, e => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType number
-		const r9 = await F.run(1, e => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType string
-		const r10 = await F.run(1, e => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType number
-		const r11 = await F.run(1, e => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType string
-		const r12 = await F.run(1, e => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType number
-		const r13 = await F.run(1, e => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType string
-		const r14 = await F.run(1, e => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType number
-		const r15 = await F.run(1, e => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType string
-		const r16 = await F.run(1, e => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType number
-		const r17 = await F.run(1, e => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType string
-		const r18 = await F.run(1, e => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType number
-		const r19 = await F.run(1, e => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType string
+		const r0 = await F.run(1, (e: number) => e); // $ExpectType number
+		const r1 = await F.run(1, (e: number) => e, toString); // $ExpectType string
+		const r2 = await F.run(1, (e: number) => e, toString, e => parseInt(e, 10)); // $ExpectType number
+		const r3 = await F.run(1, (e: number) => e, toString, e => parseInt(e, 10), asyncToString); // $ExpectType string
+		const r4 = await F.run(1, (e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10)); // $ExpectType number
+		const r5 = await F.run(1, (e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString); // $ExpectType string
+		const r6 = await F.run(1, (e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType number
+		const r7 = await F.run(1, (e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType string
+		const r8 = await F.run(1, (e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType number
+		const r9 = await F.run(1, (e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType string
+		const r10 = await F.run(1, (e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType number
+		const r11 = await F.run(1, (e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType string
+		const r12 = await F.run(1, (e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType number
+		const r13 = await F.run(1, (e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType string
+		const r14 = await F.run(1, (e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType number
+		const r15 = await F.run(1, (e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType string
+		const r16 = await F.run(1, (e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType number
+		const r17 = await F.run(1, (e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType string
+		const r18 = await F.run(1, (e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10)); // $ExpectType number
+		const r19 = await F.run(1, (e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType string
 	});
 });
 
