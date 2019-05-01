@@ -147,10 +147,13 @@ describe('pfmap', () => {
     });
 
     it('with run', async () => {
-        const a = [[1], Promise.resolve(['a']), [4], [5]];
+        const a = [[1], Promise.resolve(['a']), [4], [5], [Promise.resolve('b')]];
         const b = [[1], Promise.resolve([2]), Promise.resolve([3]), [4], [5]];
 
-        const ar0 = await F.run(a, e0 => F.pfmap(e1 => e1, e0)); // $ExpectType AsyncIterableIterator<string | number>
+        const ar0 = await F.run(a, F.pfmap(e => { // $ExpectType AsyncIterableIterator<string | number>
+            e; // $ExpectType string[] | number[] | Promise<string>[]
+            return e;
+        }));
 
         const br0 = await F.run(b, F.pfmap(e => e)); // $ExpectType AsyncIterableIterator<number>
     });
