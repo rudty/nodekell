@@ -244,12 +244,11 @@ export function notNil(a: any): boolean;
  *  let r = await F.run(a,
  *           F.map(e => e + 1), // a = [2,3,4,5,6]
  *           F.filter(e => e < 4), // a = [2,3]
- *           F.take(Infinity));
- *  for await (const e of r) {
- *      console.log(e);
- *  }
- * result:
- * [ 2 , 3 ]
+ *           F.take(Infinity),
+ *           F.collect);
+ *  
+ *  console.log(r); // print [2,3]
+ *
  * ```
  *
  * @param t
@@ -282,10 +281,13 @@ export function run<T, R0, R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R1
  * - please use functions length 20 or less
  * - please specified argument type in first function
  * ```ts
- * const double = F.pipe(F.map((e: number) => e + e), F.collect);
- * const double = F.pipe((t: number[]) => t.map(e => e + e));
+ * const double1 = F.pipe(F.map((e: number) => e + e), F.collect);
+ * const double2 = F.pipe((t: number[]) => t.map(e => e + e));
  * const a = [1,2,3,4];
- * const r = await double(a);
+ * const r1 = await double1(a);
+ * const r2 = await double2(a);
+ * console.log(r1); // [2,4,6,8]
+ * console.log(r2); // [2,4,6,8]
  * ```
  *
  * @param ...f

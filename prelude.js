@@ -220,14 +220,11 @@ exports.zipWith =  C.curry(async function* (f, a, b) {
  *  let r = await F.run(a,
  *           F.map(e => e + 1), // a = [2,3,4,5,6]
  *           F.filter(e => e < 4), // a = [2,3]
- *           F.take(Infinity));
- *  for await (const e of r) {
- *      console.log(e);
- *  }
+ *           F.take(Infinity),
+ *           F.collect);
  * 
- * //result:
- * //2
- * //3
+ *  console.log(r); // print [2,3]
+ * 
  */
 exports.run =  C.curry(async (iter, ...f) => foldl((z, fn) => fn(z), iter, f));
 
