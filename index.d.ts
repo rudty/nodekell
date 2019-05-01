@@ -240,11 +240,14 @@ export function notNil(a: any): boolean;
  * ```ts
  * // like `$` or `.`
  *
- * const a = [1,2,3,4,5];
- * const r = F.run(a,
- *               F.map(e => e + 1), // a = [2,3,4,5,6]
- *               F.filter(e => e < 4), // a = [2,3]
- *               F.take(Infinity));
+ *  let a = [1,2,3,4,5];
+ *  let r = await F.run(a,
+ *           F.map(e => e + 1), // a = [2,3,4,5,6]
+ *           F.filter(e => e < 4), // a = [2,3]
+ *           F.take(Infinity));
+ *  for await (const e of r) {
+ *      console.log(e);
+ *  }
  * result:
  * [ 2 , 3 ]
  * ```
