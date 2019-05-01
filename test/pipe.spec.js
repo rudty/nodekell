@@ -67,6 +67,17 @@ describe('test pipe', () => {
           
         let a = [1,2,3,4,5];
         assert.deepStrictEqual(await r(a), [2,3]);
-        // console.log(await r(a));
+        assert.deepStrictEqual(await r(a), [2,3]);
+        assert.deepStrictEqual(await r(a), [2,3]);
+    });
+
+    it('double', async () => {
+        const double1 = F.pipe(F.map((e) => e + e), F.collect);
+        const double2 = F.pipe((t) => t.map(e => e + e));
+        const a = [1,2,3,4];
+        const r1 = await double1(a);
+        const r2 = await double2(a);
+        assert.deepStrictEqual(r1, [2,4,6,8]);
+        assert.deepStrictEqual(r2, [2,4,6,8]);
     });
 });
