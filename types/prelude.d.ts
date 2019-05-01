@@ -367,7 +367,7 @@ export function run<T, R0, R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R1
  * https://github.com/rudty/nodekell#pipe
  * **Note**
  * - please use functions length 20 or less
- * - please specified argument type in first function
+ * - please specify argument type in first function
  * ```ts
  * const double1 = F.pipe(F.map((e: number) => e + e), F.collect);
  * const double2 = F.pipe((t: number[]) => t.map(e => e + e));
