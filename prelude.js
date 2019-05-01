@@ -243,4 +243,4 @@ exports.run =  C.curry(async (iter, ...f) => foldl((z, fn) => fn(z), iter, f));
  * //2
  * //3
  */
-exports.pipe = (...f) => iter => f.reduce((z, fn) => fn(z), iter);
+exports.pipe = (...f) => (...args) => f.slice(1).reduce((z, fn) => fn(z), f[0](...args));

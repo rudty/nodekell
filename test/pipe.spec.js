@@ -90,4 +90,17 @@ describe('test pipe', () => {
         const a = [1,5,4,3,2];
         assert.deepStrictEqual(await rs(a),[5,4,3,2,1]);
     });
+
+    it('empty', async () => {
+        const rs = F.pipe(()=>{});
+        await rs();
+    });
+
+    it('call first function support multiple argument', async () => {
+        const f2 = (a,b) => {
+            return [a,b];
+        };
+        const rs = F.pipe(f2);
+        console.log(await rs(1,2));
+    });
 });

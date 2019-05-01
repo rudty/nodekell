@@ -364,7 +364,7 @@ export function run<T, R0, R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R1
 export function run<T, R0, R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17, R18, R19>(t: T | Promise<T>, f0: (t: T) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>), f3: (r2: R2) => (R3 | Promise<R3>), f4: (r3: R3) => (R4 | Promise<R4>), f5: (r4: R4) => (R5 | Promise<R5>), f6: (r5: R5) => (R6 | Promise<R6>), f7: (r6: R6) => (R7 | Promise<R7>), f8: (r7: R7) => (R8 | Promise<R8>), f9: (r8: R8) => (R9 | Promise<R9>), f10: (r9: R9) => (R10 | Promise<R10>), f11: (r10: R10) => (R11 | Promise<R11>), f12: (r11: R11) => (R12 | Promise<R12>), f13: (r12: R12) => (R13 | Promise<R13>), f14: (r13: R13) => (R14 | Promise<R14>), f15: (r14: R14) => (R15 | Promise<R15>), f16: (r15: R15) => (R16 | Promise<R16>), f17: (r16: R16) => (R17 | Promise<R17>), f18: (r17: R17) => (R18 | Promise<R18>), f19: (r18: R18) => (R19 | Promise<R19>)): Promise<R19>;
 
 /**
- *
+ * https://github.com/rudty/nodekell#pipe
  * **Note**
  * - please use functions length 20 or less
  * - please specified argument type in first function
@@ -381,9 +381,27 @@ export function run<T, R0, R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R1
  * @param ...f
  * @param t
  */
-export function pipe<T, R0>(f0: (t: T) => (R0 | Promise<R0>)): (t: T) => Promise<R0>;
-export function pipe<T, R0, R1>(f0: (t: T) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>)): (t: T) => Promise<R1>;
-export function pipe<T, R0, R1, R2>(f0: (t: T) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>)): (t: T) => Promise<R2>;
+export function pipe<T0, R0>(f0: (t: T0) => (R0 | Promise<R0>)): (t: T0) => Promise<R0>;
+export function pipe<T0, T1, R0>(f0: (t0: T0, t1: T1) => (R0 | Promise<R0>)): (t0: T0, t1: T1) => Promise<R0>;
+export function pipe<T0, T1, T2, R0>(f0: (t0: T0, t1: T1, t2: T2) => (R0 | Promise<R0>)): (t0: T0, t1: T1, t2: T2) => Promise<R0>;
+export function pipe<T0, T1, T2, T3, R0>(f0: (t0: T0, t1: T1, t2: T2, t3: T3) => (R0 | Promise<R0>)): (t0: T0, t1: T1, t2: T2, t3: T3) => Promise<R0>;
+export function pipe<T0, T1, T2, T3, T4, R0>(f0: (t0: T0, t1: T1, t2: T2, t3: T3, t4: T4) => (R0 | Promise<R0>)): (t0: T0, t1: T1, t2: T2, t3: T3, t4: T4) => Promise<R0>;
+export function pipe<T0, T1, T2, T3, T4, T5, R0>(f0: (t0: T0, t1: T1, t2: T2, t3: T3, t4: T4) => (R0 | Promise<R0>)): (t0: T0, t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) => Promise<R0>;
+
+export function pipe<T0, R0, R1>(f0: (t0: T0) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>)): (t0: T0) => Promise<R1>;
+export function pipe<T0, T1, R0, R1>(f0: (t0: T0, t1: T1) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>)): (t0: T0, t1: T1) => Promise<R1>;
+export function pipe<T0, T1, T2, R0, R1>(f0: (t0: T0, t1: T1, t2: T2) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>)): (t0: T0, t1: T1, t2: T2) => Promise<R1>;
+export function pipe<T0, T1, T2, T3, R0, R1>(f0: (t0: T0, t1: T1, t2: T2, t3: T3) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>)): (t0: T0, t1: T1, t2: T2, t3: T3) => Promise<R1>;
+export function pipe<T0, T1, T2, T3, T4, R0, R1>(f0: (t0: T0, t1: T1, t2: T2, t3: T3, t4: T4) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>)): (t0: T0, t1: T1, t2: T2, t3: T3, t4: T4) => Promise<R1>;
+export function pipe<T0, T1, T2, T3, T4, T5, R0, R1>(f0: (t0: T0, t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>)): (t0: T0, t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) => Promise<R1>;
+
+export function pipe<T0, R0, R1, R2>(f0: (t0: T0) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>)): (t0: T0) => Promise<R2>;
+export function pipe<T0, T1, R0, R1, R2>(f0: (t0: T0, t1: T1) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>)): (t0: T0, t1: T1) => Promise<R2>;
+export function pipe<T0, T1, T2, R0, R1, R2>(f0: (t0: T0, t1: T1, t2: T2) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>)): (t0: T0, t1: T1, t2: T2) => Promise<R2>;
+export function pipe<T0, T1, T2, T3, R0, R1, R2>(f0: (t0: T0, t1: T1, t2: T2, t3: T3) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>)): (t0: T0, t1: T1, t2: T2, t3: T3) => Promise<R2>;
+export function pipe<T0, T1, T2, T3, T4, R0, R1, R2>(f0: (t0: T0, t1: T1, t2: T2, t3: T3, t4: T4) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>)): (t0: T0, t1: T1, t2: T2, t3: T3, t4: T4) => Promise<R2>;
+export function pipe<T0, T1, T2, T3, T4, T5, R0, R1, R2>(f0: (t0: T0, t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>)): (t0: T0, t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) => Promise<R2>;
+
 export function pipe<T, R0, R1, R2, R3>(f0: (t: T) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>), f3: (r2: R2) => (R3 | Promise<R3>)): (t: T) => Promise<R3>;
 export function pipe<T, R0, R1, R2, R3, R4>(f0: (t: T) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>), f3: (r2: R2) => (R3 | Promise<R3>), f4: (r3: R3) => (R4 | Promise<R4>)): (t: T) => Promise<R4>;
 export function pipe<T, R0, R1, R2, R3, R4, R5>(f0: (t: T) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>), f3: (r2: R2) => (R3 | Promise<R3>), f4: (r3: R3) => (R4 | Promise<R4>), f5: (r4: R4) => (R5 | Promise<R5>)): (t: T) => Promise<R5>;
