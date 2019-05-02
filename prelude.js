@@ -236,7 +236,7 @@ exports.run =  C.curry(async (iter, ...f) => foldl((z, fn) => fn(z), iter, f));
  *              F.take(Infinity));
  * 
  *      let a = [1,2,3,4,5];
- *      for await (const e of r(a)) {
+ *      for await (const e of await r(a)) {
  *          console.log(e);
  *      }
  * //result

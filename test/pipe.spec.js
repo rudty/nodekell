@@ -53,7 +53,7 @@ describe('test pipe', () => {
             F.take(Infinity));
           
         let a = [1,2,3,4,5];
-        for await (const _ of (await r(a))) {
+        for await (const _ of await r(a)) {
             //async iterable
         }
     });
