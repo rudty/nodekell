@@ -101,6 +101,16 @@ describe('test pipe', () => {
             return [a,b];
         };
         const rs = F.pipe(f2);
-        console.log(await rs(1,2));
+        assert.deepStrictEqual(await rs(1,2), [1,2]);
+        assert.deepStrictEqual(await rs(1,2), [1,2]);
+        assert.deepStrictEqual(await rs(1,2), [1,2]);
+    });
+
+    it('not lazy', async () => {
+        const p = F.pipe(F.add, F.dec);
+        assert.deepEqual(2, p(1,2));
+        assert.deepEqual(9, p(2,8));
+        assert.deepEqual(2, p(1,2));
+        assert.deepEqual(7, p(3,5));
     });
 });
