@@ -113,4 +113,27 @@ describe('test pipe', () => {
         assert.deepEqual(2, p(1,2));
         assert.deepEqual(7, p(3,5));
     });
+
+    it('lazy', async () => {
+        const p = F.pipe(
+            async (a, b) => await a + b,
+            async (a) => (await ((await a) - 1)));
+        assert.deepEqual(2, await p(1,2));
+        assert.deepEqual(6, await p(3,4));
+    });
+
+    
+    it('reduce', async() => {
+        let r = F.pipe(
+            F.map(e => e + 1), // a = [2,3,4,5,6]
+            F.filter(e => e < 4), // a = [2,3]
+            F.take(Infinity),
+            F.reduce((acc,e) => acc + e));
+          
+        let a = [1,2,3,4,5];
+         assert.strictEqual(await r(a), 5);
+         assert.strictEqual(await r(a), 5);
+         assert.strictEqual(await r(a), 5);
+         assert.strictEqual(await r(a), 5);
+    });
 });
