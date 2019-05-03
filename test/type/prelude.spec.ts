@@ -352,7 +352,7 @@ describe('dflat', () => {
         const r7 = F.dflat(a, b, c, a, b, c, a, b, c); // $ExpectType AsyncIterableIterator<string | number>
         const r8 = F.dflat(a, b, c, a, b, c, a, b, c, a); // $ExpectType AsyncIterableIterator<string | number>
         const r9 = F.dflat(b, b, b, b, b, b, b, b, b, b, b); // $ExpectType AsyncIterableIterator<number>
-        const r10 = F.dflat(a, b, c, a, b, c, a, b, c, a, b, c); // $ExpectType AsyncIterableIterator<any>
+        const r10 = F.dflat(a, b, c, a, b, c, a, b, c, a, b, c); // $ExpectType AsyncIterableIterator<string | number>
     });
 });
 
