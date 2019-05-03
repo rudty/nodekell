@@ -226,7 +226,7 @@ exports.zipWith =  C.curry(async function* (f, a, b) {
  *  console.log(r); // print [2,3]
  * 
  */
-exports.run =  C.curry(async (iter, ...f) => foldl((z, fn) => fn(z), iter, f));
+exports.run = (iter, ...f) => foldl((z, fn) => fn(z), iter, f);
 
 /**
  * like `.`
