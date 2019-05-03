@@ -4,7 +4,7 @@ const assert = require("assert");
 
 describe('test cond', () => {
     it('instanceof', async () => {
-        const r = await F.cond("A", 
+        const r = await F.condv("A", 
             e => e.constructor === String, "str",
             () => true, "TRUE"
         );
@@ -13,7 +13,7 @@ describe('test cond', () => {
     });
 
     it('async instanceof', async () => {
-        const r = await F.cond("A", 
+        const r = await F.condv("A", 
             e => Promise.resolve(e.constructor === String), "str",
             () => true, "TRUE"
         );

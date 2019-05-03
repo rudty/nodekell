@@ -22,7 +22,19 @@ const C = require("./core.js");
 // exports.T = () => true;
 // exports.F = () => false;
 // exports.otherwise = () => true;
-exports.cond = async (v, ...cv) => {
+
+exports.cond = async (...cv) => {
+    for (let i = 0; i < cv.length; i += 2) {
+        if (await cv[i]()) {
+            return cv[i + 1];
+        }
+    }
+    // return undefined ??? ;
+    // throw notmatchingexception
+};
+
+//cond->
+exports.condv = async (v, ...cv) => {
     for (let i = 0; i < cv.length; i += 2) {
         if (await cv[i](v)) {
             return cv[i + 1];
@@ -31,3 +43,4 @@ exports.cond = async (v, ...cv) => {
     // return undefined ??? ;
     // throw notmatchingexception
 };
+
