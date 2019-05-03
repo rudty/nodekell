@@ -144,6 +144,11 @@ console.log(v);//25
 
 
 ### pipe
+combination functions like haskell `.`
+
+only first function can use multiple arguments.
+
+return value is promise.
 ```javascript
 const rs = F.pipe(
     e => e.sort(), //[1,2,3,4,5]
@@ -166,7 +171,7 @@ const double2 = F.pipe(
     t => t.map(e => e + e)); // Array.map
 
 const a = [1,2,3,4];
-const r2 = await double2(a);
+const r2 = await double2(a); // return promise
 console.log(r2); // [2,4,6,8]
 ```
 
