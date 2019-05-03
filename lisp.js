@@ -22,9 +22,9 @@ const C = require("./core.js");
 // exports.T = () => true;
 // exports.F = () => false;
 // exports.otherwise = () => true;
-exports.cond = (v, ...cv) => {
+exports.cond = async (v, ...cv) => {
     for (let i = 0; i < cv.length; i += 2) {
-        if (cv[i](v)) {
+        if (await cv[i](v)) {
             return cv[i + 1];
         }
     }
