@@ -692,28 +692,28 @@ describe('buffer', () => {
     it('from Normal Value', async () => {
         const a = [1, 2, 3, 4, 5];
 
-        const r0 = F.buffer<number>(1)(a); // $ExpectType AsyncIterableIterator<[number]>
-        const r1 = F.buffer(2, a); // $ExpectType AsyncIterableIterator<[number]>
+        const r0 = F.buffer<number>(1)(a); // $ExpectType AsyncIterableIterator<number[]>
+        const r1 = F.buffer(2, a); // $ExpectType AsyncIterableIterator<number[]>
     });
 
     it('from Promise Value', async () => {
         const a = [1, 2, Promise.resolve(3), 4, 5];
 
-        const r0 = F.buffer<number>(1)(a); // $ExpectType AsyncIterableIterator<[number]>
-        const r1 = F.buffer(2, a); // $ExpectType AsyncIterableIterator<[number]>
+        const r0 = F.buffer<number>(1)(a); // $ExpectType AsyncIterableIterator<number[]>
+        const r1 = F.buffer(2, a); // $ExpectType AsyncIterableIterator<number[]>
     });
 
     it('from String', async () => {
         const a = 'hello world';
 
-        const r0 = F.buffer<string>(1)(a); // $ExpectType AsyncIterableIterator<[string]>
-        const r1 = F.buffer(2, a); // $ExpectType AsyncIterableIterator<[string]>
+        const r0 = F.buffer<string>(1)(a); // $ExpectType AsyncIterableIterator<string[]>
+        const r1 = F.buffer(2, a); // $ExpectType AsyncIterableIterator<string[]>
     });
 
     it('from Normal / Promsie Union', async () => {
         const a = [1, Promise.resolve(2), 'a', Promise.resolve('b')];
 
-        const r0 = F.buffer<string | number>(1)(a); // $ExpectType AsyncIterableIterator<[string | number]>
-        const r1 = F.buffer(2, a); // $ExpectType AsyncIterableIterator<[string | number]>
+        const r0 = F.buffer<string | number>(1)(a); // $ExpectType AsyncIterableIterator<(string | number)[]>
+        const r1 = F.buffer(2, a); // $ExpectType AsyncIterableIterator<(string | number)[]>
     });
 });
