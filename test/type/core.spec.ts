@@ -56,8 +56,14 @@ describe('utils', () => {
     });
 
     it('add', () => {
-        const add0 = F.add('1', '2'); // $ExpectType string
-        const add1 = F.add(1, 2); // $ExpectType number
+        const adds = F.add('1', '2'); // $ExpectType string
+        const addn = F.add(1, 2); // $ExpectType number
+
+        const adds1 = F.add('1');
+        const adds1s = adds1('2'); // $ExpectType string
+
+        const addn1 = F.add(1);
+        const addn1n = addn1(2); // $ExpectType number
     });
 
     it('sub', () => {
