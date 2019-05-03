@@ -117,7 +117,10 @@ describe('test pipe', () => {
     it('lazy', async () => {
         const p = F.pipe(
             async (a, b) => await a + b,
-            async (a) => (await ((await a) - 1)));
+            async (a) => {
+                const v = await a;
+                return v - 1;
+            });
         assert.deepEqual(2, await p(1,2));
         assert.deepEqual(6, await p(3,4));
     });
