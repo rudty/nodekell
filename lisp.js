@@ -22,6 +22,12 @@ const C = require("./core.js");
 // exports.T = () => true;
 // exports.F = () => false;
 // exports.otherwise = () => true;
-exports.cond = (cond, value, f, ...fns) => {
-
+exports.cond = (v, ...cv) => {
+    for (let i = 0; i < cv.length; i += 2) {
+        if (cv[i](v)) {
+            return cv[i + 1];
+        }
+    }
+    // return undefined ??? ;
+    // throw notmatchingexception
 };
