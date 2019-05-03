@@ -269,8 +269,8 @@ export function then<T, R>(f: (t: T) => R, t: T): R;
  * @param supply
  * @param iter
  */
-export function buffer<T>(supply: number | Promise<number>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<[T]>;
-export function buffer<T>(supply: number | Promise<number>): (iter: Iter<T>) => AsyncIterableIterator<[EP<T>]>;
+export function buffer<T>(supply: number | Promise<number>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T[]>;
+export function buffer<T>(supply: number | Promise<number>): (iter: Iter<T>) => AsyncIterableIterator<EP<T>[]>;
 
-export function buffer<T>(supply: number | Promise<number>, iter: Iter<T | Promise<T>>): AsyncIterableIterator<[T]>;
-export function buffer<T>(supply: number | Promise<number>, iter: Iter<T>): AsyncIterableIterator<[EP<T>]>;
+export function buffer<T>(supply: number | Promise<number>, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T[]>;
+export function buffer<T>(supply: number | Promise<number>, iter: Iter<T>): AsyncIterableIterator<EP<T>[]>;
