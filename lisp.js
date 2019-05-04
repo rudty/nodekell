@@ -27,17 +27,12 @@ const mustEvenArguments = (arr) => {
     }
 };
 
-const isFalseCond = (a) => {
-    return a === false || isNil(a);
-};
-
 exports.cond = async (...cv) => {
     mustEvenArguments(cv);
 
     for (let i = 0; i < cv.length; i += 2) {
-        let v = await cv[i];
 
-        if (!C.isNil(v)) {
+        if (await cv[i]) {
             return cv[i + 1];
         }
     }

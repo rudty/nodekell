@@ -42,16 +42,16 @@ describe('test cond', () => {
         assert.strictEqual(r, "t0");
     });
 
-    // it('async3', async () => {
-    //     const r = await F.cond( 
-    //         Promise.resolve(false), "f",
-    //         true, "t0",
-    //         Promise.resolve(true), "t1",
-    //         F.otherwise, "t2"
-    //     );
+    it('async3', async () => {
+        const r = await F.cond( 
+            Promise.resolve(false), "f",
+            true, "t0",
+            Promise.resolve(true), "t1",
+            F.otherwise, "t2"
+        );
 
-    //     assert.strictEqual(r, "t0");
-    // });
+        assert.strictEqual(r, "t0");
+    });
 
     it('even arg', async () => {
         try{
