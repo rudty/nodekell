@@ -39,6 +39,31 @@ exports.cond = async (...cv) => {
     // return undefined
 };
 
+// clj
+// (let [value 0]
+//     (condp = value
+//           1 "1"
+//           2 "2"
+//           3 "3"
+//           "else"))
+//
+//
+// js
+// const value = 0;
+// const r = condp((a,b) => a === b, 
+//      value,
+//      1, "1",
+//      2, "2",
+//      3, "3",
+//      "else");
+//
+// result: "else" 
+exports.condp = (fn, v, ...cv) => {
+    for (let i = 0; i < cv.length; i += 2) {
+
+    }
+};
+
 //cond->
 // exports.condv = async (v, ...cv) => {
 //     mustEvenArguments(cv);
