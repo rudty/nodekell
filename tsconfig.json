@@ -15,23 +15,9 @@
 		"typeRoots": ["./"],
 		"types": [],
 		"forceConsistentCasingInFileNames": true
-	},
-	"files": [
-        "index.d.ts",
-        "types/core.d.ts",
-        "types/generator.d.ts",
-        "types/parallel.d.ts",
-        "types/prelude.d.ts",
-        "types/stream.d.ts",
-        "types/timer.d.ts",
-        "types/tsql.d.ts",
-        "types/utils.d.ts",
-        "test/type/core.spec.ts",
-        "test/type/generator.spec.ts",
-        "test/type/parallel.spec.ts",
-        "test/type/prelude.spec.ts",
-        "test/type/stream.spec.ts",
-        "test/type/timer.spec.ts",
-        "test/type/tsql.spec.ts"
-	]
+    },
+    "include": [
+        "types/**/*.d.ts",
+        "test/type/**.spec.ts"
+    ]
 }

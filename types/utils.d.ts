@@ -1,3 +1,55 @@
+export type Nullable<T, U extends null | undefined = null> = T | U;
+
+export type Length<T extends any[]> = T['length'];
+
+export type Cast<T, Y> = T extends Y ? T : Y;
+
+export type Head<T extends any[]> =
+    T extends [any, ...any[]] ?
+        T[0] : never;
+
+export type Second<T extends any[]> =
+    T extends [any, any, ...any[]] ?
+        T[1] : never;
+
+export type Tail<T extends any[]> =
+    ((...a: T) => any) extends ((h: any, ...a: infer U) => any) ?
+        U : never;
+
+export type HasTail<T extends any[]> =
+    T extends ([] | [any]) ?
+        false : true;
+
+export type Last<T extends any[]> = {
+    0: Last<Tail<T>>;
+    1: Head<T>;
+}[
+    HasTail<T> extends true ?
+        0 : 1
+];
+
+export type Prepend<E, T extends any[]> =
+    ((e: E, ...a: T) => any) extends ((...a: infer U) => any) ?
+        U : never;
+
+export type Drop<N extends number, T extends any[], I extends any[] = []> = {
+    0: Drop<N, Tail<T>, Prepend<any, I>>;
+    1: T;
+}[
+    Length<I> extends N ?
+        1 : 0
+];
+
+export type Filter<E, T extends any[]> = {
+    0: Filter<E, Tail<T>>;
+    1: Head<T>;
+}[
+    Head<T> extends E ?
+        1 : Length<T> extends 0 ? never : 0
+];
+
+// type ft = Filter<true, [1, 2, 3, 4, 5, true]>;
+
 export type Iter<T> = Iterable<T> | AsyncIterable<T>; // | IterableIterator<T> | AsyncIterableIterator<T> | T[];
 
 export type ExtractPromise<T> = T extends Promise<infer PT> ? PT : T;
@@ -56,7 +108,24 @@ export type PDFlat<T> =
     EP<DFlat<
     EP<DFlat<
     EP<DFlat< // 7
-	EP<T>>>>>>>>>>>>>>>;
+    EP<T>>>>>>>>>>>>>>>;
+
+export type PickElements<N extends 0 | 1, T extends any[], I extends any[] = []> = {
+    0: PickElements<N, Drop<2, T>, Prepend<N extends 0 ? Head<T> : Second<T>, I>>;
+    1: Head<T> | Flat<I>;
+    2: Second<T> | Flat<I>;
+}[
+    Length<T> extends 0 ?
+        N extends 0 ?
+            1 : 2 : 0
+];
+
+export type PairRepeat<N extends number, T, Y, I extends any[] = []> = {
+    0: PairRepeat<N, T, Y, Prepend<T, Prepend<Y, I>>>;
+    1: I;
+}[
+    Length<I> extends N ? 1 : 0
+];
 
 export interface CurriedFunction2<T1, T2, R> {
     (t1: T1): (t2: T2) => R;
