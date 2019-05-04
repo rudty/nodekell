@@ -7,6 +7,10 @@ import {
 
 export function otherwise(): true;
 
+// type c = Filter<true | (() => true), [false, () => false]>;
+
+// type d = c extends never ? true : false;
+
 // type b = PairRepeat<2, BF, any>;
 
 // type a = PickElements<0, [() => boolean, number, () => boolean, string]>;
@@ -17,16 +21,16 @@ export type BF = BooleanFn;
 /**
  * can make [a, b, a, c, a, d] type ?
  */
-export function cond<T extends PairRepeat<2, BF, any>>(...a: T): Promise<EP<Filter<() => true, T> extends never ? PickElements<1, T> | undefined : PickElements<1, T>>>;
-export function cond<T extends PairRepeat<4, BF, any>>(...a: T): Promise<EP<Filter<() => true, T> extends never ? PickElements<1, T> | undefined : PickElements<1, T>>>;
-export function cond<T extends PairRepeat<6, BF, any>>(...a: T): Promise<EP<Filter<() => true, T> extends never ? PickElements<1, T> | undefined : PickElements<1, T>>>;
-export function cond<T extends PairRepeat<8, BF, any>>(...a: T): Promise<EP<Filter<() => true, T> extends never ? PickElements<1, T> | undefined : PickElements<1, T>>>;
-export function cond<T extends PairRepeat<10, BF, any>>(...a: T): Promise<EP<Filter<() => true, T> extends never ? PickElements<1, T> | undefined : PickElements<1, T>>>;
-export function cond<T extends PairRepeat<12, BF, any>>(...a: T): Promise<EP<Filter<() => true, T> extends never ? PickElements<1, T> | undefined : PickElements<1, T>>>;
-export function cond<T extends PairRepeat<14, BF, any>>(...a: T): Promise<EP<Filter<() => true, T> extends never ? PickElements<1, T> | undefined : PickElements<1, T>>>;
-export function cond<T extends PairRepeat<16, BF, any>>(...a: T): Promise<EP<Filter<() => true, T> extends never ? PickElements<1, T> | undefined : PickElements<1, T>>>;
-export function cond<T extends PairRepeat<18, BF, any>>(...a: T): Promise<EP<Filter<() => true, T> extends never ? PickElements<1, T> | undefined : PickElements<1, T>>>;
-export function cond<T extends PairRepeat<20, BF, any>>(...a: T): Promise<EP<Filter<() => true, T> extends never ? PickElements<1, T> | undefined : PickElements<1, T>>>;
+export function cond<T extends PairRepeat<2, BF | boolean | Promise<boolean>, any>>(...a: T): Promise<EP<Filter<true | Promise<true> | (() => (true | Promise<true>)), T> extends never ? PickElements<1, T> | undefined : PickElements<1, T>>>;
+export function cond<T extends PairRepeat<4, BF | boolean | Promise<boolean>, any>>(...a: T): Promise<EP<Filter<true | Promise<true> | (() => (true | Promise<true>)), T> extends never ? PickElements<1, T> | undefined : PickElements<1, T>>>;
+export function cond<T extends PairRepeat<6, BF | boolean | Promise<boolean>, any>>(...a: T): Promise<EP<Filter<true | Promise<true> | (() => (true | Promise<true>)), T> extends never ? PickElements<1, T> | undefined : PickElements<1, T>>>;
+export function cond<T extends PairRepeat<8, BF | boolean | Promise<boolean>, any>>(...a: T): Promise<EP<Filter<true | Promise<true> | (() => (true | Promise<true>)), T> extends never ? PickElements<1, T> | undefined : PickElements<1, T>>>;
+export function cond<T extends PairRepeat<10, BF | boolean | Promise<boolean>, any>>(...a: T): Promise<EP<Filter<true | Promise<true> | (() => (true | Promise<true>)), T> extends never ? PickElements<1, T> | undefined : PickElements<1, T>>>;
+export function cond<T extends PairRepeat<12, BF | boolean | Promise<boolean>, any>>(...a: T): Promise<EP<Filter<true | Promise<true> | (() => (true | Promise<true>)), T> extends never ? PickElements<1, T> | undefined : PickElements<1, T>>>;
+export function cond<T extends PairRepeat<14, BF | boolean | Promise<boolean>, any>>(...a: T): Promise<EP<Filter<true | Promise<true> | (() => (true | Promise<true>)), T> extends never ? PickElements<1, T> | undefined : PickElements<1, T>>>;
+export function cond<T extends PairRepeat<16, BF | boolean | Promise<boolean>, any>>(...a: T): Promise<EP<Filter<true | Promise<true> | (() => (true | Promise<true>)), T> extends never ? PickElements<1, T> | undefined : PickElements<1, T>>>;
+export function cond<T extends PairRepeat<18, BF | boolean | Promise<boolean>, any>>(...a: T): Promise<EP<Filter<true | Promise<true> | (() => (true | Promise<true>)), T> extends never ? PickElements<1, T> | undefined : PickElements<1, T>>>;
+export function cond<T extends PairRepeat<20, BF | boolean | Promise<boolean>, any>>(...a: T): Promise<EP<Filter<true | Promise<true> | (() => (true | Promise<true>)), T> extends never ? PickElements<1, T> | undefined : PickElements<1, T>>>;
 
 // export type BFV<T> = ((v: T) => any) extends ((v: infer U) => any) ? (v: T) => (boolean | Promise<boolean>) : never;
 // export type BFV<T> = BooleanFnWithValue<T>;

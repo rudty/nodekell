@@ -9,6 +9,25 @@ const thanos = () => Math.random() >= 0.5;
 const asyncThanos = async () => thanos();
 
 describe('cond', () => {
+    it('from Boolean Literal', async () => {
+        // tslint:disable-next-line: no-unnecessary-type-assertion
+        const pt = Promise.resolve(true) as Promise<true>;
+        // tslint:disable-next-line: no-unnecessary-type-assertion
+        const pf = Promise.resolve(false) as Promise<false>;
+
+        // use type assertion
+        const r0 = await F.cond(true as true, 0, false as false, 1); // $ExpectType number
+        const r1 = await F.cond(false as false, 0, true as true, 1); // $ExpectType number
+        const r2 = await F.cond(pt, 0, pf, 1); // $ExpectType number
+        const r3 = await F.cond(pf, 0, pt, 1); // $ExpectType number
+
+        // don't use type assertion
+        // const r4 = await F.cond(true, 0, false, 1); // $ExpectType number | undefined
+        // const r5 = await F.cond(false, 0, true, 1); // $ExpectType number | undefined
+        const r6 = await F.cond(Promise.resolve(true), 0, Promise.resolve(false), 1); // $ExpectType number | undefined
+        const r7 = await F.cond(Promise.resolve(false), 0, Promise.resolve(true), 1); // $ExpectType number | undefined
+    });
+
     it('from Normal Value', async () => {
         const r0 = await F.cond(thanos, 1); // $ExpectType number | undefined
         const r1 = await F.cond(thanos, 1, thanos, 'a'); // $ExpectType string | number | undefined
@@ -19,7 +38,7 @@ describe('cond', () => {
         const r1 = await F.cond(asyncThanos, Promise.resolve(1), asyncThanos, Promise.resolve('a')); // $ExpectType string | number | undefined
     });
 
-    it('from Function', async () => {
+    it('from Function Value', async () => {
         const a = (aa: number) => 'a';
         const b = (bb: string) => (bbb: number) => 0;
         const c = async (cc: number) => 'b';
