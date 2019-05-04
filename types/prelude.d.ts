@@ -125,7 +125,6 @@ export function flat<T>(iter: Iter<T>): AsyncIterableIterator<PFlat<T>>;
  *
  * **Note**
  * - don't use too deep iter
- * - please use arguments length 10 or less (if over 10, please use generic)
  *
  * @param t
  */
