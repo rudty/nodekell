@@ -17,30 +17,42 @@ const C = require("./core.js");
 // }
 // else return "other"
 
-
-
 // exports.T = () => true;
 // exports.F = () => false;
-// exports.otherwise = () => true;
+exports.otherwise = () => true;
+
+const mustEvenArguments = (arr) => {
+    if ((arr.length) & 1) {
+        throw new Error("requires an even arguments");
+    }
+};
+
+const isFalseCond = (a) => {
+    return a === false || isNil(a);
+};
 
 exports.cond = async (...cv) => {
+    mustEvenArguments(cv);
+
     for (let i = 0; i < cv.length; i += 2) {
-        if (await cv[i]()) {
+        let v = await cv[i];
+
+        if (!C.isNil(v)) {
             return cv[i + 1];
         }
     }
-    // return undefined ??? ;
-    // throw notmatchingexception
+    // return undefined
 };
 
 //cond->
-exports.condv = async (v, ...cv) => {
-    for (let i = 0; i < cv.length; i += 2) {
-        if (await cv[i](v)) {
-            return cv[i + 1];
-        }
-    }
-    // return undefined ??? ;
-    // throw notmatchingexception
-};
+// exports.condv = async (v, ...cv) => {
+//     mustEvenArguments(cv);
+    
+//     for (let i = 0; i < cv.length; i += 2) {
+//         if (await cv[i](v)) {
+//             return cv[i + 1];
+//         }
+//     }
+//     // return undefined ???
+// };
 
