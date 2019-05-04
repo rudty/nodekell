@@ -18,6 +18,7 @@
     },
     "include": [
         "types/**/*.d.ts",
-        "test/type/**.spec.ts"
+        "test/type/**.spec.ts",
+        "test/type/**.error.ts"
     ]
 }
