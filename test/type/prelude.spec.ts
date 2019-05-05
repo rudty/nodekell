@@ -884,3 +884,58 @@ describe('pipe', () => {
 		const p19 = F.pipe((e: number) => e, toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString); // $ExpectType (e: number) => Promise<string>
 	});
 });
+
+describe('compose', () => {
+    it('iter', async () => {
+      const a = [1, 2, 3, 4];
+      const b = [{ id: 1, name: 'haskell curry' }, Promise.resolve({ id: 2, name: 'john doe' }), { id: 3, name: 'jane doe' }];
+
+      const compose0 = F.compose(F.map((e: number) => e + e));
+      const r0 = await compose0(a); // $ExpectType AsyncIterableIterator<number>
+
+      const compose1 = F.compose(F.collect, F.map((e: number) => (typeof e as string)));
+      const r1 = await compose1(a); // $ExpectType string[]
+
+      const compose2 = F.compose(F.collect, F.map(e => e.name), (e: typeof b) => e);
+      const r2 = await compose2(b); // $ExpectType string[]
+
+      const compose3 = F.compose(F.collect, F.map((e: F.PFlat<typeof b>) => e.id));
+      const r3 = await compose3(b); // $ExpectType number[]
+
+      const compose4 = F.compose((t: number[]) => Promise.all(t.map(async e => e + e)));
+      const r4 = await compose4(a); // $ExpectType number[]
+  });
+
+  it('multiple parameter', async () => {
+      const compose0 = F.compose((a: number, b: number, c: string, d: Promise<number>, e: Promise<string>) => [a, b, c, d, e]);
+      const r0 = await compose0(1, 2, 'a', Promise.resolve(3), Promise.resolve('b')); // $ExpectType (string | number | Promise<number> | Promise<string>)[]
+
+      const a0 = [1, 'a', Promise.resolve(2), Promise.resolve('b')];
+      const b0 = [null, Symbol('abc'), undefined, Promise.resolve('a'), 1, Promise.resolve(2)];
+      const compose1 = F.compose((a: typeof a0, b: typeof b0, c: typeof b0, d: typeof a0) => [a, b, c, d]);
+      const r1 = await compose1(a0, b0, b0, a0); // $ExpectType ((string | number | Promise<number> | Promise<string>)[] | (number | symbol | Promise<number> | Promise<string> | null | undefined)[])[]
+  });
+
+  it('all pattern types', async () => {
+      const p0 = F.compose((e: number) => e); // $ExpectType (e: number) => Promise<number>
+      const p1 = F.compose(toString, (e: number) => e); // $ExpectType (e: number) => Promise<string>
+      const p2 = F.compose(e => parseInt(e, 10), toString, (e: number) => e); // $ExpectType (e: number) => Promise<number>
+      const p3 = F.compose(asyncToString, e => parseInt(e, 10), toString, (e: number) => e); // $ExpectType (e: number) => Promise<string>
+      const p4 = F.compose(e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, (e: number) => e); // $ExpectType (e: number) => Promise<number>
+      const p5 = F.compose(toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, (e: number) => e); // $ExpectType (e: number) => Promise<string>
+      const p6 = F.compose(e => parseInt(e, 10), toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, (e: number) => e); // $ExpectType (e: number) => Promise<number>
+      const p7 = F.compose(toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, (e: number) => e); // $ExpectType (e: number) => Promise<string>
+      const p8 = F.compose(e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, (e: number) => e); // $ExpectType (e: number) => Promise<number>
+      const p9 = F.compose(toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, (e: number) => e); // $ExpectType (e: number) => Promise<string>
+      const p10 = F.compose(e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, (e: number) => e); // $ExpectType (e: number) => Promise<number>
+      const p11 = F.compose(toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, (e: number) => e); // $ExpectType (e: number) => Promise<string>
+      const p12 = F.compose(e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, (e: number) => e); // $ExpectType (e: number) => Promise<number>
+      const p13 = F.compose(toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, (e: number) => e); // $ExpectType (e: number) => Promise<string>
+      const p14 = F.compose(e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, (e: number) => e); // $ExpectType (e: number) => Promise<number>
+      const p15 = F.compose(toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, (e: number) => e); // $ExpectType (e: number) => Promise<string>
+      const p16 = F.compose(e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, (e: number) => e); // $ExpectType (e: number) => Promise<number>
+      const p17 = F.compose(toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, (e: number) => e); // $ExpectType (e: number) => Promise<string>
+      const p18 = F.compose(e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, (e: number) => e); // $ExpectType (e: number) => Promise<number>
+      const p19 = F.compose(toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, (e: number) => e); // $ExpectType (e: number) => Promise<string>
+  });
+});
