@@ -98,10 +98,10 @@ export function collectSet<T>(iter: Iter<T>): Promise<Set<EP<T>>>;
  * @param iter
  */
 export function forEach<T, R>(f: (elem: T) => (R | Promise<R>)): (iter: Iter<T | Promise<T>>) => Promise<R[]>;
-export function forEach<T, R>(f: (elem: EP<T>) => (R | Promise<R>)): (iter: Iter<T>) => Promise<R[]>;
+export function forEach<T, R>(f: (elem: EP<T>) => R): (iter: Iter<T>) => Promise<EP<R>[]>;
 
 export function forEach<T, R>(f: (elem: T) => (R | Promise<R>), iter: Iter<T | Promise<T>>): Promise<R[]>;
-export function forEach<T, R>(f: (elem: EP<T>) => (R | Promise<R>), iter: Iter<T>): Promise<R[]>;
+export function forEach<T, R>(f: (elem: EP<T>) => R, iter: Iter<T>): Promise<EP<R>[]>;
 
 /**
  * https://github.com/rudty/nodekell#distinctby
@@ -177,7 +177,7 @@ export function count(iter: Iter<any>): Promise<number>;
 /*
   about types of sum, max, min
 
-  set type number or string, an bug occurs
+  set type number or string, bug occurs
 
   so use generic
 */
