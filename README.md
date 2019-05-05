@@ -49,6 +49,7 @@ console.log(v);//[3]
 ## currying 
 *    [run](#run)
 *    [pipe](#pipe)
+*    [compose](#compose)
 *    [curry](#curry)
 
 ## functional
@@ -157,13 +158,14 @@ const v = await F.reduce((acc, e) => acc + e, // 1+3+5+7+9
 ```
 
 
-
 ### pipe
 combination left to right functions
 
-only first function can use multiple arguments.
+only **first** function can use multiple arguments.
 
 return value is promise.
+
+see also [compose](#compose)
 ```javascript
 const rs = F.pipe(
     e => e.sort(), //[1,2,3,4,5]
@@ -191,6 +193,43 @@ console.log(r2); // [2,4,6,8]
 ```
 
 
+### compose
+combination right to left functions
+
+only **last** function can use multiple arguments.
+
+return value is promise.
+
+see also [pipe](#pipe)
+```javascript
+const rs = F.compose(
+    F.collect, //generator to array
+    F.reverse, //[5,4,3,2,1]
+    e => e.sort() //[1,2,3,4,5]
+);
+const a = [1,5,4,3,2];
+const result = await rs(a);//call
+console.log(result); //[5,4,3,2,1]
+```
+```javascript
+const double1 = F.compose(
+    F.collect,
+    F.map(e => e + e) //[2,4,6,8]
+);
+const a = [1,2,3,4];
+const r1 = await double1(a);
+console.log(r1); // [2,4,6,8]
+```
+```javascript
+const double2 = F.compose(
+    t => t.map(e => e + e)); // Array.map
+
+const a = [1,2,3,4];
+const r2 = await double2(a); // return promise
+console.log(r2); // [2,4,6,8]
+```
+
+
 ### curry
 if all arguments are not given for the function, 
 it returns the function that stored the argument
@@ -199,11 +238,12 @@ const myAdd = F.curry((a,b,c) => a + b + c);
 const myAdd1 = myAdd(1);
 const myAdd2 = myAdd1(2);
 const myAdd3 = myAdd2(3);//<- real call
-console.log(myAdd3);
+console.log(myAdd3); // print 6
 ```
 ```javascript
 const myAdd = F.curry((a,b,c) => a + b + c);
-myAdd(1,2,3); // <- real call
+const r = myAdd(1,2,3); // <- real call
+console.log(r); // print 6
 ```
 
 
