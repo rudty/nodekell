@@ -39,59 +39,6 @@ exports.cond = async (...cv) => {
     // return undefined
 };
 
-// clj
-// (let [value 0]
-//     (condp = value
-//           1 "1"
-//           2 "2"
-//           3 "3"
-//           "else"))
-//
-//
-// js
-// const value = 0;
-// const r = condp((a,b) => a === b, 
-//      value,
-//      1, "1",
-//      2, "2",
-//      3, "3",
-//      "else");
-//
-// result: "else" 
-
-// (condp some [1 2 3 4]
-//      #{1 9} :>> inc)
-// result: 2
-// 
-// ((condp some [1 2 3 4]
-//   #{1 9} inc) 1)
-// result: 1
-
-
-// await condp
-
-const M = () => {};
-exports.condp = async (fn, v, ...cv) => {
-    for (let i = 0; i < cv.length;) {
-        const e = await cv[i];
-        const c = await cv[i + 1];
-        if (c && c[Symbol.iterator] || c[Symbol.asyncIterator])
-    }
-    // for (let i = 0; i < cv.length; i += 2) {
-    //     const e = await cv[i];
-    //     if (await fn(e, v)) {
-    //         return cv[i + 1];
-    //     }
-    // }
-
-    // if ((cv.length) & 1) {
-    //     return cv[cv.length - 1]        
-    // }
-
-    // throw new Error("no matching clause");
-};
-
-//cond->
 // exports.condv = async (v, ...cv) => {
 //     mustEvenArguments(cv);
     
