@@ -229,7 +229,7 @@ exports.zipWith =  C.curry(async function* (f, a, b) {
 exports.run = (iter, ...f) => foldl((z, fn) => fn(z), iter, f);
 
 /**
- * like `.`
+ * like `.` or `->>`
  *      let r = await F.pipe(
  *              F.map(e => e + 1), // a = [2,3,4,5,6]
  *              F.filter(e => e < 4), // a = [2,3]
@@ -244,3 +244,12 @@ exports.run = (iter, ...f) => foldl((z, fn) => fn(z), iter, f);
  * //3
  */
 exports.pipe = (f, ...fns) => (...args) => foldl((z, fn) => fn(z), f(...args), fns); 
+
+exports.compose = (...fns) => async (...args) => {
+    const len = fns.length;
+    let z = await fns[len - 1](...args);
+    for (let i = len - 2; i >= 0; --i) {
+        z = await fns[i](z);
+    }
+    return z;
+};
