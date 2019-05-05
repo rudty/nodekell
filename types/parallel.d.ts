@@ -39,17 +39,6 @@ export function pfilter<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), ite
 /**
  * https://github.com/rudty/nodekell#pcalls
  *
- * **Note**
- * - if arguments length unknown or over 10 and use union type, please use generic
- * ```ts
- * const a = repeat(5, () => () => 1);
- * const b = repeat(5, () => () => 'a');
- * const c = repeat(5, () => async () => 2);
- * const d = repeat(5, () => async () => 'b');
- * const abcd = await run(concat(a, b), concat(c), concat(d), e => collect(e));
- * const r = pcalls<string | number>(...abcd);
- * ```
- *
  * @param f
  */
 export function pcalls<R>(f: Iter<() => (R | Promise<R>)>): AsyncIterableIterator<R>;
