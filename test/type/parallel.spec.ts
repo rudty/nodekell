@@ -83,9 +83,9 @@ describe('pcalls', () => {
         const fn0 = () => 1;
         const fn1 = () => 2;
         const fn2 = async () => 3;
-        const fn3 = async () => (async () => 4)();
+        const fn3 = async () => (async () => 4);
 
-        const r0 = F.pcalls(fn0, fn1, fn2, fn3); // $ExpectType AsyncIterableIterator<number>
+        const r0 = F.pcalls(fn0, fn1, fn2, fn3); // $ExpectType AsyncIterableIterator<number | (() => Promise<number>)>
     });
 
     it('from Parameter Length 10 or Less and Union Type', async () => {
@@ -105,16 +105,25 @@ describe('pcalls', () => {
         const r1 = F.pcalls(fn0, fn1, fn2, fn3); // $ExpectType AsyncIterableIterator<string | number>
     });
 
-    it('from Parameter Length Unknown or Over 10 and Union Type', async () => {
+    it('from Many Parameters', async () => {
         const a = F.repeat(5, () => () => 1);
         const b = F.repeat(5, () => () => 'a');
         const c = F.repeat(5, () => async () => 2);
         const d = F.repeat(5, () => async () => 'b');
         const abcd = await F.run(F.concat(a, b), F.concat(c), F.concat(d), F.collect);
 
-        const r0 = F.pcalls<number | string>(...abcd); // $ExpectType AsyncIterableIterator<string | number>
-        const r1 = F.pcalls(...abcd); // $ExpectType AsyncIterableIterator<any>
-    });
+        const r0 = F.pcalls(...abcd, ...abcd, ...abcd, ...abcd); // $ExpectType AsyncIterableIterator<string | number>
+	});
+
+	it('use Generic', async () => {
+		const a = F.repeat(5, () => () => 1);
+        const b = F.repeat(5, () => () => 'a');
+        const c = F.repeat(5, () => async () => 2);
+        const d = F.repeat(5, () => async () => 'b');
+        const abcd = await F.run(F.concat(a, b), F.concat(c), F.concat(d), F.collect);
+
+        const r0 = F.pcalls<string | number>(...abcd, ...abcd, ...abcd, ...abcd); // $ExpectType AsyncIterableIterator<string | number>
+	});
 });
 
 describe('pfmap', () => {

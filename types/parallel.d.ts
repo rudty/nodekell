@@ -2,6 +2,7 @@ import {
     Iter,
     EP,
     PFlat,
+	Flat,
 } from './utils';
 
 /**
@@ -54,18 +55,8 @@ export function pfilter<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), ite
 export function pcalls<R>(f: Iter<() => (R | Promise<R>)>): AsyncIterableIterator<R>;
 export function pcalls<T extends () => any>(f: Iter<T>): AsyncIterableIterator<EP<ReturnType<T>>>;
 
-export function pcalls<R0>(f0: (() => R0 | Promise<R0>)): AsyncIterableIterator<R0>;
-export function pcalls<R0, R1>(f0: (() => R0 | Promise<R0>), f1: (() => R1 | Promise<R1>)): AsyncIterableIterator<R0 | R1>;
-export function pcalls<R0, R1, R2>(f0: (() => R0 | Promise<R0>), f1: (() => R1 | Promise<R1>), f2: (() => R2 | Promise<R2>)): AsyncIterableIterator<R0 | R1 | R2>;
-export function pcalls<R0, R1, R2, R3>(f0: (() => R0 | Promise<R0>), f1: (() => R1 | Promise<R1>), f2: (() => R2 | Promise<R2>), f3: (() => R3 | Promise<R3>)): AsyncIterableIterator<R0 | R1 | R2 | R3>;
-export function pcalls<R0, R1, R2, R3, R4>(f0: (() => R0 | Promise<R0>), f1: (() => R1 | Promise<R1>), f2: (() => R2 | Promise<R2>), f3: (() => R3 | Promise<R3>), f4: (() => R4 | Promise<R4>)): AsyncIterableIterator<R0 | R1 | R2 | R3 | R4>;
-export function pcalls<R0, R1, R2, R3, R4, R5>(f0: (() => R0 | Promise<R0>), f1: (() => R1 | Promise<R1>), f2: (() => R2 | Promise<R2>), f3: (() => R3 | Promise<R3>), f4: (() => R4 | Promise<R4>), f5: (() => R5 | Promise<R5>)): AsyncIterableIterator<R0 | R1 | R2 | R3 | R4 | R5>;
-export function pcalls<R0, R1, R2, R3, R4, R5, R6>(f0: (() => R0 | Promise<R0>), f1: (() => R1 | Promise<R1>), f2: (() => R2 | Promise<R2>), f3: (() => R3 | Promise<R3>), f4: (() => R4 | Promise<R4>), f5: (() => R5 | Promise<R5>), f6: (() => R6 | Promise<R6>)): AsyncIterableIterator<R0 | R1 | R2 | R3 | R4 | R5 | R6>;
-export function pcalls<R0, R1, R2, R3, R4, R5, R6, R7>(f0: (() => R0 | Promise<R0>), f1: (() => R1 | Promise<R1>), f2: (() => R2 | Promise<R2>), f3: (() => R3 | Promise<R3>), f4: (() => R4 | Promise<R4>), f5: (() => R5 | Promise<R5>), f6: (() => R6 | Promise<R6>), f7: (() => R7 | Promise<R7>)): AsyncIterableIterator<R0 | R1 | R2 | R3 | R4 | R5 | R6 | R7>;
-export function pcalls<R0, R1, R2, R3, R4, R5, R6, R7, R8>(f0: (() => R0 | Promise<R0>), f1: (() => R1 | Promise<R1>), f2: (() => R2 | Promise<R2>), f3: (() => R3 | Promise<R3>), f4: (() => R4 | Promise<R4>), f5: (() => R5 | Promise<R5>), f6: (() => R6 | Promise<R6>), f7: (() => R7 | Promise<R7>), f8: (() => R8 | Promise<R8>)): AsyncIterableIterator<R0 | R1 | R2 | R3 | R4 | R5 | R6 | R7 | R8>;
-export function pcalls<R0, R1, R2, R3, R4, R5, R6, R7, R8, R9>(f0: (() => R0 | Promise<R0>), f1: (() => R1 | Promise<R1>), f2: (() => R2 | Promise<R2>), f3: (() => R3 | Promise<R3>), f4: (() => R4 | Promise<R4>), f5: (() => R5 | Promise<R5>), f6: (() => R6 | Promise<R6>), f7: (() => R7 | Promise<R7>), f8: (() => R8 | Promise<R8>), f9: (() => R9 | Promise<R9>)): AsyncIterableIterator<R0 | R1 | R2 | R3 | R4 | R5 | R6 | R7 | R8 | R9>;
+export function pcalls<F extends (() => any)[]>(...f: F): AsyncIterableIterator<EP<ReturnType<Flat<F>>>>;
 export function pcalls<R>(...f: (() => (R | Promise<R>))[]): AsyncIterableIterator<R>;
-export function pcalls(...f: (() => any)[]): AsyncIterableIterator<any>;
 
 /**
  * https://github.com/rudty/nodekell#pfmap
