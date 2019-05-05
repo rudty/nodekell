@@ -61,14 +61,6 @@ export function pcalls<R>(...f: (() => (R | Promise<R>))[]): AsyncIterableIterat
 /**
  * https://github.com/rudty/nodekell#pfmap
  *
- * **Note**
- * - if use run or run like function and type error occurred, please use lambda expression or function
- * ```ts
- * const a = [[1], Promise.resolve(['a']), [4], [5]];
- * const r0 = await F.run(a, F.pfmap(e => e)); // type error
- * const r1 = await F.run(a, e0 => F.pfmap(e1 => e1, e0)); // AsyncIterableIterator<string | number>
- * ```
- *
  * @param f
  * @param iter
  */
@@ -80,14 +72,6 @@ export function pfmap<T, R = EP<T>>(f: (elem: EP<T>) => (R | Promise<R>), iter: 
 
 /**
  * https://github.com/rudty/nodekell#pflatmap
- *
- * **Note**
- * - if use run or run like function and type error occurred, please use lambda expression or function
- * ```ts
- * const a = [[1], Promise.resolve(['a']), [4], [5]];
- * const r0 = await F.run(a, F.pflatMap(e => e)); // type error
- * const r1 = await F.run(a, e0 => F.pflatMap(e1 => e1, e0)); // AsyncIterableIterator<string | number>
- * ```
  *
  * @param f
  * @param iter

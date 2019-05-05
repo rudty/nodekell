@@ -74,14 +74,6 @@ export function map<T, R>(f: (elem: EP<T>) => (R | Promise<R>), iter: Iter<T>): 
 /**
  * https://github.com/rudty/nodekell#fmap
  *
- * **Note**
- * - if use run or run like function and type error occurred, please use lambda expression or function
- * ```ts
- * const a = [[1], Promise.resolve(['a']), [4], [5]];
- * const r0 = await F.run(a, F.fmap(e => e)); // type error
- * const r1 = await F.run(a, e0 => F.fmap(e1 => e1, e0)); // AsyncIterableIterator<string | number>
- * ```
- *
  * @param f
  * @param iter
  */
@@ -93,14 +85,6 @@ export function fmap<T, R = EP<T>>(f: (elem: EP<T>) => (R | Promise<R>), iter: I
 
 /**
  * https://github.com/rudty/nodekell#flatmap
- *
- * **Note**
- * - if use run or run like function and type error occurred, please use lambda expression or function
- * ```ts
- * const a = [[1], Promise.resolve(['a']), [4], [5]];
- * const r0 = await F.run(a, F.flatMap(e => e)); // type error
- * const r1 = await F.run(a, e0 => F.flatMap(e1 => e1, e0)); // AsyncIterableIterator<string | number>
- * ```
  *
  * as fmap
  *
