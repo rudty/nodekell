@@ -24,4 +24,12 @@ describe('test module', () => {
         assert.deepStrictEqual([1,4,7,10,13], v);
     });
 
+    it('3', async () => {
+        const v = await F.reduce((acc, e) => acc + e,
+                            F.map(e => e + 1, 
+                                F.filter(e => e % 2 == 0,
+                                    F.range(10)))); 
+        assert.strictEqual(25, v);
+    });
+
 });

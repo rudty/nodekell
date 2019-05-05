@@ -132,7 +132,14 @@ console.log(v);//[3]
 
 
 ### run
-combination functions like haskell `$` or `.`
+combination left to right functions
+
+first arguments received second functions argument
+
+from second received combine functions
+
+return value is promise
+
 ```javascript
 const v = await F.run(
             F.range(10),//[0~9]
@@ -141,10 +148,18 @@ const v = await F.run(
             F.reduce((acc, e) => acc + e)) // 1+3+5+7+9
 console.log(v);//25
 ```
+this expands to
+```javascript
+const v = await F.reduce((acc, e) => acc + e, // 1+3+5+7+9
+                    F.map(e => e + 1, //[1,3,5,7,9]
+                        F.filter(e => e % 2 == 0, //[0,2,4,6,8]
+                            F.range(10)))); //[0~9]
+```
+
 
 
 ### pipe
-combination functions like haskell `.`
+combination left to right functions
 
 only first function can use multiple arguments.
 
