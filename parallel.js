@@ -81,10 +81,9 @@ exports.pfilter = C.curry(async function* (fn, iter) {
         v.push(e);
     }
 
-    while (v.length > 0) {
-        const c = v.shift();
-        if (await f.shift()) {
-            yield c;
+    for(let i = 0; i < v.length; ++i) {
+        if (await f[i]) {
+            yield v[i];
         }
     }
 });
