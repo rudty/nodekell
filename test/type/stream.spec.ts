@@ -457,7 +457,23 @@ describe('count', () => {
         const a = 'hello world';
 
         const r0 = await F.count(a); // $ExpectType number
-    });
+	});
+
+	it('from Map / Set', async () => {
+		const a = new Map([['a', 0], ['b', 1]]);
+		const b = new Set([1, 2, 3, 4, 5]);
+
+		const r0 = await F.count(a); // $ExpectType number
+		const r1 = await F.count(b); // $ExpectType number
+	});
+
+	it('from Object', async () => {
+		const a = { id: 1, age: 17 };
+		const b = { id: 2, age: 23, size: 2 };
+
+		const r0 = await F.count(a); // $ExpectType number
+		const r1 = await F.count(b); // $ExpectType number
+	});
 });
 
 describe('sum', () => {

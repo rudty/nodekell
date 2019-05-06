@@ -173,6 +173,7 @@ export function minBy<T>(f: (elem: T) => any, iter: Iter<T | Promise<T>>): Promi
  * @param iter
  */
 export function count(iter: Iter<any>): Promise<number>;
+export function count(obj: object): Promise<number>;
 
 /*
   about types of sum, max, min
