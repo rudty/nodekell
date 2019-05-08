@@ -182,7 +182,7 @@ exports.errorThen = C.curry(async function*(supply, iter){
     }
 });
 
-exports.then = C.curry((f, iter) => f(iter));
+exports.then = C.curry((f, arg) => f(arg));
 
 exports.buffer = C.curry(async function*(supply, iter) {
     supply = await supply;
