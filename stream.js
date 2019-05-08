@@ -184,6 +184,18 @@ exports.errorThen = C.curry(async function*(supply, iter){
 
 exports.then = C.curry((f, arg) => f(arg));
 
+exports.tap1 = C.curry((f, arg) => {
+    const r = f(arg);
+    if (r instanceof Promise) {
+        return r.then(() => arg);
+    }
+    return arg;
+});
+exports.tap2 = C.curry(async (f, arg) => {
+    await f(arg);
+    return arg;
+});
+
 exports.buffer = C.curry(async function*(supply, iter) {
     supply = await supply;
 
