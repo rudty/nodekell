@@ -1,5 +1,4 @@
 'use strict';
-const C = require("./core.js");
 
 /**
  * if (F.otherwise) {
