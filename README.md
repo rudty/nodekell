@@ -664,6 +664,20 @@ console.log(v);
 ```
 
 
+### tap
+call first argument with second argument
+
+then returns the second argument
+
+return promise 
+```javascript
+const v = await F.run([1,2,3,4,5],
+    F.tap(console.log), //print and return [1,2,3,4,5]
+    F.map(e => e + 1),
+    F.collect);
+```
+
+
 ### concat
 merge 2 ranges 
 ```javascript
