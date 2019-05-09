@@ -15,7 +15,7 @@ describe('test tap', () => {
     it('async fn', async () => {
         const v = await F.run([1,2,3,4,5],
             F.map(e => e + 1),
-            F.then(async iter => {
+            F.tap(async iter => {
                 return iter;
             }),
             F.collect);
@@ -44,5 +44,12 @@ describe('test tap', () => {
             }),
             F.collect);
         assert.deepStrictEqual(v,[2,3,4,5,6]);
+    });
+
+    it('void', async () => {
+        const v = await F.run([1,2,3,4,5],
+            F.tap(() => {}),
+            F.collect);
+        assert.deepStrictEqual(v,[1,2,3,4,5]);
     });
 });
