@@ -79,6 +79,7 @@ console.log(v);//[3]
 *    [leftOuterJoin](#leftouterjoin)
 *    [rightOuterJoin](#rightouterjoin)
 *    [then](#then)
+*    [tap](#tap)
 *    [concat](#concat)
 *    [union](#union)
 *    [scanl](#scanl)
@@ -139,7 +140,7 @@ first arguments received second functions argument
 
 from second received combine functions
 
-return value is promise
+returns promise
 
 ```javascript
 const v = await F.run(
@@ -147,7 +148,7 @@ const v = await F.run(
             F.filter(e => e % 2 == 0), //[0,2,4,6,8] 
             F.map(e => e + 1), //[1,3,5,7,9]
             F.reduce((acc, e) => acc + e)) // 1+3+5+7+9
-console.log(v);//25
+console.log(v + 1); // 25 + 1
 ```
 this expands to
 ```javascript
@@ -633,6 +634,7 @@ console.log(r);
 
 ### then
 like promise then
+see also [tap](#tap)
 ```javascript
 const v = await F.run([1,2,3,4,5],
     F.then(async function*(iter) {
@@ -670,6 +672,7 @@ call first argument with second argument
 then returns the second argument
 
 return promise wrap
+see also [then](#then)
 ```javascript
 const v = await F.run([1,2,3,4,5],
     F.tap(console.log), //print and return Promise([1,2,3,4,5])
