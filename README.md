@@ -119,7 +119,7 @@ console.log(v);//[3]
 *    [average](#average)
 *    [groupBy](#groupby)
 
-## util
+## util / else
 *    [sleep](#sleep)
 *    [head](#head)
 *    [tail](#tail)
@@ -128,6 +128,8 @@ console.log(v);//[3]
 *    [withTimeout](#withtimeout)
 *    [notNil](#notnil) [**deprecated**]
 *    [isNil](#isNil)
+*    [cond](#cond)
+*    [otherwise](#otherwise)
 ---
 
 
@@ -1445,6 +1447,42 @@ console.log(F.isNil(0)); // false
 console.log(F.isNil(false)); // false
 console.log(F.isNil([])); // false
 console.log(F.isNil({})); // false
+```
+
+
+### cond
+Requires an even number of arguments
+
+if the first argument is true, it returns the second argument
+```javascript
+const r = await F.cond( 
+    false, "ff",
+    true, "tt",
+    F.otherwise, "oo"
+);
+console.log(r); // "tt"
+```
+```javascript
+const r = await F.cond( 
+    Promise.resolve(false), "ff",
+    Promise.resolve(true), "tt",
+    F.otherwise, "oo"
+);
+console.log(r); // "tt"
+```
+
+
+### otherwise
+```javascript
+if (F.otherwise) {
+    console.log("WORK!");
+}
+if (F.otherwise()) {
+    console.log("WORK!");
+}
+//print 
+//WORK!
+//WORK!
 ```
 
 
