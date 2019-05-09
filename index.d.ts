@@ -49,3 +49,9 @@ export * from './types/generator';
 //
 
 export * from './types/parallel';
+
+//
+// lisp.js
+//
+
+export * from './types/lisp';

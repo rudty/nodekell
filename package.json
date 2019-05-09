@@ -12,7 +12,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha -r ts-node/register test/**/*.js test/**/*.ts",
+    "test": "mocha -r ts-node/register test/**/*.js test/**/*.spec.ts",
     "dtslint": "dtslint"
   },
   "keywords": [

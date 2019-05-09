@@ -6,4 +6,5 @@ module.exports = Object.assign(
     require("./tsql.js"),
     require("./timer"),
     require("./generator"),
-    require("./parallel.js"));
+    require("./parallel.js"),
+    require("./lisp.js"));
