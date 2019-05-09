@@ -264,15 +264,15 @@ export function then<T, R>(f: (t: T) => R): (t: T) => R;
 
 export function then<T, R>(f: (t: T) => R, t: T): R;
 
-
 /**
  * https://github.com/rudty/nodekell#tap
  *
  * @param f
  * @param t
  */
-export function tap<T, R>(f: (t: T | Promise<T>) => R): (t: T | Promise<T>) => Promise<T>;
-export function tap<T, R>(f: (t: T | Promise<T>) => R, t: T | Promise<T>): Promise<T>;
+export function tap<T>(f: (t: T | Promise<T>) => any): (t: T | Promise<T>) => Promise<T>;
+
+export function tap<T>(f: (t: T | Promise<T>) => any, t: T | Promise<T>): Promise<T>;
 
 /**
  * https://github.com/rudty/nodekell#buffer
