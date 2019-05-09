@@ -669,10 +669,10 @@ call first argument with second argument
 
 then returns the second argument
 
-return promise 
+return promise wrap
 ```javascript
 const v = await F.run([1,2,3,4,5],
-    F.tap(console.log), //print and return [1,2,3,4,5]
+    F.tap(console.log), //print and return Promise([1,2,3,4,5])
     F.map(e => e + 1),
     F.collect);
 ```
