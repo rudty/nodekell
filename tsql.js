@@ -43,10 +43,10 @@ const sortBy = C.curry(async function* (f, order, iter) {
         switch (order) {
             case 'asc':
                 return ma > mb ? 1 : ma < mb ? -1 : 0;
-            case 'dsc':
+            case 'desc':
                 return ma < mb ? 1 : ma > mb ? -1 : 0;
             default:
-                throw new Error('please set order parameter to asc or dsc');
+                throw new Error('please set order parameter to ASC or DESC');
         }
     });
 });

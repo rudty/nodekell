@@ -139,8 +139,8 @@ describe('sortBy', () => {
 
         const r0 = F.sortBy<number>(e => e)('ASC')(a); // $ExpectType AsyncIterableIterator<number>
         const r1 = F.sortBy<number>(e => e)('asc', a); // $ExpectType AsyncIterableIterator<number>
-        const r2 = F.sortBy<number>(e => e, 'DSC')(a); // $ExpectType AsyncIterableIterator<number>
-        const r3 = F.sortBy(e => e, 'dsc', a); // $ExpectType AsyncIterableIterator<number>
+        const r2 = F.sortBy<number>(e => e, 'DESC')(a); // $ExpectType AsyncIterableIterator<number>
+        const r3 = F.sortBy(e => e, 'desc', a); // $ExpectType AsyncIterableIterator<number>
     });
 
     it('from Promise Value', async () => {
@@ -148,8 +148,8 @@ describe('sortBy', () => {
 
         const r0 = F.sortBy<number>(async e => e)('ASC')(a); // $ExpectType AsyncIterableIterator<number>
         const r1 = F.sortBy<number>(async e => e)('asc', a); // $ExpectType AsyncIterableIterator<number>
-        const r2 = F.sortBy<number>(async e => e, 'DSC')(a); // $ExpectType AsyncIterableIterator<number>
-        const r3 = F.sortBy(async e => e, 'dsc', a); // $ExpectType AsyncIterableIterator<number>
+        const r2 = F.sortBy<number>(async e => e, 'DESC')(a); // $ExpectType AsyncIterableIterator<number>
+        const r3 = F.sortBy(async e => e, 'desc', a); // $ExpectType AsyncIterableIterator<number>
     });
 
     it('from Object Array', async () => {
@@ -157,8 +157,8 @@ describe('sortBy', () => {
 
         const r0 = F.sortBy<F.Flat<typeof a>>(e => e.releaseDate)('ASC')(a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
         const r1 = F.sortBy<F.Flat<typeof a>>(e => e.releaseDate)('asc', a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
-        const r2 = F.sortBy<F.Flat<typeof a>>(e => e.releaseDate, 'DSC')(a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
-        const r3 = F.sortBy(e => e.releaseDate, 'dsc', a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
+        const r2 = F.sortBy<F.Flat<typeof a>>(e => e.releaseDate, 'DESC')(a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
+        const r3 = F.sortBy(e => e.releaseDate, 'desc', a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
     });
 
     it('from Promise Object Array', async () => {
@@ -166,8 +166,8 @@ describe('sortBy', () => {
 
         const r0 = F.sortBy<F.PFlat<typeof a>>(e => e.releaseDate)('ASC')(a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; } | { releaseDate: number; language: string; }>
         const r1 = F.sortBy<F.PFlat<typeof a>>(e => e.releaseDate)('asc', a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; } | { releaseDate: number; language: string; }>
-        const r2 = F.sortBy<F.PFlat<typeof a>>(e => e.releaseDate, 'DSC')(a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; } | { releaseDate: number; language: string; }>
-        const r3 = F.sortBy(e => e.releaseDate, 'dsc', a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
+        const r2 = F.sortBy<F.PFlat<typeof a>>(e => e.releaseDate, 'DESC')(a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; } | { releaseDate: number; language: string; }>
+        const r3 = F.sortBy(e => e.releaseDate, 'desc', a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
     });
 
     it('from String', async () => {
@@ -175,8 +175,8 @@ describe('sortBy', () => {
 
         const r0 = F.sortBy<string>(async e => e)('ASC')(a); // $ExpectType AsyncIterableIterator<string>
         const r1 = F.sortBy<string>(async e => e)('asc', a); // $ExpectType AsyncIterableIterator<string>
-        const r2 = F.sortBy<string>(async e => e, 'DSC')(a); // $ExpectType AsyncIterableIterator<string>
-        const r3 = F.sortBy(async e => e, 'dsc', a); // $ExpectType AsyncIterableIterator<string>
+        const r2 = F.sortBy<string>(async e => e, 'DESC')(a); // $ExpectType AsyncIterableIterator<string>
+        const r3 = F.sortBy(async e => e, 'desc', a); // $ExpectType AsyncIterableIterator<string>
     });
 
     it('with run', async () => {
@@ -192,8 +192,8 @@ describe('orderBy', () => {
 
         const r0 = F.orderBy<number>(e => e)('ASC')(a); // $ExpectType AsyncIterableIterator<number>
         const r1 = F.orderBy<number>(e => e)('asc', a); // $ExpectType AsyncIterableIterator<number>
-        const r2 = F.orderBy<number>(e => e, 'DSC')(a); // $ExpectType AsyncIterableIterator<number>
-        const r3 = F.orderBy(e => e, 'dsc', a); // $ExpectType AsyncIterableIterator<number>
+        const r2 = F.orderBy<number>(e => e, 'DESC')(a); // $ExpectType AsyncIterableIterator<number>
+        const r3 = F.orderBy(e => e, 'desc', a); // $ExpectType AsyncIterableIterator<number>
     });
 
     it('from Promise Value', async () => {
@@ -201,8 +201,8 @@ describe('orderBy', () => {
 
         const r0 = F.orderBy<number>(async e => e)('ASC')(a); // $ExpectType AsyncIterableIterator<number>
         const r1 = F.orderBy<number>(async e => e)('asc', a); // $ExpectType AsyncIterableIterator<number>
-        const r2 = F.orderBy<number>(async e => e, 'DSC')(a); // $ExpectType AsyncIterableIterator<number>
-        const r3 = F.orderBy(async e => e, 'dsc', a); // $ExpectType AsyncIterableIterator<number>
+        const r2 = F.orderBy<number>(async e => e, 'DESC')(a); // $ExpectType AsyncIterableIterator<number>
+        const r3 = F.orderBy(async e => e, 'desc', a); // $ExpectType AsyncIterableIterator<number>
     });
 
     it('from Object Array', async () => {
@@ -210,8 +210,8 @@ describe('orderBy', () => {
 
         const r0 = F.orderBy<F.Flat<typeof a>>(e => e.releaseDate)('ASC')(a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
         const r1 = F.orderBy<F.Flat<typeof a>>(e => e.releaseDate)('asc', a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
-        const r2 = F.orderBy<F.Flat<typeof a>>(e => e.releaseDate, 'DSC')(a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
-        const r3 = F.orderBy(e => e.releaseDate, 'dsc', a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
+        const r2 = F.orderBy<F.Flat<typeof a>>(e => e.releaseDate, 'DESC')(a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
+        const r3 = F.orderBy(e => e.releaseDate, 'desc', a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
     });
 
     it('from Promise Object Array', async () => {
@@ -219,8 +219,8 @@ describe('orderBy', () => {
 
         const r0 = F.orderBy<F.PFlat<typeof a>>(e => e.releaseDate)('ASC')(a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; } | { releaseDate: number; language: string; }>
         const r1 = F.orderBy<F.PFlat<typeof a>>(e => e.releaseDate)('asc', a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; } | { releaseDate: number; language: string; }>
-        const r2 = F.orderBy<F.PFlat<typeof a>>(e => e.releaseDate, 'DSC')(a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; } | { releaseDate: number; language: string; }>
-        const r3 = F.orderBy(e => e.releaseDate, 'dsc', a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
+        const r2 = F.orderBy<F.PFlat<typeof a>>(e => e.releaseDate, 'DESC')(a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; } | { releaseDate: number; language: string; }>
+        const r3 = F.orderBy(e => e.releaseDate, 'desc', a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
     });
 
     it('from String', async () => {
@@ -228,8 +228,8 @@ describe('orderBy', () => {
 
         const r0 = F.orderBy<string>(async e => e)('ASC')(a); // $ExpectType AsyncIterableIterator<string>
         const r1 = F.orderBy<string>(async e => e)('asc', a); // $ExpectType AsyncIterableIterator<string>
-        const r2 = F.orderBy<string>(async e => e, 'DSC')(a); // $ExpectType AsyncIterableIterator<string>
-        const r3 = F.orderBy(async e => e, 'dsc', a); // $ExpectType AsyncIterableIterator<string>
+        const r2 = F.orderBy<string>(async e => e, 'DESC')(a); // $ExpectType AsyncIterableIterator<string>
+        const r3 = F.orderBy(async e => e, 'desc', a); // $ExpectType AsyncIterableIterator<string>
     });
 
     it('with run', async () => {

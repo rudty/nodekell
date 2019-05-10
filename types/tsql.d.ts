@@ -41,7 +41,7 @@ export function union<T, Y>(iter1: Iter<T>): (iter2: Iter<Y>) => AsyncIterableIt
 export function union<T, Y>(iter1: Iter<T | Promise<T>>, iter2: Iter<Y | Promise<Y>>): AsyncIterableIterator<T | Y>;
 export function union<T, Y>(iter1: Iter<T>, iter2: Iter<Y>): AsyncIterableIterator<EP<T> | EP<Y>>;
 
-export type Order = 'ASC' | 'DSC' | 'asc' | 'dsc';
+export type Order = 'ASC' | 'DESC' | 'asc' | 'desc';
 
 /**
  * https://github.com/rudty/nodekell#sortBy
