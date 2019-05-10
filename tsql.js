@@ -24,33 +24,31 @@ exports.concat = concat;
 exports.union = concat;
 
 const sortBy = C.curry(async function* (f, order, iter) {
-    const ASC = order.trim().toLowerCase() === 'asc';
-    
-    const i = C.seq(iter);
+    order = order.trim().toLowerCase();
 
-    const { done, value: pivot } = await i.next();
+    const t = [];
+    const m = new Map();
 
-    const a = [];
-
-    for await (const e of i) {
-        a.push(e);
+    for await (const e of iter) {
+        t.push(e);
+        // if (!m.has(e)) {
+        m.set(e, await f(e));
+        // }
     }
 
-    if (a.length === 0) {
-        if (!done) {
-            yield pivot;
+    yield* t.sort((a, b) => {
+        const ma = m.get(a);
+        const mb = m.get(b);
+
+        switch (order) {
+            case 'asc':
+                return ma > mb ? 1 : ma < mb ? -1 : 0;
+            case 'dsc':
+                return ma < mb ? 1 : ma > mb ? -1 : 0;
+            default:
+                throw new Error('please set order parameter to asc or dsc');
         }
-    }
-    else {
-        const p = await f(pivot);
-
-        const smallAndEq = P.filter(async e => await f(e) <= p, a);
-        const large = P.filter(async e => await f(e) > p, a);
-
-        yield* sortBy(f, order, ASC ? smallAndEq : large);
-        yield pivot;
-        yield* sortBy(f, order, ASC ? large : smallAndEq);
-    }
+    });
 });
 
 exports.orderBy = sortBy;
