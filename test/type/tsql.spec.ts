@@ -161,6 +161,15 @@ describe('sortBy', () => {
         const r3 = F.sortBy(e => e.releaseDate, 'dsc', a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
     });
 
+    it('from Promise Object Array', async () => {
+        const a = [Promise.resolve({ releaseDate: 1990, language: 'haskell' }), { releaseDate: 2005, language: 'F#'}, { releaseDate: 1958, language: 'lisp'}];
+
+        const r0 = F.sortBy<F.PFlat<typeof a>>(e => e.releaseDate)('ASC')(a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; } | { releaseDate: number; language: string; }>
+        const r1 = F.sortBy<F.PFlat<typeof a>>(e => e.releaseDate)('asc', a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; } | { releaseDate: number; language: string; }>
+        const r2 = F.sortBy<F.PFlat<typeof a>>(e => e.releaseDate, 'DSC')(a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; } | { releaseDate: number; language: string; }>
+        const r3 = F.sortBy(e => e.releaseDate, 'dsc', a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
+    });
+
     it('from String', async () => {
         const a = 'The quick brown fox jumps over the lazy dog';
 
@@ -202,6 +211,15 @@ describe('orderBy', () => {
         const r0 = F.orderBy<F.Flat<typeof a>>(e => e.releaseDate)('ASC')(a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
         const r1 = F.orderBy<F.Flat<typeof a>>(e => e.releaseDate)('asc', a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
         const r2 = F.orderBy<F.Flat<typeof a>>(e => e.releaseDate, 'DSC')(a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
+        const r3 = F.orderBy(e => e.releaseDate, 'dsc', a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
+    });
+
+    it('from Promise Object Array', async () => {
+        const a = [Promise.resolve({ releaseDate: 1990, language: 'haskell' }), { releaseDate: 2005, language: 'F#'}, { releaseDate: 1958, language: 'lisp'}];
+
+        const r0 = F.orderBy<F.PFlat<typeof a>>(e => e.releaseDate)('ASC')(a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; } | { releaseDate: number; language: string; }>
+        const r1 = F.orderBy<F.PFlat<typeof a>>(e => e.releaseDate)('asc', a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; } | { releaseDate: number; language: string; }>
+        const r2 = F.orderBy<F.PFlat<typeof a>>(e => e.releaseDate, 'DSC')(a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; } | { releaseDate: number; language: string; }>
         const r3 = F.orderBy(e => e.releaseDate, 'dsc', a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
     });
 
