@@ -171,25 +171,25 @@ const reverse = async function* (iter) {
 };
 exports.reverse = reverse;
 
-exports.foldr =  C.curry(async (f, z, iter) => {
+const foldr_internal = async (f, z, iter) => {
     z = await z;
-    for await (const e of reverse(iter)) {
+    for await (const e of iter) {
         z = await f(e, z);
     }
     return z;
+};
+
+exports.foldr =  C.curry((f, z, iter) => {
+    return foldr_internal(f, z, reverse(iter));
 });
 
 exports.foldr1 =  C.curry(async (f, iter) => {
-    const g =  reverse(C.seq(iter));
+    const g = reverse(iter);
     const h = await g.next();
     if (h.done) {
         throw new Error("empty iter");
     }
-    let z = h.value;
-    for await (const e of g) {
-        z = await f(e, z);
-    }
-    return z;
+    return foldr_internal(f, h.value, g);
 });
 
 exports.zip =  C.curry(async function* (a, b) {
