@@ -7,7 +7,7 @@ describe('test sortBy', () => {
         const a = [4, 3, 2, 5, 2, 7, 3, 4, 6, 8, 0, 1, 6, 4, 3, 7, 21, 12, 13, 19, 32, 39, 31, 17, 19, 18];
 
         const r0 = F.sortBy(e => e, 'asc', a);
-        const r1 = F.sortBy(e => e, 'dsc', a);
+        const r1 = F.sortBy(e => e, 'dsc')(a);
 
         assert.deepStrictEqual([0, 1, 2, 2, 3, 3, 3, 4, 4, 4, 5, 6, 6, 7, 7, 8, 12, 13, 17, 18, 19, 19, 21, 31, 32, 39],
             await F.collect(r0)
@@ -21,7 +21,7 @@ describe('test sortBy', () => {
         const a = [4, 3, 2, 5, 2, 7, 3, Promise.resolve(4), 6, 8, 0, 1, 6, 4, 3, 7, 21, 12, Promise.resolve(13), 19, 32, 39, 31, 17, 19, 18];
 
         const r0 = F.sortBy(async e => e, 'asc', a);
-        const r1 = F.sortBy(async e => e, 'dsc', a);
+        const r1 = F.sortBy(async e => e)('dsc', a);
 
         assert.deepStrictEqual([0, 1, 2, 2, 3, 3, 3, 4, 4, 4, 5, 6, 6, 7, 7, 8, 12, 13, 17, 18, 19, 19, 21, 31, 32, 39],
             await F.collect(r0)
@@ -35,7 +35,7 @@ describe('test sortBy', () => {
         const a = [{ releaseDate: 1990, language: 'haskell' }, { releaseDate: 2005, language: 'F#'}, { releaseDate: 1958, language: 'lisp'}];
 
         const r0 = F.sortBy(e => e.releaseDate, 'asc', a);
-        const r1 = F.sortBy(e => e.releaseDate, 'dsc', a);
+        const r1 = F.sortBy(e => e.releaseDate)('dsc')(a);
 
         assert.deepStrictEqual(
             [{ releaseDate: 1958, language: 'lisp' }, { releaseDate: 1990, language: 'haskell' }, { releaseDate: 2005, language: 'F#' }],
@@ -78,12 +78,4 @@ describe('test sortBy', () => {
             await F.collect(r1),
         );
     });
-
-    /* it('with run', async () => {
-        const a = [4, 3, 2, 5, 2, 7, 3, 4, 6, 8, 0, 1, 6, 4, 3, 7, 21, 12, 13, 19, 32, 39, 31, 17, 19, 18];
-
-        const r = await F.run(a, F.sortBy(async e => e));
-
-        assert.deepStrictEqual([0, 1, 2, 2, 3, 3, 3, 4, 4, 4, 5, 6, 6, 7, 7, 8, 12, 13, 17, 18, 19, 19, 21, 31, 32, 39], await F.collect(r));
-    }); */
 });
