@@ -31,9 +31,9 @@ const sortBy = C.curry(async function* (f, order, iter) {
 
     for await (const e of iter) {
         t.push(e);
-        // if (!m.has(e)) {
-        m.set(e, await f(e));
-        // }
+        if (!m.has(e)) {
+            m.set(e, await f(e));
+        }
     }
 
     yield* t.sort((a, b) => {
