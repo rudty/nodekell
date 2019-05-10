@@ -63,6 +63,22 @@ describe('test sortBy', () => {
         );
     });
 
+    it('deep object array', async () => {
+        const a = [{ a: { b: { c: { d: 1 } } } }, { a: { b: { c: { d: 4 } } } }, { a: { b: { c: { d: 2 } } } }, { a: { b: { c: { d: 3 } } } }];
+
+        const r0 = F.sortBy(e => e.a.b.c.d, 'asc', a);
+        const r1 = F.sortBy(e => e.a.b.c.d, 'dsc', a);
+
+        assert.deepStrictEqual(
+            [{ a: { b: { c: { d: 1 } } } }, { a: { b: { c: { d: 2 } } } }, { a: { b: { c: { d: 3 } } } }, { a: { b: { c: { d: 4 } } } }],
+            await F.collect(r0),
+        );
+        assert.deepStrictEqual(
+            [{ a: { b: { c: { d: 4 } } } }, { a: { b: { c: { d: 3 } } } }, { a: { b: { c: { d: 2 } } } }, { a: { b: { c: { d: 1 } } } }],
+            await F.collect(r1),
+        );
+    });
+
     it('string', async () => {
         const a = 'The quick brown fox jumps over the lazy dog';
 
