@@ -40,15 +40,15 @@ export type Drop<N extends number, T extends any[], I extends any[] = []> = {
         1 : 0
 ];
 
-export type Filter<E, T extends any[]> = {
-    0: Filter<E, Tail<T>>;
+export type Find<E, T extends any[]> = {
+    0: Find<E, Tail<T>>;
     1: Head<T>;
 }[
     Head<T> extends E ?
         1 : Length<T> extends 0 ? never : 0
 ];
 
-// type ft = Filter<true, [1, 2, 3, 4, 5, true]>;
+// type ft = Find<true, [1, 2, 3, 4, 5, true]>;
 
 export type Iter<T> = Iterable<T> | AsyncIterable<T>; // | IterableIterator<T> | AsyncIterableIterator<T> | T[];
 
