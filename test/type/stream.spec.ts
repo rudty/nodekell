@@ -704,6 +704,42 @@ describe('then', () => {
     });
 });
 
+describe('tap', () => {
+    it('from Normal Value', async () => {
+        const a = 1;
+
+        const r0 = await F.tap<number>(F.fnothing)(a); // $ExpectType number
+        const r1 = await F.tap(F.fnothing, a); // $ExpectType number
+    });
+
+    it('from Promise Value', async () => {
+        const a = Promise.resolve('a');
+
+        const r0 = await F.tap<string>(F.fnothing)(a); // $ExpectType string
+        const r1 = await F.tap(F.fnothing, a); // $ExpectType string
+    });
+
+    it('from Normal Array', async () => {
+        const a = [1, 2, 3, 4];
+
+        const r0 = await F.tap<number[]>(F.fnothing)(a); // $ExpectType number[]
+        const r1 = await F.tap(F.fnothing, a); // $ExpectType number[]
+    });
+
+    it('from Promise / Normal Union Array', async () => {
+        const a = [Promise.resolve(1), 2, Promise.resolve('a'), 'b'];
+
+        const r0 = await F.tap<typeof a>(F.fnothing)(a); // $ExpectType (string | number | Promise<number> | Promise<string>)[]
+        const r1 = await F.tap(F.fnothing, a); // $ExpectType (string | number | Promise<number> | Promise<string>)[]
+    });
+
+    it('with run', async () => {
+        const a = F.range(Infinity);
+
+        const r = await F.run(a, F.map(F.inc), F.take(20), F.tap(F.fnothing)); // $ExpectType AsyncIterableIterator<number>
+    });
+});
+
 describe('buffer', () => {
     it('from Normal Value', async () => {
         const a = [1, 2, 3, 4, 5];
