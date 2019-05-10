@@ -44,7 +44,7 @@ export function union<T, Y>(iter1: Iter<T>, iter2: Iter<Y>): AsyncIterableIterat
 export type Order = 'ASC' | 'DESC' | 'asc' | 'desc';
 
 /**
- * https://github.com/rudty/nodekell#sortBy
+ * https://github.com/rudty/nodekell#sortby
  *
  * @param f
  * @param order
@@ -55,7 +55,7 @@ export function sortBy<T>(f: (e: T) => any, order: Order): (iter: Iter<T | Promi
 export function sortBy<T>(f: (e: T) => any): CurriedFunction2<Order, Iter<T | Promise<T>>, AsyncIterableIterator<T>>;
 
 /**
- * https://github.com/rudty/nodekell#orderBy
+ * https://github.com/rudty/nodekell#orderby
  *
  *
  * @param f
