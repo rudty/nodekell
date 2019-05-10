@@ -41,6 +41,49 @@ export function union<T, Y>(iter1: Iter<T>): (iter2: Iter<Y>) => AsyncIterableIt
 export function union<T, Y>(iter1: Iter<T | Promise<T>>, iter2: Iter<Y | Promise<Y>>): AsyncIterableIterator<T | Y>;
 export function union<T, Y>(iter1: Iter<T>, iter2: Iter<Y>): AsyncIterableIterator<EP<T> | EP<Y>>;
 
+export type Order = 'ASC' | 'DSC' | 'asc' | 'dsc';
+
+/**
+ * https://github.com/rudty/nodekell#sortBy
+ *
+ * @param f
+ * @param order
+ * @param iter
+ */
+export function sortBy<T>(f: (e: T) => any, order: Order, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+export function sortBy<T>(f: (e: T) => any, order: Order): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+export function sortBy<T>(f: (e: T) => any): CurriedFunction2<Order, Iter<T | Promise<T>>, AsyncIterableIterator<T>>;
+
+/**
+ * https://github.com/rudty/nodekell#orderBy
+ *
+ *
+ * @param f
+ * @param order
+ * @param iter
+ */
+export function orderBy<T>(f: (e: T) => any, order: Order, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+export function orderBy<T>(f: (e: T) => any, order: Order): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+export function orderBy<T>(f: (e: T) => any): CurriedFunction2<Order, Iter<T | Promise<T>>, AsyncIterableIterator<T>>;
+
+/**
+ * https://github.com/rudty/nodekell#sort
+ *
+ * sort iterable by ascending
+ *
+ * @param iter
+ */
+export function sort<T>(iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+
+/**
+ * https://github.com/rudty/nodekell#order
+ *
+ * sort iterable by ascending
+ *
+ * @param iter
+ */
+export function order<T>(iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+
 export type InnerJoinObject<T1 extends object, T2 extends object> = { [P in keyof T1 | keyof T2]: P extends keyof T1 ? T1[P] : P extends keyof T2 ? T2[P] : unknown };
 export type InnerJoinMap<T1, T2> = Map<T1 extends Map<infer K1, infer V1> ? T2 extends Map<infer K2, infer V2> ? K1 | K2 : unknown : unknown, T1 extends Map<infer K1, infer V1> ? T2 extends Map<infer K2, infer V2> ? V1 | V2 : unknown : unknown>;
 // export type InnerJoinCustomIterable<T1 extends { set: (...arg: any[]) => any; } & Iter<any>, T2 extends { set: (...arg: any[]) => any; } & Iter<any>> = AsyncIterableIterator<T1 | T2>;

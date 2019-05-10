@@ -1,5 +1,6 @@
 'use strict';
 const C = require("./core.js");
+const P = require("./prelude.js");
 
 exports.groupBy = C.curry(async (f, iter) => {
     const m = new Map();
@@ -21,6 +22,42 @@ const concat = C.curry(async function* (a, b) {
 });
 exports.concat = concat;
 exports.union = concat;
+
+const sortBy = C.curry(async function* (f, order, iter) {
+    const ASC = order.trim().toLowerCase() === 'asc';
+    
+    const i = C.seq(iter);
+
+    const { done, value: pivot } = await i.next();
+
+    const a = [];
+
+    for await (const e of i) {
+        a.push(e);
+    }
+
+    if (a.length === 0) {
+        if (!done) {
+            yield pivot;
+        }
+    }
+    else {
+        const p = await f(pivot);
+
+        const smallAndEq = P.filter(async e => await f(e) <= p, a);
+        const large = P.filter(async e => await f(e) > p, a);
+
+        yield* sortBy(f, order, ASC ? smallAndEq : large);
+        yield pivot;
+        yield* sortBy(f, order, ASC ? large : smallAndEq);
+    }
+});
+
+exports.orderBy = sortBy;
+exports.order = sortBy(C.identity, 'asc');
+
+exports.sortBy = sortBy;
+exports.sort = sortBy(C.identity, 'asc');
 
 const combineMap = (a, b) => new Map([...b, ...a]);
 

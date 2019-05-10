@@ -133,6 +133,146 @@ describe('union', () => {
     });
 });
 
+describe('sortBy', () => {
+    it('from Normal Value', async () => {
+        const a = [10, 5, 7, 1, 4, 3];
+
+        const r0 = F.sortBy<number>(e => e)('ASC')(a); // $ExpectType AsyncIterableIterator<number>
+        const r1 = F.sortBy<number>(e => e)('asc', a); // $ExpectType AsyncIterableIterator<number>
+        const r2 = F.sortBy<number>(e => e, 'DSC')(a); // $ExpectType AsyncIterableIterator<number>
+        const r3 = F.sortBy(e => e, 'dsc', a); // $ExpectType AsyncIterableIterator<number>
+    });
+
+    it('from Promise Value', async () => {
+        const a = [Promise.resolve(10), 5, 7, Promise.resolve(1), 4, 3];
+
+        const r0 = F.sortBy<number>(async e => e)('ASC')(a); // $ExpectType AsyncIterableIterator<number>
+        const r1 = F.sortBy<number>(async e => e)('asc', a); // $ExpectType AsyncIterableIterator<number>
+        const r2 = F.sortBy<number>(async e => e, 'DSC')(a); // $ExpectType AsyncIterableIterator<number>
+        const r3 = F.sortBy(async e => e, 'dsc', a); // $ExpectType AsyncIterableIterator<number>
+    });
+
+    it('from Object Array', async () => {
+        const a = [{ releaseDate: 1990, language: 'haskell' }, { releaseDate: 2005, language: 'F#'}, { releaseDate: 1958, language: 'lisp'}];
+
+        const r0 = F.sortBy<F.Flat<typeof a>>(e => e.releaseDate)('ASC')(a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
+        const r1 = F.sortBy<F.Flat<typeof a>>(e => e.releaseDate)('asc', a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
+        const r2 = F.sortBy<F.Flat<typeof a>>(e => e.releaseDate, 'DSC')(a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
+        const r3 = F.sortBy(e => e.releaseDate, 'dsc', a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
+    });
+
+    it('from String', async () => {
+        const a = 'The quick brown fox jumps over the lazy dog';
+
+        const r0 = F.sortBy<string>(async e => e)('ASC')(a); // $ExpectType AsyncIterableIterator<string>
+        const r1 = F.sortBy<string>(async e => e)('asc', a); // $ExpectType AsyncIterableIterator<string>
+        const r2 = F.sortBy<string>(async e => e, 'DSC')(a); // $ExpectType AsyncIterableIterator<string>
+        const r3 = F.sortBy(async e => e, 'dsc', a); // $ExpectType AsyncIterableIterator<string>
+    });
+
+    it('with run', async () => {
+        const a = [Promise.resolve(10), 5, 7, Promise.resolve(1), 4, 3];
+
+        const r0 = await F.run(a, F.sortBy(e => e, 'ASC')); // $ExpectType AsyncIterableIterator<number>
+    });
+});
+
+describe('orderBy', () => {
+    it('from Normal Value', async () => {
+        const a = [10, 5, 7, 1, 4, 3];
+
+        const r0 = F.orderBy<number>(e => e)('ASC')(a); // $ExpectType AsyncIterableIterator<number>
+        const r1 = F.orderBy<number>(e => e)('asc', a); // $ExpectType AsyncIterableIterator<number>
+        const r2 = F.orderBy<number>(e => e, 'DSC')(a); // $ExpectType AsyncIterableIterator<number>
+        const r3 = F.orderBy(e => e, 'dsc', a); // $ExpectType AsyncIterableIterator<number>
+    });
+
+    it('from Promise Value', async () => {
+        const a = [Promise.resolve(10), 5, 7, Promise.resolve(1), 4, 3];
+
+        const r0 = F.orderBy<number>(async e => e)('ASC')(a); // $ExpectType AsyncIterableIterator<number>
+        const r1 = F.orderBy<number>(async e => e)('asc', a); // $ExpectType AsyncIterableIterator<number>
+        const r2 = F.orderBy<number>(async e => e, 'DSC')(a); // $ExpectType AsyncIterableIterator<number>
+        const r3 = F.orderBy(async e => e, 'dsc', a); // $ExpectType AsyncIterableIterator<number>
+    });
+
+    it('from Object Array', async () => {
+        const a = [{ releaseDate: 1990, language: 'haskell' }, { releaseDate: 2005, language: 'F#'}, { releaseDate: 1958, language: 'lisp'}];
+
+        const r0 = F.orderBy<F.Flat<typeof a>>(e => e.releaseDate)('ASC')(a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
+        const r1 = F.orderBy<F.Flat<typeof a>>(e => e.releaseDate)('asc', a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
+        const r2 = F.orderBy<F.Flat<typeof a>>(e => e.releaseDate, 'DSC')(a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
+        const r3 = F.orderBy(e => e.releaseDate, 'dsc', a); // $ExpectType AsyncIterableIterator<{ releaseDate: number; language: string; }>
+    });
+
+    it('from String', async () => {
+        const a = 'The quick brown fox jumps over the lazy dog';
+
+        const r0 = F.orderBy<string>(async e => e)('ASC')(a); // $ExpectType AsyncIterableIterator<string>
+        const r1 = F.orderBy<string>(async e => e)('asc', a); // $ExpectType AsyncIterableIterator<string>
+        const r2 = F.orderBy<string>(async e => e, 'DSC')(a); // $ExpectType AsyncIterableIterator<string>
+        const r3 = F.orderBy(async e => e, 'dsc', a); // $ExpectType AsyncIterableIterator<string>
+    });
+
+    it('with run', async () => {
+        const a = [Promise.resolve(10), 5, 7, Promise.resolve(1), 4, 3];
+
+        const r0 = await F.run(a, F.sortBy(e => e, 'ASC')); // $ExpectType AsyncIterableIterator<number>
+    });
+});
+
+describe('sort', () => {
+    it('from Normal Value', async () => {
+        const a = [10, 5, 7, 1, 4, 3];
+
+        const r0 = F.sort(a); // $ExpectType AsyncIterableIterator<number>
+    });
+
+    it('from Promise Value', async () => {
+        const a = [Promise.resolve(10), 5, 7, Promise.resolve(1), 4, 3];
+
+        const r0 = F.sort(a); // $ExpectType AsyncIterableIterator<number>
+    });
+
+    it('from String', async () => {
+        const a = 'The quick brown fox jumps over the lazy dog';
+
+        const r0 = F.sort(a); // $ExpectType AsyncIterableIterator<string>
+    });
+
+    it('with run', async () => {
+        const a = [Promise.resolve(10), 5, 7, Promise.resolve(1), 4, 3];
+
+        const r0 = await F.run(a, F.sort); // $ExpectType AsyncIterableIterator<number>
+    });
+});
+
+describe('order', () => {
+    it('from Normal Value', async () => {
+        const a = [10, 5, 7, 1, 4, 3];
+
+        const r0 = F.order(a); // $ExpectType AsyncIterableIterator<number>
+    });
+
+    it('from Promise Value', async () => {
+        const a = [Promise.resolve(10), 5, 7, Promise.resolve(1), 4, 3];
+
+        const r0 = F.order(a); // $ExpectType AsyncIterableIterator<number>
+    });
+
+    it('from String', async () => {
+        const a = 'The quick brown fox jumps over the lazy dog';
+
+        const r0 = F.order(a); // $ExpectType AsyncIterableIterator<string>
+    });
+
+    it('with run', async () => {
+        const a = [Promise.resolve(10), 5, 7, Promise.resolve(1), 4, 3];
+
+        const r0 = await F.run(a, F.order); // $ExpectType AsyncIterableIterator<number>
+    });
+});
+
 describe('innerJoin', () => {
     it('from Map Array', async () => {
         const a = [
