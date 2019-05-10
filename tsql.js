@@ -1,6 +1,5 @@
 'use strict';
 const C = require("./core.js");
-const P = require("./prelude.js");
 
 exports.groupBy = C.curry(async (f, iter) => {
     const m = new Map();
