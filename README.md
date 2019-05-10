@@ -120,6 +120,10 @@ console.log(v);//[3]
 *    [sum](#sum)
 *    [average](#average)
 *    [groupBy](#groupby)
+*    [orderBy](#orderby)
+*    [sortBy](#sortby)
+*    [order](#order)
+*    [sort](#sort)
 
 ## util / else
 *    [sleep](#sleep)
@@ -1315,6 +1319,40 @@ console.log(r.get("tea"));
 //print [ { type: 'tea', price: 1 }, { type: 'tea', price: 2 } ]
 console.log(r.get("phone"));
 //print [ { type: 'phone', price: 3 }, { type: 'phone', price: 4 } ]
+```
+
+
+### orderBy
+same as [sortBy](#sortby)
+
+
+### sortBy
+sort iterable by ascending or descending
+```javascript
+const a = [{ year: 1990 }, { year: 2005 }, { year: 1958 }];
+
+const ASC = 'ASC'; // or 'asc'
+const DESC = 'desc'; // or 'DESC'
+
+const sortedByASC = F.sortBy(e => e.year, ASC, a);
+const sortedByDESC = F.sortBy(e => e.year, DESC, a);
+
+await F.collect(sortedByASC); // [{ year: 1958 }, { year: 1990 }, { year: 2005 }]
+await F.collect(sortedByDESC); // [{ year: 2005 }, { year: 1990 }, { year: 1958 }]
+```
+
+
+### order
+same as [sort](#sort)
+
+
+### sort
+sort iterable by ascending
+```javascript
+const a = [3, 6, 2, 3, 7, 10, 23, 21, 22, 16, 13, 14, 17, 20];
+const sorted = F.sort(a); // same as F.sortBy(e => e, 'asc', a);
+
+await F.collect(sorted); // [2, 3, 3, 6, 7, 10, 13, 14, 16, 17, 20, 21, 22, 23]
 ```
 
 
