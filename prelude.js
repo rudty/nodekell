@@ -194,7 +194,7 @@ exports.foldr1 =  C.curry(async (f, iter) => {
 
 exports.zip =  C.curry(async function* (a, b) {
     a =  C.seq(a);
-    for await (const e of C.seq(b)) {
+    for await (const e of b) {
         const { value, done } = await a.next();
         if (done) {
             break;
@@ -205,12 +205,12 @@ exports.zip =  C.curry(async function* (a, b) {
 
 exports.zipWith =  C.curry(async function* (f, a, b) {
     a =  C.seq(a);
-    for await (const e of C.seq(b)) {
+    for await (const e of b) {
         const { value, done } = await a.next();
         if (done) {
             break;
         }
-        yield await f(value, e);
+        yield f(value, e);
     }
 });
 
