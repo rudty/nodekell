@@ -23,7 +23,18 @@ exports.concat = concat;
 exports.union = concat;
 
 const sortBy = C.curry(async function* (f, order, iter) {
-    order = order.trim().toLowerCase();
+    if (order.constructor === ''.constructor) {
+        switch (order.trim().toLowerCase()) {
+            case 'asc':
+                order = asc;
+                break;
+            case 'desc':
+                order = desc;
+                break;
+            default:
+                throw new Error('please set order parameter to ASC or DESC or compare function');
+        }
+    }
 
     const t = [];
     const m = new Map();
@@ -39,22 +50,21 @@ const sortBy = C.curry(async function* (f, order, iter) {
         const ma = m.get(a);
         const mb = m.get(b);
 
-        switch (order) {
-            case 'asc':
-                return ma > mb ? 1 : ma < mb ? -1 : 0;
-            case 'desc':
-                return ma < mb ? 1 : ma > mb ? -1 : 0;
-            default:
-                throw new Error('please set order parameter to ASC or DESC');
-        }
+        return order(ma, mb);
     });
 });
 
+const asc = (a, b) => a > b ? 1 : a < b ? -1 : 0;
+const desc = (a, b) => a < b ? 1 : a > b ? -1 : 0;
+
+exports.asc = asc;
+exports.desc = desc;
+
 exports.orderBy = sortBy;
-exports.order = sortBy(C.identity, 'asc');
+exports.order = sortBy(C.identity, asc);
 
 exports.sortBy = sortBy;
-exports.sort = sortBy(C.identity, 'asc');
+exports.sort = sortBy(C.identity, asc);
 
 const combineMap = (a, b) => new Map([...b, ...a]);
 
