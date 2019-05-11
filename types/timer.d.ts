@@ -16,17 +16,17 @@ export function sleep(t: number): Promise<void>;
  * @param duration
  * @param iter
  */
-export function withTimeout<T>(duration: () => (number | Promise<number>)): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
-export function withTimeout<T>(duration: () => (number | Promise<number>)): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
-
-export function withTimeout<T>(duration: number | Promise<number>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
-export function withTimeout<T>(duration: number | Promise<number>): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
-
 export function withTimeout<T>(duration: () => (number | Promise<number>), iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
 export function withTimeout<T>(duration: () => (number | Promise<number>), iter: Iter<T>): AsyncIterableIterator<EP<T>>;
 
 export function withTimeout<T>(duration: number | Promise<number>, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
 export function withTimeout<T>(duration: number | Promise<number>, iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+
+export function withTimeout<T>(duration: () => (number | Promise<number>)): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+export function withTimeout<T>(duration: () => (number | Promise<number>)): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
+
+export function withTimeout<T>(duration: number | Promise<number>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+export function withTimeout<T>(duration: number | Promise<number>): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
 
 /**
  * https://github.com/rudty/nodekell#timeout
@@ -34,17 +34,17 @@ export function withTimeout<T>(duration: number | Promise<number>, iter: Iter<T>
  * @param duration
  * @param job
  */
-export function timeout<T>(duration: number | Promise<number>): (job: Promise<T>) => Promise<T>;
-export function timeout<T>(duration: number | Promise<number>): (job: () => Promise<T>) => Promise<T>;
-
-export function timeout<T>(duration: () => (number | Promise<number>)): (job: Promise<T>) => Promise<T>;
-export function timeout<T>(duration: () => (number | Promise<number>)): (job: () => Promise<T>) => Promise<T>;
-
 export function timeout<T>(duration: number | Promise<number>, job: Promise<T>): Promise<T>;
 export function timeout<T>(duration: number | Promise<number>, job: () => Promise<T>): Promise<T>;
 
 export function timeout<T>(duration: () => (number | Promise<number>), job: Promise<T>): Promise<T>;
 export function timeout<T>(duration: () => (number | Promise<number>), job: () => Promise<T>): Promise<T>;
+
+export function timeout<T>(duration: number | Promise<number>): (job: Promise<T>) => Promise<T>;
+export function timeout<T>(duration: number | Promise<number>): (job: () => Promise<T>) => Promise<T>;
+
+export function timeout<T>(duration: () => (number | Promise<number>)): (job: Promise<T>) => Promise<T>;
+export function timeout<T>(duration: () => (number | Promise<number>)): (job: () => Promise<T>) => Promise<T>;
 
 /**
  * https://github.com/rudty/nodekell#interval

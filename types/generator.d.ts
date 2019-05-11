@@ -14,13 +14,13 @@ import {
  * ```
  * @param supply
  */
-export function repeat<T>(supply: Promise<() => T>): AsyncIterableIterator<EP<T>>;
-export function repeat<T>(supply: () => T): AsyncIterableIterator<EP<T>>;
-export function repeat<T>(supply: T): AsyncIterableIterator<EP<T>>;
-
 export function repeat<T>(length: number | Promise<number>, supply: Promise<() => T>): AsyncIterableIterator<EP<T>>;
 export function repeat<T>(length: number | Promise<number>, supply: () => T): AsyncIterableIterator<EP<T>>;
 export function repeat<T>(length: number | Promise<number>, supply: T): AsyncIterableIterator<EP<T>>;
+
+export function repeat<T>(supply: Promise<() => T>): AsyncIterableIterator<EP<T>>;
+export function repeat<T>(supply: () => T): AsyncIterableIterator<EP<T>>;
+export function repeat<T>(supply: T): AsyncIterableIterator<EP<T>>;
 
 /**
  * https://github.com/rudty/nodekell#range
@@ -38,6 +38,6 @@ export function range(begin: number, end: number, step?: number): IterableIterat
  * @param f
  * @param value
  */
-export function iterate<T>(f: (value: T) => (T | Promise<T>)): (value: T | Promise<T>) => AsyncIterableIterator<T>;
-
 export function iterate<T>(f: (value: T) => (T | Promise<T>), value: T | Promise<T>): AsyncIterableIterator<T>;
+
+export function iterate<T>(f: (value: T) => (T | Promise<T>)): (value: T | Promise<T>) => AsyncIterableIterator<T>;
