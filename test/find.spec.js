@@ -2,7 +2,7 @@
 const F = require("../index");
 const assert = require("assert");
 
-describe('test flat', () => {
+describe('test find', () => {
     const a1 = { a: 1 };
     const a2 = { a: 2 };
     const a3 = { a: 3 };
