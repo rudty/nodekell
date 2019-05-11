@@ -261,25 +261,36 @@ describe('sort', () => {
     it('from Normal Value', async () => {
         const a = [10, 5, 7, 1, 4, 3];
 
-        const r0 = F.sort(a); // $ExpectType AsyncIterableIterator<number>
+        const r0 = F.sort<F.Flat<typeof a>>(F.asc)(a); // $ExpectType AsyncIterableIterator<number>
+        const r1 = F.sort(F.asc, a); // $ExpectType AsyncIterableIterator<number>
     });
 
     it('from Promise Value', async () => {
         const a = [Promise.resolve(10), 5, 7, Promise.resolve(1), 4, 3];
 
-        const r0 = F.sort(a); // $ExpectType AsyncIterableIterator<number>
+        const r0 = F.sort<F.Flat<typeof a>>(F.desc)(a); // $ExpectType AsyncIterableIterator<number>
+        const r1 = F.sort(F.desc, a); // $ExpectType AsyncIterableIterator<number>
     });
 
     it('from String', async () => {
         const a = 'The quick brown fox jumps over the lazy dog';
 
-        const r0 = F.sort(a); // $ExpectType AsyncIterableIterator<string>
+        const r0 = F.sort<F.Flat<typeof a>>(F.asc)(a); // $ExpectType AsyncIterableIterator<string>
+        const r1 = F.sort(F.asc, a); // $ExpectType AsyncIterableIterator<string>
+    });
+
+    it('use custom compare function', async () => {
+        const a = [Promise.resolve(10), 5, 7, Promise.resolve(1), 4, 3];
+        const f = (a: number, b: number) => a > b ? 1 : a < b ? -1 : 0;
+
+        const r0 = F.sort<F.Flat<typeof a>>(f)(a); // $ExpectType AsyncIterableIterator<number>
+        const r1 = F.sort(f, a); // $ExpectType AsyncIterableIterator<number>
     });
 
     it('with run', async () => {
         const a = [Promise.resolve(10), 5, 7, Promise.resolve(1), 4, 3];
 
-        const r0 = await F.run(a, F.sort); // $ExpectType AsyncIterableIterator<number>
+        const r0 = await F.run(a, F.sort(F.asc)); // $ExpectType AsyncIterableIterator<number>
     });
 });
 
@@ -287,25 +298,36 @@ describe('order', () => {
     it('from Normal Value', async () => {
         const a = [10, 5, 7, 1, 4, 3];
 
-        const r0 = F.order(a); // $ExpectType AsyncIterableIterator<number>
+        const r0 = F.order<F.Flat<typeof a>>(F.asc)(a); // $ExpectType AsyncIterableIterator<number>
+        const r1 = F.order(F.asc, a); // $ExpectType AsyncIterableIterator<number>
     });
 
     it('from Promise Value', async () => {
         const a = [Promise.resolve(10), 5, 7, Promise.resolve(1), 4, 3];
 
-        const r0 = F.order(a); // $ExpectType AsyncIterableIterator<number>
+        const r0 = F.order<F.Flat<typeof a>>(F.desc)(a); // $ExpectType AsyncIterableIterator<number>
+        const r1 = F.order(F.desc, a); // $ExpectType AsyncIterableIterator<number>
     });
 
     it('from String', async () => {
         const a = 'The quick brown fox jumps over the lazy dog';
 
-        const r0 = F.order(a); // $ExpectType AsyncIterableIterator<string>
+        const r0 = F.order<F.Flat<typeof a>>(F.asc)(a); // $ExpectType AsyncIterableIterator<string>
+        const r1 = F.order(F.asc, a); // $ExpectType AsyncIterableIterator<string>
+    });
+
+    it('use custom compare function', async () => {
+        const a = [Promise.resolve(10), 5, 7, Promise.resolve(1), 4, 3];
+        const f = (a: number, b: number) => a > b ? 1 : a < b ? -1 : 0;
+
+        const r0 = F.order<F.Flat<typeof a>>(f)(a); // $ExpectType AsyncIterableIterator<number>
+        const r1 = F.order(f, a); // $ExpectType AsyncIterableIterator<number>
     });
 
     it('with run', async () => {
         const a = [Promise.resolve(10), 5, 7, Promise.resolve(1), 4, 3];
 
-        const r0 = await F.run(a, F.order); // $ExpectType AsyncIterableIterator<number>
+        const r0 = await F.run(a, F.order(F.asc)); // $ExpectType AsyncIterableIterator<number>
     });
 });
 
