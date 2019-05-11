@@ -61,10 +61,10 @@ exports.asc = asc;
 exports.desc = desc;
 
 exports.orderBy = sortBy;
-exports.order = sortBy(C.identity, asc);
+exports.order = sortBy(C.identity);
 
 exports.sortBy = sortBy;
-exports.sort = sortBy(C.identity, asc);
+exports.sort = sortBy(C.identity);
 
 const combineMap = (a, b) => new Map([...b, ...a]);
 
