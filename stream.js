@@ -209,3 +209,22 @@ exports.buffer = C.curry(async function*(supply, iter) {
         yield c;
     }
 });
+
+exports.find = C.curry(async (fn, iter) => {
+    for await(const e of iter) {
+        if (await fn(e)) {
+            return e;
+        }
+    }
+    //return undefined;
+});
+
+exports.findLast = C.curry(async (fn, iter) => {
+    iter = Array.isArray(iter) ? iter : await collect(iter);
+    for (let i = iter.length - 1; i >= 0; --i) {
+        if (await fn(iter[i])) {
+            return iter[i];
+        }
+    }
+    //return undefined;
+});
