@@ -54,3 +54,17 @@ exports.isNil = isNil;
 
 //deprecated / use isNill instead.
 exports.notNil = (a) => !isNil(a);
+
+const get = curry((key, a) => {
+    if (a.get) {
+        try {
+            const r = a.get(key);
+            if (r !== undefined) {
+                return r;
+            }
+        } catch {/* ignore */}
+    }
+    return a[key];
+});
+
+exports.get = get;
