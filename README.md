@@ -1327,18 +1327,45 @@ same as [sortBy](#sortby)
 
 
 ### sortBy
-sort iterable by ascending or descending
 ```javascript
 const a = [{ year: 1990 }, { year: 2005 }, { year: 1958 }];
 
 const ASC = 'ASC'; // or 'asc'
 const DESC = 'desc'; // or 'DESC'
 
-const sortedByASC = F.sortBy(e => e.year, ASC, a);
-const sortedByDESC = F.sortBy(e => e.year, DESC, a);
+const sortedByASC0 = F.sortBy(e => e.year, F.asc, a);
+const sortedByASC1 = F.sortBy(e => e.year, ASC, a);
+const sortedByDESC0 = F.sortBy(e => e.year, F.desc, a);
+const sortedByDESC1 = F.sortBy(e => e.year, DESC, a);
 
-await F.collect(sortedByASC); // [{ year: 1958 }, { year: 1990 }, { year: 2005 }]
-await F.collect(sortedByDESC); // [{ year: 2005 }, { year: 1990 }, { year: 1958 }]
+await F.collect(sortedByASC0);
+// [{ year: 1958 }, { year: 1990 }, { year: 2005 }]
+await F.collect(sortedByDESC1);
+// [{ year: 2005 }, { year: 1990 }, { year: 1958 }]
+```
+
+```javascript
+const a = [3, 6, 2, 3, 7, 10, 23, 21, 22, 16, 13, 14, 17, 20];
+
+const sortedByASC = F.sortBy(e => e, F.asc, a);
+const sortedByDESC = F.sortBy(e => e, F.desc, a);
+
+await F.collect(sortedByASC);
+// [2, 3, 3, 6, 7, 10, 13, 14, 16, 17, 20, 21, 22, 23]
+await F.collect(sortedbyDESC);
+// [23, 22, 21, 20, 17, 16, 14, 13, 10, 7, 6, 3, 3, 2]
+```
+
+```javascript
+const a = 'Haskell Brooks Curry';
+
+const sortedByASC = F.sortBy(e => e, F.asc, a);
+const sortedByDESC = F.sortBy(e => e, F.desc, a);
+
+await F.collect(sortedByASC).then(e => [e.join('')]);
+// ['  BCHaekklloorrrssuy']
+await F.collect(sortedByDESC).then(e => [e.join('')]);
+// ['yussrrroollkkeaHCB  ']
 ```
 
 
@@ -1347,12 +1374,28 @@ same as [sort](#sort)
 
 
 ### sort
-sort iterable by ascending
 ```javascript
 const a = [3, 6, 2, 3, 7, 10, 23, 21, 22, 16, 13, 14, 17, 20];
-const sorted = F.sort(a); // same as F.sortBy(e => e, 'asc', a);
 
-await F.collect(sorted); // [2, 3, 3, 6, 7, 10, 13, 14, 16, 17, 20, 21, 22, 23]
+const sortedByASC = F.sort(F.asc, a);
+const sortedByDESC = F.sort(F.desc, a);
+
+await F.collect(sortedByASC);
+// [2, 3, 3, 6, 7, 10, 13, 14, 16, 17, 20, 21, 22, 23]
+await F.collect(sortedbyDESC);
+// [23, 22, 21, 20, 17, 16, 14, 13, 10, 7, 6, 3, 3, 2]
+```
+
+```javascript
+const a = 'Haskell Brooks Curry';
+
+const sortedByASC = F.sort(F.asc, a);
+const sortedByDESC = F.sort(F.desc, a);
+
+await F.collect(sortedByASC).then(e => [e.join('')]);
+// ['  BCHaekklloorrrssuy']
+await F.collect(sortedByDESC).then(e => [e.join('')]);
+// ['yussrrroollkkeaHCB  ']
 ```
 
 
