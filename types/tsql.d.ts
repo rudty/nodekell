@@ -41,7 +41,24 @@ export function union<T, Y>(iter1: Iter<T>): (iter2: Iter<Y>) => AsyncIterableIt
 export function union<T, Y>(iter1: Iter<T | Promise<T>>, iter2: Iter<Y | Promise<Y>>): AsyncIterableIterator<T | Y>;
 export function union<T, Y>(iter1: Iter<T>, iter2: Iter<Y>): AsyncIterableIterator<EP<T> | EP<Y>>;
 
-export type Order = 'ASC' | 'DESC' | 'asc' | 'desc';
+export type CompareFn<T> = (a: T, b: T) => 1 | 0 | -1;
+export type OrderType = 'ASC' | 'DESC' | 'asc' | 'desc';
+
+/**
+ * ascending compare function
+ *
+ * @param a
+ * @param b
+ */
+export function asc<T>(a: T, b: T): 1 | 0 | -1;
+
+/**
+ * descending compare function
+ *
+ * @param a
+ * @param b
+ */
+export function desc<T>(a: T, b: T): 1 | 0 | -1;
 
 /**
  * https://github.com/rudty/nodekell#sortby
@@ -50,9 +67,9 @@ export type Order = 'ASC' | 'DESC' | 'asc' | 'desc';
  * @param order
  * @param iter
  */
-export function sortBy<T>(f: (e: T) => any, order: Order, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
-export function sortBy<T>(f: (e: T) => any, order: Order): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
-export function sortBy<T>(f: (e: T) => any): CurriedFunction2<Order, Iter<T | Promise<T>>, AsyncIterableIterator<T>>;
+export function sortBy<T>(f: (e: T) => any, order: OrderType | CompareFn<ReturnType<typeof f>>, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+export function sortBy<T>(f: (e: T) => any, order: OrderType | CompareFn<ReturnType<typeof f>>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+export function sortBy<T>(f: (e: T) => any): CurriedFunction2<OrderType | CompareFn<ReturnType<typeof f>>, Iter<T | Promise<T>>, AsyncIterableIterator<T>>;
 
 /**
  * https://github.com/rudty/nodekell#orderby
@@ -62,9 +79,9 @@ export function sortBy<T>(f: (e: T) => any): CurriedFunction2<Order, Iter<T | Pr
  * @param order
  * @param iter
  */
-export function orderBy<T>(f: (e: T) => any, order: Order, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
-export function orderBy<T>(f: (e: T) => any, order: Order): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
-export function orderBy<T>(f: (e: T) => any): CurriedFunction2<Order, Iter<T | Promise<T>>, AsyncIterableIterator<T>>;
+export function orderBy<T>(f: (e: T) => any, order: OrderType | CompareFn<ReturnType<typeof f>>, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+export function orderBy<T>(f: (e: T) => any, order: OrderType | CompareFn<ReturnType<typeof f>>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+export function orderBy<T>(f: (e: T) => any): CurriedFunction2<OrderType | CompareFn<ReturnType<typeof f>>, Iter<T | Promise<T>>, AsyncIterableIterator<T>>;
 
 /**
  * https://github.com/rudty/nodekell#sort
