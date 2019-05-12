@@ -136,6 +136,7 @@ console.log(v);//[3]
 *    [isNil](#isNil)
 *    [cond](#cond)
 *    [otherwise](#otherwise)
+*    [get](#get)
 ---
 
 
