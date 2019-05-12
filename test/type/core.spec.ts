@@ -94,4 +94,9 @@ describe('get', () => {
         const a = [{ value: 1 }, { value: 3 }, { value: 0 }];
         const r = F.sortBy(F.get("value"), F.asc, a); // $ExpectType AsyncIterableIterator<any>
     });
+
+    it('currying get', () => {
+        const a = { value: 1 };
+        const r1 = F.get("value"); // $ExpectType (o: any) => any
+    });
 });
