@@ -4,8 +4,12 @@ const assert = require("assert");
 
 describe('test get', () => {
     const obj = { name: "hello", value: 42 };
-    const arr = [1,2,3];
-    arr["name"] = "hello"; 
+    const arr = [1, 2, 3];
+    arr["name"] = "hello";
+
+    const getObj = { get: "get", a: 1 };
+
+    const getObj2 = { get: () => {}, a: 1 };
 
     const m = new Map([
         ["name", "hello map"],
@@ -35,7 +39,7 @@ describe('test get', () => {
         const r = F.get("name", m);
         assert.strictEqual(r, "hello map");
     });
-    
+
     it('Map.size', async () => {
         const r = F.get("size", m);
         assert.strictEqual(r, 2);
@@ -46,4 +50,23 @@ describe('test get', () => {
         assert.strictEqual(r, m.set);
     });
 
+    it('getObj.a', async () => {
+        const r = F.get("a", getObj);
+        assert.strictEqual(r, 1);
+    });
+
+    it('getObj.get', async () => {
+        const r = F.get("get", getObj);
+        assert.strictEqual(r, "get");
+    });
+
+    it('getObj2.a', async () => {
+        const r = F.get("a", getObj2);
+        assert.strictEqual(r, 1);
+    });
+
+    it('getObj2.get', async () => {
+        const r = F.get("get", getObj2);
+        assert.strictEqual(r(), undefined);
+    });
 });

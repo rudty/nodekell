@@ -55,14 +55,15 @@ exports.isNil = isNil;
 //deprecated / use isNill instead.
 exports.notNil = (a) => !isNil(a);
 
+/**
+ * support Map, Set, any Object
+ */
 const get = curry((key, a) => {
-    if (a.get) {
-        try {
-            const r = a.get(key);
-            if (r !== undefined) {
-                return r;
-            }
-        } catch {/* ignore */}
+    if (a.get && a.get.constructor === Function) {
+        const r = a.get(key);
+        if (r !== undefined) {
+            return r;
+        }
     }
     return a[key];
 });
