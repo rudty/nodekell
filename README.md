@@ -1639,5 +1639,19 @@ if (F.otherwise()) {
 ```
 
 
+### get 
+call get function or object property
+```javascript
+const obj = { name: "hello", value: 42 };
+console.log(F.get("name", obj)); //print hello
+```
+```javascript
+const m = new Map([
+    ["name", "hello map"]
+]);
+console.log(F.get("name", m)); //print hello map
+console.log(F.get("size", m)); //print 1
+```
+
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frudty%2Fnodekell.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Frudty%2Fnodekell?ref=badge_large)

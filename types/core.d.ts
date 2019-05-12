@@ -118,3 +118,14 @@ export function isNil(a: any): boolean;
  * @deprecated use isNil instead
  */
 export function notNil(a: any): boolean;
+
+/**
+ * ```ts
+ * let obj = {
+ *   "world": 1
+ * };
+ * F.get("world", obj) === 1;
+ * ```
+ */
+export function get(key: any): (o: any) => any;
+export function get(key: any, o: any): any;

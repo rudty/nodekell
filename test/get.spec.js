@@ -69,4 +69,10 @@ describe('test get', () => {
         const r = F.get("get", getObj2);
         assert.strictEqual(r(), undefined);
     });
+
+    it('sort and get', async () => {
+        const a = [{ value: 1 }, { value: 3 }, { value: 0 }];
+        const r = await F.collect(F.sortBy(F.get("value"), F.asc, a));
+        assert.deepStrictEqual(r, [{ value: 0 }, { value: 1 }, { value: 3 }]);
+    });
 });

@@ -88,3 +88,10 @@ describe('utils', () => {
         const notNil = F.notNil(0); // $ExpectType boolean
     });
 });
+
+describe('get', () => {
+    it('get & sort array', async () => {
+        const a = [{ value: 1 }, { value: 3 }, { value: 0 }];
+        const r = F.sortBy(F.get("value"), F.asc, a); // $ExpectType AsyncIterableIterator<any>
+    });
+});
