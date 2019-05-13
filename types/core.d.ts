@@ -165,11 +165,11 @@ export type Getter<T, K> =
  * @param key
  * @param target
  */
-export function get<T, K extends keyof T>(key: K): (target: T) => Getter<T, K>;
-export function get<T, K>(key: K): (target: T) => Getter<T, K>;
-
 export function get<T, K extends keyof T>(key: K, target: T): Getter<T, K>;
 export function get<T, K>(key: K, target: T): Getter<T, K>;
+
+export function get<T, K extends keyof T>(key: K): (target: T) => Getter<T, K>;
+export function get<T, K>(key: K): (target: T) => Getter<T, K>;
 
 /* export function get<T extends Map<any, any>, K extends keyof T>(key: K, map: T): ExtractMap<T>[1] | T[K];
 export function get<T extends Map<any, any>>(key: ExtractMap<T>[0], map: T): ExtractMap<T>[1] | undefined;

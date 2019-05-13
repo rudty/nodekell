@@ -769,3 +769,75 @@ describe('buffer', () => {
         const r1 = F.buffer(2, a); // $ExpectType AsyncIterableIterator<(string | number)[]>
     });
 });
+
+describe('find', () => {
+    it('from Normal Array', async () => {
+        const a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+        const r0 = await F.find<number>(e => e === 12)(a); // $ExpectType number | undefined
+        const r1 = await F.find(e => e === 6, a); // $ExpectType number | undefined
+    });
+
+    it('from Promise Array', async () => {
+        const a = [1, 2, 3, Promise.resolve(4), 5, 6, Promise.resolve(7), 8, 9, 10];
+
+        const r0 = await F.find<number | Promise<number>>(e => e === 12)(a); // $ExpectType number | undefined
+        const r1 = await F.find(e => e === 6, a); // $ExpectType number | undefined
+    });
+
+    it('from Object Array', async () => {
+        const a = [{ name: 'Ice' }, { name: 'NORA' }, { name: 'ginkiha' }, { name: 'Rabpit' }];
+
+        const r0 = await F.find<{ name: string }>(e => e.name === 'xi')(a); // $ExpectType { name: string; } | undefined
+        const r1 = await F.find(e => e.name === 'Rabpit', a); // $ExpectType { name: string; } | undefined
+    });
+
+    it('from Promise / Normal Union Value', async () => {
+        const a = [1, Promise.resolve(2), 'a', Promise.resolve('b'), { name: 'xi' }];
+
+        const r0 = await F.find<F.PFlat<typeof a>>(e => e === 12)(a); // $ExpectType string | number | { name: string; } | undefined
+        const r1 = await F.find(e => e === 6, a); // $ExpectType string | number | { name: string; } | undefined
+    });
+
+    it('with run', async () => {
+        const a = [{ name: 'Ice' }, Promise.resolve({ name: 'NORA' }), { name: 'ginkiha' }, { name: 'Rabpit' }, 1, 'a'];
+
+        const r0 = await F.run(a, F.find(e => new Object(e).hasOwnProperty('name') ? (e as any).name === 'NORA' : e === 1)); // $ExpectType string | number | { name: string; } | { name: string; } | undefined
+    });
+});
+
+describe('findLast', () => {
+    it('from Normal Array', async () => {
+        const a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+        const r0 = await F.findLast<number>(e => e === 12)(a); // $ExpectType number | undefined
+        const r1 = await F.findLast(e => e === 6, a); // $ExpectType number | undefined
+    });
+
+    it('from Promise Array', async () => {
+        const a = [1, 2, 3, Promise.resolve(4), 5, 6, Promise.resolve(7), 8, 9, 10];
+
+        const r0 = await F.findLast<number | Promise<number>>(e => e === 12)(a); // $ExpectType number | undefined
+        const r1 = await F.findLast(e => e === 6, a); // $ExpectType number | undefined
+    });
+
+    it('from Object Array', async () => {
+        const a = [{ name: 'Ice' }, { name: 'NORA' }, { name: 'ginkiha' }, { name: 'Rabpit' }];
+
+        const r0 = await F.findLast<{ name: string }>(e => e.name === 'xi')(a); // $ExpectType { name: string; } | undefined
+        const r1 = await F.findLast(e => e.name === 'Rabpit', a); // $ExpectType { name: string; } | undefined
+    });
+
+    it('from Promise / Normal Union Value', async () => {
+        const a = [1, Promise.resolve(2), 'a', Promise.resolve('b'), { name: 'xi' }];
+
+        const r0 = await F.findLast<F.PFlat<typeof a>>(e => e === 12)(a); // $ExpectType string | number | { name: string; } | undefined
+        const r1 = await F.findLast(e => e === 6, a); // $ExpectType string | number | { name: string; } | undefined
+    });
+
+    it('with run', async () => {
+        const a = [{ name: 'Ice' }, Promise.resolve({ name: 'NORA' }), { name: 'ginkiha' }, { name: 'Rabpit' }, 1, 'a'];
+
+        const r0 = await F.run(a, F.findLast(e => new Object(e).hasOwnProperty('name') ? (e as any).name === 'NORA' : e === 1)); // $ExpectType string | number | { name: string; } | { name: string; } | undefined
+    });
+});

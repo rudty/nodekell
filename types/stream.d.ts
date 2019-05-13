@@ -285,3 +285,40 @@ export function buffer<T>(supply: number | Promise<number>, iter: Iter<T>): Asyn
 
 export function buffer<T>(supply: number | Promise<number>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T[]>;
 export function buffer<T>(supply: number | Promise<number>): (iter: Iter<T>) => AsyncIterableIterator<EP<T>[]>;
+
+export type ReturnTypeOfFind<T> =
+    T extends Iter<infer E> ?
+        E extends Promise<infer PE> ?
+            PE | undefined
+        : E | undefined
+    : unknown;
+
+/**
+ *
+ *
+ * @param f
+ * @param iter
+ */
+export function find<T>(f: (elem: T) => (boolean | Promise<boolean>), iter: Iter<T | Promise<T>>): Promise<T | undefined>;
+export function find<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), iter: Iter<T>): Promise<EP<T> | undefined>;
+
+export function find<T extends Iter<any>>(f: (elem: PFlat<T>) => (boolean | Promise<boolean>), iter: T): Promise<ReturnTypeOfFind<T>>;
+export function find<T extends Iter<any>>(f: (elem: PFlat<T>) => (boolean | Promise<boolean>)): (iter: T) => Promise<ReturnTypeOfFind<T>>;
+
+export function find<T>(f: (elem: T) => (boolean | Promise<boolean>)): (iter: Iter<T | Promise<T>>) => Promise<T | undefined>;
+export function find<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>)): (iter: Iter<T | Promise<T>>) => Promise<EP<T> | undefined>;
+
+/**
+ *
+ *
+ * @param f
+ * @param iter
+ */
+export function findLast<T>(f: (elem: T) => (boolean | Promise<boolean>), iter: Iter<T | Promise<T>>): Promise<T | undefined>;
+export function findLast<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), iter: Iter<T>): Promise<EP<T> | undefined>;
+
+export function findLast<T extends Iter<any>>(f: (elem: PFlat<T>) => (boolean | Promise<boolean>), iter: T): Promise<ReturnTypeOfFind<T>>;
+export function findLast<T extends Iter<any>>(f: (elem: PFlat<T>) => (boolean | Promise<boolean>)): (iter: T) => Promise<ReturnTypeOfFind<T>>;
+
+export function findLast<T>(f: (elem: T) => (boolean | Promise<boolean>)): (iter: Iter<T | Promise<T>>) => Promise<T | undefined>;
+export function findLast<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>)): (iter: Iter<T | Promise<T>>) => Promise<EP<T> | undefined>;
