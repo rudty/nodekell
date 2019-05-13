@@ -149,7 +149,7 @@ export type Getter<T, K> =
     :
     K extends keyof T ?
         T[K]
-    : undefined;
+    : unknown;
 
 /**
  * https://github.com/rudty/nodekell#get
