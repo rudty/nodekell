@@ -8,6 +8,9 @@ import {
     CurriedFunction8,
     Iter,
     EP,
+    ExtractMap,
+    ExtractMapValue,
+    ExtractMapKey,
 } from './utils';
 
 /**
@@ -103,6 +106,8 @@ export function first<T extends any[]>(a: T): T[0];
 export function second<T extends any[]>(a: T): T[1];
 
 /**
+ * https://github.com/rudty/nodekell#isnil
+ *
  * ```ts
  * isNil(undefined) === true;
  * isNil(false) === false;
@@ -111,6 +116,8 @@ export function second<T extends any[]>(a: T): T[1];
 export function isNil(a: any): boolean;
 
 /**
+ * https://github.com/rudty/nodekell#notnil
+ *
  * ```ts
  * notNil(undefined) === false;
  * notNil(false) === true;
@@ -119,13 +126,65 @@ export function isNil(a: any): boolean;
  */
 export function notNil(a: any): boolean;
 
+export type Getter<T, K> =
+    T extends Map<any, any> ?
+        K extends ExtractMapKey<T> ?
+            K extends keyof T ?
+                ExtractMapValue<T> | T[K]
+            : ExtractMapValue<T> | undefined
+        : K extends keyof T ?
+            T[K]
+        : undefined
+    :
+    T extends any[] ?
+        K extends keyof T ?
+            K extends number ?
+                T[K] | undefined
+            : T[K]
+        : undefined
+    :
+    T extends object ?
+        K extends keyof T ?
+            T[K]
+        : undefined
+    :
+    K extends keyof T ?
+        T[K]
+    : undefined;
+
 /**
+ * https://github.com/rudty/nodekell#get
+ *
  * ```ts
  * let obj = {
  *   "world": 1
  * };
  * F.get("world", obj) === 1;
  * ```
+ *
+ * @param key
+ * @param target
  */
-export function get(key: any): (o: any) => any;
-export function get(key: any, o: any): any;
+export function get<T, K extends keyof T>(key: K): (target: T) => Getter<T, K>;
+export function get<T, K>(key: K): (target: T) => Getter<T, K>;
+
+export function get<T, K extends keyof T>(key: K, target: T): Getter<T, K>;
+export function get<T, K>(key: K, target: T): Getter<T, K>;
+
+/* export function get<T extends Map<any, any>, K extends keyof T>(key: K, map: T): ExtractMap<T>[1] | T[K];
+export function get<T extends Map<any, any>>(key: ExtractMap<T>[0], map: T): ExtractMap<T>[1] | undefined;
+
+export function get<T extends any[], K extends keyof T & number>(key: K, array: T): T[K] | undefined;
+export function get<T extends any[], K extends keyof T>(key: K, array: T): T[K extends number ? never : K];
+
+export function get<T extends object, K extends keyof T>(key: K, object: T): T[K];
+// export function get<T extends object>(key: any, target: T): T[typeof key] | undefined;
+
+export function get<T extends Map<any, any>, K extends keyof T>(key: K): (map: T) => ExtractMap<T>[1] | T[K];
+export function get<T extends Map<any, any>>(key: ExtractMap<T>[0]): (map: T) => ExtractMap<T>[1] | undefined;
+
+export function get<T extends any[], K extends keyof T & number>(key: K): (array: T) => T[K] | undefined;
+export function get<T extends any[], K extends keyof T>(key: K): (array: T) => T[K extends number ? never : K];
+
+export function get<T extends object, K extends keyof T>(key: K): (object: T) => T[K];
+// export function get<T extends object>(key: any): (target: T) => T[typeof key] | undefined; */

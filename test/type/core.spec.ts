@@ -90,13 +90,78 @@ describe('utils', () => {
 });
 
 describe('get', () => {
-    it('get & sort array', async () => {
-        const a = [{ value: 1 }, { value: 3 }, { value: 0 }];
-        const r = F.sortBy(F.get("value"), F.asc, a); // $ExpectType AsyncIterableIterator<any>
+    describe('from Map', () => {
+        const a = new Map([['a', 1]]);
+        const b = new Map([[1, 'a']]);
+
+        it('has property or key', () => {
+            const ar0 = F.get<typeof a, 'get'>('get')(a); // $ExpectType number | ((key: string) => number | undefined)
+            const ar1 = F.get('size', a); // $ExpectType number
+
+            const br0 = F.get<typeof b, 'set'>('set')(b); // $ExpectType (key: number, value: string) => Map<number, string>
+            const br1 = F.get('size', b); // $ExpectType number
+        });
+
+        it('has key', () => {
+            const ar0 = F.get<typeof a, 'a'>('a')(a); // $ExpectType number | undefined
+            const ar1 = F.get('b', a); // $ExpectType number | undefined
+
+            const br0 = F.get<typeof b, 1>(1)(b); // $ExpectType string | undefined
+            const br1 = F.get(2, b); // $ExpectType string | undefined
+        });
+
+        it('has not property', () => {
+            const r0 = F.get<typeof a, 1>(1)(a); // $ExpectType undefined
+            const r1 = F.get('d', b); // $ExpectType undefined
+        });
     });
 
-    it('currying get', () => {
-        const a = { value: 1 };
-        const r1 = F.get("value"); // $ExpectType (o: any) => any
+    describe('from Object', () => {
+        const a = { a: 1, b: 'a', get: 'get' };
+        const b = { a: 1, b: 'a', get: () => {} };
+
+        it('has property', () => {
+            const ar0 = F.get<typeof a, 'get'>('get')(a); // $ExpectType string
+            const ar1 = F.get('b', a); // $ExpectType string
+
+            const br0 = F.get<typeof b, 'b'>('b')(b); // $ExpectType string
+            const br1 = F.get('get', b); // $ExpectType () => void
+        });
+
+        it('has not property', () => {
+            const r0 = F.get<typeof a, 'c'>('c')(a); // $ExpectType undefined
+            const r1 = F.get('d', b); // $ExpectType undefined
+        });
+    });
+
+    describe('from Array', () => {
+        const a = [1, 2, 3, 4, 5, 6];
+        const b = ['a', 'b', 'c', 'd', 'e', 'f'];
+
+        it('index', () => {
+            const ar0 = F.get<typeof a, 0>(0, a); // $ExpectType number | undefined
+            const ar1 = F.get(190, a); // $ExpectType number | undefined
+
+            const br0 = F.get<typeof b, 0>(0, b); // $ExpectType string | undefined
+            const br1 = F.get(190, b); // $ExpectType string | undefined
+        });
+
+        it('has property', () => {
+            const ar0 = F.get<typeof a, 'length'>('length', a); // $ExpectType number
+            const ar1 = F.get('reverse', a); // $ExpectType () => number[]
+
+            const br0 = F.get<typeof b, 'length'>('length', b); // $ExpectType number
+            const br1 = F.get('reverse', b); // $ExpectType () => string[]
+        });
+
+        it('has not property', () => {
+            const r0 = F.get<typeof a, 'n'>('n')(a); // $ExpectType undefined
+            const r1 = F.get('d', b); // $ExpectType undefined
+        });
+    });
+
+    it('get & sort array', async () => {
+        const a = [{ value: 1 }, { value: 3 }, { value: 0 }];
+        const r0 = F.sortBy(F.get('value'), F.asc, a); // $ExpectType AsyncIterableIterator<{ value: number; }>
     });
 });

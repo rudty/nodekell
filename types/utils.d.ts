@@ -56,6 +56,8 @@ export type ExtractPromise<T> = T extends Promise<infer PT> ? PT : T;
 export type EP<T> = ExtractPromise<T>;
 
 export type ExtractMap<T> = T extends Map<infer K, infer V> ? [K, V] : unknown;
+export type ExtractMapKey<T> = T extends Map<infer K, any> ? K : unknown;
+export type ExtractMapValue<T> = T extends Map<any, infer V> ? V : unknown;
 
 /**
  * Non-Promise Iter Flat
