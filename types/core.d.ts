@@ -8,7 +8,6 @@ import {
     CurriedFunction8,
     Iter,
     EP,
-    ExtractMap,
     ExtractMapValue,
     ExtractMapKey,
 } from './utils';

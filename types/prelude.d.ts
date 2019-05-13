@@ -235,14 +235,14 @@ export function reverse<T>(iter: Iter<T>): AsyncIterableIterator<EP<T>>;
 
 // export function foldr<T>(f: (acc: T, elem: T) => (T | Promise<T>)): (init: T | Promise<T>, iter: Iter<T | Promise<T>>) => Promise<T>;
 
-export function foldr<T>(f: (acc: T, elem: T) => (T | Promise<T>), init: T | Promise<T>, iter: Iter<T | Promise<T>>): Promise<T>;
-export function foldr<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>), init: T, iter: Iter<T>): Promise<EP<T>>;
+export function foldr<T>(f: (elem: T, acc: T) => (T | Promise<T>), init: T | Promise<T>, iter: Iter<T | Promise<T>>): Promise<T>;
+export function foldr<T>(f: (elem: EP<T>, acc: EP<T>) => (EP<T> | Promise<EP<T>>), init: T, iter: Iter<T>): Promise<EP<T>>;
 
-export function foldr<T>(f: (acc: T, elem: T) => (T | Promise<T>), init: T | Promise<T>): (iter: Iter<T | Promise<T>>) => Promise<T>;
-export function foldr<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>), init: T): (iter: Iter<T>) => Promise<EP<T>>;
+export function foldr<T>(f: (elem: T, acc: T) => (T | Promise<T>), init: T | Promise<T>): (iter: Iter<T | Promise<T>>) => Promise<T>;
+export function foldr<T>(f: (elem: EP<T>, acc: EP<T>) => (EP<T> | Promise<EP<T>>), init: T): (iter: Iter<T>) => Promise<EP<T>>;
 
-export function foldr<T>(f: (acc: T, elem: T) => (T | Promise<T>)): CurriedFunction2<T | Promise<T>, Iter<T | Promise<T>>, Promise<T>>;
-export function foldr<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>)): CurriedFunction2<T, Iter<T>, Promise<EP<T>>>;
+export function foldr<T>(f: (elem: T, acc: T) => (T | Promise<T>)): CurriedFunction2<T | Promise<T>, Iter<T | Promise<T>>, Promise<T>>;
+export function foldr<T>(f: (elem: EP<T>, acc: EP<T>) => (EP<T> | Promise<EP<T>>)): CurriedFunction2<T, Iter<T>, Promise<EP<T>>>;
 
 /**
  * https://github.com/rudty/nodekell#foldr1
@@ -250,11 +250,11 @@ export function foldr<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>
  * @param f
  * @param iter
  */
-export function foldr1<T>(f: (acc: T, elem: T) => (T | Promise<T>), iter: Iter<T | Promise<T>>): Promise<T>;
-export function foldr1<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>), iter: Iter<T>): Promise<EP<T>>;
+export function foldr1<T>(f: (elem: T, acc: T) => (T | Promise<T>), iter: Iter<T | Promise<T>>): Promise<T>;
+export function foldr1<T>(f: (elem: EP<T>, acc: EP<T>) => (EP<T> | Promise<EP<T>>), iter: Iter<T>): Promise<EP<T>>;
 
-export function foldr1<T>(f: (acc: T, elem: T) => (T | Promise<T>)): (iter: Iter<T | Promise<T>>) => Promise<T>;
-export function foldr1<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>)): (iter: Iter<T>) => Promise<EP<T>>;
+export function foldr1<T>(f: (elem: T, acc: T) => (T | Promise<T>)): (iter: Iter<T | Promise<T>>) => Promise<T>;
+export function foldr1<T>(f: (elem: EP<T>, acc: EP<T>) => (EP<T> | Promise<EP<T>>)): (iter: Iter<T>) => Promise<EP<T>>;
 
 /**
  * https://github.com/rudty/nodekell#zip
