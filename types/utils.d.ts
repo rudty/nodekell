@@ -112,6 +112,16 @@ export type PDFlat<T> =
     EP<DFlat< // 7
     EP<T>>>>>>>>>>>>>>>;
 
+/**
+ * Internal Type
+ */
+export type FlatForInternalFn<T> =
+    T extends Iter<infer E> ?
+        E extends Promise<infer PE> ?
+            PE
+        : E
+    : unknown;
+
 export type PickElements<N extends 0 | 1, T extends any[], I extends any[] = []> = {
     0: PickElements<N, Drop<2, T>, Prepend<N extends 0 ? Head<T> : Second<T>, I>>;
     1: Head<T> | Flat<I>;

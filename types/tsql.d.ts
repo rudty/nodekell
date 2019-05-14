@@ -3,6 +3,7 @@ import {
     EP,
     ExtractMap,
     CurriedFunction2,
+    FlatForInternalFn,
 } from './utils';
 
 /**
@@ -12,10 +13,13 @@ import {
  * @param iter
  */
 export function groupBy<K, V>(f: (elem: V) => (K | Promise<K>), iter: Iter<V | Promise<V>>): Promise<Map<K, V[]>>;
-export function groupBy<K, V>(f: (elem: EP<V>) => K, iter: Iter<V>): Promise<Map<EP<K>, EP<V>[]>>;
+// export function groupBy<K, V>(f: (elem: EP<V>) => K, iter: Iter<V>): Promise<Map<EP<K>, EP<V>[]>>;
+
+export function groupBy<K, V extends Iter<any>>(f: (elem: FlatForInternalFn<V>) => K, iter: V): Promise<Map<EP<K>, FlatForInternalFn<V>[]>>;
+export function groupBy<K, V extends Iter<any>>(f: (elem: FlatForInternalFn<V>) => K): (iter: V) => Promise<Map<EP<K>, FlatForInternalFn<V>[]>>;
 
 export function groupBy<K, V>(f: (elem: V) => (K | Promise<K>)): (iter: Iter<V | Promise<V>>) => Promise<Map<K, V[]>>;
-export function groupBy<K, V>(f: (elem: EP<V>) => K): (iter: Iter<V>) => Promise<Map<EP<K>, EP<V>[]>>;
+// export function groupBy<K, V>(f: (elem: EP<V>) => K): (iter: Iter<V>) => Promise<Map<EP<K>, EP<V>[]>>;
 
 /**
  * https://github.com/rudty/nodekell#concat
@@ -24,10 +28,13 @@ export function groupBy<K, V>(f: (elem: EP<V>) => K): (iter: Iter<V>) => Promise
  * @param iter2
  */
 export function concat<T, Y>(iter1: Iter<T | Promise<T>>, iter2: Iter<Y | Promise<Y>>): AsyncIterableIterator<T | Y>;
-export function concat<T, Y>(iter1: Iter<T>, iter2: Iter<Y>): AsyncIterableIterator<EP<T> | EP<Y>>;
+// export function concat<T, Y>(iter1: Iter<T>, iter2: Iter<Y>): AsyncIterableIterator<EP<T> | EP<Y>>;
+
+export function concat<T extends Iter<any>, Y extends Iter<any>>(iter1: T, iter2: Y): AsyncIterableIterator<FlatForInternalFn<T> | FlatForInternalFn<Y>>;
+export function concat<T extends Iter<any>, Y extends Iter<any>>(iter1: T): (iter2: Y) => AsyncIterableIterator<FlatForInternalFn<T> | FlatForInternalFn<Y>>;
 
 export function concat<T, Y>(iter1: Iter<T | Promise<T>>): (iter2: Iter<Y | Promise<Y>>) => AsyncIterableIterator<T | Y>;
-export function concat<T, Y>(iter1: Iter<T>): (iter2: Iter<Y>) => AsyncIterableIterator<EP<T> | EP<Y>>;
+// export function concat<T, Y>(iter1: Iter<T>): (iter2: Iter<Y>) => AsyncIterableIterator<EP<T> | EP<Y>>;
 
 /**
  * https://github.com/rudty/nodekell#union
@@ -36,10 +43,13 @@ export function concat<T, Y>(iter1: Iter<T>): (iter2: Iter<Y>) => AsyncIterableI
  * @param iter2
  */
 export function union<T, Y>(iter1: Iter<T | Promise<T>>, iter2: Iter<Y | Promise<Y>>): AsyncIterableIterator<T | Y>;
-export function union<T, Y>(iter1: Iter<T>, iter2: Iter<Y>): AsyncIterableIterator<EP<T> | EP<Y>>;
+// export function union<T, Y>(iter1: Iter<T>, iter2: Iter<Y>): AsyncIterableIterator<EP<T> | EP<Y>>;
+
+export function union<T extends Iter<any>, Y extends Iter<any>>(iter1: T, iter2: Y): AsyncIterableIterator<FlatForInternalFn<T> | FlatForInternalFn<Y>>;
+export function union<T extends Iter<any>, Y extends Iter<any>>(iter1: T): (iter2: Y) => AsyncIterableIterator<FlatForInternalFn<T> | FlatForInternalFn<Y>>;
 
 export function union<T, Y>(iter1: Iter<T | Promise<T>>): (iter2: Iter<Y | Promise<Y>>) => AsyncIterableIterator<T | Y>;
-export function union<T, Y>(iter1: Iter<T>): (iter2: Iter<Y>) => AsyncIterableIterator<EP<T> | EP<Y>>;
+// export function union<T, Y>(iter1: Iter<T>): (iter2: Iter<Y>) => AsyncIterableIterator<EP<T> | EP<Y>>;
 
 export type CompareFn<T> = (a: T, b: T) => 1 | 0 | -1 | number;
 export type OrderType = 'ASC' | 'DESC' | 'asc' | 'desc';

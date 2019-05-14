@@ -5,6 +5,7 @@ import {
     PFlat,
     PDFlat,
     CurriedFunction2,
+    FlatForInternalFn,
 } from './utils';
 
 /**
@@ -30,10 +31,13 @@ export function tail<T>(iter: Iter<T>): AsyncIterableIterator<EP<T>>;
  * @param iter
  */
 export function drop<T>(count: number, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
-export function drop<T>(count: number, iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+// export function drop<T>(count: number, iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+
+export function drop<T extends Iter<any>>(count: number, iter: T): AsyncIterableIterator<FlatForInternalFn<T>>;
+export function drop<T extends Iter<any>>(count: number): (iter: T) => AsyncIterableIterator<FlatForInternalFn<T>>;
 
 export function drop<T>(count: number): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
-export function drop<T>(count: number): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
+// export function drop<T>(count: number): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
 
 /**
  * https://github.com/rudty/nodekell#dropwhile
@@ -42,10 +46,13 @@ export function drop<T>(count: number): (iter: Iter<T>) => AsyncIterableIterator
  * @param iter
  */
 export function dropWhile<T>(f: (elem: T) => (boolean | Promise<boolean>), iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
-export function dropWhile<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+// export function dropWhile<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+
+export function dropWhile<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>), iter: T): AsyncIterableIterator<FlatForInternalFn<T>>;
+export function dropWhile<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>)): (iter: T) => AsyncIterableIterator<FlatForInternalFn<T>>;
 
 export function dropWhile<T>(f: (elem: T) => (boolean | Promise<boolean>)): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
-export function dropWhile<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>)): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
+// export function dropWhile<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>)): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
 
 /**
  * https://github.com/rudty/nodekell#filter
@@ -54,10 +61,13 @@ export function dropWhile<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>)): 
  * @param iter
  */
 export function filter<T>(f: (elem: T) => (boolean | Promise<boolean>), iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
-export function filter<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+// export function filter<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+
+export function filter<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>), iter: T): AsyncIterableIterator<FlatForInternalFn<T>>;
+export function filter<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>)): (iter: T) => AsyncIterableIterator<FlatForInternalFn<T>>;
 
 export function filter<T>(f: (elem: T) => (boolean | Promise<boolean>)): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
-export function filter<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>)): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
+// export function filter<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>)): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
 
 /**
  * https://github.com/rudty/nodekell#map
@@ -66,10 +76,13 @@ export function filter<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>)): (it
  * @param iter
  */
 export function map<T, R>(f: (elem: T) => (R | Promise<R>), iter: Iter<T | Promise<T>>): AsyncIterableIterator<R>;
-export function map<T, R>(f: (elem: EP<T>) => (R | Promise<R>), iter: Iter<T>): AsyncIterableIterator<R>;
+// export function map<T, R>(f: (elem: EP<T>) => (R | Promise<R>), iter: Iter<T>): AsyncIterableIterator<R>;
+
+export function map<T extends Iter<any>, R>(f: (elem: FlatForInternalFn<T>) => R, iter: T): AsyncIterableIterator<EP<R>>;
+export function map<T extends Iter<any>, R>(f: (elem: FlatForInternalFn<T>) => R): (iter: T) => AsyncIterableIterator<EP<R>>;
 
 export function map<T, R>(f: (elem: T) => (R | Promise<R>)): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<R>;
-export function map<T, R>(f: (elem: EP<T>) => (R | Promise<R>)): (iter: Iter<T>) => AsyncIterableIterator<R>;
+// export function map<T, R>(f: (elem: EP<T>) => (R | Promise<R>)): (iter: Iter<T>) => AsyncIterableIterator<R>;
 
 /**
  * https://github.com/rudty/nodekell#fmap
@@ -79,6 +92,9 @@ export function map<T, R>(f: (elem: EP<T>) => (R | Promise<R>)): (iter: Iter<T>)
  */
 export function fmap<T, R = T>(f: (elem: EP<T>) => R, iter: Iter<T>): AsyncIterableIterator<PFlat<EP<R>>>;
 export function fmap<T, R = EP<T>>(f: (elem: EP<T>) => (R | Promise<R>), iter: Iter<T | Promise<T>>): AsyncIterableIterator<PFlat<R>>;
+
+// export function fmap<T extends Iter<any>, R = PFlat<T>>(f: (elem: PFlat<T>) => R, iter: T): AsyncIterableIterator<PFlat<EP<R>>>;
+// export function fmap<T extends Iter<any>, R = PFlat<T>>(f: (elem: PFlat<T>) => R): (iter: T) => AsyncIterableIterator<PFlat<EP<R>>>;
 
 export function fmap<T, R = T>(f: (elem: EP<T>) => R): (iter: Iter<T>) => AsyncIterableIterator<PFlat<EP<R>>>;
 export function fmap<T, R = EP<T>>(f: (elem: EP<T>) => (R | Promise<R>)): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<PFlat<R>>;
@@ -121,10 +137,13 @@ export function dflat<T extends any[]>(...a: T): AsyncIterableIterator<PDFlat<Fl
  * @param iter
  */
 export function take<T>(count: number, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
-export function take<T>(count: number, iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+// export function take<T>(count: number, iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+
+export function take<T extends Iter<any>>(count: number, iter: T): AsyncIterableIterator<FlatForInternalFn<T>>;
+export function take<T extends Iter<any>>(count: number): (iter: T) => AsyncIterableIterator<FlatForInternalFn<T>>;
 
 export function take<T>(count: number): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
-export function take<T>(count: number): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
+// export function take<T>(count: number): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
 
 /**
  * https://github.com/rudty/nodekell#takewhile
@@ -133,10 +152,13 @@ export function take<T>(count: number): (iter: Iter<T>) => AsyncIterableIterator
  * @param iter
  */
 export function takeWhile<T>(f: (elem: T) => (boolean | Promise<boolean>), iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
-export function takeWhile<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+// export function takeWhile<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+
+export function takeWhile<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>), iter: T): AsyncIterableIterator<FlatForInternalFn<T>>;
+export function takeWhile<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>)): (iter: T) => AsyncIterableIterator<FlatForInternalFn<T>>;
 
 export function takeWhile<T>(f: (elem: T) => (boolean | Promise<boolean>)): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
-export function takeWhile<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>)): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
+// export function takeWhile<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>)): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
 
 /**
  * https://github.com/rudty/nodekell#foldl
@@ -150,13 +172,17 @@ export function takeWhile<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>)): 
 
 // export function foldl<T>(f: (acc: T, elem: T) => (T | Promise<T>)): (init: T | Promise<T>, iter: Iter<T | Promise<T>>) => Promise<T>;
 export function foldl<T>(f: (acc: T, elem: T) => (T | Promise<T>), init: T | Promise<T>, iter: Iter<T | Promise<T>>): Promise<T>;
-export function foldl<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>), init: T, iter: Iter<T>): Promise<EP<T>>;
+// export function foldl<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>), init: T, iter: Iter<T>): Promise<EP<T>>;
+
+export function foldl<T extends Iter<any>>(f: (acc: FlatForInternalFn<T>, elem: FlatForInternalFn<T>) => (FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>), init: FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>, iter: T): Promise<FlatForInternalFn<T>>;
+export function foldl<T extends Iter<any>>(f: (acc: FlatForInternalFn<T>, elem: FlatForInternalFn<T>) => (FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>), init: FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>): (iter: T) => Promise<FlatForInternalFn<T>>;
+export function foldl<T extends Iter<any>>(f: (acc: FlatForInternalFn<T>, elem: FlatForInternalFn<T>) => (FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>)): CurriedFunction2<FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>, T, Promise<FlatForInternalFn<T>>>;
 
 export function foldl<T>(f: (acc: T, elem: T) => (T | Promise<T>), init: T | Promise<T>): (iter: Iter<T | Promise<T>>) => Promise<T>;
-export function foldl<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>), init: T): (iter: Iter<T>) => Promise<EP<T>>;
+// export function foldl<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>), init: T): (iter: Iter<T>) => Promise<EP<T>>;
 
 export function foldl<T>(f: (acc: T, elem: T) => (T | Promise<T>)): CurriedFunction2<T | Promise<T>, Iter<T | Promise<T>>, Promise<T>>;
-export function foldl<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>)): CurriedFunction2<T, Iter<T>, Promise<EP<T>>>;
+// export function foldl<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>)): CurriedFunction2<T, Iter<T>, Promise<EP<T>>>;
 
 /**
  * https://github.com/rudty/nodekell#foldl1
@@ -165,10 +191,13 @@ export function foldl<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>
  * @param iter
  */
 export function foldl1<T>(f: (acc: T, elem: T) => (T | Promise<T>), iter: Iter<T | Promise<T>>): Promise<T>;
-export function foldl1<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>), iter: Iter<T>): Promise<EP<T>>;
+// export function foldl1<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>), iter: Iter<T>): Promise<EP<T>>;
+
+export function foldl1<T extends Iter<any>>(f: (acc: FlatForInternalFn<T>, elem: FlatForInternalFn<T>) => (FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>), iter: T): Promise<FlatForInternalFn<T>>;
+export function foldl1<T extends Iter<any>>(f: (acc: FlatForInternalFn<T>, elem: FlatForInternalFn<T>) => (FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>)): (iter: T) => Promise<FlatForInternalFn<T>>;
 
 export function foldl1<T>(f: (acc: T, elem: T) => (T | Promise<T>)): (iter: Iter<T | Promise<T>>) => Promise<T>;
-export function foldl1<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>)): (iter: Iter<T>) => Promise<EP<T>>;
+// export function foldl1<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>)): (iter: Iter<T>) => Promise<EP<T>>;
 
 /**
  * https://github.com/rudty/nodekell#reduce
@@ -179,10 +208,13 @@ export function foldl1<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>
  * @param iter
  */
 export function reduce<T>(f: (acc: T, elem: T) => (T | Promise<T>), iter: Iter<T | Promise<T>>): Promise<T>;
-export function reduce<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>), iter: Iter<T>): Promise<EP<T>>;
+// export function reduce<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>), iter: Iter<T>): Promise<EP<T>>;
+
+export function reduce<T extends Iter<any>>(f: (acc: FlatForInternalFn<T>, elem: FlatForInternalFn<T>) => (FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>), iter: T): Promise<FlatForInternalFn<T>>;
+export function reduce<T extends Iter<any>>(f: (acc: FlatForInternalFn<T>, elem: FlatForInternalFn<T>) => (FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>)): (iter: T) => Promise<FlatForInternalFn<T>>;
 
 export function reduce<T>(f: (acc: T, elem: T) => (T | Promise<T>)): (iter: Iter<T | Promise<T>>) => Promise<T>;
-export function reduce<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>)): (iter: Iter<T>) => Promise<EP<T>>;
+// export function reduce<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>)): (iter: Iter<T>) => Promise<EP<T>>;
 
 /**
  * https://github.com/rudty/nodekell#scanl
@@ -196,13 +228,17 @@ export function reduce<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>
 // export function scanl<T>(f: (a: T, b: T) => (T | Promise<T>)): (init: T | Promise<T>, iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
 
 export function scanl<T>(f: (a: T, b: T) => (T | Promise<T>), init: T | Promise<T>, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
-export function scanl<T>(f: (a: EP<T>, b: EP<T>) => (EP<T> | Promise<EP<T>>), init: T, iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+// export function scanl<T>(f: (a: EP<T>, b: EP<T>) => (EP<T> | Promise<EP<T>>), init: T, iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+
+export function scanl<T extends Iter<any>>(f: (a: FlatForInternalFn<T>, b: FlatForInternalFn<T>) => (FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>), init: FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>, iter: T): AsyncIterableIterator<FlatForInternalFn<T>>;
+export function scanl<T extends Iter<any>>(f: (a: FlatForInternalFn<T>, b: FlatForInternalFn<T>) => (FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>), init: FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>): (iter: T) => AsyncIterableIterator<FlatForInternalFn<T>>;
+export function scanl<T extends Iter<any>>(f: (a: FlatForInternalFn<T>, b: FlatForInternalFn<T>) => (FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>)): CurriedFunction2<FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>, T, AsyncIterableIterator<FlatForInternalFn<T>>>;
 
 export function scanl<T>(f: (a: T, b: T) => (T | Promise<T>), init: T | Promise<T>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
-export function scanl<T>(f: (a: EP<T>, b: EP<T>) => (EP<T> | Promise<EP<T>>), init: T): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
+// export function scanl<T>(f: (a: EP<T>, b: EP<T>) => (EP<T> | Promise<EP<T>>), init: T): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
 
 export function scanl<T>(f: (a: T, b: T) => (T | Promise<T>)): CurriedFunction2<T | Promise<T>, Iter<T | Promise<T>>, AsyncIterableIterator<T>>;
-export function scanl<T>(f: (a: EP<T>, b: EP<T>) => (EP<T> | Promise<EP<T>>)): CurriedFunction2<T, Iter<T>, AsyncIterableIterator<EP<T>>>;
+// export function scanl<T>(f: (a: EP<T>, b: EP<T>) => (EP<T> | Promise<EP<T>>)): CurriedFunction2<T, Iter<T>, AsyncIterableIterator<EP<T>>>;
 
 /**
  * https://github.com/rudty/nodekell#scanl1
@@ -211,10 +247,13 @@ export function scanl<T>(f: (a: EP<T>, b: EP<T>) => (EP<T> | Promise<EP<T>>)): C
  * @param iter
  */
 export function scanl1<T>(f: (a: T, b: T) => (T | Promise<T>), iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
-export function scanl1<T>(f: (a: EP<T>, b: EP<T>) => (EP<T> | Promise<EP<T>>), iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+// export function scanl1<T>(f: (a: EP<T>, b: EP<T>) => (EP<T> | Promise<EP<T>>), iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+
+export function scanl1<T extends Iter<any>>(f: (acc: FlatForInternalFn<T>, elem: FlatForInternalFn<T>) => (FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>), iter: T): AsyncIterableIterator<FlatForInternalFn<T>>;
+export function scanl1<T extends Iter<any>>(f: (acc: FlatForInternalFn<T>, elem: FlatForInternalFn<T>) => (FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>)): (iter: T) => AsyncIterableIterator<FlatForInternalFn<T>>;
 
 export function scanl1<T>(f: (a: T, b: T) => (T | Promise<T>)): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
-export function scanl1<T>(f: (a: EP<T>, b: EP<T>) => (EP<T> | Promise<EP<T>>)): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
+// export function scanl1<T>(f: (a: EP<T>, b: EP<T>) => (EP<T> | Promise<EP<T>>)): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
 
 /**
  * https://github.com/rudty/nodekell#reverse
@@ -236,13 +275,17 @@ export function reverse<T>(iter: Iter<T>): AsyncIterableIterator<EP<T>>;
 // export function foldr<T>(f: (acc: T, elem: T) => (T | Promise<T>)): (init: T | Promise<T>, iter: Iter<T | Promise<T>>) => Promise<T>;
 
 export function foldr<T>(f: (elem: T, acc: T) => (T | Promise<T>), init: T | Promise<T>, iter: Iter<T | Promise<T>>): Promise<T>;
-export function foldr<T>(f: (elem: EP<T>, acc: EP<T>) => (EP<T> | Promise<EP<T>>), init: T, iter: Iter<T>): Promise<EP<T>>;
+// export function foldr<T>(f: (elem: EP<T>, acc: EP<T>) => (EP<T> | Promise<EP<T>>), init: T, iter: Iter<T>): Promise<EP<T>>;
+
+export function foldr<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>, acc: FlatForInternalFn<T>) => (FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>), init: FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>, iter: T): Promise<FlatForInternalFn<T>>;
+export function foldr<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>, acc: FlatForInternalFn<T>) => (FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>), init: FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>): (iter: T) => Promise<FlatForInternalFn<T>>;
+export function foldr<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>, acc: FlatForInternalFn<T>) => (FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>)): CurriedFunction2<FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>, T, Promise<FlatForInternalFn<T>>>;
 
 export function foldr<T>(f: (elem: T, acc: T) => (T | Promise<T>), init: T | Promise<T>): (iter: Iter<T | Promise<T>>) => Promise<T>;
-export function foldr<T>(f: (elem: EP<T>, acc: EP<T>) => (EP<T> | Promise<EP<T>>), init: T): (iter: Iter<T>) => Promise<EP<T>>;
+// export function foldr<T>(f: (elem: EP<T>, acc: EP<T>) => (EP<T> | Promise<EP<T>>), init: T): (iter: Iter<T>) => Promise<EP<T>>;
 
 export function foldr<T>(f: (elem: T, acc: T) => (T | Promise<T>)): CurriedFunction2<T | Promise<T>, Iter<T | Promise<T>>, Promise<T>>;
-export function foldr<T>(f: (elem: EP<T>, acc: EP<T>) => (EP<T> | Promise<EP<T>>)): CurriedFunction2<T, Iter<T>, Promise<EP<T>>>;
+// export function foldr<T>(f: (elem: EP<T>, acc: EP<T>) => (EP<T> | Promise<EP<T>>)): CurriedFunction2<T, Iter<T>, Promise<EP<T>>>;
 
 /**
  * https://github.com/rudty/nodekell#foldr1
@@ -251,10 +294,13 @@ export function foldr<T>(f: (elem: EP<T>, acc: EP<T>) => (EP<T> | Promise<EP<T>>
  * @param iter
  */
 export function foldr1<T>(f: (elem: T, acc: T) => (T | Promise<T>), iter: Iter<T | Promise<T>>): Promise<T>;
-export function foldr1<T>(f: (elem: EP<T>, acc: EP<T>) => (EP<T> | Promise<EP<T>>), iter: Iter<T>): Promise<EP<T>>;
+// export function foldr1<T>(f: (elem: EP<T>, acc: EP<T>) => (EP<T> | Promise<EP<T>>), iter: Iter<T>): Promise<EP<T>>;
+
+export function foldr1<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>, acc: FlatForInternalFn<T>) => (FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>), iter: T): Promise<FlatForInternalFn<T>>;
+export function foldr1<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>, acc: FlatForInternalFn<T>) => (FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>)): (iter: T) => Promise<FlatForInternalFn<T>>;
 
 export function foldr1<T>(f: (elem: T, acc: T) => (T | Promise<T>)): (iter: Iter<T | Promise<T>>) => Promise<T>;
-export function foldr1<T>(f: (elem: EP<T>, acc: EP<T>) => (EP<T> | Promise<EP<T>>)): (iter: Iter<T>) => Promise<EP<T>>;
+// export function foldr1<T>(f: (elem: EP<T>, acc: EP<T>) => (EP<T> | Promise<EP<T>>)): (iter: Iter<T>) => Promise<EP<T>>;
 
 /**
  * https://github.com/rudty/nodekell#zip
@@ -263,10 +309,13 @@ export function foldr1<T>(f: (elem: EP<T>, acc: EP<T>) => (EP<T> | Promise<EP<T>
  * @param iter2
  */
 export function zip<T, Y>(iter1: Iter<T | Promise<T>>, iter2: Iter<Y | Promise<Y>>): AsyncIterableIterator<[T, Y]>;
-export function zip<T, Y>(iter1: Iter<T>, iter2: Iter<Y>): AsyncIterableIterator<[EP<T>, EP<Y>]>;
+// export function zip<T, Y>(iter1: Iter<T>, iter2: Iter<Y>): AsyncIterableIterator<[EP<T>, EP<Y>]>;
+
+export function zip<T extends Iter<any>, Y extends Iter<any>>(iter1: T, iter2: Y): AsyncIterableIterator<[FlatForInternalFn<T>, FlatForInternalFn<Y>]>;
+export function zip<T extends Iter<any>, Y extends Iter<any>>(iter1: T): (iter2: Y) => AsyncIterableIterator<[FlatForInternalFn<T>, FlatForInternalFn<Y>]>;
 
 export function zip<T, Y>(iter1: Iter<T | Promise<T>>): (iter2: Iter<Y | Promise<Y>>) => AsyncIterableIterator<[T, Y]>;
-export function zip<T, Y>(iter1: Iter<T>): (iter2: Iter<Y>) => AsyncIterableIterator<[EP<T>, EP<Y>]>;
+// export function zip<T, Y>(iter1: Iter<T>): (iter2: Iter<Y>) => AsyncIterableIterator<[EP<T>, EP<Y>]>;
 
 /**
  * https://github.com/rudty/nodekell#zipwith

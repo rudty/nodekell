@@ -3,6 +3,7 @@ import {
     EP,
     PFlat,
 	Flat,
+    FlatForInternalFn,
 } from './utils';
 
 /**
@@ -19,10 +20,13 @@ export function parallel_set_fetch_count(count: number): void;
  * @param iter
  */
 export function pmap<T, R>(f: (elem: T) => (R | Promise<R>), iter: Iter<T | Promise<T>>): AsyncIterableIterator<R>;
-export function pmap<T, R>(f: (elem: EP<T>) => (R | Promise<R>), iter: Iter<T>): AsyncIterableIterator<R>;
+// export function pmap<T, R>(f: (elem: EP<T>) => (R | Promise<R>), iter: Iter<T>): AsyncIterableIterator<R>;
+
+export function pmap<T extends Iter<any>, R>(f: (elem: FlatForInternalFn<T>) => R, iter: T): AsyncIterableIterator<EP<R>>;
+export function pmap<T extends Iter<any>, R>(f: (elem: FlatForInternalFn<T>) => R): (iter: T) => AsyncIterableIterator<EP<R>>;
 
 export function pmap<T, R>(f: (elem: T) => (R | Promise<R>)): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<R>;
-export function pmap<T, R>(f: (elem: EP<T>) => (R | Promise<R>)): (iter: Iter<T>) => AsyncIterableIterator<R>;
+// export function pmap<T, R>(f: (elem: EP<T>) => (R | Promise<R>)): (iter: Iter<T>) => AsyncIterableIterator<R>;
 
 /**
  * https://github.com/rudty/nodekell#pfilter
@@ -31,10 +35,13 @@ export function pmap<T, R>(f: (elem: EP<T>) => (R | Promise<R>)): (iter: Iter<T>
  * @param iter
  */
 export function pfilter<T>(f: (elem: T) => (boolean | Promise<boolean>), iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
-export function pfilter<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+// export function pfilter<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+
+export function pfilter<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>), iter: T): AsyncIterableIterator<FlatForInternalFn<T>>;
+export function pfilter<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>)): (iter: T) => AsyncIterableIterator<FlatForInternalFn<T>>;
 
 export function pfilter<T>(f: (elem: T) => (boolean | Promise<boolean>)): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
-export function pfilter<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>)): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
+// export function pfilter<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>)): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
 
 /**
  * https://github.com/rudty/nodekell#pcalls

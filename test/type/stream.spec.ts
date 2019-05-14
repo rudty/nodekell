@@ -73,6 +73,21 @@ describe('firstOrGet', () => {
         const r0 = await F.firstOrGet<string | number, string | number>(y)(a); // $ExpectType string | number
         const r1 = await F.firstOrGet(y, a); // $ExpectType string | number
     });
+
+    it('with run', async () => {
+        const a = [1, Promise.resolve(2), 'a', Promise.resolve('b'), null];
+        const y0 = F.first([9, Promise.resolve('y'), 'y', Promise.resolve(9)]);
+        const y1 = () => () => 'y';
+        const y2 = () => async () => 'y';
+
+        const ar0 = await F.run(a, F.firstOrGet<string | number | null, string | number>(y0)); // $ExpectType string | number | null
+        const ar1 = await F.run(a, F.firstOrGet<string | number | null, () => string>(y1)); // $ExpectType string | number | (() => string) | null
+        const ar2 = await F.run(a, F.firstOrGet<string | number | null, () => Promise<string>>(y2)); // $ExpectType string | number | (() => Promise<string>) | null
+
+        const br0 = await F.run(a, F.firstOrGet(y0)); // $ExpectType string | number | null
+        const br1 = await F.run(a, F.firstOrGet(y1)); // $ExpectType string | number | (() => string) | null
+        const br2 = await F.run(a, F.firstOrGet(y2)); // $ExpectType string | number | (() => Promise<string>) | null
+    });
 });
 
 describe('emptyThen', () => {
@@ -140,6 +155,21 @@ describe('emptyThen', () => {
         const br0 = F.emptyThen(Promise.resolve(y), t); // $ExpectType AsyncIterableIterator<string | number>
         const br1 = F.emptyThen(testSupplyFunc(y), t); // $ExpectType AsyncIterableIterator<string | number>
     });
+
+    it('with run', async () => {
+        const testSupplyFunc = (i: (string | number | Promise<string> | Promise<number> | null)[]) => () => i;
+
+        const t = [] as (string | Promise<string> | number | Promise<number>)[];
+        const y = [1, Promise.resolve(2), 'a', Promise.resolve('b'), null];
+
+        const ar0 = await F.run(t, F.emptyThen<string | number, string | number | null>(y)); // $ExpectType AsyncIterableIterator<string | number | null>
+        const ar1 = await F.run(t, F.emptyThen<string | number, string | number | null>(testSupplyFunc(y))); // $ExpectType AsyncIterableIterator<string | number | null>
+        const ar2 = await F.run(t, F.emptyThen<string | number, string | number | null>(Promise.resolve(testSupplyFunc(y)))); // $ExpectType AsyncIterableIterator<string | number | null>
+
+        const br0 = await F.run(t, F.emptyThen(y)); // $ExpectType AsyncIterableIterator<string | number | null>
+        const br1 = await F.run(t, F.emptyThen(testSupplyFunc(y))); // $ExpectType AsyncIterableIterator<string | number | null>
+        const br2 = await F.run(t, F.emptyThen(Promise.resolve(testSupplyFunc(y)))); // $ExpectType AsyncIterableIterator<string | number | null>
+    });
 });
 
 describe('collect', () => {
@@ -168,9 +198,9 @@ describe('collect', () => {
     });
 
     it('with run', async () => {
-        const a = [1, 2, 3, Promise.resolve(4), 'a', Promise.resolve('b')];
+        const a = [1, 2, 3, Promise.resolve(4), 'a', Promise.resolve('b'), null];
 
-        const r0 = await F.run(F.seq(a), F.collect); // $ExpectType (string | number)[]
+        const r0 = await F.run(F.seq(a), F.collect); // $ExpectType (string | number | null)[]
     });
 });
 
@@ -271,6 +301,14 @@ describe('forEach', () => {
         const r0 = await F.forEach<string | number, string | number>(e => b[e])(a); // $ExpectType (string | number)[]
         const r1 = await F.forEach(e => b[e], a); // $ExpectType (string | number)[]
     });
+
+    it('with run', async () => {
+        const a = [1, Promise.resolve(2), Promise.resolve('a'), 'b', null];
+        const b: { [k: string]: string | number; } = { a: 0, b: 0, 1: 'b', 2: 'c' };
+
+        const r0 = await F.run(a, F.forEach<string | number | null, string | number | null>(e => e)); // $ExpectType (string | number | null)[]
+        const r1 = await F.run(a, F.forEach(e => e)); // $ExpectType (string | number | null)[]
+    });
 });
 
 describe('distinctBy', () => {
@@ -300,6 +338,13 @@ describe('distinctBy', () => {
 
         const r0 = F.distinctBy<string | number>(e => e)(a); // $ExpectType AsyncIterableIterator<string | number>
         const r1 = F.distinctBy(e => e, a); // $ExpectType AsyncIterableIterator<string | number>
+    });
+
+    it('with run', async () => {
+        const a = [Promise.resolve('a'), 1, Promise.resolve(1), 'a', null];
+
+        const r0 = await F.run(a, F.distinctBy<string | number | null>(e => e)); // $ExpectType AsyncIterableIterator<string | number | null>
+        const r1 = await F.run(a, F.distinctBy(e => e)); // $ExpectType AsyncIterableIterator<string | number | null>
     });
 });
 
@@ -363,6 +408,19 @@ describe('some', () => {
         const r0 = await F.some<string | number>(e => e === 'a')(a); // $ExpectType boolean
         const r1 = await F.some(e => e === 'a', a); // $ExpectType boolean
     });
+
+    it('with run', async () => {
+        const a = ['a', Promise.resolve('b'), Promise.resolve('c'), Promise.resolve(1), 2, 1, null];
+
+        const r0 = await F.run(a, F.some<string | number | null>(e => { // $ExpectType boolean
+            e; // $ExpectType string | number | null
+            return e === 'a';
+        }));
+        const r1 = await F.run(a, F.some(e => { // $ExpectType boolean
+            e; // $ExpectType string | number | null
+            return e === 'a';
+        }));
+    });
 });
 
 describe('every', () => {
@@ -390,8 +448,21 @@ describe('every', () => {
     it('from Normal / Promise Union', async () => {
         const a = ['a', Promise.resolve('b'), Promise.resolve('c'), Promise.resolve(1), 2, 1];
 
-        const r0 = await F.some<string | number>(e => e === 'a')(a); // $ExpectType boolean
-        const r1 = await F.some(e => e === 'a', a); // $ExpectType boolean
+        const r0 = await F.every<string | number>(e => e === 'a')(a); // $ExpectType boolean
+        const r1 = await F.every(e => e === 'a', a); // $ExpectType boolean
+    });
+
+    it('with run', async () => {
+        const a = ['a', Promise.resolve('b'), Promise.resolve('c'), Promise.resolve(1), 2, 1, null];
+
+        const r0 = await F.run(a, F.every<string | number | null>(e => { // $ExpectType boolean
+            e; // $ExpectType string | number | null
+            return e === 'a';
+        }));
+        const r1 = await F.run(a, F.every(e => { // $ExpectType boolean
+            e; // $ExpectType string | number | null
+            return e === 'a';
+        }));
     });
 });
 
@@ -422,6 +493,12 @@ describe('maxBy', () => {
         const r0 = await F.maxBy<string>(e => e)(a); // $ExpectType string
         const r1 = await F.maxBy(e => e, a); // $ExpectType string
     });
+
+    it('with run', async () => {
+        const a = [Promise.resolve({ id: 1 }), { id: 5 }, { id: 2 }, { id: 4 }, { id: 3 }];
+
+        const r0 = await F.run(a, F.maxBy(e => e.id)); // $ExpectType { id: number; }
+    });
 });
 
 describe('minBy', () => {
@@ -443,6 +520,12 @@ describe('minBy', () => {
 
         r0.id; // $ExpectType number
         r1.id; // $ExpectType number
+    });
+
+    it('with run', async () => {
+        const a = [Promise.resolve({ id: 1 }), { id: 5 }, { id: 2 }, { id: 4 }, { id: 3 }];
+
+        const r0 = await F.run(a, F.minBy(e => e.id)); // $ExpectType { id: number; }
     });
 });
 
@@ -473,7 +556,7 @@ describe('count', () => {
 
 		const r0 = await F.count(a); // $ExpectType number
 		const r1 = await F.count(b); // $ExpectType number
-	});
+    });
 });
 
 describe('sum', () => {
@@ -566,6 +649,12 @@ describe('average', () => {
 
         const r0 = await F.average(a); // $ExpectType number
     });
+
+    it('with run', async () => {
+        const a = [Promise.resolve(1), 2, 3, 4, 5];
+
+        const r0 = await F.run(a, F.average); // $ExpectType number
+    });
 });
 
 describe('splitBy', () => {
@@ -588,6 +677,12 @@ describe('splitBy', () => {
 
         const br0 = F.splitBy<string, string>(async e => e.split(' '))(a); // $ExpectType AsyncIterableIterator<string>
         const br1 = F.splitBy(async e => e.split(' '), a); // $ExpectType AsyncIterableIterator<string>
+    });
+
+    it('with run', async () => {
+        const a = 'hello world';
+
+        const r0 = await F.run(a, F.splitBy(e => e.split(' '))); // $ExpectType AsyncIterableIterator<string>
     });
 });
 
@@ -654,6 +749,21 @@ describe('errorThen', () => {
         const br2 = F.errorThen(testSupplyFunc(e), a); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | { id: number; } | null>
         const br3 = F.errorThen(Promise.resolve(testSupplyFunc(e)), a); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | { id: number; } | null>
     });
+
+    it('with run', async () => {
+        const testSupplyFunc = (i: (null | Promise<null> | { id: number; } | Promise<{ id: number; }>)[]) => () => i;
+
+        const a = [1, Promise.resolve(2), 'a', Promise.resolve('b')];
+        const e = [Promise.resolve(null), null, Promise.resolve({ id: 1}), { id: 2}];
+
+        const ar0 = await F.run(a, F.errorThen<string | number, { id: number; } | null>(e)); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | null>
+        const ar1 = await F.run(a, F.errorThen<string | number, { id: number; } | null>(testSupplyFunc(e))); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | null>
+        const ar2 = await F.run(a, F.errorThen<string | number, { id: number; } | null>(Promise.resolve(testSupplyFunc(e)))); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | null>
+
+        const br0 = await F.run(a, F.errorThen(e)); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | { id: number; } | null>
+        const br1 = await F.run(a, F.errorThen(testSupplyFunc(e))); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | { id: number; } | null>
+        const br2 = await F.run(a, F.errorThen(Promise.resolve(testSupplyFunc(e)))); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | { id: number; } | null>
+    });
 });
 
 describe('then', () => {
@@ -702,6 +812,12 @@ describe('then', () => {
         const r0 = await F.then<(number | Promise<number>)[], Promise<void>>(async () => F.fnothing())(a); // $ExpectType void
         const r1 = await F.then(async () => F.fnothing(), a); // $ExpectType void
     });
+
+    it('with run', async () => {
+        const a = [1, 2, Promise.resolve(3), 4, 5];
+
+        const r0 = await F.run(a, F.then(F.map(e => e + 1))); // $ExpectType AsyncIterableIterator<number>
+    });
 });
 
 describe('tap', () => {
@@ -736,7 +852,7 @@ describe('tap', () => {
     it('with run', async () => {
         const a = F.range(Infinity);
 
-        const r = await F.run(a, F.map(F.inc), F.take(20), F.tap(F.fnothing)); // $ExpectType AsyncIterableIterator<number>
+        const r0 = await F.run(a, F.map(F.inc), F.take(20), F.tap(F.fnothing)); // $ExpectType AsyncIterableIterator<number>
     });
 });
 
@@ -767,6 +883,13 @@ describe('buffer', () => {
 
         const r0 = F.buffer<string | number>(1)(a); // $ExpectType AsyncIterableIterator<(string | number)[]>
         const r1 = F.buffer(2, a); // $ExpectType AsyncIterableIterator<(string | number)[]>
+    });
+
+    it('with run', async () => {
+        const a = [1, Promise.resolve(2), 'a', Promise.resolve('b')];
+
+        const r0 = await F.run(a, F.buffer<string | number>(2)); // $ExpectType AsyncIterableIterator<(string | number)[]>
+        const r1 = await F.run(a, F.buffer(2)); // $ExpectType AsyncIterableIterator<(string | number)[]>
     });
 });
 
@@ -802,7 +925,8 @@ describe('find', () => {
     it('with run', async () => {
         const a = [{ name: 'Ice' }, Promise.resolve({ name: 'NORA' }), { name: 'ginkiha' }, { name: 'Rabpit' }, 1, 'a'];
 
-        const r0 = await F.run(a, F.find(e => new Object(e).hasOwnProperty('name') ? (e as any).name === 'NORA' : e === 1)); // $ExpectType string | number | { name: string; } | { name: string; } | undefined
+        const r0 = await F.run(a, F.find<string | number | { name: string; }>(e => new Object(e).hasOwnProperty('name') ? (e as any).name === 'NORA' : e === 1)); // $ExpectType string | number | { name: string; } | undefined
+        const r1 = await F.run(a, F.find(e => new Object(e).hasOwnProperty('name') ? (e as any).name === 'NORA' : e === 1)); // $ExpectType string | number | { name: string; } | { name: string; } | undefined
     });
 });
 
@@ -838,6 +962,7 @@ describe('findLast', () => {
     it('with run', async () => {
         const a = [{ name: 'Ice' }, Promise.resolve({ name: 'NORA' }), { name: 'ginkiha' }, { name: 'Rabpit' }, 1, 'a'];
 
-        const r0 = await F.run(a, F.findLast(e => new Object(e).hasOwnProperty('name') ? (e as any).name === 'NORA' : e === 1)); // $ExpectType string | number | { name: string; } | { name: string; } | undefined
+        const r0 = await F.run(a, F.find<string | number | { name: string; }>(e => new Object(e).hasOwnProperty('name') ? (e as any).name === 'NORA' : e === 1)); // $ExpectType string | number | { name: string; } | undefined
+        const r1 = await F.run(a, F.findLast(e => new Object(e).hasOwnProperty('name') ? (e as any).name === 'NORA' : e === 1)); // $ExpectType string | number | { name: string; } | { name: string; } | undefined
     });
 });

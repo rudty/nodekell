@@ -44,8 +44,15 @@ describe('groupBy', () => {
     it('from Normal / Promise Union', async () => {
         const a = [1, Promise.resolve(2), 'a', Promise.resolve('b')];
 
-        const r0 = await F.groupBy<string, string | number>(e => typeof e)(a);
-        const r1 = await F.groupBy(e => typeof e, a);
+        const r0 = await F.groupBy<string, string | number>(e => (typeof e) as string)(a); // $ExpectType Map<string, (string | number)[]>
+        const r1 = await F.groupBy(e => (typeof e) as string, a); // $ExpectType Map<string, (string | number)[]>
+    });
+
+    it('with run', async () => {
+        const a = [1, Promise.resolve(2), 'a', Promise.resolve('b'), null];
+
+        const r0 = await F.run(a, F.groupBy<string, string | number | null>(e => (typeof e) as string)); // $ExpectType Map<string, (string | number | null)[]>
+        const r1 = await F.run(a, F.groupBy(e => (typeof e) as string)); // $ExpectType Map<string, (string | number | null)[]>
     });
 });
 
@@ -89,6 +96,14 @@ describe('concat', () => {
         const r0 = F.concat<string | number, symbol | null>(a)(b); // $ExpectType AsyncIterableIterator<string | number | symbol | null>
         const r1 = F.concat(a, b); // $ExpectType AsyncIterableIterator<string | number | symbol | null>
     });
+
+    it('with run', async () => {
+        const a = ['a', Promise.resolve(1), Promise.resolve('b'), 2];
+        const b = [null, Promise.resolve(null), Symbol('syr'), Promise.resolve(Symbol('flover'))];
+
+        const r0 = await F.run(b, F.concat<string | number, symbol | null>(a)); // $ExpectType AsyncIterableIterator<string | number | symbol | null>
+        const r1 = await F.run(b, F.concat(a)); // $ExpectType AsyncIterableIterator<string | number | symbol | null>
+    });
 });
 
 describe('union', () => {
@@ -130,6 +145,14 @@ describe('union', () => {
 
         const r0 = F.union<string | number, symbol | null>(a)(b); // $ExpectType AsyncIterableIterator<string | number | symbol | null>
         const r1 = F.union(a, b); // $ExpectType AsyncIterableIterator<string | number | symbol | null>
+    });
+
+    it('with run', async () => {
+        const a = ['a', Promise.resolve(1), Promise.resolve('b'), 2];
+        const b = [null, Promise.resolve(null), Symbol('syr'), Promise.resolve(Symbol('flover'))];
+
+        const r0 = await F.run(b, F.union<string | number, symbol | null>(a)); // $ExpectType AsyncIterableIterator<string | number | symbol | null>
+        const r1 = await F.run(b, F.union(a)); // $ExpectType AsyncIterableIterator<string | number | symbol | null>
     });
 });
 
@@ -421,6 +444,32 @@ describe('innerJoin', () => {
         rr3[0].length; // $ExpectType number
         rr3[0].name; // $ExpectType string
     });
+
+    it('with run', async () => {
+        const a0 = [Promise.resolve({ id: 1, name: 'syrflover' }), { id: 2, name: 'GyungDal' }, { id: 3, name: 'SacredPigeon' }];
+        const b0 = [{ id: 1, length: 8 }, Promise.resolve({ id: 3, length: 12 })];
+
+        const a1 = [
+            // new Map([['id', 1], ['name', 'CenoX']]) as Map<string, string | number>,
+            // new Map([['id', 2], ['name', 'SacredPigeon']]) as Map<string, string | number>,
+            new Map() as Map<string, string | number>,
+            new Map() as Map<string, string | number>,
+        ];
+        const b1 = [
+            new Map([['id', 1], ['length', 3]]),
+            new Map([['id', 2], ['length', 4]]),
+        ];
+
+        const r0 = await F.run(b0, F.innerJoin((a, b) => a.id === b.id, a0), F.collect);
+
+        r0[0].id; // $ExpectType number
+        r0[0].length; // $ExpectType number
+        r0[0].name; // $ExpectType string
+
+        const r1 = await F.run(b1, F.innerJoin((a, b) => true, a1), F.collect);
+
+        r1[0]; // $ExpectType Map<string, string | number>
+    });
 });
 
 describe('leftInnerJoin', () => {
@@ -513,6 +562,32 @@ describe('leftInnerJoin', () => {
         rr3[0].length; // $ExpectType number
         rr3[0].name; // $ExpectType string
     });
+
+    it('with run', async () => {
+        const a0 = [Promise.resolve({ id: 1, name: 'syrflover' }), { id: 2, name: 'GyungDal' }, { id: 3, name: 'SacredPigeon' }];
+        const b0 = [{ id: 1, length: 8 }, Promise.resolve({ id: 3, length: 12 })];
+
+        const a1 = [
+            // new Map([['id', 1], ['name', 'CenoX']]) as Map<string, string | number>,
+            // new Map([['id', 2], ['name', 'SacredPigeon']]) as Map<string, string | number>,
+            new Map() as Map<string, string | number>,
+            new Map() as Map<string, string | number>,
+        ];
+        const b1 = [
+            new Map([['id', 1], ['length', 3]]),
+            new Map([['id', 2], ['length', 4]]),
+        ];
+
+        const r0 = await F.run(b0, F.leftInnerJoin((a, b) => a.id === b.id, a0), F.collect);
+
+        r0[0].id; // $ExpectType number
+        r0[0].length; // $ExpectType number
+        r0[0].name; // $ExpectType string
+
+        const r1 = await F.run(b1, F.leftInnerJoin((a, b) => true, a1), F.collect);
+
+        r1[0]; // $ExpectType Map<string, string | number>
+    });
 });
 
 describe('rightInnerJoin', () => {
@@ -604,6 +679,32 @@ describe('rightInnerJoin', () => {
         rr3[0].id; // $ExpectType number
         rr3[0].length; // $ExpectType number
         rr3[0].name; // $ExpectType string
+    });
+
+    it('with run', async () => {
+        const a0 = [Promise.resolve({ id: 1, name: 'syrflover' }), { id: 2, name: 'GyungDal' }, { id: 3, name: 'SacredPigeon' }];
+        const b0 = [{ id: 1, length: 8 }, Promise.resolve({ id: 3, length: 12 })];
+
+        const a1 = [
+            // new Map([['id', 1], ['name', 'CenoX']]) as Map<string, string | number>,
+            // new Map([['id', 2], ['name', 'SacredPigeon']]) as Map<string, string | number>,
+            new Map() as Map<string, string | number>,
+            new Map() as Map<string, string | number>,
+        ];
+        const b1 = [
+            new Map([['id', 1], ['length', 3]]),
+            new Map([['id', 2], ['length', 4]]),
+        ];
+
+        const r0 = await F.run(b0, F.rightInnerJoin((a, b) => a.id === b.id, a0), F.collect);
+
+        r0[0].id; // $ExpectType number
+        r0[0].length; // $ExpectType number
+        r0[0].name; // $ExpectType string
+
+        const r1 = await F.run(b1, F.rightInnerJoin((a, b) => true, a1), F.collect);
+
+        r1[0]; // $ExpectType Map<string, string | number>
     });
 });
 
@@ -705,6 +806,32 @@ describe('outerJoin', () => {
         rr3[0].length; // $ExpectType number | undefined
         rr3[0].name; // $ExpectType string
     });
+
+    it('with run', async () => {
+        const a0 = [Promise.resolve({ id: 1, name: 'syrflover' }), { id: 2, name: 'GyungDal' }, { id: 3, name: 'SacredPigeon' }];
+        const b0 = [{ id: 1, length: 8 }, Promise.resolve({ id: 3, length: 12 })];
+
+        const a1 = [
+            // new Map([['id', 1], ['name', 'CenoX']]) as Map<string, string | number>,
+            // new Map([['id', 2], ['name', 'SacredPigeon']]) as Map<string, string | number>,
+            new Map() as Map<string, string | number>,
+            new Map() as Map<string, string | number>,
+        ];
+        const b1 = [
+            new Map([['id', 1], ['length', 3]]),
+            new Map([['id', 2], ['length', 4]]),
+        ];
+
+        const r0 = await F.run(b0, F.outerJoin((a, b) => a.id === b.id, a0), F.collect);
+
+        r0[0].id; // $ExpectType number
+        r0[0].length; // $ExpectType number | undefined
+        r0[0].name; // $ExpectType string
+
+        const r1 = await F.run(b1, F.outerJoin((a, b) => true, a1), F.collect);
+
+        r1[0]; // $ExpectType Map<string, string | number>
+    });
 });
 
 describe('leftOuterJoin', () => {
@@ -805,6 +932,32 @@ describe('leftOuterJoin', () => {
         rr3[0].length; // $ExpectType number | undefined
         rr3[0].name; // $ExpectType string
     });
+
+    it('with run', async () => {
+        const a0 = [Promise.resolve({ id: 1, name: 'syrflover' }), { id: 2, name: 'GyungDal' }, { id: 3, name: 'SacredPigeon' }];
+        const b0 = [{ id: 1, length: 8 }, Promise.resolve({ id: 3, length: 12 })];
+
+        const a1 = [
+            // new Map([['id', 1], ['name', 'CenoX']]) as Map<string, string | number>,
+            // new Map([['id', 2], ['name', 'SacredPigeon']]) as Map<string, string | number>,
+            new Map() as Map<string, string | number>,
+            new Map() as Map<string, string | number>,
+        ];
+        const b1 = [
+            new Map([['id', 1], ['length', 3]]),
+            new Map([['id', 2], ['length', 4]]),
+        ];
+
+        const r0 = await F.run(b0, F.leftOuterJoin((a, b) => a.id === b.id, a0), F.collect);
+
+        r0[0].id; // $ExpectType number
+        r0[0].length; // $ExpectType number | undefined
+        r0[0].name; // $ExpectType string
+
+        const r1 = await F.run(b1, F.leftOuterJoin((a, b) => true, a1), F.collect);
+
+        r1[0]; // $ExpectType Map<string, string | number>
+    });
 });
 
 describe('rightOuterJoin', () => {
@@ -904,5 +1057,31 @@ describe('rightOuterJoin', () => {
         rr3[0].id; // $ExpectType number
         rr3[0].length; // $ExpectType number
         rr3[0].name; // $ExpectType string | undefined
+    });
+
+    it('with run', async () => {
+        const a0 = [Promise.resolve({ id: 1, name: 'syrflover' }), { id: 2, name: 'GyungDal' }, { id: 3, name: 'SacredPigeon' }];
+        const b0 = [{ id: 1, length: 8 }, Promise.resolve({ id: 3, length: 12 })];
+
+        const a1 = [
+            // new Map([['id', 1], ['name', 'CenoX']]) as Map<string, string | number>,
+            // new Map([['id', 2], ['name', 'SacredPigeon']]) as Map<string, string | number>,
+            new Map() as Map<string, string | number>,
+            new Map() as Map<string, string | number>,
+        ];
+        const b1 = [
+            new Map([['id', 1], ['length', 3]]),
+            new Map([['id', 2], ['length', 4]]),
+        ];
+
+        const r0 = await F.run(b0, F.rightOuterJoin((a, b) => a.id === b.id, a0), F.collect);
+
+        r0[0].id; // $ExpectType number
+        r0[0].length; // $ExpectType number
+        r0[0].name; // $ExpectType string | undefined
+
+        const r1 = await F.run(b1, F.rightOuterJoin((a, b) => true, a1), F.collect);
+
+        r1[0]; // $ExpectType Map<string, string | number>
     });
 });

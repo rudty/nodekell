@@ -32,6 +32,13 @@ describe('pmap', () => {
         const r0 = F.pmap<number, number>(e => e ** e)(a); // $ExpectType AsyncIterableIterator<number>
         const r1 = F.pmap(e => e ** e, a); // $ExpectType AsyncIterableIterator<number>
     });
+
+    it('with run', async () => {
+        const a = [Promise.resolve(1), 2, 'a', Promise.resolve('b'), null];
+
+        const r0 = await F.run(a, F.pmap<string | number | null, string | number | null>(e => e)); // $ExpectType AsyncIterableIterator<string | number | null>
+        const r1 = await F.run(a, F.pmap(e => e)); // $ExpectType AsyncIterableIterator<string | number | null>
+    });
 });
 
 describe('pfilter', () => {
@@ -54,6 +61,19 @@ describe('pfilter', () => {
 
         const r0 = F.pfilter<number>(e => e % 2 === 0)(a); // $ExpectType AsyncIterableIterator<number>
         const r1 = F.pfilter(e => e % 2 === 0, a); // $ExpectType AsyncIterableIterator<number>
+    });
+
+    it('with run', async () => {
+        const a = [1, Promise.resolve(2), 'a', Promise.resolve('b'), null];
+
+        const r0 = await F.run(a, F.pfilter<string | number | null>(e => { // $ExpectType AsyncIterableIterator<string | number | null>
+            e; // $ExpectType string | number | null
+            return e === 'a';
+        }));
+        const r1 = await F.run(a, F.pfilter(e => { // $ExpectType AsyncIterableIterator<string | number | null>
+            e; // $ExpectType string | number | null
+            return e === 'a';
+        }));
     });
 });
 
@@ -113,17 +133,17 @@ describe('pcalls', () => {
         const abcd = await F.run(F.concat(a, b), F.concat(c), F.concat(d), F.collect);
 
         const r0 = F.pcalls(...abcd, ...abcd, ...abcd, ...abcd); // $ExpectType AsyncIterableIterator<string | number>
-	});
+    });
 
-	it('use Generic', async () => {
-		const a = F.repeat(5, () => () => 1);
+    it('use Generic', async () => {
+        const a = F.repeat(5, () => () => 1);
         const b = F.repeat(5, () => () => 'a');
         const c = F.repeat(5, () => async () => 2);
         const d = F.repeat(5, () => async () => 'b');
         const abcd = await F.run(F.concat(a, b), F.concat(c), F.concat(d), F.collect);
 
         const r0 = F.pcalls<string | number>(...abcd, ...abcd, ...abcd, ...abcd); // $ExpectType AsyncIterableIterator<string | number>
-	});
+    });
 });
 
 describe('pfmap', () => {
@@ -153,14 +173,14 @@ describe('pfmap', () => {
 
         const r0 = F.pfmap<F.Flat<typeof a>>(e => e)(a); // $ExpectType AsyncIterableIterator<string | number>
         const r1 = F.pfmap(e => e, a); // $ExpectType AsyncIterableIterator<string | number>
-	});
+    });
 
-	it('wrap array', async () => {
-		const a = [[1], [Promise.resolve('a')], [2], [Promise.resolve(3)], Promise.resolve([4]), Promise.resolve(['b'])];
+    it('wrap array', async () => {
+        const a = [[1], [Promise.resolve('a')], [2], [Promise.resolve(3)], Promise.resolve([4]), Promise.resolve(['b'])];
 
-		const r0 = F.pfmap<F.Flat<typeof a>, F.PFlat<typeof a>[]>(e => [e])(a); // $ExpectType AsyncIterableIterator<string[] | number[] | Promise<number>[] | Promise<string>[]>
-		const r1 = F.pfmap(e => [e], a); // $ExpectType AsyncIterableIterator<string[] | number[] | Promise<number>[] | Promise<string>[]>
-	});
+        const r0 = F.pfmap<F.Flat<typeof a>, F.PFlat<typeof a>[]>(e => [e])(a); // $ExpectType AsyncIterableIterator<string[] | number[] | Promise<number>[] | Promise<string>[]>
+        const r1 = F.pfmap(e => [e], a); // $ExpectType AsyncIterableIterator<string[] | number[] | Promise<number>[] | Promise<string>[]>
+    });
 
     it('with run', async () => {
         const a = [[1], Promise.resolve(['a']), [4], [5], [Promise.resolve('b')]];
@@ -202,14 +222,14 @@ describe('pflatMap', () => {
 
         const r0 = F.pflatMap<F.Flat<typeof a>>(e => e)(a); // $ExpectType AsyncIterableIterator<string | number>
         const r1 = F.pflatMap(e => e, a); // $ExpectType AsyncIterableIterator<string | number>
-	});
+    });
 
-	it('wrap array', async () => {
-		const a = [[1], [Promise.resolve('a')], [2], [Promise.resolve(3)], Promise.resolve([4]), Promise.resolve(['b'])];
+    it('wrap array', async () => {
+        const a = [[1], [Promise.resolve('a')], [2], [Promise.resolve(3)], Promise.resolve([4]), Promise.resolve(['b'])];
 
-		const r0 = F.pflatMap<F.Flat<typeof a>, F.PFlat<typeof a>[]>(e => [e])(a); // $ExpectType AsyncIterableIterator<string[] | number[] | Promise<number>[] | Promise<string>[]>
-		const r1 = F.pflatMap(e => [e], a); // $ExpectType AsyncIterableIterator<string[] | number[] | Promise<number>[] | Promise<string>[]>
-	});
+        const r0 = F.pflatMap<F.Flat<typeof a>, F.PFlat<typeof a>[]>(e => [e])(a); // $ExpectType AsyncIterableIterator<string[] | number[] | Promise<number>[] | Promise<string>[]>
+        const r1 = F.pflatMap(e => [e], a); // $ExpectType AsyncIterableIterator<string[] | number[] | Promise<number>[] | Promise<string>[]>
+    });
 
     it('with run', async () => {
         const a = [[1], Promise.resolve(['a']), [4], [5], [Promise.resolve('b')]];

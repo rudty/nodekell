@@ -47,6 +47,26 @@ describe('withTimeout', () => {
         const r2 = F.withTimeout(50, a); // $ExpectType AsyncIterableIterator<string | number>
         const r3 = F.withTimeout(testDurationFunction(50), a); // $ExpectType AsyncIterableIterator<string | number>
     });
+
+    it('with run', async () => {
+        const testDurationFunction = (t: number) => () => t;
+        const testDurationAsyncFunction = (t: number) => () => t;
+
+        const a = F.map(async e => {
+            await F.sleep(5);
+            return e;
+        }, [Promise.resolve(1), 2, 'a', Promise.resolve('b'), null]);
+
+        const ar0 = await F.run(a, F.withTimeout<string | number | null>(50)); // $ExpectType AsyncIterableIterator<string | number | null>
+        const ar1 = await F.run(a, F.withTimeout<string | number | null>(Promise.resolve(50))); // $ExpectType AsyncIterableIterator<string | number | null>
+        const ar2 = await F.run(a, F.withTimeout<string | number | null>(testDurationFunction(50))); // $ExpectType AsyncIterableIterator<string | number | null>
+        const ar3 = await F.run(a, F.withTimeout<string | number | null>(testDurationAsyncFunction(50))); // $ExpectType AsyncIterableIterator<string | number | null>
+
+        const br0 = await F.run(a, F.withTimeout(50)); // $ExpectType AsyncIterableIterator<string | number | null>
+        const br1 = await F.run(a, F.withTimeout(Promise.resolve(50))); // $ExpectType AsyncIterableIterator<string | number | null>
+        const br2 = await F.run(a, F.withTimeout(testDurationFunction(50))); // $ExpectType AsyncIterableIterator<string | number | null>
+        const br3 = await F.run(a, F.withTimeout(testDurationAsyncFunction(50))); // $ExpectType AsyncIterableIterator<string | number | null>
+    });
 });
 
 describe('timeout', () => {
@@ -166,5 +186,12 @@ describe('rangeInterval', () => {
         F.rangeInterval(Promise.resolve(50), 0, 5, 1); // $ExpectType AsyncIterableIterator<number>
         F.rangeInterval(() => 50, 0, 5, 1); // $ExpectType AsyncIterableIterator<number>
         F.rangeInterval(async () => 50, 0, 5, 1); // $ExpectType AsyncIterableIterator<number>
+    });
+
+    it('with run', async () => {
+        const ar0 = await F.run(50, F.rangeInterval); // $ExpectType AsyncIterableIterator<number>
+        const ar1 = await F.run(Promise.resolve(50), F.rangeInterval); // $ExpectType AsyncIterableIterator<number>
+        const ar2 = await F.run(() => 50, F.rangeInterval); // $ExpectType AsyncIterableIterator<number>
+        const ar3 = await F.run(async () => 50, F.rangeInterval); // $ExpectType AsyncIterableIterator<number>
     });
 });
