@@ -137,6 +137,8 @@ console.log(v);//[3]
 *    [cond](#cond)
 *    [otherwise](#otherwise)
 *    [get](#get)
+*    [find](#find)
+*    [findLast](#findLast)
 ---
 
 
@@ -1653,6 +1655,47 @@ const m = new Map([
 console.log(F.get("name", m)); //print hello map
 console.log(F.get("size", m)); //print 1
 ```
+
+### find
+```javascript
+const arr = [{a:"a1"}, {b:"a2"}, {a:"a3"}];
+const r = await F.find(e => "a" in e , arr);
+console.log(r); // print {a:"a1"}
+```
+```javascript
+const arr = [{a:"a1"}, {b:"a2"}, {a:"a3"}];
+const r = await F.find(e => "hello" in e , arr);
+console.log(r); // print undefined
+```
+
+
+### find
+returns first element
+```javascript
+const arr = [{a:"a1"}, {b:"a2"}, {a:"a3"}];
+const r = await F.find(e => "a" in e , arr);
+console.log(r); // print {a:"a1"}
+```
+```javascript
+const arr = [{a:"a1"}, {b:"a2"}, {a:"a3"}];
+const r = await F.find(e => "hello" in e , arr);
+console.log(r); // print undefined
+```
+
+
+### findLast
+returns last element
+```javascript
+const arr = [{a:"a1"}, {b:"a2"}, {a:"a3"}];
+const r = await F.findLast(e => "a" in e , arr);
+console.log(r); // print {a:"a3"}
+```
+```javascript
+const arr = [{a:"a1"}, {b:"a2"}, {a:"a3"}];
+const r = await F.findLast(e => "hello" in e , arr);
+console.log(r); // print undefined
+```
+
 
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frudty%2Fnodekell.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Frudty%2Fnodekell?ref=badge_large)
