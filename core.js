@@ -69,3 +69,12 @@ const get = curry((key, a) => {
 });
 
 exports.get = get;
+
+exports.has = curry((key, a) => {
+    if (a[key]) {
+        return true;
+    }
+    return (key in a);
+});
+
+exports.prop = curry((key, a) => a[key]);
