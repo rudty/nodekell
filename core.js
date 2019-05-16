@@ -78,3 +78,37 @@ exports.has = curry((key, a) => {
 });
 
 exports.prop = curry((key, a) => a[key]);
+
+
+
+
+
+/**
+ * concept 
+ * 
+ * like python enumerate
+ * ar = [9,8,7]
+ * for await (const [i, e] of F.enumerate(ar)) {
+ *      i = 0, 1, 2 ...
+ *      e = 9, 8, 7 ..
+ * }
+ */
+exports.enumerate = () => {
+
+};
+
+/**
+ * 
+ * concpet
+ * boost :: combine
+ * 
+ * a1 = [1,2,3]
+ * a2 = ["a","b","c","d","e"]
+ * a3 = [7,8,9,10,11]
+ * for await (const [a, b, c] of F.???(a1,a2,a3)) {
+ *      a = 1,2,3
+ *      b = "a","b","c"
+ *      c = 7,8,9
+ * }
+ */
+// exports.???
