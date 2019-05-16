@@ -110,8 +110,9 @@ export function collectSet<T>(iter: Iter<T>): Promise<Set<EP<T>>>;
  * @param iter
  */
 export function forEach<T, R>(f: (elem: T) => (R | Promise<R>), iter: Iter<T | Promise<T>>): Promise<R[]>;
-export function forEach<T, R>(f: (elem: EP<T>) => R, iter: Iter<T>): Promise<EP<R>[]>;
+// export function forEach<T, R>(f: (elem: EP<T>) => R, iter: Iter<T>): Promise<EP<R>[]>;
 
+export function forEach<T extends Iter<any>, R>(f: (elem: FlatForInternalFn<T>) => R, iter: T): Promise<EP<R>[]>;
 export function forEach<T extends Iter<any>, R>(f: (elem: FlatForInternalFn<T>) => R): (iter: T) => Promise<EP<R>[]>;
 
 export function forEach<T, R>(f: (elem: T) => (R | Promise<R>)): (iter: Iter<T | Promise<T>>) => Promise<R[]>;
@@ -124,8 +125,9 @@ export function forEach<T, R>(f: (elem: T) => (R | Promise<R>)): (iter: Iter<T |
  * @param iter
  */
 export function distinctBy<T>(f: (elem: T) => any, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
-export function distinctBy<T>(f: (elem: EP<T>) => any, iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+// export function distinctBy<T>(f: (elem: EP<T>) => any, iter: Iter<T>): AsyncIterableIterator<EP<T>>;
 
+export function distinctBy<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => any, iter: T): AsyncIterableIterator<FlatForInternalFn<T>>;
 export function distinctBy<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => any): (iter: T) => AsyncIterableIterator<FlatForInternalFn<T>>;
 
 export function distinctBy<T>(f: (elem: T) => any): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
@@ -146,8 +148,9 @@ export function distinct<T>(iter: Iter<T>): AsyncIterableIterator<EP<T>>;
  * @param iter
  */
 export function some<T>(f: (elem: T) => (boolean | Promise<boolean>), iter: Iter<T | Promise<T>>): Promise<boolean>;
-export function some<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), iter: Iter<T>): Promise<boolean>;
+// export function some<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), iter: Iter<T>): Promise<boolean>;
 
+export function some<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>), iter: T): Promise<boolean>;
 export function some<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>)): (iter: T) => Promise<boolean>;
 
 export function some<T>(f: (elem: T) => (boolean | Promise<boolean>)): (iter: Iter<T | Promise<T>>) => Promise<boolean>;
@@ -160,8 +163,9 @@ export function some<T>(f: (elem: T) => (boolean | Promise<boolean>)): (iter: It
  * @param iter
  */
 export function every<T>(f: (elem: T) => (boolean | Promise<boolean>), iter: Iter<T | Promise<T>>): Promise<boolean>;
-export function every<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), iter: Iter<T>): Promise<boolean>;
+// export function every<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), iter: Iter<T>): Promise<boolean>;
 
+export function every<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>), iter: T): Promise<boolean>;
 export function every<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>)): (iter: T) => Promise<boolean>;
 
 export function every<T>(f: (elem: T) => (boolean | Promise<boolean>)): (iter: Iter<T | Promise<T>>) => Promise<boolean>;
@@ -307,8 +311,9 @@ export function tap<T>(f: (t: T | Promise<T>) => any): (t: T | Promise<T>) => Pr
  * @param iter
  */
 export function buffer<T>(supply: number | Promise<number>, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T[]>;
-export function buffer<T>(supply: number | Promise<number>, iter: Iter<T>): AsyncIterableIterator<EP<T>[]>;
+// export function buffer<T>(supply: number | Promise<number>, iter: Iter<T>): AsyncIterableIterator<EP<T>[]>;
 
+export function buffer<T extends Iter<any>>(supply: number | Promise<number>, iter: T): AsyncIterableIterator<FlatForInternalFn<T>[]>;
 export function buffer<T extends Iter<any>>(supply: number | Promise<number>): (iter: T) => AsyncIterableIterator<FlatForInternalFn<T>[]>;
 
 export function buffer<T>(supply: number | Promise<number>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T[]>;
@@ -321,10 +326,10 @@ export function buffer<T>(supply: number | Promise<number>): (iter: Iter<T | Pro
  * @param iter
  */
 export function find<T>(f: (elem: T) => (boolean | Promise<boolean>), iter: Iter<T | Promise<T>>): Promise<T | undefined>;
-export function find<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), iter: Iter<T>): Promise<EP<T> | undefined>;
+// export function find<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), iter: Iter<T>): Promise<EP<T> | undefined>;
 
-// export function find<T extends Iter<any>>(f: (elem: PFlat<T>) => (boolean | Promise<boolean>), iter: T): Promise<FlatForInternalFn<T> | undefined>;
-export function find<T extends Iter<any>>(f: (elem: PFlat<T>) => (boolean | Promise<boolean>)): (iter: T) => Promise<FlatForInternalFn<T> | undefined>;
+export function find<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>), iter: T): Promise<FlatForInternalFn<T> | undefined>;
+export function find<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>)): (iter: T) => Promise<FlatForInternalFn<T> | undefined>;
 
 export function find<T>(f: (elem: T) => (boolean | Promise<boolean>)): (iter: Iter<T | Promise<T>>) => Promise<T | undefined>;
 // export function find<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>)): (iter: Iter<T | Promise<T>>) => Promise<EP<T> | undefined>;
@@ -336,10 +341,10 @@ export function find<T>(f: (elem: T) => (boolean | Promise<boolean>)): (iter: It
  * @param iter
  */
 export function findLast<T>(f: (elem: T) => (boolean | Promise<boolean>), iter: Iter<T | Promise<T>>): Promise<T | undefined>;
-export function findLast<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), iter: Iter<T>): Promise<EP<T> | undefined>;
+// export function findLast<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>), iter: Iter<T>): Promise<EP<T> | undefined>;
 
-// export function findLast<T extends Iter<any>>(f: (elem: PFlat<T>) => (boolean | Promise<boolean>), iter: T): Promise<FlatForInternalFn<T> | undefined>;
-export function findLast<T extends Iter<any>>(f: (elem: PFlat<T>) => (boolean | Promise<boolean>)): (iter: T) => Promise<FlatForInternalFn<T> | undefined>;
+export function findLast<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>), iter: T): Promise<FlatForInternalFn<T> | undefined>;
+export function findLast<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>)): (iter: T) => Promise<FlatForInternalFn<T> | undefined>;
 
 export function findLast<T>(f: (elem: T) => (boolean | Promise<boolean>)): (iter: Iter<T | Promise<T>>) => Promise<T | undefined>;
 // export function findLast<T>(f: (elem: EP<T>) => (boolean | Promise<boolean>)): (iter: Iter<T | Promise<T>>) => Promise<EP<T> | undefined>;
