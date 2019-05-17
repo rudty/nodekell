@@ -93,8 +93,11 @@ exports.prop = curry((key, a) => a[key]);
  *      e = 9, 8, 7 ..
  * }
  */
-exports.enumerate = () => {
-
+exports.enumerate = async function* (iter) {
+    let i = 0;
+    for await (const e of iter) {
+        yield [i++, e];
+    }
 };
 
 /**
