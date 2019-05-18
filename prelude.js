@@ -192,27 +192,27 @@ exports.foldr1 =  C.curry(async (f, iter) => {
     return foldr_internal(f, h.value, g);
 });
 
-exports.zip =  C.curry(async function* (a, b) {
-    a =  C.seq(a);
-    for await (const e of b) {
-        const { value, done } = await a.next();
-        if (done) {
+const zipWith =  C.curry(async function* (f, a, b) {
+    a = C.seq(a);
+    b = C.seq(b);
+
+    while (true) {
+        const ap = a.next();
+        const bp = b.next();
+
+        const ae = await ap;
+        const be = await bp;
+
+        if (ae.done || be.done) {
             break;
         }
-        yield [value, e];
+
+        yield f(ae.value, be.value);
     }
 });
 
-exports.zipWith =  C.curry(async function* (f, a, b) {
-    a =  C.seq(a);
-    for await (const e of b) {
-        const { value, done } = await a.next();
-        if (done) {
-            break;
-        }
-        yield f(value, e);
-    }
-});
+exports.zipWith = zipWith;
+exports.zip = C.curry((iter1, iter2) => zipWith((elem1, elem2) => [elem1, elem2], iter1, iter2)); 
 
 const zipWith3 = C.curry(async function*(f, a, b, c){
     a = C.seq(a);
@@ -237,7 +237,6 @@ const zipWith3 = C.curry(async function*(f, a, b, c){
 });
 
 exports.zipWith3 = zipWith3;
-
 exports.zip3 = C.curry((iter1, iter2, iter3) => zipWith3((elem1, elem2, elem3) => [elem1, elem2, elem3], iter1, iter2, iter3));
 
 /**
