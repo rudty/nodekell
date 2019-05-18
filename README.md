@@ -100,6 +100,7 @@ console.log(v);//[3]
 *    [repeat](#repeat)
 *    [rangeInterval](#rangeinterval)
 *    [iterate](#iterate)
+*    [enumerate](#enumerate)
 
 ## aggregate
 *    [foldl](#foldl)
@@ -137,6 +138,8 @@ console.log(v);//[3]
 *    [cond](#cond)
 *    [otherwise](#otherwise)
 *    [get](#get)
+*    [prop](#prop)
+*    [has](#has)
 *    [find](#find)
 *    [findLast](#findLast)
 ---
@@ -1072,6 +1075,22 @@ console.log(r);
 ```
 
 
+### enumerate
+like python enumerate
+```javascript
+const arr = ["a", "b", "c", "d", "e"];
+for await (const [i, e] of F.enumerate(arr)) {
+   console.log(i, e);
+}
+//print
+// 0 'a'
+// 1 'b'
+// 2 'c'
+// 3 'd'
+// 4 'e'
+```
+
+
 ### foldl
 ```javascript
 const a = [1,2,3,4,5];
@@ -1643,7 +1662,11 @@ if (F.otherwise()) {
 
 
 ### get 
-call get function or object property
+call **get** function or object property
+
+if there is no value, returns undefined
+
+see also [prop](#prop)
 ```javascript
 const obj = { name: "hello", value: 42 };
 console.log(F.get("name", obj)); //print hello
@@ -1655,6 +1678,37 @@ const m = new Map([
 console.log(F.get("name", m)); //print hello map
 console.log(F.get("size", m)); //print 1
 ```
+
+### prop
+get object property
+
+if there is no value, returns undefined
+
+see also [get](#get)
+
+
+```javascript
+const obj = { name: "hello", value: 42 };
+console.log(F.prop("name", obj)); //print hello
+```
+
+
+### has
+if there is a **has** function, check if the value is true after the call. if the **has** function is missing or returned false, check that the property is not undefined.
+
+```javascript
+const r = F.has("hello", {hello:"world"});
+console.log(r); //print true
+```
+```javascript
+const r = F.has("hello", new Map([["hello","world"]]));
+console.log(r); //print true
+```
+```javascript
+const r = F.has("size", new Map());
+console.log(r); //print true
+```
+
 
 ### find
 ```javascript
