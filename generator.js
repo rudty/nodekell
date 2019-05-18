@@ -54,3 +54,13 @@ exports.iterate = C.curry(async function*(fn, v) {
         yield v;
     }
 });
+
+/**
+ * like python enumerate
+ */
+exports.enumerate = async function* (iter) {
+    let i = 0;
+    for await (const e of iter) {
+        yield [i++, e];
+    }
+};

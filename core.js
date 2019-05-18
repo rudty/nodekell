@@ -78,24 +78,3 @@ exports.has = curry((key, a) => {
 });
 
 exports.prop = curry((key, a) => a[key]);
-
-
-
-
-
-/**
- * concept 
- * 
- * like python enumerate
- * ar = [9,8,7]
- * for await (const [i, e] of F.enumerate(ar)) {
- *      i = 0, 1, 2 ...
- *      e = 9, 8, 7 ..
- * }
- */
-exports.enumerate = async function* (iter) {
-    let i = 0;
-    for await (const e of iter) {
-        yield [i++, e];
-    }
-};
