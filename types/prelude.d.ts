@@ -321,6 +321,14 @@ export function zip<T, Y>(iter1: Iter<T | Promise<T>>): (iter2: Iter<Y | Promise
 /**
  * https://github.com/rudty/nodekell#zipwith
  *
+ * **Note**
+ * - if you want high quality type, use type assertion
+ * ```ts
+ * const a = [1, 2, 3, 4];
+ * const b = 'abcd';
+ * const r = F.zipWith((a, b) => [a, b] as [number, string]);
+ * ```
+ *
  * @param f
  * @param iter1
  * @param iter2
@@ -361,6 +369,15 @@ export function zip3<T, Y, Z>(iter1: Iter<T | Promise<T>>, iter2: Iter<Y | Promi
 export function zip3<T, Y, Z>(iter1: Iter<T | Promise<T>>): CurriedFunction2<Iter<Y | Promise<Y>>, Iter<Z | Promise<Z>>, AsyncIterableIterator<[T, Y, Z]>>;
 
 /**
+ *
+ * **Note**
+ * - if you want high quality type, use type assertion
+ * ```ts
+ * const a = [1, 2, 3, 4];
+ * const b = 'abcd';
+ * const c = [5, 6, 7, 8];
+ * const r = F.zipWith3((a, b, c) => [a, b, c] as [number, string, number]);
+ * ```
  *
  * @param f
  * @param iter1
