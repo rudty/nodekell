@@ -24,9 +24,19 @@ describe('test has', () => {
         assert.ok(r);
     });
 
+    it('not Map', async () => {
+        const r = F.has("hello", new Map([["1","2"]]));
+        assert.ok(!r);
+    });
+
     it('Set', async () => {
         const r = F.has("hello", new Set(["hello","world"]));
         assert.ok(r);
+    });
+
+    it('not Set', async () => {
+        const r = F.has("hello", new Set(["1","2"]));
+        assert.ok(!r);
     });
     
     it('toString', async () => {
