@@ -29,6 +29,11 @@ describe('test has', () => {
         assert.ok(!r);
     });
 
+    it('Map.size', async () => {
+        const r = F.has("size", new Map([["hello","world"]]));
+        assert.ok(r);
+    });
+
     it('Set', async () => {
         const r = F.has("hello", new Set(["hello","world"]));
         assert.ok(r);
