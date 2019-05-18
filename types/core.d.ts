@@ -171,20 +171,26 @@ export function get<T, K>(key: K, target: T): Getter<T, K>;
 export function get<T, K extends keyof T>(key: K): (target: T) => Getter<T, K>;
 export function get<T, K>(key: K): (target: T) => Getter<T, K>;
 
-/* export function get<T extends Map<any, any>, K extends keyof T>(key: K, map: T): ExtractMap<T>[1] | T[K];
-export function get<T extends Map<any, any>>(key: ExtractMap<T>[0], map: T): ExtractMap<T>[1] | undefined;
+/**
+ *
+ *
+ * @param key
+ * @param target
+ */
+// tslint:disable-next-line: no-unnecessary-generics
+export function has<T>(key: any, target: T): boolean;
+// export function has(key: any, target: any): boolean;
 
-export function get<T extends any[], K extends keyof T & number>(key: K, array: T): T[K] | undefined;
-export function get<T extends any[], K extends keyof T>(key: K, array: T): T[K extends number ? never : K];
+// tslint:disable-next-line: no-unnecessary-generics
+export function has<T>(key: any): (target: T) => boolean;
+// export function has(key: any): (target: any) => boolean;
 
-export function get<T extends object, K extends keyof T>(key: K, object: T): T[K];
-// export function get<T extends object>(key: any, target: T): T[typeof key] | undefined;
+/**
+ *
+ *
+ * @param key
+ * @param target
+ */
+export function prop<T, K extends keyof T>(key: K, target: T): T[K];
 
-export function get<T extends Map<any, any>, K extends keyof T>(key: K): (map: T) => ExtractMap<T>[1] | T[K];
-export function get<T extends Map<any, any>>(key: ExtractMap<T>[0]): (map: T) => ExtractMap<T>[1] | undefined;
-
-export function get<T extends any[], K extends keyof T & number>(key: K): (array: T) => T[K] | undefined;
-export function get<T extends any[], K extends keyof T>(key: K): (array: T) => T[K extends number ? never : K];
-
-export function get<T extends object, K extends keyof T>(key: K): (object: T) => T[K];
-// export function get<T extends object>(key: any): (target: T) => T[typeof key] | undefined; */
+export function prop<T, K extends keyof T>(key: K): (target: T) => T[K];

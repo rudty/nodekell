@@ -165,3 +165,40 @@ describe('get', () => {
         const r0 = F.sortBy(F.get('value'), F.asc, a); // $ExpectType AsyncIterableIterator<{ value: number; }>
     });
 });
+
+describe('has', () => {
+    it('string', () => {
+        const a = 'hello world';
+
+        const r0 = F.has('length')(a); // $ExpectType boolean
+        const r1 = F.has('length', a); // $ExpectType boolean
+    });
+
+    it('has not property in type', () => {
+        const a = {};
+
+        const r0 = F.has('abcd')(a); // $ExpectType boolean
+        const r1 = F.has('efgh', a); // $ExpectType boolean
+    });
+
+    it('with filter', () => {
+        const a = ['hello', 1234];
+
+        const r0 = F.filter(F.has('toFixed'), a); // $ExpectType AsyncIterableIterator<string | number>
+    });
+});
+
+describe('prop', () => {
+    it('string', () => {
+        const a = 'hello world';
+
+        const r0 = F.prop<string, 'valueOf'>('valueOf')(a); // $ExpectType () => string
+        const r1 = F.prop('length', a); // $ExpectType number
+    });
+
+    it('with sortBy', () => {
+        const a = ['hello world', 'a', 'ab', 'abcde', 'abcd', 'abc'];
+
+        const r0 = F.sortBy(F.prop('length'), F.asc, a); // $ExpectType AsyncIterableIterator<string>
+    });
+});

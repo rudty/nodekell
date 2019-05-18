@@ -69,3 +69,16 @@ const get = curry((key, a) => {
 });
 
 exports.get = get;
+
+exports.has = curry((key, a) => {
+    if (a.has && a.has.constructor === Function) {
+        const r = a.has(key);
+        if (r !== undefined) {
+            return r;
+        }
+    }
+
+   return a[key] !== undefined;
+});
+
+exports.prop = curry((key, a) => a[key]);

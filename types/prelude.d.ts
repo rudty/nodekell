@@ -6,6 +6,7 @@ import {
     PDFlat,
     CurriedFunction2,
     FlatForInternalFn,
+    CurriedFunction3,
 } from './utils';
 
 /**
@@ -320,6 +321,14 @@ export function zip<T, Y>(iter1: Iter<T | Promise<T>>): (iter2: Iter<Y | Promise
 /**
  * https://github.com/rudty/nodekell#zipwith
  *
+ * **Note**
+ * - if you want high quality type, use type assertion
+ * ```ts
+ * const a = [1, 2, 3, 4];
+ * const b = 'abcd';
+ * const r = F.zipWith((a, b) => [a, b] as [number, string]);
+ * ```
+ *
  * @param f
  * @param iter1
  * @param iter2
@@ -330,14 +339,63 @@ export function zip<T, Y>(iter1: Iter<T | Promise<T>>): (iter2: Iter<Y | Promise
 // export function zipWith<T, Y, R1, R2>(f: (a: T, b: Y) => [R1, R2]): (a: Iter<T | Promise<T>>, b: Iter<Y | Promise<Y>>) => AsyncIterableIterator<[R1, R2]>;
 // export function zipWith<T, Y, R1, R2>(f: (a: T, b: Y) => (Promise<[R1, R2]> | Promise<(R1 | R2)[]>)): (a: Iter<T | Promise<T>>, b: Iter<Y | Promise<Y>>) => AsyncIterableIterator<[R1, R2]>;
 
-export function zipWith<T, Y, R1, R2>(f: (a: T, b: Y) => ([R1, R2] | Promise<[R1, R2]> | Promise<(R1 | R2)[]>), iter1: Iter<T | Promise<T>>, iter2: Iter<Y | Promise<Y>>): AsyncIterableIterator<[R1, R2]>;
-export function zipWith<T, Y, R1, R2>(f: (a: EP<T>, b: EP<Y>) => ([R1, R2] | Promise<[R1, R2]> | Promise<(R1 | R2)[]>), iter1: Iter<T>, iter2: Iter<Y>): AsyncIterableIterator<[R1, R2]>;
+export function zipWith<T, Y, R>(f: (elem1: T, elem2: Y) => (R | Promise<R>), iter1: Iter<T | Promise<T>>, iter2: Iter<Y | Promise<Y>>): AsyncIterableIterator<R>;
+// export function zipWith<T, Y, R>(f: (a: EP<T>, b: EP<Y>) => R, iter1: Iter<T>, iter2: Iter<Y>): AsyncIterableIterator<EP<R>>;
 
-export function zipWith<T, Y, R1, R2>(f: (a: T, b: Y) => ([R1, R2] | Promise<[R1, R2]> | Promise<(R1 | R2)[]>), iter1: Iter<T | Promise<T>>): (iter2: Iter<Y | Promise<Y>>) => AsyncIterableIterator<[R1, R2]>;
-export function zipWith<T, Y, R1, R2>(f: (a: EP<T>, b: EP<Y>) => ([R1, R2] | Promise<[R1, R2]> | Promise<(R1 | R2)[]>), iter1: Iter<T>): (iter2: Iter<Y>) => AsyncIterableIterator<[R1, R2]>;
+export function zipWith<T extends Iter<any>, Y extends Iter<any>, R>(f: (elem1: FlatForInternalFn<T>, elem2: FlatForInternalFn<Y>) => R, iter1: T, iter2: Y): AsyncIterableIterator<EP<R>>;
+export function zipWith<T extends Iter<any>, Y extends Iter<any>, R>(f: (elem1: FlatForInternalFn<T>, elem2: FlatForInternalFn<Y>) => R, iter1: T): (iter2: Y) => AsyncIterableIterator<EP<R>>;
+export function zipWith<T extends Iter<any>, Y extends Iter<any>, R>(f: (elem1: FlatForInternalFn<T>, elem2: FlatForInternalFn<Y>) => R): CurriedFunction2<T, Y, AsyncIterableIterator<EP<R>>>;
 
-export function zipWith<T, Y, R1, R2>(f: (a: T, b: Y) => ([R1, R2] | Promise<[R1, R2]> | Promise<(R1 | R2)[]>)): CurriedFunction2<Iter<T | Promise<T>>, Iter<Y | Promise<Y>>, AsyncIterableIterator<[R1, R2]>>;
-export function zipWith<T, Y, R1, R2>(f: (a: EP<T>, b: EP<Y>) => ([R1, R2] | Promise<[R1, R2]> | Promise<(R1 | R2)[]>)): CurriedFunction2<Iter<T>, Iter<Y>, AsyncIterableIterator<[R1, R2]>>;
+export function zipWith<T, Y, R>(f: (elem1: T, elem2: Y) => (R | Promise<R>), iter1: Iter<T | Promise<T>>): (iter2: Iter<Y | Promise<Y>>) => AsyncIterableIterator<R>;
+// export function zipWith<T, Y, R>(f: (a: EP<T>, b: EP<Y>) => R, iter1: Iter<T>): (iter2: Iter<Y>) => AsyncIterableIterator<EP<R>>;
+
+export function zipWith<T, Y, R>(f: (elem1: T, elem2: Y) => (R | Promise<R>)): CurriedFunction2<Iter<T | Promise<T>>, Iter<Y | Promise<Y>>, AsyncIterableIterator<R>>;
+// export function zipWith<T, Y, R>(f: (a: EP<T>, b: EP<Y>) => R): CurriedFunction2<Iter<T>, Iter<Y>, AsyncIterableIterator<EP<R>>>;
+
+/**
+ *
+ * @param iter1
+ * @param iter2
+ * @param iter3
+ */
+export function zip3<T, Y, Z>(iter1: Iter<T | Promise<T>>, iter2: Iter<Y | Promise<Y>>, iter3: Iter<Z | Promise<Z>>): AsyncIterableIterator<[T, Y, Z]>;
+
+export function zip3<T extends Iter<any>, Y extends Iter<any>, Z extends Iter<any>>(iter1: T, iter2: Y, iter3: Z): AsyncIterableIterator<[FlatForInternalFn<T>, FlatForInternalFn<Y>, FlatForInternalFn<Z>]>;
+export function zip3<T extends Iter<any>, Y extends Iter<any>, Z extends Iter<any>>(iter1: T, iter2: Y): (iter3: Z) => AsyncIterableIterator<[FlatForInternalFn<T>, FlatForInternalFn<Y>, FlatForInternalFn<Z>]>;
+export function zip3<T extends Iter<any>, Y extends Iter<any>, Z extends Iter<any>>(iter1: T): CurriedFunction2<Y, Z, AsyncIterableIterator<[FlatForInternalFn<T>, FlatForInternalFn<Y>, FlatForInternalFn<Z>]>>;
+
+export function zip3<T, Y, Z>(iter1: Iter<T | Promise<T>>, iter2: Iter<Y | Promise<Y>>): (iter3: Iter<Z | Promise<Z>>) => AsyncIterableIterator<[T, Y, Z]>;
+
+export function zip3<T, Y, Z>(iter1: Iter<T | Promise<T>>): CurriedFunction2<Iter<Y | Promise<Y>>, Iter<Z | Promise<Z>>, AsyncIterableIterator<[T, Y, Z]>>;
+
+/**
+ *
+ * **Note**
+ * - if you want high quality type, use type assertion
+ * ```ts
+ * const a = [1, 2, 3, 4];
+ * const b = 'abcd';
+ * const c = [5, 6, 7, 8];
+ * const r = F.zipWith3((a, b, c) => [a, b, c] as [number, string, number]);
+ * ```
+ *
+ * @param f
+ * @param iter1
+ * @param iter2
+ * @param iter3
+ */
+export function zipWith3<T, Y, Z, R>(f: (elem1: T, elem2: Y, elem3: Z) => (R | Promise<R>), iter1: Iter<T | Promise<T>>, iter2: Iter<Y | Promise<Y>>, iter3: Iter<Z | Promise<Z>>): AsyncIterableIterator<R>;
+
+export function zipWith3<T extends Iter<any>, Y extends Iter<any>, Z extends Iter<any>, R>(f: (elem1: FlatForInternalFn<T>, elem2: FlatForInternalFn<Y>, elem3: FlatForInternalFn<Z>) => R, iter1: T, iter2: Y, iter3: Z): AsyncIterableIterator<EP<R>>;
+export function zipWith3<T extends Iter<any>, Y extends Iter<any>, Z extends Iter<any>, R>(f: (elem1: FlatForInternalFn<T>, elem2: FlatForInternalFn<Y>, elem3: FlatForInternalFn<Z>) => R, iter1: T, iter2: Y): (iter3: Z) => AsyncIterableIterator<EP<R>>;
+export function zipWith3<T extends Iter<any>, Y extends Iter<any>, Z extends Iter<any>, R>(f: (elem1: FlatForInternalFn<T>, elem2: FlatForInternalFn<Y>, elem3: FlatForInternalFn<Z>) => R, iter1: T): CurriedFunction2<Y, Z, AsyncIterableIterator<EP<R>>>;
+export function zipWith3<T extends Iter<any>, Y extends Iter<any>, Z extends Iter<any>, R>(f: (elem1: FlatForInternalFn<T>, elem2: FlatForInternalFn<Y>, elem3: FlatForInternalFn<Z>) => R): CurriedFunction3<T, Y, Z, AsyncIterableIterator<EP<R>>>;
+
+export function zipWith3<T, Y, Z, R>(f: (elem1: T, elem2: Y, elem3: Z) => (R | Promise<R>), iter1: Iter<T | Promise<T>>, iter2: Iter<Y | Promise<Y>>): (iter3: Iter<Z | Promise<Z>>) => AsyncIterableIterator<R>;
+
+export function zipWith3<T, Y, Z, R>(f: (elem1: T, elem2: Y, elem3: Z) => (R | Promise<R>), iter1: Iter<T | Promise<T>>): CurriedFunction2<Iter<Y | Promise<Y>>, Iter<Z | Promise<Z>>, AsyncIterableIterator<R>>;
+
+export function zipWith3<T, Y, Z, R>(f: (elem1: T, elem2: Y, elem3: Z) => (R | Promise<R>)): CurriedFunction3<Iter<T | Promise<T>>, Iter<Y | Promise<Y>>, Iter<Z | Promise<Z>>, AsyncIterableIterator<R>>;
 
 /**
  * https://github.com/rudty/nodekell#run
