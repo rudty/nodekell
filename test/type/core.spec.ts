@@ -202,23 +202,3 @@ describe('prop', () => {
         const r0 = F.sortBy(F.prop('length'), F.asc, a); // $ExpectType AsyncIterableIterator<string>
     });
 });
-
-describe('enumerate', () => {
-    it('string', () => {
-        const a = 'hello world';
-
-        const r0 = F.enumerate(a); // $ExpectType AsyncIterableIterator<[number, string]>
-    });
-
-    it('from Promise Value', () => {
-        const a = [1, Promise.resolve(2), 'a', Promise.resolve('b'), null];
-
-        const r0 = F.enumerate(a); // $ExpectType AsyncIterableIterator<[number, string | number | null]>
-    });
-
-    it('with run', async () => {
-        const a = [1, Promise.resolve(2), 'a', Promise.resolve('b'), null];
-
-        const r0 = await F.run(a, F.enumerate); // $ExpectType AsyncIterableIterator<[number, string | number | null]>
-    });
-});
