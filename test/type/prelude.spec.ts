@@ -834,48 +834,48 @@ describe('zipWith', () => {
         const a = [{ id: 0 }, { id: 1 }, { id: 2 }];
         const b = [{ name: 'hong9802' }, { name: 'cenox' }, { name: 'gyungdal' }];
 
-        const r0 = F.zipWith<{ id: number; }, { name: string; }, number, string>((a, b) => [a.id, b.name])(a)(b); // $ExpectType AsyncIterableIterator<[number, string]>
-        const r1 = F.zipWith<{ id: number; }, { name: string; }, number, string>((a, b) => [a.id, b.name])(a, b); // $ExpectType AsyncIterableIterator<[number, string]>
-        const r2 = F.zipWith<{ id: number; }, { name: string; }, number, string>((a, b) => [a.id, b.name], a)(b); // $ExpectType AsyncIterableIterator<[number, string]>
-        const r3 = F.zipWith((a, b) => [a.id, b.name], a, b); // $ExpectType AsyncIterableIterator<[number, string]>
+        const r0 = F.zipWith<{ id: number; }, { name: string; }, [number, string]>((a, b) => [a.id, b.name])(a)(b); // $ExpectType AsyncIterableIterator<[number, string]>
+        const r1 = F.zipWith<{ id: number; }, { name: string; }, [number, string]>((a, b) => [a.id, b.name])(a, b); // $ExpectType AsyncIterableIterator<[number, string]>
+        const r2 = F.zipWith<{ id: number; }, { name: string; }, [number, string]>((a, b) => [a.id, b.name], a)(b); // $ExpectType AsyncIterableIterator<[number, string]>
+        const r3 = F.zipWith((a, b) => [a.id, b.name] as [number, string], a, b); // $ExpectType AsyncIterableIterator<[number, string]>
     });
 
     it('from Promise Value', async () => {
         const a = [Promise.resolve({ id: 0 }), { id: 1 }, { id: 2 }];
         const b = [{ name: 'hong9802' }, { name: 'cenox' }, Promise.resolve({ name: 'gyungdal' })];
 
-        const r0 = F.zipWith<{ id: number; }, { name: string; }, number, string>(async (a, b) => [a.id, b.name])(a)(b); // $ExpectType AsyncIterableIterator<[number, string]>
-        const r1 = F.zipWith<{ id: number; }, { name: string; }, number, string>(async (a, b) => [a.id, b.name])(a, b); // $ExpectType AsyncIterableIterator<[number, string]>
-        const r2 = F.zipWith<{ id: number; }, { name: string; }, number, string>(async (a, b) => [a.id, b.name], a)(b); // $ExpectType AsyncIterableIterator<[number, string]>
-        const r3 = F.zipWith((a, b) => [a.id, b.name], a, b); // $ExpectType AsyncIterableIterator<[number, string]>
+        const r0 = F.zipWith<{ id: number; }, { name: string; }, [number, string]>(async (a, b) => [a.id, b.name] as [number, string])(a)(b); // $ExpectType AsyncIterableIterator<[number, string]>
+        const r1 = F.zipWith<{ id: number; }, { name: string; }, [number, string]>(async (a, b) => [a.id, b.name] as [number, string])(a, b); // $ExpectType AsyncIterableIterator<[number, string]>
+        const r2 = F.zipWith<{ id: number; }, { name: string; }, [number, string]>(async (a, b) => [a.id, b.name] as [number, string], a)(b); // $ExpectType AsyncIterableIterator<[number, string]>
+        const r3 = F.zipWith((a, b) => [a.id, b.name] as [number, string], a, b); // $ExpectType AsyncIterableIterator<[number, string]>
     });
 
     it('from String', async () => {
         const a = 'hello world';
         const b = 'dlrow olleh';
 
-        const r0 = F.zipWith<string, string, string, string>((a, b) => [a, b])(a)(b); // $ExpectType AsyncIterableIterator<[string, string]>
-        const r1 = F.zipWith<string, string, string, string>((a, b) => [a, b])(a, b); // $ExpectType AsyncIterableIterator<[string, string]>
-        const r2 = F.zipWith<string, string, string, string>((a, b) => [a, b], a)(b); // $ExpectType AsyncIterableIterator<[string, string]>
-        const r3 = F.zipWith((a, b) => [a, b], a, b); // $ExpectType AsyncIterableIterator<[string, string]>
+        const r0 = F.zipWith<string, string, [string, string]>((a, b) => [a, b])(a)(b); // $ExpectType AsyncIterableIterator<[string, string]>
+        const r1 = F.zipWith<string, string, [string, string]>((a, b) => [a, b])(a, b); // $ExpectType AsyncIterableIterator<[string, string]>
+        const r2 = F.zipWith<string, string, [string, string]>((a, b) => [a, b], a)(b); // $ExpectType AsyncIterableIterator<[string, string]>
+        const r3 = F.zipWith((a, b) => [a, b] as [string, string], a, b); // $ExpectType AsyncIterableIterator<[string, string]>
     });
 
     it('from Normal / Promise Union', async () => {
         const a = [1, Promise.resolve(2), 'a', Promise.resolve('b')];
         const b = [Promise.resolve('b'), 'a', Promise.resolve(2), 1];
 
-        const r0 = F.zipWith<string | number, string | number, string | number, string | number>((a, b) => [a, b])(a)(b); // $ExpectType AsyncIterableIterator<[string | number, string | number]>
-        const r1 = F.zipWith<string | number, string | number, string | number, string | number>((a, b) => [a, b])(a, b); // $ExpectType AsyncIterableIterator<[string | number, string | number]>
-        const r2 = F.zipWith<string | number, string | number, string | number, string | number>((a, b) => [a, b], a)(b); // $ExpectType AsyncIterableIterator<[string | number, string | number]>
-        const r3 = F.zipWith((a, b) => [a, b], a, b); // $ExpectType AsyncIterableIterator<[string | number, string | number]>
+        const r0 = F.zipWith<string | number, string | number, [string | number, string | number]>((a, b) => [a, b])(a)(b); // $ExpectType AsyncIterableIterator<[string | number, string | number]>
+        const r1 = F.zipWith<string | number, string | number, [string | number, string | number]>((a, b) => [a, b])(a, b); // $ExpectType AsyncIterableIterator<[string | number, string | number]>
+        const r2 = F.zipWith<string | number, string | number, [string | number, string | number]>((a, b) => [a, b], a)(b); // $ExpectType AsyncIterableIterator<[string | number, string | number]>
+        const r3 = F.zipWith((a, b) => [a, b] as [string | number, string | number], a, b); // $ExpectType AsyncIterableIterator<[string | number, string | number]>
     });
 
     it('with run', async () => {
         const a = [1, Promise.resolve(2), 'a', Promise.resolve('b'), null];
         const b = [Promise.resolve('b'), 'a', Promise.resolve(2), 1, null];
 
-        const r0 = await F.run(b, F.zipWith<string | number | null, string | number | null, string | number | null, string | number | null>((a, b) => [a, b], a)); // $ExpectType AsyncIterableIterator<[string | number | null, string | number | null]>
-        const r1 = await F.run(b, F.zipWith((a, b) => [a, b], a)); // $ExpectType AsyncIterableIterator<[string | number | null, string | number | null]>
+        const r0 = await F.run(b, F.zipWith<string | number | null, string | number | null, [string | number | null, string | number | null]>((a, b) => [a, b], a)); // $ExpectType AsyncIterableIterator<[string | number | null, string | number | null]>
+        const r1 = await F.run(b, F.zipWith((a, b) => [a, b] as [string | number | null, string | number | null], a)); // $ExpectType AsyncIterableIterator<[string | number | null, string | number | null]>
     });
 });
 
