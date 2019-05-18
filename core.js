@@ -72,8 +72,7 @@ exports.get = get;
 
 exports.has = curry((key, a) => {
     if (a.has && a.has.constructor === Function) {
-        const r = a.has(key);
-        if (r) {
+        if (a.has(key)) {
             return true;
         }
     }
