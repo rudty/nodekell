@@ -214,6 +214,32 @@ exports.zipWith =  C.curry(async function* (f, a, b) {
     }
 });
 
+const zipWith3 = C.curry(async function*(f, a, b, c){
+    a = C.seq(a);
+    b = C.seq(b);
+    c = C.seq(c);
+
+    while (true) {
+        const ap = a.next();
+        const bp = b.next();
+        const cp = c.next();
+
+        const ae = await ap;
+        const be = await bp;
+        const ce = await cp;
+
+        if (ae.done || be.done || ce.done) {
+            break;
+        }
+
+        yield f(ae.value, be.value, ce.value);
+    }
+});
+
+exports.zipWith3 = zipWith3;
+
+exports.zip3 = C.curry((iter1, iter2, iter3) => zipWith3((elem1, elem2, elem3) => [elem1, elem2, elem3], iter1, iter2, iter3));
+
 /**
  * like `$` or `.`
  *  let a = [1,2,3,4,5];
