@@ -74,7 +74,7 @@ exports.has = curry((key, a) => {
     if (a.has && a.has.constructor === Function) {
         const r = a.has(key);
         if (r !== undefined) {
-            return !!r;
+            return true;
         }
     }
 
