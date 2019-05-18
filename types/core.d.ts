@@ -194,10 +194,3 @@ export function has<T>(key: any): (target: T) => boolean;
 export function prop<T, K extends keyof T>(key: K, target: T): T[K];
 
 export function prop<T, K extends keyof T>(key: K): (target: T) => T[K];
-
-/**
- *
- * @param iter
- */
-// export function enumerate<T>(iter: Iter<T | Promise<T>>): AsyncIterableIterator<[number, T]>;
-export function enumerate<T>(iter: Iter<T>): AsyncIterableIterator<[number, EP<T>]>;

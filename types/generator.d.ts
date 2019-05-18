@@ -1,5 +1,6 @@
 import {
     EP,
+    Iter
 } from './utils';
 
 /**
@@ -41,3 +42,10 @@ export function range(begin: number, end: number, step?: number): IterableIterat
 export function iterate<T>(f: (value: T) => (T | Promise<T>), value: T | Promise<T>): AsyncIterableIterator<T>;
 
 export function iterate<T>(f: (value: T) => (T | Promise<T>)): (value: T | Promise<T>) => AsyncIterableIterator<T>;
+
+/**
+ *
+ * @param iter
+ */
+// export function enumerate<T>(iter: Iter<T | Promise<T>>): AsyncIterableIterator<[number, T]>;
+export function enumerate<T>(iter: Iter<T>): AsyncIterableIterator<[number, EP<T>]>;
