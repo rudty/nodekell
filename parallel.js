@@ -3,40 +3,33 @@ const C = require("./core.js");
 const default_fetch_count = 100;
 let global_fetch_count = default_fetch_count;
 
-class LinkedListNode {
-    constructor(value, prev, next) {
-        this.prev = prev;
-        this.next = next;
-        this.value = value;
-    }
+const listNodeGetAndClear = (n) => {
+    const v = n.value;
+    n.value = null;
+    n.next = null;
+    return v;
+};
 
-    removeAndGet() {
-        this.prev = null;
-        this.next = null;
-
-        const v = this.value;
-        this.value = null;
-        return v;
-    }
-}
-
+/**
+ * like haskell List
+ */
 class LinkedList {
     constructor() {
         this.head = this.tail = null;
     }
 
     // addFirst(value) {
-    //     const n = new LinkedListNode(value, null, this.head);
+    //     const n = {value: value, next: null};
     //     if (!this.tail) {
     //         this.tail = n;
     //     } else {
-    //         this.head.next = n;
+    //         n.next = this.head;
     //     }
     //     this.head = n;
     // }
 
     addLast(value) {
-        const n = new LinkedListNode(value, this.tail, null);
+        const n = {value: value, next: null};
         if (!this.head) {
             this.head = n;
         } else {
@@ -52,30 +45,20 @@ class LinkedList {
         } else {
             this.head = f.next;
         }
-        return f.removeAndGet();
+        return listNodeGetAndClear(f);
     }
-
-    // removeLast() {
-    //     const l = this.tail;
-    //     if (this.head === l) {
-    //         this.head = this.tail = null;
-    //     } else {
-    //         this.tail = l.prev;
-    //     }
-    //     return l.removeAndGet();
-    // }
 
     isEmpty() {
         return this.head === null;
     }
 
-    // *[Symbol.iterator]() {
-    //     let it = this.head;
-    //     while(it) {
-    //         yield it.value;
-    //         it = it.next;
-    //     }
-    // }
+    *[Symbol.iterator]() {
+        let it = this.head;
+        while(it) {
+            yield it.value;
+            it = it.next;
+        }
+    }
 }
 
 /**
