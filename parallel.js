@@ -25,15 +25,15 @@ class LinkedList {
         this.head = this.tail = null;
     }
 
-    addFirst(value) {
-        const n = new LinkedListNode(value, null, this.head);
-        if (!this.tail) {
-            this.tail = n;
-        } else {
-            this.head.next = n;
-        }
-        this.head = n;
-    }
+    // addFirst(value) {
+    //     const n = new LinkedListNode(value, null, this.head);
+    //     if (!this.tail) {
+    //         this.tail = n;
+    //     } else {
+    //         this.head.next = n;
+    //     }
+    //     this.head = n;
+    // }
 
     addLast(value) {
         const n = new LinkedListNode(value, this.tail, null);
@@ -55,27 +55,27 @@ class LinkedList {
         return f.removeAndGet();
     }
 
-    removeLast() {
-        const l = this.tail;
-        if (this.head === l) {
-            this.head = this.tail = null;
-        } else {
-            this.tail = l.prev;
-        }
-        return l.removeAndGet();
-    }
+    // removeLast() {
+    //     const l = this.tail;
+    //     if (this.head === l) {
+    //         this.head = this.tail = null;
+    //     } else {
+    //         this.tail = l.prev;
+    //     }
+    //     return l.removeAndGet();
+    // }
 
     isEmpty() {
         return this.head === null;
     }
 
-    *[Symbol.iterator]() {
-        let it = this.head;
-        while(it) {
-            yield it.value;
-            it = it.next;
-        }
-    }
+    // *[Symbol.iterator]() {
+    //     let it = this.head;
+    //     while(it) {
+    //         yield it.value;
+    //         it = it.next;
+    //     }
+    // }
 }
 
 /**
