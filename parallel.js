@@ -126,7 +126,9 @@ exports.pmap = C.curry(async function* (fn, iter) {
         yield await f.removeFirst();
     }
 
-    yield* f;
+    while (!f.isEmpty()) {
+        yield f.removeFirst();
+    }
 });
 
 const pfmap = C.curry(async function* (fn, iter) {
@@ -138,8 +140,8 @@ const pfmap = C.curry(async function* (fn, iter) {
         yield* await f.removeFirst();
     }
 
-    for (let i = 0; i < f.length; ++i) {
-        yield* await f[i];
+    while (!f.isEmpty()) {
+        yield* await f.removeFirst();
     }
 });
 exports.pfmap = pfmap;
@@ -154,29 +156,30 @@ const fetch_filter_internal = async (f, v, fn, iter) => {
         if (done) {
             break;
         }
-        f.push(fn(value));
-        v.push(value);
+        f.addLast(fn(value));
+        v.addLast(value);
     }
     return g;
 };
 
 exports.pfilter = C.curry(async function* (fn, iter) {
-    const f = [];
-    const v = [];
+    const f = new LinkedList();
+    const v = new LinkedList();
     const g = await fetch_filter_internal(f, v, fn, iter);
     for await (const e of g) {
-        const c = v.shift();
-        if (await f.shift()) {
+        f.addLast(fn(e));
+        v.addLast(e);
+
+        const c = v.removeFirst();
+        if (await f.removeFirst()) {
             yield c;
         }
-
-        f.push(fn(e));
-        v.push(e);
     }
 
-    for(let i = 0; i < v.length; ++i) {
-        if (await f[i]) {
-            yield v[i];
+    while (!v.isEmpty()) {
+        const c = v.removeFirst(); 
+        if (await f.removeFirst()) {
+            yield c;
         }
     }
 });
