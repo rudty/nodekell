@@ -64,7 +64,9 @@ console.log(v);//[3]
 *    [reverse](#reverse)
 *    [forEach](#foreach)
 *    [zip](#zip)
+*    [zip3](#zip3)
 *    [zipWith](#zipwith)
+*    [zipWith3](#zipwith3)
 *    [drop](#drop)
 *    [dropWhile](#dropwhile)
 *    [emptyThen](#emptythen)
@@ -418,12 +420,42 @@ const z = F.zip(a, b);
 const arr = await F.collect(z);
 for (const e of arr) {
     console.log(e);
-    //print
-    //[1,6]
-    //[2,7]
-    //[4,9]
-    //[5,0]
 }
+//print
+//[1,6]
+//[2,7]
+//[4,9]
+//[5,0]
+```
+
+
+### zip3
+```javascript
+const a = [1,2,3];
+const b = [4,5,6];
+const c = [7,8,9];
+const z = F.zip3(a,b,c);
+const arr = await F.collect(z);
+for (const e of arr) {
+    console.log(e);
+}
+//print
+//[1,4,7]
+//[2,5,8]
+//[3,6,9]
+```
+```javascript
+const a = [1,2];
+const b = [4,5,6];
+const c = [7,8,9];
+const z = F.zip3(a,b,c);
+const arr = await F.collect(z);
+for (const e of arr) {
+    console.log(e);
+}
+//print
+//[1,4,7]
+//[2,5,8]
 ```
 
 
@@ -444,6 +476,18 @@ for (const e of arr) {
 //print
 //[1,"a"]
 //[2,"b"]
+```
+
+
+### zipWith3
+```javascript
+const a = [1,2,3];
+const b = [4,5,6];
+const c = [7,8,9];
+const z = F.zipWith3((f,s,t)=>f+s+t, a, b,c);
+const arr = await F.collect(z);
+console.log(arr);
+//print [12,15,18]
 ```
 
 
