@@ -44,6 +44,7 @@ export function iterate<T>(f: (value: T) => (T | Promise<T>), value: T | Promise
 export function iterate<T>(f: (value: T) => (T | Promise<T>)): (value: T | Promise<T>) => AsyncIterableIterator<T>;
 
 /**
+ * https://github.com/rudty/nodekell#enumerate
  *
  * @param iter
  */

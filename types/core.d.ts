@@ -172,7 +172,7 @@ export function get<T, K extends keyof T>(key: K): (target: T) => Getter<T, K>;
 export function get<T, K>(key: K): (target: T) => Getter<T, K>;
 
 /**
- *
+ * https://github.com/rudty/nodekell#has
  *
  * @param key
  * @param target
@@ -186,7 +186,7 @@ export function has<T>(key: any): (target: T) => boolean;
 // export function has(key: any): (target: any) => boolean;
 
 /**
- *
+ * https://github.com/rudty/nodekell#prop
  *
  * @param key
  * @param target
