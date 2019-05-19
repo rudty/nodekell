@@ -5,8 +5,7 @@ const assert = require("assert");
 describe('test tap', () => {
     it('fn', async () => {
         const v = await F.tap(async (e) => {
-            var a;
-            await a;
+            await F.sleep(1);
             e.push(4);
         }, [1,2,3]);
         assert.deepStrictEqual(v,[1,2,3,4]);
