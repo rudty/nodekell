@@ -300,9 +300,9 @@ export function then<T, R>(f: (t: T) => R): (t: T) => R;
  * @param f
  * @param t
  */
-export function tap<T>(f: (t: T | Promise<T>) => any, t: T | Promise<T>): Promise<T>;
+export function tap<T>(f: (t: T) => any, t: T): Promise<EP<T>>;
 
-export function tap<T>(f: (t: T | Promise<T>) => any): (t: T | Promise<T>) => Promise<T>;
+export function tap<T>(f: (t: T) => any): (t: T) => Promise<EP<T>>;
 
 /**
  * https://github.com/rudty/nodekell#buffer

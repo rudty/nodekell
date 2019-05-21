@@ -831,7 +831,7 @@ describe('tap', () => {
     it('from Promise Value', async () => {
         const a = Promise.resolve('a');
 
-        const r0 = await F.tap<string>(F.fnothing)(a); // $ExpectType string
+        const r0 = await F.tap<Promise<string>>(F.fnothing)(a); // $ExpectType string
         const r1 = await F.tap(F.fnothing, a); // $ExpectType string
     });
 
@@ -845,7 +845,7 @@ describe('tap', () => {
     it('from Promise / Normal Union Array', async () => {
         const a = [Promise.resolve(1), 2, Promise.resolve('a'), 'b'];
 
-        const r0 = await F.tap<typeof a>(F.fnothing)(a); // $ExpectType (string | number | Promise<number> | Promise<string>)[]
+        const r0 = await F.tap<(string | number | Promise<string> | Promise<number>)[]>(F.fnothing)(a); // $ExpectType (string | number | Promise<number> | Promise<string>)[]
         const r1 = await F.tap(F.fnothing, a); // $ExpectType (string | number | Promise<number> | Promise<string>)[]
     });
 
