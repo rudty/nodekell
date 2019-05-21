@@ -165,16 +165,29 @@ exports.pfilter = C.curry(async function* (fn, iter) {
     }
 });
 
-const pcalls_internal = async function* (iter) {
+const fetch_call_internal =  async (f, iter) => { 
     const fetch_count = global_fetch_count;
-    let f = [];
-    for await(const e of iter) {
-        const len = f.push(e());
-        if(len >= fetch_count) {
-            yield* f;
-            f = [];
+    const g = C.seq(iter);
+    for (let i = fetch_count; i > 0; --i) {
+        const e = await g.next();
+        if (e.done) {
+            break;
         }
+        f.addLast(e.value());
+    }
+    return g;
+}
+
+const pcalls_internal = async function* (iter) {
+
+    const f = new LinkedList();
+    const g = await fetch_call_internal(f, iter);
+    
+    for await(const e of g) {
+        f.addLast(e());
+        yield f.removeFirst();
     } 
+
     yield* f;
 };
 

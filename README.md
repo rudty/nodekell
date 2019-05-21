@@ -962,7 +962,7 @@ console.log(r);
 ```
 2. call vaarg async functions
 ```javascript
-/*same as */Promise.all([fn1(),fn2(),fn3(),fn4()])
+/*like*/Promise.all([fn1(),fn2(),fn3(),fn4()])
 ```
 ```javascript
 const fn1 = () => {
