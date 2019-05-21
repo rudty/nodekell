@@ -11,7 +11,7 @@ const listNodeGetAndClear = (n) => {
 };
 
 /**
- * like haskell List
+ * single linked list
  */
 class LinkedList {
     constructor() {
@@ -19,11 +19,9 @@ class LinkedList {
     }
 
     // addFirst(value) {
-    //     const n = {value: value, next: null};
+    //     const n = {value: value, next: this.head};
     //     if (!this.tail) {
     //         this.tail = n;
-    //     } else {
-    //         n.next = this.head;
     //     }
     //     this.head = n;
     // }
