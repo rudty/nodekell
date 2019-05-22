@@ -1,9 +1,10 @@
 "use strict";
 const F = require("../index");
+const LinkedList = require("../linkedlist");
 const assert = require("assert");
 describe('test LinkedList', () => {
-    it('add', async () => {
-        const list = new F.LinkedList();
+    it('addLast', async () => {
+        const list = new LinkedList();
         assert.ok(list.isEmpty());
         list.addLast(3);
         list.addLast(4);
@@ -14,8 +15,20 @@ describe('test LinkedList', () => {
         assert.strictEqual(list.head.next.next.value, 5);
     });
 
+    it('add first', async () => {
+        const list = new LinkedList();
+        assert.ok(list.isEmpty());
+        list.addFirst(3);
+        list.addFirst(4);
+        list.addFirst(5);
+
+        assert.strictEqual(list.head.value, 5);
+        assert.strictEqual(list.head.next.value, 4);
+        assert.strictEqual(list.head.next.next.value, 3);
+    });
+
     it('removeFirst', async () => {
-        const list = new F.LinkedList();
+        const list = new LinkedList();
         list.addLast(3);
         list.addLast(4);
         list.addLast(5);
@@ -40,11 +53,11 @@ describe('test LinkedList', () => {
     // });
 
     it('iterator', async () => {
-        const list = new F.LinkedList();
+        const list = new LinkedList();
         list.addLast(3);
         list.addLast(4);
         list.addLast(5);
-        const it = list.onceIterator();
+        const it = list.asyncRemoveIterator();
         const e1 = await it.next();
         assert.strictEqual(e1.value, 3);
         const e2 = await it.next();
@@ -55,11 +68,11 @@ describe('test LinkedList', () => {
     });
 
     it('deep iterator', async () => {
-        const list = new F.LinkedList();
+        const list = new LinkedList();
         list.addLast([3]);
         list.addLast([4]);
         list.addLast([5,Promise.resolve(6)]);
-        const it = list.onceDeepIterator();
+        const it = list.asyncFlatRemoveIterator();
         const e1 = await it.next();
         assert.strictEqual(e1.value, 3);
         const e2 = await it.next();
