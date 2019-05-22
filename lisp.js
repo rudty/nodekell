@@ -30,12 +30,14 @@ exports.cond = async (...cv) => {
 };
 
 exports.memoize = (fn) => {
-    const cache = new Map();
+    const cache = {};
     return (...arg) => {
-        let r = cache.get(arg);
-        if(r === undefined) {
+        let r;
+        if(!(arg in cache)) {
             r = fn(...arg);
             cache[arg] = r;
+        } else {
+            r = cache[arg]; 
         }
         return r;
     };
