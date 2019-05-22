@@ -28,3 +28,19 @@ exports.cond = async (...cv) => {
     }
     // return undefined
 };
+
+exports.memoize = (fn) => {
+    const cache = new Map();
+    return (...arg) => {
+        let r = cache.get(arg);
+        if(r === undefined) {
+            r = fn(...arg);
+            cache[arg] = r;
+        }
+        return r;
+    };
+};
+
+// exports.memoizeWith;
+
+// exports.memoizeWithExpireTime;
