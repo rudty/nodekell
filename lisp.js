@@ -1,4 +1,5 @@
 'use strict';
+const C = require("./core.js");
 
 /**
  * if (F.otherwise) {
@@ -29,20 +30,21 @@ exports.cond = async (...cv) => {
     // return undefined
 };
 
-exports.memoize = (fn) => {
+const memoizeWith = C.curry((keyFn, callFn) => {
     const cache = {};
-    return (...arg) => {
+    return async (...arg) => {
         let r;
-        if(!(arg in cache)) {
-            r = fn(...arg);
-            cache[arg] = r;
+        const key = keyFn(...arg);
+        if(!(key in cache)) {
+            r = await callFn(...arg);
+            cache[key] = r;
         } else {
-            r = cache[arg]; 
+            r = cache[key];
         }
         return r;
     };
-};
+});
+exports.memoizeWith = memoizeWith;
 
-// exports.memoizeWith;
-
+exports.memoize = memoizeWith((...a) => a);
 // exports.memoizeWithExpireTime;
