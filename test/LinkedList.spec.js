@@ -44,13 +44,30 @@ describe('test LinkedList', () => {
         list.addLast(3);
         list.addLast(4);
         list.addLast(5);
-        const it = list[Symbol.iterator]();
-        const e1 = it.next();
+        const it = list.onceIterator();
+        const e1 = await it.next();
         assert.strictEqual(e1.value, 3);
-        const e2 = it.next();
+        const e2 = await it.next();
         assert.strictEqual(e2.value, 4);
-        const e3 = it.next();
+        const e3 = await it.next();
         assert.strictEqual(e3.value, 5);
+        
+    });
+
+    it('deep iterator', async () => {
+        const list = new F.LinkedList();
+        list.addLast([3]);
+        list.addLast([4]);
+        list.addLast([5,Promise.resolve(6)]);
+        const it = list.onceDeepIterator();
+        const e1 = await it.next();
+        assert.strictEqual(e1.value, 3);
+        const e2 = await it.next();
+        assert.strictEqual(e2.value, 4);
+        const e3 = await it.next();
+        assert.strictEqual(e3.value, 5);
+        const e4 = await it.next();
+        assert.strictEqual(e4.value, 6);
         
     });
 });

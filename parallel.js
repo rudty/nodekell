@@ -50,11 +50,45 @@ class LinkedList {
         return this.head === null;
     }
 
-    *[Symbol.iterator]() {
+    // *[Symbol.iterator]() {
+    //     let it = this.head;
+    //     while(it) {
+    //         yield it.value;
+    //         it = it.next;
+    //     }
+    // }
+
+    /**
+     * yield value
+     * and remove value
+     * help gc
+     */
+    async *onceIterator() {
         let it = this.head;
-        while(it) {
-            yield it.value;
-            it = it.next;
+        while (it) {
+            const p = it;
+            yield await p.value;
+            it = p.next;
+
+            p.value = null;
+            p.next = null;
+        }
+    }
+
+    /**
+     * yield* value
+     * and remove value
+     * help gc
+     */
+    async *onceDeepIterator() {
+        let it = this.head;
+        while (it) {
+            const p = it;
+            yield* await p.value;
+            it = p.next;
+
+            p.value = null;
+            p.next = null;
         }
     }
 }
@@ -104,12 +138,10 @@ exports.pmap = C.curry(async function* (fn, iter) {
 
     for await (const e of g) {
         f.addLast(fn(e));
-        yield await f.removeFirst();
-    }
-
-    while (!f.isEmpty()) {
         yield f.removeFirst();
     }
+
+    yield* f.onceIterator();
 });
 
 const pfmap = C.curry(async function* (fn, iter) {
@@ -121,9 +153,7 @@ const pfmap = C.curry(async function* (fn, iter) {
         yield* await f.removeFirst();
     }
 
-    while (!f.isEmpty()) {
-        yield* await f.removeFirst();
-    }
+    yield* f.onceDeepIterator();
 });
 exports.pfmap = pfmap;
 exports.pflatMap = pfmap;
@@ -188,7 +218,7 @@ const pcalls_internal = async function* (iter) {
         yield f.removeFirst();
     } 
 
-    yield* f;
+    yield* f.onceIterator();
 };
 
 exports.pcalls = C.curry(async function* (...a) {
