@@ -61,3 +61,100 @@ describe('cond', () => {
         const r1 = await F.cond(thanos, 'a', thanos, Promise.resolve(1), thanosp, 2, thanos, Promise.resolve('b'), F.otherwise, null); // $ExpectType string | number | null
     });
 });
+
+describe('memoizeWith', () => {
+    it('normal', async () => {
+        const a = (n: number) => n + n;
+
+        const r0 = F.memoizeWith<(n: number) => number>(n => n)(a); // $ExpectType (n: number) => Promise<number>
+        const r1 = await r0(1); // $ExpectType number
+
+        const r2 = F.memoizeWith(n => n, a); // $ExpectType (n: number) => Promise<number>
+        const r3 = await r2(1); // $ExpectType number
+    });
+
+    it('async', async () => {
+        const a = async (n: number) => n + n;
+
+        const r0 = F.memoizeWith<(n: number) => Promise<number>>(n => n)(a); // $ExpectType (n: number) => Promise<number>
+        const r1 = await r0(1); // $ExpectType number
+
+        const r2 = F.memoizeWith(n => n, a); // $ExpectType (n: number) => Promise<number>
+        const r3 = await r2(2); // $ExpectType number
+    });
+
+    it('multiple', async () => {
+        const a = (n0: number, n1: number, n2: number) => (n0 + n1) * n2;
+
+        const r0 = F.memoizeWith<(n0: number, n1: number, n2: number) => number>((n0, n1) => [n0, n1])(a); // $ExpectType (n0: number, n1: number, n2: number) => Promise<number>
+        const r1 = await r0(1, 2, 3); // $ExpectType number
+
+        const r2 = F.memoizeWith((n0, n1, n2) => [n0, n1, n2], a); // $ExpectType (n0: number, n1: number, n2: number) => Promise<number>
+        const r3 = await r2(1, 2, 3); // $ExpectType number
+    });
+
+    it('callFn has overload type', async () => {
+        const ar0 = F.memoizeWith<(a: number, b: number) => number>((a, b) => [a, b])(F.add); // $ExpectType (a: number, b: number) => Promise<number>
+        const ar1 = await ar0(1, 2); // $ExpectType number
+
+        const ar2 = F.memoizeWith<[number, number], number>((a, b) => [a, b], F.add); // $ExpectType (args_0: number, args_1: number) => Promise<number>
+        const ar3 = await ar2(1, 2); // $ExpectType number
+
+        const br0 = F.memoizeWith<(a: string, b: string) => string>((a, b) => [a, b])(F.add); // $ExepctType (a: string, b: string) => Promise<string>
+        const br1 = await br0('hello', 'world'); // $ExpectType string
+
+        const br2 = F.memoizeWith<[string, string], string>((a, b) => [a, b], F.add); // $ExepctType (args_0: string, args_1: string) => Promise<string>
+        const br3 = await br2('hello', 'world'); // $ExpectType string
+
+        const cr0 = F.memoizeWith<((a: string, b: string) => string) | ((a: number, b: number) => number)>((a, b) => [a, b])(F.add);
+        const cr1 = await cr0('hello', 'world') as string; // $ExpectType string
+        const cr2 = await cr0(1, 2) as number; // $ExpectType number
+
+        const cr3 = F.memoizeWith<((a: string, b: string) => string) | ((a: number, b: number) => number)>((a, b) => [a, b], F.add);
+        const cr4 = await cr3('hello', 'world') as string; // $ExpectType string
+        const cr5 = await cr3(1, 2) as number; // $ExpectType number
+
+        /* const cr0 = F.memoize<typeof F.add>(F.add); // (a: string) => Promise<(b: string) => string> ???
+        const cr1 = cr0(1, 2); // Expected 1 arguments, but got 2. ts(2554) */
+    });
+});
+
+describe('memoize', () => {
+    it('normal', async () => {
+        const a = (n: number) => n + n;
+
+        const r0 = F.memoize(a); // $ExpectType (n: number) => Promise<number>
+        const r1 = await r0(1); // $ExpectType number
+    });
+
+    it('async', async () => {
+        const a = async (n: number) => n + n;
+
+        const r0 = F.memoize(a); // $ExpectType (n: number) => Promise<number>
+        const r1 = await r0(2); // $ExpectType number
+    });
+
+    it('multiple', async () => {
+        const a = (n0: number, n1: number, n2: number) => (n0 + n1) * n2;
+
+        const r0 = F.memoize(a); // $ExpectType (n0: number, n1: number, n2: number) => Promise<number>
+        const r1 = await r0(1, 2, 3); // $ExpectType number
+    });
+
+    it('callFn has overload type', async () => {
+        const ar0 = F.memoize<[number, number], number>(F.add); // $ExpectType (args_0: number, args_1: number) => Promise<number>
+        const ar1 = await ar0(1, 2); // $ExpectType number
+
+        const br0 = F.memoize<(a: string, b: string) => string>(F.add); // $ExepctType (a: string, b: string) => Promise<string>
+        const br1 = await br0('hello', 'world'); // $ExpectType string
+
+        const cr0 = F.memoize<((a: string, b: string) => string) | ((a: number, b: number) => number)>(F.add); // $ExpectType (...args: [number, number] | [string, string]) => Promise<string | number>
+        const cr1 = await cr0('hello', 'world') as string; // $ExpectType string
+        const cr2 = await cr0(1, 2) as number; // $ExpectType number
+
+        /* const cr0 = F.memoize<typeof F.add>(F.add); // (a: string) => Promise<(b: string) => string> ???
+        const cr1 = cr0(1, 2); // Expected 1 arguments, but got 2. ts(2554) */
+    });
+
+    // it('callFn is curried')
+});

@@ -37,3 +37,46 @@ export function cond<T extends PairRepeat<34, boolean | Promise<boolean> | typeo
 export function cond<T extends PairRepeat<36, boolean | Promise<boolean> | typeof otherwise, any>>(...a: T): Promise<EP<Find<true | Promise<true> | typeof otherwise, T> extends never ? PickElements<1, T> | undefined : PickElements<1, T>>>;
 export function cond<T extends PairRepeat<38, boolean | Promise<boolean> | typeof otherwise, any>>(...a: T): Promise<EP<Find<true | Promise<true> | typeof otherwise, T> extends never ? PickElements<1, T> | undefined : PickElements<1, T>>>;
 export function cond<T extends PairRepeat<40, boolean | Promise<boolean> | typeof otherwise, any>>(...a: T): Promise<EP<Find<true | Promise<true> | typeof otherwise, T> extends never ? PickElements<1, T> | undefined : PickElements<1, T>>>;
+
+/**
+ *
+ *
+ * **Note**
+ * - if use overloaded type function, use generic
+ * ```ts
+ * const addn = F.memoizeWith<(a: number, b: number) => number>((...e) => e, F.add);
+ * addn(1, 2);
+ * const adds = F.memoizeWith<(a: string, b: string) => string>((...e) => e, F.add);
+ * adds('a', 'b');
+ * const add = F.memoizeWith<((a: string, b: string) => string) | ((a: number, b: number) => number)>((...e) => e, F.add);
+ * add('a', 'b') as string;
+ * add(1, 2) as number;
+ * ```
+ * @param keyFn
+ * @param callFn
+ */
+export function memoizeWith<P extends any[], R>(keyFn: (...args: P) => any, callFn: (...args: P) => (R | Promise<R>)): (...args: P) => Promise<R>;
+export function memoizeWith<F extends (...args: any[]) => any>(keyFn: (...args: Parameters<F>) => any, callFn: F): (...args: Parameters<F>) => Promise<EP<ReturnType<F>>>;
+
+export function memoizeWith<P extends any[], R>(keyFn: (...args: P) => any): (callFn: (...args: P) => (R | Promise<R>)) => (...args: P) => Promise<R>;
+export function memoizeWith<F extends (...args: any[]) => any>(keyFn: (...args: Parameters<F>) => any): (callFn: F) => (...args: Parameters<F>) => Promise<EP<ReturnType<F>>>;
+
+/**
+ *
+ *
+ * **Note**
+ * - if use overloaded type function, use generic
+ * ```ts
+ * const addn = F.memoize<(a: number, b: number) => number>(F.add);
+ * addn(1, 2);
+ * const adds = F.memoize<(a: string, b: string) => string>(F.add);
+ * adds('a', 'b');
+ * const add = F.memoize<((a: string, b: string) => string) | ((a: number, b: number) => number)>(F.add);
+ * add('a', 'b') as string;
+ * add(1, 2) as number;
+ * ```
+ *
+ * @param callFn
+ */
+export function memoize<P extends any[], R>(callFn: (...args: P) => R): (...args: P) => Promise<EP<R>>;
+export function memoize<F extends (...args: any[]) => any>(callFn: F): (...args: Parameters<F>) => Promise<EP<ReturnType<F>>>;
