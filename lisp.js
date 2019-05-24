@@ -30,7 +30,7 @@ exports.cond = async (...cv) => {
     // return undefined
 };
 
-const memoizeWith = C.curry((keyFn, callFn) => {
+const memoizeBy = C.curry((keyFn, callFn) => {
     const cache = {};
     return async (...arg) => {
         let r;
@@ -44,7 +44,6 @@ const memoizeWith = C.curry((keyFn, callFn) => {
         return r;
     };
 });
-exports.memoizeWith = memoizeWith;
+exports.memoizeBy = memoizeBy;
 
-exports.memoize = memoizeWith((...a) => a);
-// exports.memoizeWithExpireTime;
+exports.memoize = memoizeBy((...a) => a);

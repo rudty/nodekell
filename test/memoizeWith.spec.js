@@ -2,7 +2,7 @@
 const F = require("../index");
 const assert = require("assert");
 
-describe('test memoizeWith', () => {
+describe('test memoizeBy', () => {
     it('div10', async () => {
         let counterIV = 0;
         const mustCallOnce = () => {
@@ -11,7 +11,7 @@ describe('test memoizeWith', () => {
             }
             return 42;
         }
-        const c = F.memoizeWith(e => e / 10 ,mustCallOnce);
+        const c = F.memoizeBy(e => e / 10 ,mustCallOnce);
         assert.strictEqual(42, await c());
         assert.strictEqual(42, await c());
         assert.strictEqual(42, await c());
@@ -26,7 +26,7 @@ describe('test memoizeWith', () => {
             }
             return a + b;
         }
-        const c = F.memoizeWith(e => e / 10 ,mustCallOnce);
+        const c = F.memoizeBy(e => e / 10 ,mustCallOnce);
         assert.strictEqual(7, await c(3,4));
         assert.strictEqual(7, await c(3,4));
         assert.strictEqual(7, await c(3,4));
@@ -50,7 +50,7 @@ describe('test memoizeWith', () => {
             return 42;
         };
 
-        const c = F.memoizeWith(F.identity, mustCallOnce);
+        const c = F.memoizeBy(F.identity, mustCallOnce);
         await c({hello:"world"});
         await c({hello:"world"});
         await c({hello:"world"});
@@ -67,7 +67,7 @@ describe('test memoizeWith', () => {
             return 42;
         };
 
-        const c = F.memoizeWith(F.identity, mustCallOnce);
+        const c = F.memoizeBy(F.identity, mustCallOnce);
         await c([1,2,3,4,5]);
         await c([1,2,3,4,5]);
         await c([1,2,3,4,5]);
