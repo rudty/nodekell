@@ -48,23 +48,31 @@ exports.memoizeBy = memoizeBy;
 
 exports.memoize = memoizeBy((...a) => a);
 
-exports.memoizeWithTimeout = C.curry((timeout, callFn) => {
-    const cache = {};
-    return async (...arg) => {
+
+class MemoizeWithTimeout {
+    constructor(timeout, callFn) {
+        this.cache = {};
+        this.callFn = callFn;
+        this.timeout = timeout;
+    }
+
+    async callValue(now, arg) {
+        const ret = await this.callFn(...arg);
+        this.cache[arg] = { value: ret, time: now };
+        return ret;
+    }
+
+    async getOrCall(arg) {
         const now = Date.now();
-        let r;
-        if (!(arg in cache)) {
-            r = await callFn(...arg);
-            cache[arg] = { value: r, time: now };
-        } else {
-            let c = cache[arg];
-            if (now - c.time > timeout) {
-                r = await callFn(...arg);
-                cache[arg] = { value: r, time: now };
-            }
-            r = c.value;
+        const c = this.cache[arg];
+        if ((!c) || (now - c.time > this.timeout)) {
+            return await this.callValue(now, arg);
         }
-        
-        return r;
-    };
+        return c.value;
+    }
+}
+
+exports.memoizeWithTimeout = C.curry((timeout, callFn) => {
+    const m = new MemoizeWithTimeout(timeout, callFn);
+    return async (...arg) => m.getOrCall(arg);
 });

@@ -28,4 +28,6 @@ describe('test memoizeWithTimeout', () => {
         assert.strictEqual(42, await c());
         assert.strictEqual(counter, 1);
     });
+
+    
 });
