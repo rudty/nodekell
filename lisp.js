@@ -57,13 +57,14 @@ exports.memoizeWithTimeout = C.curry((timeout, callFn) => {
             r = await callFn(...arg);
             cache[arg] = { value: r, time: now };
         } else {
-            r = cache[arg];
-            if (now - r.time > timeout) {
+            let c = cache[arg];
+            if (now - c.time > timeout) {
                 r = await callFn(...arg);
                 cache[arg] = { value: r, time: now };
             }
+            r = c.value;
         }
         
-        return r.value;
+        return r;
     };
 });
