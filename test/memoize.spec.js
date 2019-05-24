@@ -85,10 +85,16 @@ describe('test memoize', () => {
         assert.strictEqual(9, await c(4,5));
     });
 
-    it('test', async () => {
-        const a = {};
-        a[[]] = undefined;
-        // console.log(a[[]]);
-        // console.log(a);
+    it('fibo', async () => {
+        const memFibo = F.memoize(async (n) => {
+            if (n === 0) return 1;
+            if (n === 1) return 1;
+            return await memFibo(n - 1) + await memFibo(n - 2);
+        });
+
+        // if not work memoize
+        // node throw memory error
+        // or mocha timeout error
+        await memFibo(30);
     });
 });

@@ -144,6 +144,8 @@ console.log(v);//[3]
 *    [has](#has)
 *    [find](#find)
 *    [findLast](#findLast)
+*    [memoize](#memoize)
+*    [memoizeBy](#memoizeby)
 ---
 
 
@@ -1792,6 +1794,66 @@ console.log(r); // print {a:"a3"}
 const arr = [{a:"a1"}, {b:"a2"}, {a:"a3"}];
 const r = await F.findLast(e => "hello" in e , arr);
 console.log(r); // print undefined
+```
+
+### memoize
+result of the call is stored in the internal cache, and the next call returns the result of the cache
+
+function returns promise
+```javascript
+const memFn = () => {
+    console.log("callOnce");
+};
+const m = F.memoize(memFn);
+await m(); 
+await m(); 
+await m(); 
+//print
+//callOnce
+```
+```javascript
+const beginTime = Date.now();
+const memFibo = F.memoize(async (n) => {
+    if (n === 0) return 0;
+    if (n === 1) return 1;
+    return await memFibo(n - 1) + await memFibo(n - 2);
+});
+console.log(await memFibo(30));
+console.log(`Elapsed time:${Date.now()-beginTime}msec`);
+// print
+// 832040
+// Elapsed time:1msec
+```
+
+### memoizeBy
+result of the call is stored in the internal cache, and the next call returns the result of the cache
+
+first argument is the key value to be stored in the internal cache
+
+function returns promise
+```javascript
+const memFn = () => {
+    console.log("callOnce");
+};
+const m = F.memoizeBy(F.identity, memFn);
+await m(); 
+await m(); 
+await m(); 
+//print
+//callOnce
+```
+```javascript
+const beginTime = Date.now();
+const memFibo = F.memoizeBy(F.identity, async (n) => {
+    if (n === 0) return 0;
+    if (n === 1) return 1;
+    return await memFibo(n - 1) + await memFibo(n - 2);
+});
+console.log(await memFibo(30));
+console.log(`Elapsed time:${Date.now()-beginTime}msec`);
+// print
+// 832040
+// Elapsed time:1msec
 ```
 
 

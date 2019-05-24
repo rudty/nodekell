@@ -75,4 +75,17 @@ describe('test memoizeBy', () => {
         await c([1,2,3,4,5]);
     });
 
+    it('fibo', async () => {
+        const memFibo = F.memoizeBy(F.identity, async (n) => {
+            if (n === 0) return 0;
+            if (n === 1) return 1;
+            return await memFibo(n - 1) + await memFibo(n - 2);
+        });
+
+        // if not work memoize
+        // node throw memory error
+        // or mocha timeout error
+        await memFibo(30);
+    });
+
 });
