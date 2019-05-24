@@ -72,7 +72,3 @@ class MemoizeWithTimeout {
     }
 }
 
-exports.memoizeWithTimeout = C.curry((timeout, callFn) => {
-    const m = new MemoizeWithTimeout(timeout, callFn);
-    return async (...arg) => m.getOrCall(arg);
-});
