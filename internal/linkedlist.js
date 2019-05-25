@@ -51,17 +51,6 @@ class LinkedList {
     }
 
     /**
-     * await value internally
-     */
-    async *[Symbol.asyncIterator]() {
-        let it = this.head;
-        while(it) {
-            yield await it.value;
-            it = it.next;
-        }
-    }
-
-    /**
      * yields the value from head and then deletes the value
      * After the iterator ends, the size of the LinkedList is zero
      * 

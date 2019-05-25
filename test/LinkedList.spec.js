@@ -1,6 +1,6 @@
 "use strict";
 const F = require("../index");
-const LinkedList = require("../linkedlist");
+const LinkedList = require("../internal/linkedlist.js");
 const assert = require("assert");
 describe('test LinkedList', () => {
     it('addLast', async () => {

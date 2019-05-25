@@ -1,6 +1,6 @@
 'use strict';
 const C = require("./core.js");
-const LinkedList = require("./linkedlist.js");
+const Queue = require("./internal/queue.js");
 
 const default_fetch_count = 100;
 let global_fetch_count = default_fetch_count;
@@ -21,33 +21,37 @@ const fetch_map_internal = async (f, fn, iter) => {
         if (e.done) {
             break;
         }
-        f.addLast(fn(e.value));
+        f.add(fn(e.value));
     }
     return g;
 };
 
 exports.pmap = C.curry(async function* (fn, iter) {
-    const f = new LinkedList();
+    const f = new Queue();
     const g = await fetch_map_internal(f, fn, iter);
 
     for await (const e of g) {
-        f.addLast(fn(e));
-        yield f.removeFirst();
+        f.add(fn(e));
+        yield f.poll();
     }
 
-    yield* f.asyncRemoveIterator();
+    while(!f.isEmpty()) {
+        yield f.poll();
+    }
 });
 
 const pfmap = C.curry(async function* (fn, iter) {
-    const f = new LinkedList();
+    const f = new Queue();
     const g = await fetch_map_internal(f, fn, iter);
 
     for await (const e of g) {
-        f.addLast(fn(e));
-        yield* await f.removeFirst();
+        f.add(fn(e));
+        yield* await f.poll();
     }
 
-    yield* f.asyncFlatRemoveIterator();
+    while(!f.isEmpty()) {
+        yield* await f.poll();
+    }
 });
 exports.pfmap = pfmap;
 exports.pflatMap = pfmap;
@@ -61,29 +65,29 @@ const fetch_filter_internal = async (f, v, fn, iter) => {
         if (done) {
             break;
         }
-        f.addLast(fn(value));
-        v.addLast(value);
+        f.add(fn(value));
+        v.add(value);
     }
     return g;
 };
 
 exports.pfilter = C.curry(async function* (fn, iter) {
-    const f = new LinkedList();
-    const v = new LinkedList();
+    const f = new Queue();
+    const v = new Queue();
     const g = await fetch_filter_internal(f, v, fn, iter);
     for await (const e of g) {
-        f.addLast(fn(e));
-        v.addLast(e);
+        f.add(fn(e));
+        v.add(e);
 
-        const c = v.removeFirst();
-        if (await f.removeFirst()) {
+        const c = v.poll();
+        if (await f.poll()) {
             yield c;
         }
     }
 
     while (!v.isEmpty()) {
-        const c = v.removeFirst(); 
-        if (await f.removeFirst()) {
+        const c = v.poll(); 
+        if (await f.poll()) {
             yield c;
         }
     }
@@ -97,22 +101,24 @@ const fetch_call_internal =  async (f, iter) => {
         if (e.done) {
             break;
         }
-        f.addLast(e.value());
+        f.add(e.value());
     }
     return g;
 }
 
 const pcalls_internal = async function* (iter) {
 
-    const f = new LinkedList();
+    const f = new Queue();
     const g = await fetch_call_internal(f, iter);
     
     for await(const e of g) {
-        f.addLast(e());
-        yield f.removeFirst();
+        f.add(e());
+        yield f.poll();
     } 
 
-    yield* f.asyncRemoveIterator();
+    while(!f.isEmpty()) {
+        yield f.poll();
+    }
 };
 
 exports.pcalls = C.curry(async function* (...a) {
