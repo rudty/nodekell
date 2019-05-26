@@ -81,3 +81,5 @@ exports.has = curry((key, a) => {
 });
 
 exports.prop = curry((key, a) => a[key]);
+
+exports.equals = curry((a, b) => a === b);

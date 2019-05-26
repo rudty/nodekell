@@ -1,53 +1,92 @@
 "use strict";
 const F = require("../index");
 const assert = require("assert");
-    
-describe('test split', () => {
 
-    it("for", async() => {
-        const helloWorld = "hello world";
-        const r = await F.splitBy(e=>e.split(" "), helloWorld);
-        assert.deepStrictEqual(await F.collect(r), ["hello", "world"]);
-    })
+describe('test splitBy', () => {
+    it("number array3", async () => {
+        const s = F.split(F.equals(3), [1, 2, 3, 4, 5]);
+        // for await (const e of s) {
+        //     // console.log(e);
+        //     for await (const k of e) {
+        //         console.log(k);
+        //     }
+        //     console.log("e");
+        // }
 
-    it('helloworld', async () => {
-        const helloWorld = await F.collect(
-            await F.splitBy(
-            e=>e.split(" "), 
-            "hello world")
-        );
-        assert.deepStrictEqual(helloWorld, ["hello", "world"]);
-    });
+        let e = await s.next();
+        assert.deepStrictEqual(await e.value.next(),
+            { done: false, value: 1 });
+        assert.deepStrictEqual(await e.value.next(),
+            { done: false, value: 2 });
+        assert.deepStrictEqual(await e.value.next(),
+            { done: true, value: undefined });
 
-    it('gen', async () => {
-        const gen = await F.collect(
-            await F.splitBy(function*() {
-                yield 1;
-                yield 2;
-                yield 3;
-                yield 4;
-                yield 5;
-            }, null)
-        );
-        assert.deepStrictEqual(gen, [1,2,3,4,5]);
-    });
+        e = await s.next();
 
-    it('str', async () => {
-        const r = await F.run(
-            "1,2,3,4,5",
-            F.splitBy(e => e.split(",")),
-            F.map(parseInt),
-            F.sum);
-        
-        assert.strictEqual(r, 15);
+        assert.deepStrictEqual(await e.value.next(),
+            { done: false, value: 3 });
+        assert.deepStrictEqual(await e.value.next(),
+            { done: false, value: 4 });
+        assert.deepStrictEqual(await e.value.next(),
+            { done: false, value: 5 });
+        assert.deepStrictEqual(await e.value.next(),
+            { done: true, value: undefined });
     });
 
 
-    it('int array', async () => {
-        const r = await F.run(
-            [1,2,3,4,5],
-            F.splitBy(e => [e, e]),
-            F.collect);
-        assert.deepStrictEqual(r, [[1,2,3,4,5],[1,2,3,4,5]]);
+    it("number array1", async () => {
+        const s = F.split(F.equals(1), [1, 2, 3, 4, 5]);
+        let e = await s.next();
+        assert.deepStrictEqual(await e.value.next(),
+            { done: true, value: undefined });
+
+        e = await s.next();
+
+        assert.deepStrictEqual(await e.value.next(),
+            { done: false, value: 1 });
+        assert.deepStrictEqual(await e.value.next(),
+            { done: false, value: 2 });
+        assert.deepStrictEqual(await e.value.next(),
+            { done: false, value: 3 });
+        assert.deepStrictEqual(await e.value.next(),
+            { done: false, value: 4 });
+        assert.deepStrictEqual(await e.value.next(),
+            { done: false, value: 5 });
+        assert.deepStrictEqual(await e.value.next(),
+            { done: true, value: undefined });
+    });
+
+    it("string", async () => {
+        const s = F.split(F.equals("o"), "hello world");
+        let e = await s.next();
+        assert.deepStrictEqual(await e.value.next(),
+            { done: false, value: "h" });
+        assert.deepStrictEqual(await e.value.next(),
+            { done: false, value: "e" });
+        assert.deepStrictEqual(await e.value.next(),
+            { done: false, value: "l" });
+        assert.deepStrictEqual(await e.value.next(),
+            { done: false, value: "l" });
+
+        assert.deepStrictEqual(await e.value.next(),
+            { done: true, value: undefined });
+
+        e = await s.next();
+
+        assert.deepStrictEqual(await e.value.next(),
+            { done: false, value: "o" });
+        assert.deepStrictEqual(await e.value.next(),
+            { done: false, value: " " });
+        assert.deepStrictEqual(await e.value.next(),
+            { done: false, value: "w" });
+        assert.deepStrictEqual(await e.value.next(),
+            { done: false, value: "o" });
+        assert.deepStrictEqual(await e.value.next(),
+            { done: false, value: "r" });
+        assert.deepStrictEqual(await e.value.next(),
+            { done: false, value: "l" });
+        assert.deepStrictEqual(await e.value.next(),
+            { done: false, value: "d" });
+
     });
 });

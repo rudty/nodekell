@@ -73,7 +73,7 @@ const fmap =  C.curry(async function* (fn, iter) {
 exports.fmap = fmap;
 exports.flatMap = fmap;
 
-exports.flat = async function* (iter) {
+const flat = async function* (iter) {
     for await (const e of iter) {
         if (e && (e[Symbol.iterator] || e[Symbol.asyncIterator])) {
             yield* e;
@@ -82,6 +82,7 @@ exports.flat = async function* (iter) {
         }
     }
 };
+exports.flat = flat;
 
 const dflat = async function* (...iters) {
     for await (const it of iters) {
@@ -238,6 +239,32 @@ const zipWith3 = C.curry(async function*(f, a, b, c){
 
 exports.zipWith3 = zipWith3;
 exports.zip3 = C.curry((iter1, iter2, iter3) => zipWith3((elem1, elem2, elem3) => [elem1, elem2, elem3], iter1, iter2, iter3));
+
+/**
+ * break is keyword..
+ */
+exports.split = C.curry(async function*(fn, iter) {
+    const g = C.seq(iter);
+    const b = [];
+    while (true) {
+        const e = await g.next();
+        if (e.done) {
+            break;
+        }
+        if (await fn(e.value)) {
+            yield (async function* () {
+                yield* b;
+            })();
+            yield (async function* () {
+                yield e.value;
+                yield* g;
+            })();
+            break;
+        } else {
+            b.push(e.value);
+        }
+    }
+});
 
 /**
  * like `$` or `.`
