@@ -34,7 +34,7 @@ const memoizeBy = C.curry((keyFn, callFn) => {
     const cache = {};
     return async (...arg) => {
         let r;
-        const key = keyFn(...arg);
+        const key = await keyFn(...arg);
         if(!(key in cache)) {
             r = await callFn(...arg);
             cache[key] = r;
