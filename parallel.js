@@ -35,9 +35,7 @@ exports.pmap = C.curry(async function* (fn, iter) {
         yield f.poll();
     }
 
-    while(!f.isEmpty()) {
-        yield f.poll();
-    }
+    yield f.removeIterator();
 });
 
 const pfmap = C.curry(async function* (fn, iter) {
@@ -116,9 +114,7 @@ const pcalls_internal = async function* (iter) {
         yield f.poll();
     } 
 
-    while(!f.isEmpty()) {
-        yield f.poll();
-    }
+    yield f.removeIterator();
 };
 
 exports.pcalls = C.curry(async function* (...a) {

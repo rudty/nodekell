@@ -104,6 +104,29 @@ class Queue {
             it = it.next;
         }
     }
+
+    /**
+     * yields the value from head and then deletes the value
+     * After the iterator ends, the size of the Queue is zero
+     * 
+     * same as
+     * while (false === q.isEmpty()) {
+     *     yield q.remove();
+     * }
+     * yield value and assign next to null
+     * help gc
+     */
+    *removeIterator() {
+        let it = this.head;
+        while (it) {
+            const p = it;
+            yield p.value;
+            it = p.next;
+
+            p.value = null;
+            p.next = null;
+        }
+    }
 }
 
 /**
