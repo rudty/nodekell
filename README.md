@@ -77,6 +77,7 @@ console.log(v);//[3]
 *    [errorThen](#errorthen)
 *    [distinct](#distinct)
 *    [distinctBy](#distinctby)
+*    [split](#split)
 *    [splitBy](#splitby)
 *    [innerJoin](#innerjoin)
 *    [leftInnerJoin](#leftinnerjoin)
@@ -150,6 +151,7 @@ console.log(v);//[3]
 *    [findLast](#findLast)
 *    [memoize](#memoize)
 *    [memoizeBy](#memoizeby)
+*    [equals](#equals)
 ---
 
 
@@ -610,6 +612,26 @@ for (const m of result) {
 //print
 //{num:1}
 //{num:2}
+```
+
+
+### split
+like haskell break 
+```javascript
+const s = F.split(F.equals(3), [1, 2, 3, 4, 5]);
+for await (const e of s) {
+    for await (const k of e) {
+        console.log(k);
+    }
+    console.log("--");
+}
+// print 
+// 1
+// 2
+// --
+// 3
+// 4
+// 5
 ```
 
 
@@ -1860,6 +1882,14 @@ console.log(`Elapsed time:${Date.now()-beginTime}msec`);
 // Elapsed time:1msec
 ```
 
+
+### equals
+compares strict equals
+```javascript
+const a = 1;
+F.equals(a, 1); // true
+F.equals(a, 0); // false
+```
 
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frudty%2Fnodekell.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Frudty%2Fnodekell?ref=badge_large)
