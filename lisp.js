@@ -47,3 +47,22 @@ const memoizeBy = C.curry((keyFn, callFn) => {
 exports.memoizeBy = memoizeBy;
 
 exports.memoize = memoizeBy((...a) => a);
+
+const defaultMemoizeOption = {
+    keyFn: (...a) => a,
+    timeout: Infinity
+};
+const memoizeWith = C.curry((opt, callFn) => {
+    const cache = {};
+    return async (...arg) => {
+        const now = Date.now();
+        const key = await keyFn()
+        const c = cache[arg];
+        if ((!c) || (now - c.time > timeout)) {
+            const ret = await callFn(...arg);
+            cache[arg] = { value: ret, time: now };
+            return ret;
+        }
+        return c.value;
+    }
+});
