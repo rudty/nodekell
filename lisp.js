@@ -47,28 +47,3 @@ const memoizeBy = C.curry((keyFn, callFn) => {
 exports.memoizeBy = memoizeBy;
 
 exports.memoize = memoizeBy((...a) => a);
-
-
-class MemoizeWithTimeout {
-    constructor(timeout, callFn) {
-        this.cache = {};
-        this.callFn = callFn;
-        this.timeout = timeout;
-    }
-
-    async callValue(now, arg) {
-        const ret = await this.callFn(...arg);
-        this.cache[arg] = { value: ret, time: now };
-        return ret;
-    }
-
-    async getOrCall(arg) {
-        const now = Date.now();
-        const c = this.cache[arg];
-        if ((!c) || (now - c.time > this.timeout)) {
-            return await this.callValue(now, arg);
-        }
-        return c.value;
-    }
-}
-
