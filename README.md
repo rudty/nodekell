@@ -22,6 +22,10 @@ Functional library for nodejs
 
 ### Import Module 
 ```javascript
+import F from "nodekell"
+```
+or
+```javascript
 const F = require("nodekell");
 ```
 
