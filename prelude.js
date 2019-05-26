@@ -245,25 +245,22 @@ exports.zip3 = C.curry((iter1, iter2, iter3) => zipWith3((elem1, elem2, elem3) =
  */
 exports.split = C.curry(async function*(fn, iter) {
     const g = C.seq(iter);
-    const b = [];
-    while (true) {
-        const e = await g.next();
-        if (e.done) {
-            break;
+    let e;
+    yield (async function* () {
+        while (true) {
+            e = await g.next();
+            if ((e.done) || await fn(e.value)) {
+                break;    
+            }
+            yield e.value;
         }
-        if (await fn(e.value)) {
-            yield (async function* () {
-                yield* b;
-            })();
-            yield (async function* () {
-                yield e.value;
-                yield* g;
-            })();
-            break;
-        } else {
-            b.push(e.value);
+    })();
+    yield (async function* () {
+        if (!e.done) {
+            yield e.value;
+            yield* g;
         }
-    }
+    })();
 });
 
 /**

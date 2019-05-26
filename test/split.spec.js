@@ -89,4 +89,16 @@ describe('test splitBy', () => {
             { done: false, value: "d" });
 
     });
+
+    it("empty array", async () => {
+        // break (3==) []
+        // print ([],[])
+        const s = F.split(F.equals(1), []);
+        let e = await s.next();
+        assert.deepStrictEqual(await e.value.next(),
+            { done: true, value: undefined });
+        e = await s.next();
+        assert.deepStrictEqual(await e.value.next(),
+            { done: true, value: undefined });
+    });
 });
