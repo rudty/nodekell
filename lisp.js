@@ -52,7 +52,8 @@ const defaultMemoizeOption = {
     keyFn: (...a) => a,
     timeout: Infinity
 };
-const memoizeWith = C.curry((opt, callFn) => {
+
+const memoizeWithTimout = C.curry((timeout, callFn) => {
     // const cache = {};
     // return async (...arg) => {
     //     const now = Date.now();
@@ -65,4 +66,8 @@ const memoizeWith = C.curry((opt, callFn) => {
     //     }
     //     return c.value;
     // }
+});
+
+const memoizeWithLru = C.curry((count, callFn) => {
+
 });
