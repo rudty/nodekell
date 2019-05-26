@@ -194,3 +194,13 @@ export function has<T>(key: any): (target: T) => boolean;
 export function prop<T, K extends keyof T>(key: K, target: T): T[K];
 
 export function prop<T, K extends keyof T>(key: K): (target: T) => T[K];
+
+/**
+ *
+ *
+ * @param a
+ * @param b
+ */
+export function equals<T>(a: T, b: T): boolean;
+
+export function equals<T>(a: T): (b: T) => boolean;
