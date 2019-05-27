@@ -48,26 +48,19 @@ exports.memoizeBy = memoizeBy;
 
 exports.memoize = memoizeBy((...a) => a);
 
-const defaultMemoizeOption = {
-    keyFn: (...a) => a,
-    timeout: Infinity
+const memoizeWithTimeoutBy = (timeout, keyFn, callFn) => {
+    const cache = {};
+    return async (...arg) => {
+        const now = Date.now();
+        const key = await keyFn(...arg);
+        const c = cache[key];
+        if ((!c) || (now - c.time > timeout)) {
+            const ret = await callFn(...arg);
+            cache[arg] = { value: ret, time: now };
+            return ret;
+        }
+        return c.value;
+    }
 };
 
-const memoizeWithTimout = C.curry((timeout, callFn) => {
-    // const cache = {};
-    // return async (...arg) => {
-    //     const now = Date.now();
-    //     const key = await keyFn()
-    //     const c = cache[arg];
-    //     if ((!c) || (now - c.time > timeout)) {
-    //         const ret = await callFn(...arg);
-    //         cache[arg] = { value: ret, time: now };
-    //         return ret;
-    //     }
-    //     return c.value;
-    // }
-});
-
-const memoizeWithLru = C.curry((count, callFn) => {
-
-});
+exports.memoizeWithTimeout = C.curry((timeout, callFn) => memoizeWithTimeoutBy(timeout, (...a) => a, callFn));
