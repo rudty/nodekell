@@ -47,3 +47,25 @@ const memoizeBy = C.curry((keyFn, callFn) => {
 exports.memoizeBy = memoizeBy;
 
 exports.memoize = memoizeBy((...a) => a);
+
+/**
+ * {a:1,b:2,c:3} => [[a,1],[b,2],[c,3]]
+ */
+exports.kvkv = (obj) => {
+
+};
+
+/**
+ * {a:1,b:2,c:3} => [[a,b,c],[1,2,3]]
+ */
+exports.kkvv = (obj) => {
+
+};
+
+/**
+ * like map constructor
+ *[[a,1],[b,2],[c,3]]  => {a:1,b:2,c:3} 
+ */
+exports.to_obj = (a) => {
+
+};
