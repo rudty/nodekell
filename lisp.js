@@ -61,11 +61,3 @@ exports.kvkv = (obj) => {
 exports.kkvv = (obj) => {
 
 };
-
-/**
- * like map constructor
- *[[a,1],[b,2],[c,3]]  => {a:1,b:2,c:3} 
- */
-exports.to_obj = (a) => {
-
-};
