@@ -104,6 +104,13 @@ export function collectMap<T extends any[]>(iter: Iter<T | Promise<T>>): Promise
 export function collectSet<T>(iter: Iter<T>): Promise<Set<EP<T>>>;
 
 /**
+ * https://github.com/rudty/nodekell#collectobject
+ *
+ * @param iter
+ */
+export function collectObject(iter: Iter<any[] | Promise<any[]>>): Promise<any>;
+
+/**
  * https://github.com/rudty/nodekell#foreach
  *
  * @param f

@@ -269,6 +269,32 @@ describe('collectSet', () => {
     });
 });
 
+describe('collectObject', () => {
+    it('from Normal Value', async () => {
+        const a = [['a', 0], ['b', 1], ['c', 2]];
+
+        const r0 = await F.collectObject(a); // $ExpectType any
+    });
+
+    it('from Promise Value', async () => {
+        const a = [Promise.resolve(['a', 0]), ['b', 1], ['c', 2]];
+
+        const r0 = await F.collectObject(a); // $ExpectType any
+    });
+
+    it('from Normal / Promise Union', async () => {
+        const a = [Promise.resolve(['a', 0]), ['b', 1], [2, 'c'], Promise.resolve([3, 'd'])];
+
+        const r0 = await F.collectObject(a); // $ExpectType any
+    });
+
+    it('with run', async () => {
+        const a = [Promise.resolve(['a', 0]), ['b', 1], [2, 'c'], Promise.resolve([3, 'd'])];
+
+        const r0 = await F.run(a, F.collectObject); // $ExpectType any
+    });
+});
+
 describe('forEach', () => {
     it('from Normal Value', async () => {
         const a = [0, 1, 2, 3, 4, 5];
