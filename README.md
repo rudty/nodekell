@@ -12,7 +12,7 @@ Functional library for nodejs
 - supports [parallel functions](#pfilter)
 - supports async generator
 - supports lazy evaluation
-- typescript support (ver:3.4, target:es2018)
+- typescript support (ver:3.4)
  
 
 
