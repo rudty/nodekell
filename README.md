@@ -118,6 +118,7 @@ console.log(v);//[3]
 *    [collect](#collect)
 *    [collectMap](#collectmap)
 *    [collectSet](#collectset)
+*    [collectObject](#collectobject)
 *    [maxBy](#minby)
 *    [minBy](#maxby)
 *    [max](#max)
@@ -1282,6 +1283,15 @@ for(const e of m) {
 }
 //print 
 //helo wrd
+```
+
+
+### collectObject
+```javascript
+const a = [[1,2],[3,4]];
+const m = await F.collectObject(a); // {1:2,3:4}
+console.log(m);
+//print { '1': 2, '3': 4 }
 ```
 
 
