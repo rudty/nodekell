@@ -1,6 +1,6 @@
 {
   "name": "nodekell",
-  "version": "1.7.2",
+  "version": "1.7.11",
   "description": "async functional library",
   "repository": {
     "type": "git",
@@ -38,7 +38,8 @@
     "pmap",
     "parallel",
     "pfilter",
-    "lisp"
+    "lisp",
+    "parallel"
   ],
   "author": "rudtyz",
   "license": "MIT",
