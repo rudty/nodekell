@@ -69,6 +69,15 @@ exports.forEach = C.curry(async (fn, iter) => {
     return Promise.all(wait);
 });
 
+exports.forEachIndexed = C.curry(async (fn, iter) => {
+    const wait = [];
+    let i = 0;
+    for await (const e of iter) {
+        wait.push(i++, fn(e));
+    }
+    return Promise.all(wait);
+});
+
 const distinctBy = C.curry(async function*(f, iter) {
     const s = new Set();
     for await (const e of iter) {
