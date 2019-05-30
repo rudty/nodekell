@@ -55,9 +55,33 @@ exports.filter =  C.curry(async function* (fn, iter) {
     }
 });
 
+exports.filterIndexed = C.curry(async function* (fn, iter) {
+    let i = 0;
+    for await (const e of iter) {
+        if (await fn(i++, e)) {
+            yield e;
+        }
+    }
+});
+
+exports.filterNot = C.curry(async function* (fn, iter) {
+    for await (const e of iter) {
+        if (!(await fn(e))) {
+            yield e;
+        }
+    }
+});
+
 exports.map =  C.curry(async function* (fn, iter) {
     for await (const e of iter) {
         yield fn(e);
+    }
+});
+
+exports.mapIndexed = C.curry(async function* (fn, iter) {
+    let i = 0;
+    for await (const e of iter) {
+        yield fn(i++, e);
     }
 });
 
