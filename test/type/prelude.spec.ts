@@ -189,6 +189,91 @@ describe('filter', () => {
     });
 });
 
+describe('filterIndexed', () => {
+    it('from Normal Value', async () => {
+        const a = [1, 2, 3, 4, 5];
+
+        const r0 = F.filterIndexed<number>(async (i, e) => {
+            i; // $ExpectType number
+            e; // $ExpectType number
+            return e % 2 === 0;
+        })(a);
+        r0; // $ExpectType AsyncIterableIterator<number>
+        const r1 = F.filterIndexed(async (i, e) => {
+            i; // $ExpectType number
+            e; // $ExpectType number
+            return e % 2 === 0;
+        }, a);
+        r1; // $ExpectType AsyncIterableIterator<number>
+    });
+
+    it('from Promise Value', async () => {
+        const a = [Promise.resolve(1), 2, 3, 4, 5];
+
+        const r0 = F.filterIndexed<number>(async (i, e) => {
+            i; // $ExpectType number
+            e; // $ExpectType number
+            return e % 2 === 0;
+        })(a);
+        r0; // $ExpectType AsyncIterableIterator<number>
+        const r1 = F.filterIndexed(async (i, e) => {
+            i; // $ExpectType number
+            e; // $ExpectType number
+            return e % 2 === 0;
+        }, a);
+        r1; // $ExpectType AsyncIterableIterator<number>
+    });
+
+    it('from String', async () => {
+        const a = 'hello world';
+
+        const r0 = F.filterIndexed<string>((i, e) => {
+            i; // $ExpectType number
+            e; // $ExpectType string
+            return e === 'l';
+        })(a);
+        r0; // $ExpectType AsyncIterableIterator<string>
+        const r1 = F.filterIndexed<string>((i, e) => {
+            i; // $ExpectType number
+            e; // $ExpectType string
+            return e === 'l';
+        }, a);
+        r1; // $ExpectType AsyncIterableIterator<string>
+    });
+
+    it('from Normal / Promise Union', async () => {
+        const a = [1, Promise.resolve(2), 'a', Promise.resolve('b')];
+
+        const r0 = F.filterIndexed<string | number>((i, e) => {
+            i; // $ExpectType number
+            e; // $ExpectType string | number
+            return e === 'a';
+        })(a);
+        r0; // $ExpectType AsyncIterableIterator<string | number>
+        const r1 = F.filterIndexed((i, e) => {
+            i; // $ExpectType number
+            e; // $ExpectType string | number
+            return e === 'a';
+        }, a);
+        r1; // $ExpectType AsyncIterableIterator<string | number>
+    });
+
+    it('with run', async () => {
+        const a = [1, Promise.resolve(2), 'a', Promise.resolve('b'), null];
+
+        const r0 = await F.run(a, F.filterIndexed<string | number | null>((i, e) => { // $ExpectType AsyncIterableIterator<string | number | null>
+            i; // $ExpectType number
+            e; // $ExpectType string | number | null
+            return e === 'a';
+        }));
+        const r1 = await F.run(a, F.filterIndexed((i, e) => { // $ExpectType AsyncIterableIterator<string | number | null>
+            i; // $ExpectType number
+            e; // $ExpectType string | number | null
+            return e === 'a';
+        }));
+    });
+});
+
 describe('filterNot', () => {
     it('from Normal Value', async () => {
         const a = [1, 2, 3, 4, 5];
