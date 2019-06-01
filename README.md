@@ -69,6 +69,7 @@ console.log(v);//[3]
 *    [dflat](#dflat)
 *    [reverse](#reverse)
 *    [forEach](#foreach)
+*    [forEachIndexed](#foreachindexed)
 *    [zip](#zip)
 *    [zip3](#zip3)
 *    [zipWith](#zipwith)
@@ -483,6 +484,21 @@ const beginTime = Date.now();
 await F.run(
     F.range(100), 
     F.forEach(async e => {
+        await F.sleep(100)
+    }));
+const endTime = Date.now();
+console.log(endTime - beginTime); 
+// print 121
+// works concurrency
+```
+
+### forEachIndexed
+forEach with loop counter
+```javascript
+const beginTime = Date.now();
+await F.run(
+    F.range(100), 
+    F.forEachIndexed(async (i, e) => {
         await F.sleep(100)
     }));
 const endTime = Date.now();
