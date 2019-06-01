@@ -189,6 +189,49 @@ describe('filter', () => {
     });
 });
 
+describe('filterNot', () => {
+    it('from Normal Value', async () => {
+        const a = [1, 2, 3, 4, 5];
+
+        const r0 = F.filterNot<number>(async e => e % 2 === 0)(a); // $ExpectType AsyncIterableIterator<number>
+        const r1 = F.filterNot(async e => e % 2 === 0, a); // $ExpectType AsyncIterableIterator<number>
+    });
+
+    it('from Promise Value', async () => {
+        const a = [Promise.resolve(1), 2, 3, 4, 5];
+
+        const r0 = F.filterNot<number>(async e => e % 2 === 0)(a); // $ExpectType AsyncIterableIterator<number>
+        const r1 = F.filterNot(async e => (e % 2 === 0), a); // $ExpectType AsyncIterableIterator<number>
+    });
+
+    it('from String', async () => {
+        const a = 'hello world';
+
+        const r0 = F.filterNot<string>(e => e === 'l')(a); // $ExpectType AsyncIterableIterator<string>
+        const r1 = F.filterNot(e => e === 'l', a); // $ExpectType AsyncIterableIterator<string>
+    });
+
+    it('from Normal / Promise Union', async () => {
+        const a = [1, Promise.resolve(2), 'a', Promise.resolve('b')];
+
+        const r0 = F.filterNot<string | number>(e => e === 'a')(a); // $ExpectType AsyncIterableIterator<string | number>
+        const r1 = F.filterNot(e => e === 'a', a); // $ExpectType AsyncIterableIterator<string | number>
+    });
+
+    it('with run', async () => {
+        const a = [1, Promise.resolve(2), 'a', Promise.resolve('b'), null];
+
+        const r0 = await F.run(a, F.filterNot<string | number | null>(e => { // $ExpectType AsyncIterableIterator<string | number | null>
+            e; // $ExpectType string | number | null
+            return e === 'a';
+        }));
+        const r1 = await F.run(a, F.filterNot(e => { // $ExpectType AsyncIterableIterator<string | number | null>
+            e; // $ExpectType string | number | null
+            return e === 'a';
+        }));
+    });
+});
+
 describe('map', () => {
     it('from Normal Value', async () => {
         const a = [1, 2, 3, 4];
