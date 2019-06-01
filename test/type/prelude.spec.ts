@@ -226,6 +226,93 @@ describe('map', () => {
     });
 });
 
+describe('mapIndexed', () => {
+    it('from Normal Value', async () => {
+        const a = [1, 2, 3, 4];
+
+        const r0 = F.mapIndexed<number, number>((i, x) => {
+            i; // $ExpectType number
+            x; // $ExpectType number
+            return x + x;
+        })(a);
+        r0; // $ExpectType AsyncIterableIterator<number>
+        const r1 = F.mapIndexed((i, x) => {
+            i; // $ExpectType number
+            x; // $ExpectType number
+            return x + x;
+        }, a);
+        r1; // $ExpectType AsyncIterableIterator<number>
+    });
+
+    it('from Promise Value', async () => {
+        const a = [1, 2, Promise.resolve(3), 4];
+
+        const r0 = F.mapIndexed<number, number>(async (i, x) => {
+            i; // $ExpectType number
+            x; // $ExpectType number
+            return x + x;
+        })(a);
+        r0; // $ExpectType AsyncIterableIterator<number>
+        const r1 = F.mapIndexed(async (i, x) => {
+            i; // $ExpectType number
+            x; // $ExpectType number
+            return x + x;
+        }, a);
+        r1; // $ExpectType AsyncIterableIterator<number>
+    });
+
+    it('from String', async () => {
+        const a = 'hello world';
+
+        const r0 = F.mapIndexed<string, string>((i, e) => {
+            i; // $ExpectType number
+            e; // $ExpectType string
+            return e + e;
+        })(a);
+        r0; // $ExpectType AsyncIterableIterator<string>
+        const r1 = F.mapIndexed((i, e) => {
+            i; // $ExpectType number
+            e; // $ExpectType string
+            return e + e;
+        }, a);
+        r1; // $ExpectType AsyncIterableIterator<string>
+    });
+
+    it('from Normal / Promise Union', async () => {
+        const a = [Promise.resolve(1), 2, 'a', Promise.resolve('b')];
+
+        const r0 = F.mapIndexed<string | number, string | number>((i, e) => {
+            i; // $ExpectType number
+            e; // $ExpectType string | number
+            return e;
+        })(a);
+        r0; // $ExpectType AsyncIterableIterator<string | number>
+        const r1 = F.mapIndexed((i, e) => {
+            i; // $ExpectType number
+            e; // $ExpectType string | number
+            return e;
+        }, a);
+        r1; // $ExpectType AsyncIterableIterator<string | number>
+    });
+
+    it('with run', async () => {
+        const a = [Promise.resolve(1), 2, 'a', Promise.resolve('b'), null];
+
+        const r0 = await F.run(a, F.mapIndexed<string | number | null, string | number | null>((i, e) => {
+            i; // $ExpectType number
+            e; // $ExpectType string | number | null
+            return e;
+        }));
+        r0; // $ExpectType AsyncIterableIterator<string | number | null>
+        const r1 = await F.run(a, F.mapIndexed((i, e) => {
+            i; // $ExpectType number
+            e; // $ExpectType string | number | null
+            return e;
+        }));
+        r1; // $ExpectType AsyncIterableIterator<string | number | null>
+    });
+});
+
 describe('fmap', () => {
     it('from Normal Value', async () => {
         const a = [[1], [2], [3], [4], [5]];

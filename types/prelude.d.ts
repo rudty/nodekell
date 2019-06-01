@@ -86,6 +86,19 @@ export function map<T, R>(f: (elem: T) => (R | Promise<R>)): (iter: Iter<T | Pro
 // export function map<T, R>(f: (elem: EP<T>) => (R | Promise<R>)): (iter: Iter<T>) => AsyncIterableIterator<R>;
 
 /**
+ * https://github.com/rudty/nodekell#mapindexed
+ *
+ * @param f
+ * @param iter
+ */
+export function mapIndexed<T, R>(f: (idx: number, elem: T) => (R | Promise<R>), iter: Iter<T | Promise<T>>): AsyncIterableIterator<R>;
+
+export function mapIndexed<T extends Iter<any>, R>(f: (idx: number, elem: FlatForInternalFn<T>) => R, iter: T): AsyncIterableIterator<EP<R>>;
+export function mapIndexed<T extends Iter<any>, R>(f: (idx: number, elem: FlatForInternalFn<T>) => R): (iter: T) => AsyncIterableIterator<EP<R>>;
+
+export function mapIndexed<T, R>(f: (idx: number, elem: T) => (R | Promise<R>)): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<R>;
+
+/**
  * https://github.com/rudty/nodekell#fmap
  *
  * @param f
