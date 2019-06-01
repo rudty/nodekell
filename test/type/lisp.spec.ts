@@ -158,3 +158,57 @@ describe('memoize', () => {
 
     // it('callFn is curried')
 });
+
+describe('memoizeWithTimeout', () => {
+    it('normal', async () => {
+        const a = (n: number) => n + n;
+
+        const r0 = F.memoizeWithTimeout<(n: number) => number>(1)(a); // $ExpectType (n: number) => Promise<number>
+        const r1 = await r0(1); // $ExpectType number
+
+        const r2 = F.memoizeWithTimeout(1, a); // $ExpectType (n: number) => Promise<number>
+        const r3 = await r2(1); // $ExpectType number
+    });
+
+    it('async', async () => {
+        const a = async (n: number) => n + n;
+
+        const r0 = F.memoizeWithTimeout<(n: number) => Promise<number>>(1)(a); // $ExpectType (n: number) => Promise<number>
+        const r1 = await r0(1); // $ExpectType number
+
+        const r2 = F.memoizeWithTimeout(1, a); // $ExpectType (n: number) => Promise<number>
+        const r3 = await r2(2); // $ExpectType number
+    });
+
+    it('multiple', async () => {
+        const a = (n0: number, n1: number, n2: number) => (n0 + n1) * n2;
+
+        const r0 = F.memoizeWithTimeout<(n0: number, n1: number, n2: number) => number>(1)(a); // $ExpectType (n0: number, n1: number, n2: number) => Promise<number>
+        const r1 = await r0(1, 2, 3); // $ExpectType number
+
+        const r2 = F.memoizeWithTimeout(1, a); // $ExpectType (n0: number, n1: number, n2: number) => Promise<number>
+        const r3 = await r2(1, 2, 3); // $ExpectType number
+    });
+
+    it('callFn has overload type', async () => {
+        const ar0 = F.memoizeWithTimeout<(a: number, b: number) => number>(1)(F.add); // $ExpectType (a: number, b: number) => Promise<number>
+        const ar1 = await ar0(1, 2); // $ExpectType number
+
+        const ar2 = F.memoizeWithTimeout<[number, number], number>(1, F.add); // $ExpectType (args_0: number, args_1: number) => Promise<number>
+        const ar3 = await ar2(1, 2); // $ExpectType number
+
+        const br0 = F.memoizeWithTimeout<(a: string, b: string) => string>(1)(F.add); // $ExepctType (a: string, b: string) => Promise<string>
+        const br1 = await br0('hello', 'world'); // $ExpectType string
+
+        const br2 = F.memoizeWithTimeout<[string, string], string>(1, F.add); // $ExepctType (args_0: string, args_1: string) => Promise<string>
+        const br3 = await br2('hello', 'world'); // $ExpectType string
+
+        const cr0 = F.memoizeWithTimeout<((a: string, b: string) => string) | ((a: number, b: number) => number)>(1)(F.add);
+        const cr1 = await cr0('hello', 'world') as string; // $ExpectType string
+        const cr2 = await cr0(1, 2) as number; // $ExpectType number
+
+        const cr3 = F.memoizeWithTimeout<((a: string, b: string) => string) | ((a: number, b: number) => number)>(1, F.add);
+        const cr4 = await cr3('hello', 'world') as string; // $ExpectType string
+        const cr5 = await cr3(1, 2) as number; // $ExpectType number
+    });
+});
