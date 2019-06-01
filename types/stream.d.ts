@@ -126,6 +126,19 @@ export function forEach<T, R>(f: (elem: T) => (R | Promise<R>)): (iter: Iter<T |
 // export function forEach<T, R>(f: (elem: EP<T>) => R): (iter: Iter<T>) => Promise<EP<R>[]>;
 
 /**
+ * https://github.com/rudty/nodekell#foreachindexed
+ *
+ * @param f
+ * @param iter
+ */
+export function forEachIndexed<T, R>(f: (idx: number, elem: T) => (R | Promise<R>), iter: Iter<T | Promise<T>>): Promise<R[]>;
+
+export function forEachIndexed<T extends Iter<any>, R>(f: (idx: number, elem: FlatForInternalFn<T>) => R, iter: T): Promise<EP<R>[]>;
+export function forEachIndexed<T extends Iter<any>, R>(f: (idx: number, elem: FlatForInternalFn<T>) => R): (iter: T) => Promise<EP<R>[]>;
+
+export function forEachIndexed<T, R>(f: (idx: number, elem: T) => (R | Promise<R>)): (iter: Iter<T | Promise<T>>) => Promise<R[]>;
+
+/**
  * https://github.com/rudty/nodekell#distinctby
  *
  * @param f

@@ -337,6 +337,105 @@ describe('forEach', () => {
     });
 });
 
+describe('forEachIndexed', () => {
+    it('from Normal Value', async () => {
+        const a = [0, 1, 2, 3, 4, 5];
+        const b = ['a', 'b', 'c', 'd', 'e', 'f'];
+        const c: number[] = [];
+        const r0 = await F.forEachIndexed<number, string>((i, e) => {
+            i; // $ExpectType number
+            e; // $ExpectType number
+            c.push(i);
+            return b[e];
+        })(a);
+        r0; // $ExpectType string[]
+
+        const r1 = await F.forEachIndexed((i, e) => {
+            i; // $ExpectType number
+            e; // $ExpectType number
+            c.push(i);
+            return b[e];
+        }, a);
+        r1; // $ExpectType string[]
+    });
+
+    it('from Promise Value', async () => {
+        const a = [0, 1, Promise.resolve(2), 3, Promise.resolve(4), 5];
+        const b = ['a', 'b', 'c', 'd', 'e', 'f'];
+        const c: number[] = [];
+        const r0 = await F.forEachIndexed<number, string>((i, e) => {
+            i; // $ExpectType number
+            e; // $ExpectType number
+            c.push(i);
+            return b[e];
+        })(a);
+        r0; // $ExpectType string[]
+        const r1 = await F.forEachIndexed((i, e) => {
+            i; // $ExpectType number
+            e; // $ExpectType number
+            c.push(i);
+            return b[e];
+        }, a);
+        r1; // $ExpectType string[]
+    });
+
+    it('from String', async () => {
+        const a = 'fcbaadefbab';
+        const b: { [k: string]: number; } = { a: 0, b: 1, c: 2, d: 3, e: 4, f: 5 };
+        const c: number[] = [];
+        const r0 = await F.forEachIndexed<string, number>((i, e) => {
+            i; // $ExpectType number
+            e; // $ExpectType string
+            c.push(i);
+            return b[e];
+        })(a);
+        r0; // $ExpectType number[]
+        const r1 = await F.forEachIndexed((i, e) => {
+            i; // $ExpectType number
+            e; // $ExpectType string
+            c.push(i);
+            return b[e];
+        }, a);
+        r1; // $ExpectType number[]
+    });
+
+    it('from Normal / Promise Union', async () => {
+        const a = [1, Promise.resolve(2), Promise.resolve('a'), 'b'];
+        const b: { [k: string]: string | number; } = { a: 0, b: 0, 1: 'b', 2: 'c' };
+
+        const r0 = await F.forEachIndexed<string | number, string | number>((i, e) => {
+            i; // $ExpectType number
+            e; // $ExpectType string | number
+            return b[e];
+        })(a);
+        r0; // $ExpectType (string | number)[]
+        const r1 = await F.forEachIndexed((i, e) => {
+            i; // $ExpectType number
+            e; // $ExpectType string | number
+            return b[e];
+        }, a);
+        r1; // $ExpectType (string | number)[]
+    });
+
+    it('with run', async () => {
+        const a = [1, Promise.resolve(2), Promise.resolve('a'), 'b', null];
+        const b: { [k: string]: string | number; } = { a: 0, b: 0, 1: 'b', 2: 'c' };
+
+        const r0 = await F.run(a, F.forEachIndexed<string | number | null, string | number | null>((i, e) => {
+            i; // $ExpectType number
+            e; // $ExpectType string | number | null
+            return e;
+        }));
+        r0; // $ExpectType (string | number | null)[]
+        const r1 = await F.run(a, F.forEachIndexed((i, e) => {
+            i; // $ExpectType number
+            e; // $ExpectType string | number | null
+            return e;
+        }));
+        r1; // $ExpectType (string | number | null)[]
+    });
+});
+
 describe('distinctBy', () => {
     it('from Normal Value', async () => {
         const a = [{ id: 1 }, { id: 1 }, { id: 2 }];
