@@ -58,7 +58,9 @@ console.log(v);//[3]
 
 ## functional
 *    [filter](#filter)
+*    [filterIndexed](#filterindexed)
 *    [map](#map)
+*    [mapIndexed](#mapindexed)
 *    [take](#take)
 *    [takeWhile](#takewhile)
 *    [fmap](#fmap)          [**change**]
@@ -296,6 +298,56 @@ for await (const e of r) {
 ```
 
 
+### filterIndexed
+filter with loop counter
+```javascript
+const a = ["Apple", "Banana", "Orange", "Strawberry"];
+const filtered = F.filterIndexed((i, e) => {
+    return e[i] === "a";
+}, a);
+//i => 0,1,2,3 
+//b[a]nana
+//or[a]nge
+//str[a]wberry
+
+for await (const e of filtered) {
+    console.log(e);
+}
+//print
+//"Banana"
+//"Orange"
+//"Strawberry"
+```
+
+
+### filterNot
+filter return false
+```javascript
+const a = [1,2,3,4,5];
+const filtered = F.filterNot(e=> e % 2 == 0, a)
+for await (const e of filtered) {
+    console.log(e);
+}
+//print
+//1
+//3
+//5
+```
+```javascript
+const r = await F.run(
+       [1,2,3,4,5], 
+       F.filterNot(e => e % 2 == 0));
+
+for await (const e of r) {
+    console.log(e);
+}
+//print 
+//1
+//3
+//5
+```
+
+
 ### map
 ```javascript
 const a = [1,2,3,4,5];
@@ -310,6 +362,25 @@ const v = await F.run([1,2,3,4,5],
             F.collect);
 console.log(v);
 //print 2 3 4 5 6        
+```
+
+### mapIndexed
+map with loop counter
+```javascript
+const a = ['a','b','c','d','e'];
+const mapped = F.mapIndexed((i, e) => {
+    return e + i;
+}, a);
+
+for await (const e of mapped) {
+    console.log(e);
+}
+//print 
+//a0
+//b1
+//c2
+//d3
+//34
 ```
 
 

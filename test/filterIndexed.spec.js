@@ -143,4 +143,14 @@ describe('test filterIndexed', () => {
         const result = await F.collect(f);
         assert.deepStrictEqual(result, [2,4]);
     });
+
+    it('whereis a', async ()=>{
+        const a = ["Apple", "Banana", "Orange", "Strawberry"];
+        const filtered = F.filterIndexed((i, e) => {
+            return e[i] === "a";
+        }, a);
+
+        const r = await F.collect(filtered);
+        assert.deepStrictEqual(r, ["Banana", "Orange", "Strawberry"]);
+    });
 });
