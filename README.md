@@ -479,6 +479,7 @@ console.log(await F.collect(t)); // print 5,4,3,2,1
 
 
 ### forEach
+works concurrency
 ```javascript
 const beginTime = Date.now();
 await F.run(
@@ -489,22 +490,27 @@ await F.run(
 const endTime = Date.now();
 console.log(endTime - beginTime); 
 // print 121
-// works concurrency
 ```
 
 ### forEachIndexed
 forEach with loop counter
+
+works concurrency
 ```javascript
 const beginTime = Date.now();
-await F.run(
-    F.range(100), 
-    F.forEachIndexed(async (i, e) => {
-        await F.sleep(100)
-    }));
+const arr = ['a','b','c','d','e'];
+await F.forEachIndexed(async (i, e) => {
+    await F.sleep(100);
+    console.log(i, e);
+}, arr);
 const endTime = Date.now();
 console.log(endTime - beginTime); 
-// print 121
-// works concurrency
+// print 
+// 0 'a'
+// 1 'b'
+// 2 'c'
+// 3 'd'
+// 4 'e'
 ```
 
 

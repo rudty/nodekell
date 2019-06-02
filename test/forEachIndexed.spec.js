@@ -83,4 +83,15 @@ describe('test forEach', () => {
         assert.strictEqual(true, (endTime - beginTime) < 200);
         assert.deepStrictEqual(a, r);
     });
+
+    it('checktime', async () => {
+        const beginTime = Date.now();
+        const arr = ['a', 'b', 'c', 'd', 'e'];
+        await F.forEachIndexed(async (i, e) => {
+            await F.sleep(100);
+            // console.log(i, e);
+        }, arr);
+        const endTime = Date.now();
+        assert.ok(endTime - beginTime < 500);
+    });
 });
