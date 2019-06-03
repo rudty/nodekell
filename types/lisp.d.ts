@@ -80,3 +80,26 @@ export function memoizeBy<F extends (...args: any[]) => any>(keyFn: (...args: Pa
  */
 export function memoize<P extends any[], R>(callFn: (...args: P) => R): (...args: P) => Promise<EP<R>>;
 export function memoize<F extends (...args: any[]) => any>(callFn: F): (...args: Parameters<F>) => Promise<EP<ReturnType<F>>>;
+
+/**
+ *
+ *
+ * **Note**
+ * - if use overloaded type function, use generic
+ * ```ts
+ * const addn = F.memoizeWithTimeout<(a: number, b: number) => number>(1, F.add);
+ * addn(1, 2);
+ * const adds = F.memoizeWithTimeout<(a: string, b: string) => string>(1, F.add);
+ * adds('a', 'b');
+ * const add = F.memoizeWithTimeout<((a: string, b: string) => string) | ((a: number, b: number) => number)>(1, F.add);
+ * add('a', 'b') as string;
+ * add(1, 2) as number;
+ * ```
+ * @param timeout timeout cache
+ * @param callFn
+ */
+export function memoizeWithTimeout<P extends any[], R>(timeout: number, callFn: (...args: P) => (R | Promise<R>)): (...args: P) => Promise<R>;
+export function memoizeWithTimeout<F extends (...args: any[]) => any>(timeout: number, callFn: F): (...args: Parameters<F>) => Promise<EP<ReturnType<F>>>;
+
+export function memoizeWithTimeout<P extends any[], R>(timeout: number): (callFn: (...args: P) => (R | Promise<R>)) => (...args: P) => Promise<R>;
+export function memoizeWithTimeout<F extends (...args: any[]) => any>(timeout: number): (callFn: F) => (...args: Parameters<F>) => Promise<EP<ReturnType<F>>>;
