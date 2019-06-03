@@ -234,6 +234,13 @@ exports.buffer = C.curry(async function*(supply, iter) {
     }
 });
 
+exports.peek = C.curry(async function*(f, iter) {
+    for await (const e of iter) {
+        await f(e);
+        yield e;
+    }
+});
+
 exports.find = C.curry(async (fn, iter) => {
     for await(const e of iter) {
         if (await fn(e)) {
