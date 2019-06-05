@@ -95,6 +95,7 @@ console.log(v);//[3]
 *    [scanl](#scanl)
 *    [scanl1](#scanl1)
 *    [buffer](#buffer)
+*    [peek](#peek)
 
 ## functional / parallel
 *    [parallel_set_fetch_count](#parallel_set_fetch_count)
@@ -812,6 +813,7 @@ console.log(r);
 
 ### then
 like promise then
+
 see also [tap](#tap)
 ```javascript
 const v = await F.run([1,2,3,4,5],
@@ -850,7 +852,10 @@ call first argument with second argument
 then returns the second argument
 
 return promise wrap
+
 see also [then](#then)
+
+see also [peek](#peek)
 ```javascript
 const v = await F.run([1,2,3,4,5],
     F.tap(console.log), //print and return Promise([1,2,3,4,5])
@@ -922,6 +927,34 @@ console.log(c); //print [[1],[2],[3],[4],[5]]
 const b = F.buffer(2, [1,2,3,4,5]);
 const c = await F.collect(b);
 console.log(c); //print [[1,2],[3,4],[5]]
+```
+
+
+### peek
+function that perform a function on each element like a [map](#map) but returns the original instead of the result
+
+this function is useful for debugging.
+
+see also [tap](#tap)
+```javascript
+const v = await F.run([1,2,3,4,5],
+    F.map(e => e + 1),
+    F.peek(console.log),
+    F.map(e => e + 1),
+    F.collect);
+//print 
+//2
+//3
+//4
+//5
+//6
+```
+```javascript
+const a = [1,2,3,4,5];
+const p = F.peek(e=> e + 1, a)
+const result = await F.collect(p);
+console.log(result); //not change 
+//print [1,2,3,4,5]
 ```
 
 
