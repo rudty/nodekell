@@ -71,3 +71,4 @@ nodekell-test.js
 .idea
 src/
 rollup.config.js
+build.js
