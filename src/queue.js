@@ -3,6 +3,8 @@
 /**
  * collection interface
  * like java Queue<T>
+ * 
+ * internal only
  */
 export class Queue {
     constructor() {

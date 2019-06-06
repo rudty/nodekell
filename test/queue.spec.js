@@ -1,5 +1,5 @@
 "use strict";
-const Queue = require("../internal/queue.js");
+const Queue = require("../index.js").Queue;
 const assert = require("assert");
     
 describe('test queue', () => {

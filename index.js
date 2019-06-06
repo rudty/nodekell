@@ -1319,6 +1319,7 @@ const zipWith3 = curry(async function*(f, a, b, c){
 
 const zip3 = curry((iter1, iter2, iter3) => zipWith3((elem1, elem2, elem3) => [elem1, elem2, elem3], iter1, iter2, iter3));
 
+exports.Queue = Queue;
 exports.add = add;
 exports.asc = asc;
 exports.average = average;
