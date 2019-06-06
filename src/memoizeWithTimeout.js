@@ -15,4 +15,4 @@ const memoizeWithTimeoutBy = (timeout, keyFn, callFn) => {
     }
 };
 
-exports.memoizeWithTimeout = curry((timeout, callFn) => memoizeWithTimeoutBy(timeout, (...a) => a, callFn));
+export const memoizeWithTimeout = curry((timeout, callFn) => memoizeWithTimeoutBy(timeout, (...a) => a, callFn));
