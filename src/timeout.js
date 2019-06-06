@@ -1,0 +1,17 @@
+import { curry } from "./curry"
+import { getDuration, errorSleep } from "./internal/timer"
+
+export const timeout = curry(async (duration, a) => {
+    duration = await getDuration(duration);
+
+    const s = errorSleep(duration);
+
+    if (a instanceof Function) {
+        a = a();
+    }
+
+    const r = Promise.race([s, a]);
+    const e = await r;
+    s.catch(C.fnothing);
+    return e;
+});
