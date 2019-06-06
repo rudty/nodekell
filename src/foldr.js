@@ -1,6 +1,6 @@
 import { curry } from "./curry"
 import { reverse } from "./reverse"
-export const _foldr_internal = async (f, z, iter) => {
+const _foldr_internal = async (f, z, iter) => {
     z = await z;
     for await (const e of iter) {
         z = await f(e, z);

@@ -280,7 +280,7 @@ const memoizeWithTimeoutBy = (timeout, keyFn, callFn) => {
         return c.value;
     }
 };
-exports.memoizeWithTimeout = curry((timeout, callFn) => memoizeWithTimeoutBy(timeout, (...a) => a, callFn));
+const memoizeWithTimeout = curry((timeout, callFn) => memoizeWithTimeoutBy(timeout, (...a) => a, callFn));
 
 const notNil = (a) => !isNil(a);
 
@@ -476,6 +476,7 @@ exports.iterate = iterate;
 exports.map = map;
 exports.memoize = memoize;
 exports.memoizeBy = memoizeBy;
+exports.memoizeWithTimeout = memoizeWithTimeout;
 exports.notNil = notNil;
 exports.otherwise = otherwise;
 exports.pipe = pipe;
