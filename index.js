@@ -367,10 +367,7 @@ const foldl1 = curry(async (f, iter) => {
 const reduce = foldl1;
 
 const reverse = async function* (iter) {
-    const a = [];
-    for await (const e of iter) {
-        a.push(e);
-    }
+    const a = await collect(iter);
     for (let i = a.length - 1; i >= 0; i -= 1) {
         yield a[i];
     }
@@ -628,6 +625,8 @@ const parallel_set_fetch_count = (count) =>
 /**
  * collection interface
  * like java Queue<T>
+ * 
+ * internal only
  */
 class Queue {
     constructor() {
