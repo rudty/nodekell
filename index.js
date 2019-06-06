@@ -394,7 +394,7 @@ const foldr1 = curry(async (f, iter) => {
     if (h.done) {
         throw new Error("empty iter");
     }
-    return foldr_internal(f, h.value, g);
+    return _foldr_internal(f, h.value, g);
 });
 
 const forEach = curry(async (fn, iter) => {

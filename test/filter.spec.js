@@ -1,5 +1,5 @@
 "use strict";
-const F = require("../prelude");
+const F = require("../index");
 const assert = require("assert");
 
 describe('test filter', () => {

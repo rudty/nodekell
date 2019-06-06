@@ -12,9 +12,9 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha -r ts-node/register test/**/*.js test/**/*.spec.ts && dtslint",
+    "test": "npm run build && mocha -r ts-node/register test/**/*.js test/**/*.spec.ts && dtslint",
     "dtslint": "dtslint",
-    "build" : "node build.js && rollup -c ./rollup.config.js"
+    "build": "node build.js && rollup -c ./rollup.config.js"
   },
   "keywords": [
     "haskell",
@@ -48,11 +48,7 @@
     "node": ">=10.15.3"
   },
   "bugs": "https://github.com/rudty/nodekell/issues",
-  "dependencies": {
-    "install": "^0.12.2",
-    "npm": "^6.9.0",
-    "rollup": "^1.14.2",
-    "rollup-plugin-cleanup": "^3.1.1",
-    "rollup-plugin-node-resolve": "^5.0.1"
+  "devDependencies": {
+    "rollup": "^1.14.2"
   }
 }
