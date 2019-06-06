@@ -16,4 +16,4 @@ export const foldl1 = curry(async (f, iter) => {
     }
     return foldl(f, h.value, g);
 });
-export const reduce = fold1;
+export const reduce = foldl1;

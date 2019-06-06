@@ -1,5 +1,6 @@
 import { curry } from "./curry"
 import { getDuration, errorSleep } from "./internal/timer"
+import { fnothing } from "./fnothing"
 
 export const timeout = curry(async (duration, a) => {
     duration = await getDuration(duration);
@@ -12,6 +13,6 @@ export const timeout = curry(async (duration, a) => {
 
     const r = Promise.race([s, a]);
     const e = await r;
-    s.catch(C.fnothing);
+    s.catch(fnothing);
     return e;
 });

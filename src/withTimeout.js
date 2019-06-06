@@ -1,9 +1,12 @@
 import { getDuration, errorSleep } from "./internal/timer"
+import { curry } from "./curry"
+import { seq } from "./seq"
+import { fnothing } from "./fnothing"
 
-exports.withTimeout = C.curry(async function*(duration, iter) {
+export const withTimeout = curry(async function*(duration, iter) {
     duration = await getDuration(duration);
 
-    const g = C.seq(iter);
+    const g = seq(iter);
     const s = errorSleep(duration);
 
     while(true) {
@@ -14,5 +17,5 @@ exports.withTimeout = C.curry(async function*(duration, iter) {
         }
         yield e.value;
     }
-    s.catch(C.fnothing);
+    s.catch(fnothing);
 });

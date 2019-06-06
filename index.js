@@ -2,6 +2,15 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
+/**
+ * currying function wrapper
+ * ex)
+ * var mySum = curry((a,b,c) => {return a+b+c;});
+ *
+ * var mySum1 = mySum(1)
+ * var mySum2 = mySum1(2)
+ * var sum = mySum2(3) // <-- real call
+ */
 const curry = fn => (...a) => {
     if (fn.length <= a.length) {
         return fn(...a);
@@ -26,9 +35,11 @@ const average = async (iter) => {
 
 const buffer = curry(async function*(supply, iter) {
     supply = await supply;
+
     if(supply <= 0) {
         throw new Error("arg supply > 0 required")
     }
+
     let c = [];
     for await (const e of iter) {
         const len = c.push(e);
@@ -37,11 +48,16 @@ const buffer = curry(async function*(supply, iter) {
             c = [];
         }
     }
+
     if (c.length !== 0) {
         yield c;
     }
 });
 
+/**
+ * make array
+ * iterator to array
+ */
 const collect = async (iter) => {
     const res = [];
     for await (const e of iter) {
@@ -52,6 +68,9 @@ const collect = async (iter) => {
 
 const collectMap = async (iter) => new Map(await collect(iter));
 
+/**
+ * [a,1],[b,2],[c,3]]  => {a:1,b:2,c:3} 
+ */
 const collectObject = async (iter) => {
     const c = await collect(iter);
     const o = {};
@@ -86,22 +105,31 @@ const mustEvenArguments = (arr) => {
         throw new Error("requires an even arguments");
     }
 };
+
 const cond = async (...cv) => {
     mustEvenArguments(cv);
+
     for (let i = 0; i < cv.length; i += 2) {
+
         if (await cv[i]) {
             return cv[i + 1];
         }
     }
+    // return undefined
 };
 
 const count = async (iter) => {
+    //array, string
     if (iter.length && Number.isInteger(iter.length)) {
         return iter.length;
     }
+
+    //map, set, any collection
     if (iter.size && Number.isInteger(iter.size)) {
         return iter.size;
     }
+
+    //iterators
     if (iter[Symbol.asyncIterator] || iter[Symbol.iterator]) {
         let c = 0;
         for await (const _ of iter) {
@@ -109,6 +137,8 @@ const count = async (iter) => {
         }
         return c;
     }
+
+    //object
     return Object.keys(iter).length;
 };
 
@@ -148,6 +178,11 @@ const identity = e => e;
 
 const distinct = (iter) => distinctBy(identity, iter);
 
+/**
+ * make generator
+ * do not need to check if iter
+ * Symbol.asyncIterator or Symbol.iterator
+ */
 const seq = async function* (iter) {
     for await (const e of iter) {
         yield e;
@@ -172,6 +207,7 @@ const dropWhile =  curry(async function* (f, iter) {
         if (e.done) {
             return;
         }
+
         if(!(await f(e.value))) {
             yield e.value;
             break;
@@ -186,6 +222,7 @@ const emptyThen = curry(async function*(supply, iter) {
         yield* iter;
         return;
     }
+
     supply = await supply;
     if (supply instanceof Function) {
         yield* await supply();
@@ -194,6 +231,9 @@ const emptyThen = curry(async function*(supply, iter) {
     }
 });
 
+/**
+ * like python enumerate
+ */
 const enumerate = async function* (iter) {
     let i = 0;
     for await (const e of iter) {
@@ -208,9 +248,11 @@ const errorThen = curry(async function*(supply, iter){
         yield* iter;
     } catch(e) {
         supply = await supply;
+
         if (supply instanceof Function) {
             supply = await supply(e);
         }
+
         if(supply && (supply[Symbol.iterator] || supply[Symbol.asyncIterator])) {
             yield* supply;
         }
@@ -257,6 +299,7 @@ const find = curry(async (fn, iter) => {
             return e;
         }
     }
+    //return undefined;
 });
 
 const findLast = curry(async (fn, iter) => {
@@ -266,6 +309,7 @@ const findLast = curry(async (fn, iter) => {
             return iter[i];
         }
     }
+    //return undefined;
 });
 
 const first = a => a[0];
@@ -311,6 +355,7 @@ const foldl = curry(async (f, z, iter) => {
     }
     return z;
 });
+
 const foldl1 = curry(async (f, iter) => {
     const g =  seq(iter);
     const h = await g.next();
@@ -319,7 +364,7 @@ const foldl1 = curry(async (f, iter) => {
     }
     return foldl(f, h.value, g);
 });
-const reduce = fold1;
+const reduce = foldl1;
 
 const reverse = async function* (iter) {
     const a = [];
@@ -338,9 +383,11 @@ const _foldr_internal = async (f, z, iter) => {
     }
     return z;
 };
+
 const foldr =  curry((f, z, iter) => {
     return _foldr_internal(f, z, reverse(iter));
 });
+
 const foldr1 = curry(async (f, iter) => {
     const g = reverse(iter);
     const h = await g.next();
@@ -367,6 +414,9 @@ const forEachIndexed = curry(async (fn, iter) => {
     return Promise.all(wait);
 });
 
+/**
+ * support Map, Set, any Object
+ */
 const get = curry((key, a) => {
     if (a.get && a.get.constructor === Function) {
         const r = a.get(key);
@@ -397,6 +447,7 @@ const has = curry((key, a) => {
             return true;
         }
     }
+
    return a[key] !== undefined;
 });
 
@@ -416,6 +467,7 @@ const sleep = (t) => new Promise(r => {
 });
 
 const interval = (timeout, timerHandler, ...param) => {
+
     if(!timeout || timeout < 10) {
         timeout = 10;
     }
@@ -427,6 +479,7 @@ const interval = (timeout, timerHandler, ...param) => {
                 await timerHandler(...param);
                 await s;
             } catch {
+                //ignore
             }
         }
     })();
@@ -437,6 +490,7 @@ const isNil = v => {
     if (v) {
         return false;
     }
+
     switch(v){
         case null: return true;
         case undefined: return true;
@@ -456,6 +510,13 @@ const iterate = curry(async function*(fn, v) {
 const map =  curry(async function* (fn, iter) {
     for await (const e of iter) {
         yield fn(e);
+    }
+});
+
+const mapIndexed = curry(async function* (fn, iter) {
+    let i = 0;
+    for await (const e of iter) {
+        yield fn(i++, e);
     }
 });
 
@@ -510,6 +571,7 @@ const memoizeWithTimeoutBy = (timeout, keyFn, callFn) => {
         return c.value;
     }
 };
+
 const memoizeWithTimeout = curry((timeout, callFn) => memoizeWithTimeoutBy(timeout, (...a) => a, callFn));
 
 const minBy = curry(async (f, iter) => {
@@ -520,6 +582,7 @@ const minBy = curry(async (f, iter) => {
     }
     let m = head.value;
     let c = await f(m);
+
     for await (const e of g) {
         const k = await f(e);
         if (k < c) {
@@ -532,9 +595,200 @@ const minBy = curry(async (f, iter) => {
 
 const min = minBy(identity);
 
+//deprecated / use isNill instead.
 const notNil = (a) => !isNil(a);
 
+/**
+ * if (F.otherwise) {
+ *  // work
+ * }
+ * 
+ * if (F.otherwise()) {
+ *  // work
+ * }
+ */
 const otherwise = () => true;
+
+const default_fetch_count = 100;
+let global_fetch_count = default_fetch_count;
+
+const parallel_set_fetch_count_internal = (count) => {
+    count = Number(count);
+    if (count <= 0) {
+        throw new Error("count > 0 required");
+    }
+    global_fetch_count = count || default_fetch_count;
+};
+
+const parallel_get_fetch_count_internal = () => global_fetch_count;
+
+const parallel_set_fetch_count = (count) =>
+    parallel_set_fetch_count_internal(count);
+
+/**
+ * collection interface
+ * like java Queue<T>
+ */
+class Queue {
+    constructor() {
+        this.head = this.tail = null;
+    }
+
+    add(v) {
+        const n = { value: v, next: null };
+        if (this.head) {
+            this.tail.next = n;
+        } else {
+            this.head = n;
+        }
+        this.tail = n;
+    }
+
+    _unsafe_pop() {
+        const f = this.head;
+        if (f !== this.tail) {
+            this.head = f.next;
+        } else {
+            this.head = this.tail = null;
+        }
+        f.next = null;
+        return f.value;
+    }
+
+    /**
+     * remove head and return
+     * return head or throw Error if empty
+     */
+    remove() {
+        if (this.head === null) {
+            throw new Error("no such element");
+        }
+        return this._unsafe_pop();
+    }
+
+    /**
+     * remove head and return
+     * return head or null if empty
+     */
+    poll() {
+        if (this.head === null) {
+            return null;
+        }
+        return this._unsafe_pop();
+    }
+
+    /**
+     * not remove 
+     * return head or throw Error if empty
+     */
+    element() {
+        const f = this.head;
+        if (f === null) {
+            throw new Error("no such element");
+        }
+        return f.value;
+    }
+
+    /**
+     * not remove 
+     * return head or null if empty
+     */
+    peek() {
+        const f = this.head;
+        if (f === null) {
+            return null;
+        }
+        return f.value;
+    }
+
+    isEmpty() {
+        return this.head === null;
+    }
+
+
+    /**
+     * clear all elements
+     */
+    clear() {
+        //remove chain
+        //help gc
+        let it = this.head;
+        while (it) {
+            const n = it.next;
+            it.value = it.next = null;
+            it = n;
+        }
+
+        this.head = this.tail = null;
+    }
+
+    *[Symbol.iterator]() {
+        let it = this.head;
+        while (it) {
+            yield it.value;
+            it = it.next;
+        }
+    }
+
+    /**
+     * yields the value from head and then deletes the value
+     * After the iterator ends, the size of the Queue is zero
+     * 
+     * same as
+     * while (false === q.isEmpty()) {
+     *     yield q.remove();
+     * }
+     * yield value and assign next to null
+     * help gc
+     */
+    *removeIterator() {
+        let it = this.head;
+        while (it) {
+            const p = it;
+            yield p.value;
+            it = p.next;
+
+            p.value = null;
+            p.next = null;
+        }
+    }
+}
+
+const fetch_call_internal =  async (f, iter) => { 
+    const fetch_count = parallel_get_fetch_count_internal();
+    const g = seq(iter);
+    for (let i = fetch_count; i > 0; --i) {
+        const e = await g.next();
+        if (e.done) {
+            break;
+        }
+        f.add(e.value());
+    }
+    return g;
+};
+
+const pcalls_internal = async function* (iter) {
+
+    const f = new Queue();
+    const g = await fetch_call_internal(f, iter);
+    
+    for await(const e of g) {
+        f.add(e());
+        yield f.poll();
+    } 
+
+    yield* f.removeIterator();
+};
+
+const pcalls = curry(async function* (...a) {
+    if (a.length === 1) {
+        if (a[0][Symbol.iterator] || a[0][Symbol.asyncIterator]) {
+            yield* pcalls_internal(a[0]);
+            return;
+        }
+    }
+    yield* pcalls_internal(a);
+});
 
 const peek = curry(async function*(f, iter) {
     for await (const e of iter) {
@@ -543,7 +797,100 @@ const peek = curry(async function*(f, iter) {
     }
 });
 
+const fetch_filter_internal = async (f, v, fn, iter) => {
+    //fetch (n - 1) here
+    const fetch_count = parallel_get_fetch_count_internal() - 1;
+    const g = seq(iter);
+    for (let i = fetch_count; i > 0; --i) {
+        const { done, value } = await g.next();
+        if (done) {
+            break;
+        }
+        f.add(fn(value));
+        v.add(value);
+    }
+    return g;
+};
+
+const pfilter = curry(async function* (fn, iter) {
+    const f = new Queue();
+    const v = new Queue();
+    const g = await fetch_filter_internal(f, v, fn, iter);
+    for await (const e of g) {
+        f.add(fn(e));
+        v.add(e);
+
+        const c = v.poll();
+        if (await f.poll()) {
+            yield c;
+        }
+    }
+
+    while (!v.isEmpty()) {
+        const c = v.poll(); 
+        if (await f.poll()) {
+            yield c;
+        }
+    }
+});
+
+/**
+ * like `.` or `->>`
+ *      let r = await F.pipe(
+ *              F.map(e => e + 1), // a = [2,3,4,5,6]
+ *              F.filter(e => e < 4), // a = [2,3]
+ *              F.take(Infinity));
+ * 
+ *      let a = [1,2,3,4,5];
+ *      for await (const e of await r(a)) {
+ *          console.log(e);
+ *      }
+ * //result
+ * //2
+ * //3
+ */
 const pipe = (f, ...fns) => (...args) => foldl((z, fn) => fn(z), f(...args), fns);
+
+const fetch_map_internal = async (f, fn, iter) => {
+    const fetch_count = parallel_get_fetch_count_internal() - 1; 
+    const g = seq(iter);
+    for (let i = fetch_count; i > 0; --i) {
+        const e = await g.next();
+        if (e.done) {
+            break;
+        }
+        f.add(fn(e.value));
+    }
+    return g;
+};
+
+const pmap = curry(async function* (fn, iter) {
+    const f = new Queue();
+    const g = await fetch_map_internal(f, fn, iter);
+
+    for await (const e of g) {
+        f.add(fn(e));
+        yield f.poll();
+    }
+
+    yield* f.removeIterator();
+});
+
+const pfmap = curry(async function* (fn, iter) {
+    const f = new Queue();
+    const g = await fetch_map_internal(f, fn, iter);
+
+    for await (const e of g) {
+        f.add(fn(e));
+        yield* await f.poll();
+    }
+
+    while(!f.isEmpty()) {
+        yield* await f.poll();
+    }
+});
+
+const pflatMap = pfmap;
 
 const prop = curry((key, a) => a[key]);
 
@@ -552,6 +899,7 @@ const range = function* (...k) {
     let end = Infinity;
     let n = 1;
     const len = k.length;
+
     switch(len) {
     case 1:
         end = k[0];
@@ -566,6 +914,7 @@ const range = function* (...k) {
         n = k[2];
         break;
     }
+
     for (let i = begin; i !== end; i += n) {
         yield i;
     }
@@ -573,14 +922,17 @@ const range = function* (...k) {
 
 const getDuration = async duration => {
     duration = await duration;
+
     if (duration instanceof Function) {
         duration = await duration();
     }
+
     if (duration <= 0) {
         throw new Error("duration > 0 required")
     }
     return duration;
 };
+
 const errorSleep = t => new Promise((_, reject) => {
     setTimeout(() => {
         reject(new Error("timeout error"));
@@ -589,6 +941,7 @@ const errorSleep = t => new Promise((_, reject) => {
 
 const rangeInterval = async function*(duration, ...k) {
     duration = await getDuration(duration);
+
     await sleep(duration);
     for (const e of range(...k)) {
         yield e;
@@ -596,6 +949,12 @@ const rangeInterval = async function*(duration, ...k) {
     }
 };
 
+/**
+ * **deprecated** 
+ * deprecated. use flat or dflat instead.
+ * 
+ * @param  {...any} a any range
+ */
 const rangeOf = (...a) => fmap(identity, a);
 
 const repeat = async function* (a, ...b) {
@@ -617,6 +976,18 @@ const repeat = async function* (a, ...b) {
     }
 };
 
+/**
+ * like `$` or `.`
+ *  let a = [1,2,3,4,5];
+ *  let r = await F.run(a,
+ *           F.map(e => e + 1), // a = [2,3,4,5,6]
+ *           F.filter(e => e < 4), // a = [2,3]
+ *           F.take(Infinity),
+ *           F.collect);
+ * 
+ *  console.log(r); // print [2,3]
+ * 
+ */
 const run = (iter, ...f) => foldl((z, fn) => fn(z), iter, f);
 
 const scanl = curry(async function*(f, z, iter) {
@@ -627,6 +998,7 @@ const scanl = curry(async function*(f, z, iter) {
         yield z;
     }
 });
+
 const scanl1 = curry(async function*(f, iter) {
     const g =  seq(iter);
     const h = await g.next();
@@ -659,25 +1031,33 @@ const sortBy = curry(async function* (f, order, iter) {
                 throw new Error('please set order parameter to ASC or DESC or compare function');
         }
     }
+
     const t = [];
     const m = new Map();
+
     for await (const e of iter) {
         t.push(e);
         if (!m.has(e)) {
             m.set(e, await f(e));
         }
     }
+
     yield* t.sort((a, b) => {
         const ma = m.get(a);
         const mb = m.get(b);
+
         return order(ma, mb);
     });
 });
+
 const orderBy = sortBy;
 
 const order = sortBy(identity);
 const sort = sortBy(identity);
 
+/**
+ * break is keyword..
+ */
 const split = curry(async function*(fn, iter) {
     const g = seq(iter);
     let e;
@@ -685,7 +1065,7 @@ const split = curry(async function*(fn, iter) {
         while (true) {
             e = await g.next();
             if ((e.done) || await fn(e.value)) {
-                break;
+                break;    
             }
             yield e.value;
         }
@@ -703,6 +1083,12 @@ const splitBy = curry(async function*(f, any) {
 });
 
 const combineMap = (a, b) => new Map([...b, ...a]);
+
+
+/**
+ * support iterable + set method
+ * a is overwrite b value
+ */
 const combineCollection = (a, b) => {
     const r = new a.constructor();
     for (const e of b) {
@@ -713,22 +1099,29 @@ const combineCollection = (a, b) => {
     }
     return r;
 };
+
 const combineObject = (a, b) => Object.assign({}, b, a);
+
 const combine = (a, b) => {
     if (a.constructor !== b.constructor) {
         throw new Error("join/combine object: object is not same");
     }
+
     if (a instanceof Map) {
         return combineMap(a, b);
     }
+
     if (a[Symbol.iterator] && a.set && typeof (a.set) === "function") {
         return combineCollection(a, b);
     }
+
     if (a instanceof Object) {
         return combineObject(a, b);
     }
+
     throw new Error("join/combine object: not support type");
 };
+
 const _outerJoin = async function* (f, iter1, iter2) {
     const leftCache = [];
     const rightCache = [];
@@ -741,6 +1134,7 @@ const _outerJoin = async function* (f, iter1, iter2) {
                 continue start;
             }
         }
+
         while (true) {
             const { value, done } = await it.next();
             if (done) {
@@ -752,8 +1146,10 @@ const _outerJoin = async function* (f, iter1, iter2) {
                 continue start;
             }
         }
+
         yield e;
     }
+
     for await (const e of it) {
         for (const c of leftCache) {
             if (await f(c, e)) {
@@ -762,6 +1158,7 @@ const _outerJoin = async function* (f, iter1, iter2) {
         }
     }
 };
+
 const _innerJoin = async function* (f, iter1, iter2) {
     const leftCache = [];
     const rightCache = [];
@@ -774,6 +1171,7 @@ const _innerJoin = async function* (f, iter1, iter2) {
                 continue start;
             }
         }
+
         while (true) {
             const { value, done } = await it.next();
             if (done) {
@@ -786,6 +1184,7 @@ const _innerJoin = async function* (f, iter1, iter2) {
             }
         }
     }
+
     for await (const e of it) {
         for (const c of leftCache) {
             if (await f(c, e)) {
@@ -794,9 +1193,11 @@ const _innerJoin = async function* (f, iter1, iter2) {
         }
     }
 };
+
 const leftInnerJoin = curry(_innerJoin);
 const innerJoin = curry(_innerJoin);
 const rightInnerJoin = curry((f, a, b) => _innerJoin(f, b, a));
+
 const leftOuterJoin = curry(_outerJoin);
 const outerJoin = curry(_outerJoin);
 const rightOuterJoin = curry((f, a, b) => _outerJoin(f, b, a));
@@ -843,20 +1244,25 @@ const then = curry((f, arg) => f(arg));
 
 const timeout = curry(async (duration, a) => {
     duration = await getDuration(duration);
+
     const s = errorSleep(duration);
+
     if (a instanceof Function) {
         a = a();
     }
+
     const r = Promise.race([s, a]);
     const e = await r;
-    s.catch(C.fnothing);
+    s.catch(fnothing);
     return e;
 });
 
-exports.withTimeout = C.curry(async function*(duration, iter) {
+const withTimeout = curry(async function*(duration, iter) {
     duration = await getDuration(duration);
-    const g = C.seq(iter);
+
+    const g = seq(iter);
     const s = errorSleep(duration);
+
     while(true) {
         const it = g.next();
         const e = await Promise.race([s, it]);
@@ -865,20 +1271,24 @@ exports.withTimeout = C.curry(async function*(duration, iter) {
         }
         yield e.value;
     }
-    s.catch(C.fnothing);
+    s.catch(fnothing);
 });
 
 const zipWith = curry(async function* (f, a, b) {
     a = seq(a);
     b = seq(b);
+
     while (true) {
         const ap = a.next();
         const bp = b.next();
+
         const ae = await ap;
         const be = await bp;
+
         if (ae.done || be.done) {
             break;
         }
+
         yield f(ae.value, be.value);
     }
 });
@@ -889,16 +1299,20 @@ const zipWith3 = curry(async function*(f, a, b, c){
     a = seq(a);
     b = seq(b);
     c = seq(c);
+
     while (true) {
         const ap = a.next();
         const bp = b.next();
         const cp = c.next();
+
         const ae = await ap;
         const be = await bp;
         const ce = await cp;
+
         if (ae.done || be.done || ce.done) {
             break;
         }
+
         yield f(ae.value, be.value, ce.value);
     }
 });
@@ -930,6 +1344,7 @@ exports.enumerate = enumerate;
 exports.equals = equals;
 exports.errorThen = errorThen;
 exports.every = every;
+exports.fetch_map_internal = fetch_map_internal;
 exports.filter = filter;
 exports.filterIndexed = filterIndexed;
 exports.filterNot = filterNot;
@@ -960,6 +1375,7 @@ exports.iterate = iterate;
 exports.leftInnerJoin = leftInnerJoin;
 exports.leftOuterJoin = leftOuterJoin;
 exports.map = map;
+exports.mapIndexed = mapIndexed;
 exports.max = max;
 exports.maxBy = maxBy;
 exports.memoize = memoize;
@@ -972,8 +1388,14 @@ exports.order = order;
 exports.orderBy = orderBy;
 exports.otherwise = otherwise;
 exports.outerJoin = outerJoin;
+exports.parallel_set_fetch_count = parallel_set_fetch_count;
+exports.pcalls = pcalls;
 exports.peek = peek;
+exports.pfilter = pfilter;
+exports.pflatMap = pflatMap;
+exports.pfmap = pfmap;
 exports.pipe = pipe;
+exports.pmap = pmap;
 exports.prop = prop;
 exports.range = range;
 exports.rangeInterval = rangeInterval;
@@ -1003,6 +1425,7 @@ exports.tap = tap;
 exports.then = then;
 exports.timeout = timeout;
 exports.union = union;
+exports.withTimeout = withTimeout;
 exports.zip = zip;
 exports.zip3 = zip3;
 exports.zipWith = zipWith;
