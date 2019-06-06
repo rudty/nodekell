@@ -69,3 +69,5 @@ test/
 nodekell-test.ts
 nodekell-test.js
 .idea
+src/
+rollup.config.js
