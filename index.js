@@ -12,6 +12,58 @@ const curry = fn => (...a) => {
 
 const add = curry((a, b) => a + b);
 
+const average = async (iter) => {
+    let c = 0;
+    let sum = 0;
+    for await (const e of iter) {
+        ++c;
+        sum += e;
+    }
+    return sum / c;
+};
+
+const buffer = curry(async function*(supply, iter) {
+    supply = await supply;
+    if(supply <= 0) {
+        throw new Error("arg supply > 0 required")
+    }
+    let c = [];
+    for await (const e of iter) {
+        const len = c.push(e);
+        if (len >= supply) {
+            yield c;
+            c = [];
+        }
+    }
+    if (c.length !== 0) {
+        yield c;
+    }
+});
+
+const collect = async (iter) => {
+    const res = [];
+    for await (const e of iter) {
+        res.push(e);
+    }
+    return res;
+};
+
+const collectMap = async (iter) => new Map(await collect(iter));
+
+const collectObject = async (iter) => {
+    const c = await collect(iter);
+    const o = {};
+    for (const e of c) {
+        if (!Array.isArray(e)) {
+            throw new TypeError("value is not array");
+        }
+        o[e[0]] = e[1];
+    }
+    return o;
+};
+
+const collectSet = async (iter) => new Set(await collect(iter));
+
 const compose = (...fns) => async (...args) => {
     const len = fns.length;
     let z = await fns[len - 1](...args);
@@ -35,6 +87,23 @@ const cond = async (...cv) => {
     }
 };
 
+const count = async (iter) => {
+    if (iter.length && Number.isInteger(iter.length)) {
+        return iter.length;
+    }
+    if (iter.size && Number.isInteger(iter.size)) {
+        return iter.size;
+    }
+    if (iter[Symbol.asyncIterator] || iter[Symbol.iterator]) {
+        let c = 0;
+        for await (const _ of iter) {
+            ++c;
+        }
+        return c;
+    }
+    return Object.keys(iter).length;
+};
+
 const dec = a => a - 1;
 
 const dflat = async function* (...iters) {
@@ -53,6 +122,21 @@ const dflat = async function* (...iters) {
         yield it;
     }
 };
+
+const distinctBy = curry(async function*(f, iter) {
+    const s = new Set();
+    for await (const e of iter) {
+        const d = await f(e);
+        if (!s.has(d)) {
+            s.add(d);
+            yield e;
+        }
+    }
+});
+
+const identity = e => e;
+
+const distinct = (iter) => distinctBy(identity, iter);
 
 const seq$1 = async function* (iter) {
     for await (const e of iter) {
@@ -86,6 +170,20 @@ const dropWhile =  curry(async function* (f, iter) {
     yield* g;
 });
 
+const emptyThen = curry(async function*(supply, iter) {
+    for await (const e of iter) {
+        yield e;
+        yield* iter;
+        return;
+    }
+    supply = await supply;
+    if (supply instanceof Function) {
+        yield* await supply();
+    } else {
+        yield* supply;
+    }
+});
+
 const enumerate = async function* (iter) {
     let i = 0;
     for await (const e of iter) {
@@ -94,6 +192,29 @@ const enumerate = async function* (iter) {
 };
 
 const equals = curry((a, b) => a === b);
+
+const errorThen = curry(async function*(supply, iter){
+    try{
+        yield* iter;
+    } catch(e) {
+        supply = await supply;
+        if (supply instanceof Function) {
+            supply = await supply(e);
+        }
+        if(supply && (supply[Symbol.iterator] || supply[Symbol.asyncIterator])) {
+            yield* supply;
+        }
+    }
+});
+
+const every = curry(async (f, iter) => {
+    for await (const e of iter) {
+        if (!(await f(e))) {
+            return false;
+        }
+    }
+    return true;
+});
 
 const filter = curry(async function* (fn, iter) {
     for await (const e of iter) {
@@ -120,7 +241,35 @@ const filterNot = curry(async function* (fn, iter) {
     }
 });
 
+const find = curry(async (fn, iter) => {
+    for await(const e of iter) {
+        if (await fn(e)) {
+            return e;
+        }
+    }
+});
+
+const findLast = curry(async (fn, iter) => {
+    iter = Array.isArray(iter) ? iter : await collect(iter);
+    for (let i = iter.length - 1; i >= 0; --i) {
+        if (await fn(iter[i])) {
+            return iter[i];
+        }
+    }
+});
+
 const first = a => a[0];
+
+const firstOrGet = curry(async (supply, iter) => {
+    for await (const e of iter) {
+        return e;
+    }
+    supply = await supply;
+    if (supply instanceof Function) {
+        return await supply();
+    }
+    return supply;
+});
 
 const flat = async function* (iter) {
     for await (const e of iter) {
@@ -191,6 +340,23 @@ const foldr1 = curry(async (f, iter) => {
     return foldr_internal(f, h.value, g);
 });
 
+const forEach = curry(async (fn, iter) => {
+    const wait = [];
+    for await (const e of iter) {
+        wait.push(fn(e));
+    }
+    return Promise.all(wait);
+});
+
+const forEachIndexed = curry(async (fn, iter) => {
+    const wait = [];
+    let i = 0;
+    for await (const e of iter) {
+        wait.push(fn(i++, e));
+    }
+    return Promise.all(wait);
+});
+
 const get = curry((key, a) => {
     if (a.get && a.get.constructor === Function) {
         const r = a.get(key);
@@ -219,8 +385,6 @@ const head = async (iter) => {
     return value;
 };
 
-const identity = e => e;
-
 const inc = a => a + 1;
 
 const isNil = v => {
@@ -248,6 +412,26 @@ const map =  curry(async function* (fn, iter) {
         yield fn(e);
     }
 });
+
+const maxBy = curry(async (f, iter) => {
+    const g = seq$1(iter);
+    const head = await g.next();
+    if (head.done) {
+        throw new Error("empty iter");
+    }
+    let m = head.value;
+    let c = await f(m);
+    for await (const e of g) {
+        const k = await f(e);
+        if (k > c) {
+            m = e;
+            c = k;
+        }
+    }
+    return m;
+});
+
+const max = maxBy(identity);
 
 const memoizeBy = curry((keyFn, callFn) => {
     const cache = {};
@@ -282,9 +466,36 @@ const memoizeWithTimeoutBy = (timeout, keyFn, callFn) => {
 };
 const memoizeWithTimeout = curry((timeout, callFn) => memoizeWithTimeoutBy(timeout, (...a) => a, callFn));
 
+const minBy = curry(async (f, iter) => {
+    const g = seq$1(iter);
+    const head = await g.next();
+    if (head.done) {
+        throw new Error("empty iter");
+    }
+    let m = head.value;
+    let c = await f(m);
+    for await (const e of g) {
+        const k = await f(e);
+        if (k < c) {
+            m = e;
+            c = k;
+        }
+    }
+    return m;
+});
+
+const min = minBy(identity);
+
 const notNil = (a) => !isNil(a);
 
 const otherwise = () => true;
+
+const peek = curry(async function*(f, iter) {
+    for await (const e of iter) {
+        await f(e);
+        yield e;
+    }
+});
 
 const pipe = (f, ...fns) => (...args) => foldl((z, fn) => fn(z), f(...args), fns);
 
@@ -355,6 +566,15 @@ const scanl1 = curry(async function*(f, iter) {
 
 const second = a => a[1];
 
+const some = curry(async (f, iter) => {
+    for await (const e of iter) {
+        if (await f(e)) {
+            return true;
+        }
+    }
+    return false;
+});
+
 const split = curry(async function*(fn, iter) {
     const g = seq$1(iter);
     let e;
@@ -375,7 +595,13 @@ const split = curry(async function*(fn, iter) {
     })();
 });
 
+const splitBy = curry(async function*(f, any) {
+    yield* await f(any);
+});
+
 const sub = curry((a, b) => a - b);
+
+const sum = foldl1(add);
 
 const tail = async function* (iter) {
     const g = seq$1(iter);
@@ -405,6 +631,13 @@ const takeWhile =  curry(async function* (f, iter) {
         yield e;
     }
 });
+
+const tap = curry(async (f, arg) => {
+    await f(arg);
+    return arg;
+});
+
+const then = curry((f, arg) => f(arg));
 
 const zipWith = curry(async function* (f, a, b) {
     a = seq$1(a);
@@ -443,21 +676,35 @@ const zipWith3 = curry(async function*(f, a, b, c){
 
 const zip3 = curry((iter1, iter2, iter3) => zipWith3((elem1, elem2, elem3) => [elem1, elem2, elem3], iter1, iter2, iter3));
 
-exports._foldr_internal = _foldr_internal;
 exports.add = add;
+exports.average = average;
+exports.buffer = buffer;
+exports.collect = collect;
+exports.collectMap = collectMap;
+exports.collectObject = collectObject;
+exports.collectSet = collectSet;
 exports.compose = compose;
 exports.cond = cond;
+exports.count = count;
 exports.curry = curry;
 exports.dec = dec;
 exports.dflat = dflat;
+exports.distinct = distinct;
+exports.distinctBy = distinctBy;
 exports.drop = drop;
 exports.dropWhile = dropWhile;
+exports.emptyThen = emptyThen;
 exports.enumerate = enumerate;
 exports.equals = equals;
+exports.errorThen = errorThen;
+exports.every = every;
 exports.filter = filter;
 exports.filterIndexed = filterIndexed;
 exports.filterNot = filterNot;
+exports.find = find;
+exports.findLast = findLast;
 exports.first = first;
+exports.firstOrGet = firstOrGet;
 exports.flat = flat;
 exports.flatMap = flatMap;
 exports.fmap = fmap;
@@ -466,6 +713,8 @@ exports.foldl = foldl;
 exports.foldl1 = foldl1;
 exports.foldr = foldr;
 exports.foldr1 = foldr1;
+exports.forEach = forEach;
+exports.forEachIndexed = forEachIndexed;
 exports.get = get;
 exports.has = has;
 exports.head = head;
@@ -474,11 +723,16 @@ exports.inc = inc;
 exports.isNil = isNil;
 exports.iterate = iterate;
 exports.map = map;
+exports.max = max;
+exports.maxBy = maxBy;
 exports.memoize = memoize;
 exports.memoizeBy = memoizeBy;
 exports.memoizeWithTimeout = memoizeWithTimeout;
+exports.min = min;
+exports.minBy = minBy;
 exports.notNil = notNil;
 exports.otherwise = otherwise;
+exports.peek = peek;
 exports.pipe = pipe;
 exports.prop = prop;
 exports.range = range;
@@ -491,11 +745,16 @@ exports.scanl = scanl;
 exports.scanl1 = scanl1;
 exports.second = second;
 exports.seq = seq$1;
+exports.some = some;
 exports.split = split;
+exports.splitBy = splitBy;
 exports.sub = sub;
+exports.sum = sum;
 exports.tail = tail;
 exports.take = take;
 exports.takeWhile = takeWhile;
+exports.tap = tap;
+exports.then = then;
 exports.zip = zip;
 exports.zip3 = zip3;
 exports.zipWith = zipWith;
