@@ -12,6 +12,8 @@ const curry = fn => (...a) => {
 
 const add = curry((a, b) => a + b);
 
+const asc = (a, b) => a > b ? 1 : a < b ? -1 : 0;
+
 const average = async (iter) => {
     let c = 0;
     let sum = 0;
@@ -73,6 +75,12 @@ const compose = (...fns) => async (...args) => {
     return z;
 };
 
+const concat = curry(async function* (a, b) {
+    yield* a;
+    yield* b;
+});
+const union = concat;
+
 const mustEvenArguments = (arr) => {
     if ((arr.length) & 1) {
         throw new Error("requires an even arguments");
@@ -106,6 +114,8 @@ const count = async (iter) => {
 
 const dec = a => a - 1;
 
+const desc = (a, b) => a < b ? 1 : a > b ? -1 : 0;
+
 const dflat = async function* (...iters) {
     for await (const it of iters) {
         if (it) {
@@ -138,14 +148,14 @@ const identity = e => e;
 
 const distinct = (iter) => distinctBy(identity, iter);
 
-const seq$1 = async function* (iter) {
+const seq = async function* (iter) {
     for await (const e of iter) {
         yield e;
     }
 };
 
 const drop =  curry(async function* (count, iter) {
-    const g =  seq$1(iter);
+    const g =  seq(iter);
     for (let i = 0; i < count; i++) {
         const { done } = await g.next();
         if (done) {
@@ -156,7 +166,7 @@ const drop =  curry(async function* (count, iter) {
 });
 
 const dropWhile =  curry(async function* (f, iter) {
-    const g =  seq$1(iter);
+    const g =  seq(iter);
     while (true) {
         const e = await g.next();
         if (e.done) {
@@ -367,6 +377,20 @@ const get = curry((key, a) => {
     return a[key];
 });
 
+const groupBy = curry(async (f, iter) => {
+    const m = new Map();
+    for await (const e of iter) {
+        const k = await f(e);
+        if (m.has(k)) {
+            const v = m.get(k);
+            v.push(e);
+        } else {
+            m.set(k, [e]);
+        }
+    }
+    return m;
+});
+
 const has = curry((key, a) => {
     if (a.has && a.has.constructor === Function) {
         if (a.has(key)) {
@@ -377,7 +401,7 @@ const has = curry((key, a) => {
 });
 
 const head = async (iter) => {
-    const g =  seq$1(iter);
+    const g =  seq(iter);
     const { value, done } = await g.next();
     if (done) {
         throw new Error("empty iter");
@@ -386,6 +410,28 @@ const head = async (iter) => {
 };
 
 const inc = a => a + 1;
+
+const sleep = (t) => new Promise(r => {
+    setTimeout(r, t);
+});
+
+const interval = (timeout, timerHandler, ...param) => {
+    if(!timeout || timeout < 10) {
+        timeout = 10;
+    }
+    const k = { run: true };
+    (async () =>{
+        while (k.run) {
+            try{
+                const s = sleep(timeout);
+                await timerHandler(...param);
+                await s;
+            } catch {
+            }
+        }
+    })();
+    return k;
+};
 
 const isNil = v => {
     if (v) {
@@ -414,7 +460,7 @@ const map =  curry(async function* (fn, iter) {
 });
 
 const maxBy = curry(async (f, iter) => {
-    const g = seq$1(iter);
+    const g = seq(iter);
     const head = await g.next();
     if (head.done) {
         throw new Error("empty iter");
@@ -467,7 +513,7 @@ const memoizeWithTimeoutBy = (timeout, keyFn, callFn) => {
 const memoizeWithTimeout = curry((timeout, callFn) => memoizeWithTimeoutBy(timeout, (...a) => a, callFn));
 
 const minBy = curry(async (f, iter) => {
-    const g = seq$1(iter);
+    const g = seq(iter);
     const head = await g.next();
     if (head.done) {
         throw new Error("empty iter");
@@ -525,6 +571,31 @@ const range = function* (...k) {
     }
 };
 
+const getDuration = async duration => {
+    duration = await duration;
+    if (duration instanceof Function) {
+        duration = await duration();
+    }
+    if (duration <= 0) {
+        throw new Error("duration > 0 required")
+    }
+    return duration;
+};
+const errorSleep = t => new Promise((_, reject) => {
+    setTimeout(() => {
+        reject(new Error("timeout error"));
+    }, t);
+});
+
+const rangeInterval = async function*(duration, ...k) {
+    duration = await getDuration(duration);
+    await sleep(duration);
+    for (const e of range(...k)) {
+        yield e;
+        await sleep(duration);
+    }
+};
+
 const rangeOf = (...a) => fmap(identity, a);
 
 const repeat = async function* (a, ...b) {
@@ -557,7 +628,7 @@ const scanl = curry(async function*(f, z, iter) {
     }
 });
 const scanl1 = curry(async function*(f, iter) {
-    const g =  seq$1(iter);
+    const g =  seq(iter);
     const h = await g.next();
     if (!h.done) {
         yield* scanl(f, h.value, g);
@@ -575,8 +646,40 @@ const some = curry(async (f, iter) => {
     return false;
 });
 
+const sortBy = curry(async function* (f, order, iter) {
+    if (order.constructor === ''.constructor) {
+        switch (order.trim().toLowerCase()) {
+            case 'asc':
+                order = asc;
+                break;
+            case 'desc':
+                order = desc;
+                break;
+            default:
+                throw new Error('please set order parameter to ASC or DESC or compare function');
+        }
+    }
+    const t = [];
+    const m = new Map();
+    for await (const e of iter) {
+        t.push(e);
+        if (!m.has(e)) {
+            m.set(e, await f(e));
+        }
+    }
+    yield* t.sort((a, b) => {
+        const ma = m.get(a);
+        const mb = m.get(b);
+        return order(ma, mb);
+    });
+});
+const orderBy = sortBy;
+
+const order = sortBy(identity);
+const sort = sortBy(identity);
+
 const split = curry(async function*(fn, iter) {
-    const g = seq$1(iter);
+    const g = seq(iter);
     let e;
     yield (async function* () {
         while (true) {
@@ -599,12 +702,111 @@ const splitBy = curry(async function*(f, any) {
     yield* await f(any);
 });
 
+const combineMap = (a, b) => new Map([...b, ...a]);
+const combineCollection = (a, b) => {
+    const r = new a.constructor();
+    for (const e of b) {
+        r.set(...e);
+    }
+    for (const e of a) {
+        r.set(...e);
+    }
+    return r;
+};
+const combineObject = (a, b) => Object.assign({}, b, a);
+const combine = (a, b) => {
+    if (a.constructor !== b.constructor) {
+        throw new Error("join/combine object: object is not same");
+    }
+    if (a instanceof Map) {
+        return combineMap(a, b);
+    }
+    if (a[Symbol.iterator] && a.set && typeof (a.set) === "function") {
+        return combineCollection(a, b);
+    }
+    if (a instanceof Object) {
+        return combineObject(a, b);
+    }
+    throw new Error("join/combine object: not support type");
+};
+const _outerJoin = async function* (f, iter1, iter2) {
+    const leftCache = [];
+    const rightCache = [];
+    const it = seq(iter2);
+    start: for await (const e of iter1) {
+        leftCache.push(e);
+        for (const c of rightCache) {
+            if (await f(e, c)) {
+                yield combine(e, c);
+                continue start;
+            }
+        }
+        while (true) {
+            const { value, done } = await it.next();
+            if (done) {
+                break;
+            }
+            rightCache.push(value);
+            if (await f(e, value)) {
+                yield combine(e, value);
+                continue start;
+            }
+        }
+        yield e;
+    }
+    for await (const e of it) {
+        for (const c of leftCache) {
+            if (await f(c, e)) {
+                yield combine(c, e);
+            }
+        }
+    }
+};
+const _innerJoin = async function* (f, iter1, iter2) {
+    const leftCache = [];
+    const rightCache = [];
+    const it = seq(iter2);
+    start: for await (const e of iter1) {
+        leftCache.push(e);
+        for (const c of rightCache) {
+            if (await f(e, c)) {
+                yield combine(e, c);
+                continue start;
+            }
+        }
+        while (true) {
+            const { value, done } = await it.next();
+            if (done) {
+                break;
+            }
+            rightCache.push(value);
+            if (await f(e, value)) {
+                yield combine(e, value);
+                continue start;
+            }
+        }
+    }
+    for await (const e of it) {
+        for (const c of leftCache) {
+            if (await f(c, e)) {
+                yield combine(c, e);
+            }
+        }
+    }
+};
+const leftInnerJoin = curry(_innerJoin);
+const innerJoin = curry(_innerJoin);
+const rightInnerJoin = curry((f, a, b) => _innerJoin(f, b, a));
+const leftOuterJoin = curry(_outerJoin);
+const outerJoin = curry(_outerJoin);
+const rightOuterJoin = curry((f, a, b) => _outerJoin(f, b, a));
+
 const sub = curry((a, b) => a - b);
 
 const sum = foldl1(add);
 
 const tail = async function* (iter) {
-    const g = seq$1(iter);
+    const g = seq(iter);
     const { done } = await g.next();
     if (done) {
         throw new Error("empty iter");
@@ -639,9 +841,36 @@ const tap = curry(async (f, arg) => {
 
 const then = curry((f, arg) => f(arg));
 
+const timeout = curry(async (duration, a) => {
+    duration = await getDuration(duration);
+    const s = errorSleep(duration);
+    if (a instanceof Function) {
+        a = a();
+    }
+    const r = Promise.race([s, a]);
+    const e = await r;
+    s.catch(C.fnothing);
+    return e;
+});
+
+exports.withTimeout = C.curry(async function*(duration, iter) {
+    duration = await getDuration(duration);
+    const g = C.seq(iter);
+    const s = errorSleep(duration);
+    while(true) {
+        const it = g.next();
+        const e = await Promise.race([s, it]);
+        if(e.done) {
+            break;
+        }
+        yield e.value;
+    }
+    s.catch(C.fnothing);
+});
+
 const zipWith = curry(async function* (f, a, b) {
-    a = seq$1(a);
-    b = seq$1(b);
+    a = seq(a);
+    b = seq(b);
     while (true) {
         const ap = a.next();
         const bp = b.next();
@@ -657,9 +886,9 @@ const zipWith = curry(async function* (f, a, b) {
 const zip = curry((iter1, iter2) => zipWith((elem1, elem2) => [elem1, elem2], iter1, iter2));
 
 const zipWith3 = curry(async function*(f, a, b, c){
-    a = seq$1(a);
-    b = seq$1(b);
-    c = seq$1(c);
+    a = seq(a);
+    b = seq(b);
+    c = seq(c);
     while (true) {
         const ap = a.next();
         const bp = b.next();
@@ -677,6 +906,7 @@ const zipWith3 = curry(async function*(f, a, b, c){
 const zip3 = curry((iter1, iter2, iter3) => zipWith3((elem1, elem2, elem3) => [elem1, elem2, elem3], iter1, iter2, iter3));
 
 exports.add = add;
+exports.asc = asc;
 exports.average = average;
 exports.buffer = buffer;
 exports.collect = collect;
@@ -684,10 +914,12 @@ exports.collectMap = collectMap;
 exports.collectObject = collectObject;
 exports.collectSet = collectSet;
 exports.compose = compose;
+exports.concat = concat;
 exports.cond = cond;
 exports.count = count;
 exports.curry = curry;
 exports.dec = dec;
+exports.desc = desc;
 exports.dflat = dflat;
 exports.distinct = distinct;
 exports.distinctBy = distinctBy;
@@ -716,12 +948,17 @@ exports.foldr1 = foldr1;
 exports.forEach = forEach;
 exports.forEachIndexed = forEachIndexed;
 exports.get = get;
+exports.groupBy = groupBy;
 exports.has = has;
 exports.head = head;
 exports.identity = identity;
 exports.inc = inc;
+exports.innerJoin = innerJoin;
+exports.interval = interval;
 exports.isNil = isNil;
 exports.iterate = iterate;
+exports.leftInnerJoin = leftInnerJoin;
+exports.leftOuterJoin = leftOuterJoin;
 exports.map = map;
 exports.max = max;
 exports.maxBy = maxBy;
@@ -731,21 +968,30 @@ exports.memoizeWithTimeout = memoizeWithTimeout;
 exports.min = min;
 exports.minBy = minBy;
 exports.notNil = notNil;
+exports.order = order;
+exports.orderBy = orderBy;
 exports.otherwise = otherwise;
+exports.outerJoin = outerJoin;
 exports.peek = peek;
 exports.pipe = pipe;
 exports.prop = prop;
 exports.range = range;
+exports.rangeInterval = rangeInterval;
 exports.rangeOf = rangeOf;
 exports.reduce = reduce;
 exports.repeat = repeat;
 exports.reverse = reverse;
+exports.rightInnerJoin = rightInnerJoin;
+exports.rightOuterJoin = rightOuterJoin;
 exports.run = run;
 exports.scanl = scanl;
 exports.scanl1 = scanl1;
 exports.second = second;
-exports.seq = seq$1;
+exports.seq = seq;
+exports.sleep = sleep;
 exports.some = some;
+exports.sort = sort;
+exports.sortBy = sortBy;
 exports.split = split;
 exports.splitBy = splitBy;
 exports.sub = sub;
@@ -755,6 +1001,8 @@ exports.take = take;
 exports.takeWhile = takeWhile;
 exports.tap = tap;
 exports.then = then;
+exports.timeout = timeout;
+exports.union = union;
 exports.zip = zip;
 exports.zip3 = zip3;
 exports.zipWith = zipWith;

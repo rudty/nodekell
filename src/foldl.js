@@ -1,4 +1,5 @@
 import { curry } from "./curry"
+import { seq } from "./seq"
 export const foldl = curry(async (f, z, iter) => {
     z = await z;
     for await (const e of iter) {
