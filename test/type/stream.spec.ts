@@ -1096,28 +1096,28 @@ describe('peek', () => {
     it('from Normal Value', async () => {
         const a = [1, 2, 3, 4, 5];
 
-        const r0 = F.peek<number>(async e => { e % 2 === 0; })(a); // $ExpectType AsyncIterableIterator<number>
+        const r0 = F.peek<number>(async e => e % 2 === 0)(a); // $ExpectType AsyncIterableIterator<number>
         const r1 = F.peek(async e => e % 2 === 0, a); // $ExpectType AsyncIterableIterator<number>
     });
 
     it('from Promise Value', async () => {
         const a = [Promise.resolve(1), 2, 3, 4, 5];
 
-        const r0 = F.peek<number>(async e => { e % 2 === 0; })(a); // $ExpectType AsyncIterableIterator<number>
+        const r0 = F.peek<number>(async e => e % 2 === 0)(a); // $ExpectType AsyncIterableIterator<number>
         const r1 = F.peek(async e => e % 2 === 0, a); // $ExpectType AsyncIterableIterator<number>
     });
 
     it('from String', async () => {
         const a = 'hello world';
 
-        const r0 = F.peek<string>(e => { e === 'l'; })(a); // $ExpectType AsyncIterableIterator<string>
+        const r0 = F.peek<string>(e => e === 'l')(a); // $ExpectType AsyncIterableIterator<string>
         const r1 = F.peek(e => e === 'l', a); // $ExpectType AsyncIterableIterator<string>
     });
 
     it('from Normal / Promise Union', async () => {
         const a = [1, Promise.resolve(2), 'a', Promise.resolve('b')];
 
-        const r0 = F.peek<string | number>(e => { e === 'a'; })(a); // $ExpectType AsyncIterableIterator<string | number>
+        const r0 = F.peek<string | number>(e => e === 'a')(a); // $ExpectType AsyncIterableIterator<string | number>
         const r1 = F.peek(e => e === 'a', a); // $ExpectType AsyncIterableIterator<string | number>
     });
 
