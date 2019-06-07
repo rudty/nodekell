@@ -1392,3 +1392,11 @@ describe('compose', () => {
       const p19 = F.compose(toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), toString, e => parseInt(e, 10), asyncToString, e => parseInt(e, 10), toString, (e: number) => e); // $ExpectType (e: number) => Promise<string>
   });
 });
+
+describe('random', () => {
+    it('random', async () => {
+        const r0 = F.random(); // $ExpectType number
+        const r1 = F.random(1); // $ExpectType number
+        const r2 = F.random(0, 1); // $ExpectType number
+    });
+});

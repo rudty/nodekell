@@ -51,4 +51,7 @@ describe('test range', () => {
             F.forEach(e => assert.ok(e >= 0 && e < 4294967296))
         );
     });
+    it('0', async () => {
+        assert.strictEqual(F.random(0, 1), 0);
+    });
 });
