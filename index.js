@@ -901,7 +901,7 @@ const crypto = require("crypto");
  * 
  * maximum value is uint max
  * 
- * @param  {...any} k 
+ * @param  {...any} k 0 ~ 2 argument
  */
 const random = (...k) => {
     const len = k.length;
