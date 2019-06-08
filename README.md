@@ -2021,6 +2021,7 @@ console.log(`Elapsed time:${Date.now()-beginTime}msec`);
 
 
 ### random
+internally use crypto.randomBytes 
 ```javascript
 const r0 = F.random(); // print 0 ~ 4294967295
 const r1 = F.random(10); // print 0 ~ 9
