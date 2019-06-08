@@ -2,13 +2,21 @@
 const F = require("../index");
 const assert = require("assert");
 describe('test random', () => {
+
+    it('end 129', async () => {
+        await F.run(
+            F.repeat(10000, () => F.random(129)),
+            F.forEach(e => assert.ok(e >= 0 && e < 129))
+        );
+    });
+    
     it('end 1byte', async () => {
         await F.run(
             F.repeat(10000, () => F.random(255)),
             F.forEach(e => assert.ok(e >= 0 && e < 255))
         );
     });
-   
+
     it('end 1byte', async () => {
         await F.run(
             F.repeat(10000, () => F.random(255)),

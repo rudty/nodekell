@@ -1,30 +1,40 @@
 const crypto = require("crypto");
 
-const random_unsigned_internal = (byteSize) => {
-    const buf = crypto.randomBytes(byteSize);
-    const n = buf.readUIntBE(0, byteSize);
+const random_uint_internal = (size) => {
+    const buf = crypto.randomBytes(size);
+    const n = buf.readUIntBE(0, size);
     return n;
 };
 
 const random_internal = (begin, end) => {
     const randomRange = end - begin - 1;
-    let byteSize = 4;
-    let maxValue = 4294967295;
-    if (randomRange <= 254) { //1byte(char)
-        byteSize = 1;
-        maxValue = 255;
-    } else if (randomRange <= 65534) { //2byte(short)
-        byteSize = 2;
-        maxValue = 65535;
-    } 
-    else if (randomRange <= 16777214) { // 3byte
-        byteSize = 3;
-        maxValue = 16777215;
-    }
-    const n = random_unsigned_internal(byteSize);
-    const randomValue = n / maxValue; //[0 ~ 1) like Math.random
 
-    return Math.ceil(randomValue * randomRange + begin); 
+    /**
+     * mask: binary digit, equal or greater than randomRange
+     * 
+     * randomRange: 0~255 byteSize:1
+     * randomRange: 256~65535 byteSize:2
+     * randomRange: 65536~16777215 byteSize:3
+     * ...
+     * ...
+     */
+
+    let mask = 1;
+    let step = 0;
+
+    for (;randomRange > mask; ++step) {
+        mask <<= 1;
+        mask |= 1;
+    }
+
+    const byteSize = Math.floor(step / 8) + 1;
+
+    while (true) {
+        const v = random_uint_internal(byteSize) & mask;
+        if (v <= randomRange) {
+            return v + begin;
+        }
+    }
 };
 
 /**
@@ -41,7 +51,7 @@ export const random = (...k) => {
 
     switch (len) {
     case 0:
-        return random_unsigned_internal(4);
+        return random_uint_internal(4);
     case 1:
         return random_internal(0, k[0]);
     case 2:
