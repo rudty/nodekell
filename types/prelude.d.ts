@@ -576,7 +576,10 @@ export function compose<T extends any[], R0, R1, R2, R3, R4, R5, R6, R7, R8, R9,
 
 /**
  * https://github.com/rudty/nodekell#random
- *
+ * max: 4294967295
+ * random() => 0 ~ 4294967295 (unsigned int max)
+ * random(10) => 0 ~ 9 [begin end) max: 4294967295
+ * random(1, 42) => 1 ~ 41 [begin end) max: 429496729
  * @param endOrBegin
  * @param end
  * @param step
