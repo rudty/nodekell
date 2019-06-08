@@ -157,6 +157,7 @@ console.log(v);//[3]
 *    [memoize](#memoize)
 *    [memoizeBy](#memoizeby)
 *    [equals](#equals)
+*    [random](#random)
 ---
 
 
@@ -2018,6 +2019,13 @@ console.log(`Elapsed time:${Date.now()-beginTime}msec`);
 // Elapsed time:1msec
 ```
 
+
+### random
+```javascript
+const r0 = F.random(); // print 0 ~ 4294967295
+const r1 = F.random(10); // print 0 ~ 9
+const r2 = F.random(1, 42); // print 1 ~ 41, maximum range: 4294967295 
+```
 
 ### equals
 compares strict equals
