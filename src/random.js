@@ -26,15 +26,12 @@ const random_internal = (begin, end) => {
         mask <<= 1;
         mask |= 1;
     }
-
+    
     const byteSize = Math.floor(step / 8) + 1;
-
-    while (true) {
-        const v = random_uint_internal(byteSize) & mask;
-        if (v <= randomRange) {
-            return v + begin;
-        }
-    }
+    const v = random_uint_internal(byteSize) & mask;
+    const randomValue = v / (mask + 1);
+    
+    return Math.ceil(randomValue * randomRange) + begin;
 };
 
 /**
