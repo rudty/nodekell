@@ -914,18 +914,18 @@ const random_internal = (begin, end) => {
      * ...
      */
 
-    let mask = 1;
     let step = 0;
-
-    for (;randomRange > mask; ++step) {
-        mask <<= 1;
-        mask |= 1;
+    let bit = 1;
+    for (;randomRange >= bit; ++step) {
+        bit <<= 1;
     }
-    
+
+    const mask = bit - 1;
     const byteSize = Math.floor(step / 8) + 1;
+
     const v = random_uint_internal(byteSize) & mask;
-    const randomValue = v / (mask + 1);
-    
+    const randomValue = v / bit;
+
     return Math.ceil(randomValue * randomRange) + begin;
 };
 

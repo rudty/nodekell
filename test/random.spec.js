@@ -66,8 +66,13 @@ describe('test random', () => {
         );
     });
     it('0', async () => {
-        for (let i = 0; i < 10000; ++i){
+        for (let i = 0; i < 100000; ++i){
             assert.strictEqual(F.random(0, 1), 0);
+        }
+    });
+    it('4294967295', async () => {
+        for (let i = 0; i < 100000; ++i){
+            assert.strictEqual(F.random(4294967295, 4294967296), 4294967295);
         }
     });
 });
