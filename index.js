@@ -906,6 +906,7 @@ const random_internal = (begin, end) => {
 
     /**
      * mask: binary digit, equal or greater than randomRange
+     * bit: multiple of 2 greater than randomRange
      * 
      * randomRange: 0~255 byteSize:1
      * randomRange: 256~65535 byteSize:2
