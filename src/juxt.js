@@ -7,7 +7,7 @@ import { seq } from "./seq"
 
 //juxt([Math.max, Math.min], [1,2,3,4,5]);
 //=>[1,5]
-export const juxtR = curry((af, iter) => {
+export const juxtR = curry(async (af, iter) => {
     const len = af.length;
     const g = seq(iter);
     const r = [];
