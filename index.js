@@ -539,6 +539,8 @@ const juxtA = curry(async (af, iter) => {
     r.fill(firstElem.value);
 
     /**
+     * same as
+     * 
      * foldl((acc, e) => {
      *   for (let i = 0; i < len; ++i) {
      *       acc[i] = await af[i](acc[i], e);
@@ -546,7 +548,7 @@ const juxtA = curry(async (af, iter) => {
      *   }
      *}, r, g);
      */
-    return foldl((acc, e) => mapIndexed((i, x) => af[i](x, e), acc), r, g);
+    return foldl((acc, e) => forEachIndexed((i, x) => af[i](x, e), acc), r, g);
 });
 
 const juxtO = curry((ap, obj) => {
