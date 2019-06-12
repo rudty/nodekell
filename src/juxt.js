@@ -1,6 +1,6 @@
 import { curry } from "./curry"
 import { foldl } from "./foldl"
-import { forEach } from "./forEach"
+import { mapIndexed } from "./mapIndexed"
 import { seq } from "./seq"
 import { collect } from "./collect"
 
@@ -34,12 +34,12 @@ export const juxtA = curry(async (af, iter) => {
     /**
      * foldl((acc, e) => {
      *   for (let i = 0; i < len; ++i) {
-     *       acc[i] = af[i](acc[i], e);
+     *       acc[i] = await af[i](acc[i], e);
      *       return acc;
      *   }
      *}, r, g);
      */
-    return foldl((acc, e) => acc.map((x, i) => af[i](x, e)), r, g);
+    return foldl((acc, e) => mapIndexed((i, x) => af[i](x, e), acc), r, g);
 });
 
 export const juxtO = curry((ap, obj) => {

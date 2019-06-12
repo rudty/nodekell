@@ -504,6 +504,13 @@ const iterate = curry(async function*(fn, v) {
     }
 });
 
+const mapIndexed = curry(async function* (fn, iter) {
+    let i = 0;
+    for await (const e of iter) {
+        yield fn(i++, e);
+    }
+});
+
 //juxt(["a","b"], {"a":1,"b":2,"c":3});
 //=>[1,2]
 
@@ -534,12 +541,12 @@ const juxtA = curry(async (af, iter) => {
     /**
      * foldl((acc, e) => {
      *   for (let i = 0; i < len; ++i) {
-     *       acc[i] = af[i](acc[i], e);
+     *       acc[i] = await af[i](acc[i], e);
      *       return acc;
      *   }
      *}, r, g);
      */
-    return foldl((acc, e) => acc.map((x, i) => af[i](x, e)), r, g);
+    return foldl((acc, e) => mapIndexed((i, x) => af[i](x, e), acc), r, g);
 });
 
 const juxtO = curry((ap, obj) => {
@@ -553,13 +560,6 @@ const juxtO = curry((ap, obj) => {
 const map =  curry(async function* (fn, iter) {
     for await (const e of iter) {
         yield fn(e);
-    }
-});
-
-const mapIndexed = curry(async function* (fn, iter) {
-    let i = 0;
-    for await (const e of iter) {
-        yield fn(i++, e);
     }
 });
 
