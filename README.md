@@ -96,6 +96,7 @@ console.log(v);//[3]
 *    [scanl1](#scanl1)
 *    [buffer](#buffer)
 *    [peek](#peek)
+*    [juxtA](#juxtA)
 
 ## functional / parallel
 *    [parallel_set_fetch_count](#parallel_set_fetch_count)
@@ -956,6 +957,19 @@ const p = F.peek(e=> e + 1, a)
 const result = await F.collect(p);
 console.log(result); //not change 
 //print [1,2,3,4,5]
+```
+
+
+### juxtA
+```javascript
+const a = await F.juxtA([Math.max, Math.min], [1,2,3,4,5]);
+console.log(a);
+//print [5,1]
+```
+```javascript
+const a = await F.juxtA([Math.max, Math.min], []);
+console.log(a);
+//print [undefined, undefined]
 ```
 
 
