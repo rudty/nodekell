@@ -1,4 +1,5 @@
 "use strict"
+require("./build.js");
 module.exports = {
     input: "./src/index.js",
     output: {

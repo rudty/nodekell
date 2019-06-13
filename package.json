@@ -14,7 +14,8 @@
   "scripts": {
     "test": "npm run build && mocha -r ts-node/register test/**/*.js test/**/*.spec.ts && dtslint",
     "dtslint": "dtslint",
-    "build": "node build.js && rollup -c ./rollup.config.js",
+    "build": "rollup -c ./rollup.config.js",
+    "watch": "rollup -w -c ./rollup.config.js",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
