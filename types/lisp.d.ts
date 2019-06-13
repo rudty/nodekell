@@ -1,8 +1,11 @@
 import {
+    Iter,
     EP,
     Find,
     PairRepeat,
     PickElements,
+    Accumulator,
+    FlatAccumulator,
 } from "./utils";
 
 /**
@@ -103,3 +106,6 @@ export function memoizeWithTimeout<F extends (...args: any[]) => any>(timeout: n
 
 export function memoizeWithTimeout<P extends any[], R>(timeout: number): (callFn: (...args: P) => (R | Promise<R>)) => (...args: P) => Promise<R>;
 export function memoizeWithTimeout<F extends (...args: any[]) => any>(timeout: number): (callFn: F) => (...args: Parameters<F>) => Promise<EP<ReturnType<F>>>;
+
+export function juxtA<T>(fn: Iter<Accumulator<T>>, iter: Iter<T>): Promise<T[]>;
+export function juxtA<T>(fn: Iter<Accumulator<T>>): (iter: Iter<T>) => Promise<T[]>;

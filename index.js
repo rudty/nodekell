@@ -504,25 +504,15 @@ const iterate = curry(async function*(fn, v) {
     }
 });
 
-const mapIndexed = curry(async function* (fn, iter) {
-    let i = 0;
-    for await (const e of iter) {
-        yield fn(i++, e);
-    }
-});
-
-//juxt(["a","b"], {"a":1,"b":2,"c":3});
-//=>[1,2]
-
-//juxt([Math.max, Math.min], [1,2,3,4,5]);
+//juxtA([Math.max, Math.min], [1,2,3,4,5]);
 //=>[1,5]
 
-//juxt([Math.max, Math.min], []);
+//juxtA([Math.max, Math.min], []);
 //=>[undefined, undefined]
 const juxtA = curry(async (af, iter) => {
-    if (!Array.isArray(af)) {
+    // if (!Array.isArray(af)) {
         af = await collect(af);
-    }
+    // }
 
     const len = af.length;
     const g = seq(iter);
@@ -539,11 +529,11 @@ const juxtA = curry(async (af, iter) => {
     r.fill(firstElem.value);
 
     /**
-     * same as
+     * same 
      * 
-     * foldl((acc, e) => {
+     * foldl(async (acc, e) => {
      *   for (let i = 0; i < len; ++i) {
-     *       acc[i] = await af[i](acc[i], e);
+     *       acc[i] = await (await af[i])(acc[i], e);
      *       return acc;
      *   }
      *}, r, g);
@@ -551,17 +541,16 @@ const juxtA = curry(async (af, iter) => {
     return foldl((acc, e) => forEachIndexed((i, x) => af[i](x, e), acc), r, g);
 });
 
-const juxtO = curry((ap, obj) => {
-    const r = [];
-    for (const k of ap) {
-        r.push(obj[k]);
-    }
-    return k;
-});
-
 const map =  curry(async function* (fn, iter) {
     for await (const e of iter) {
         yield fn(e);
+    }
+});
+
+const mapIndexed = curry(async function* (fn, iter) {
+    let i = 0;
+    for await (const e of iter) {
+        yield fn(i++, e);
     }
 });
 
@@ -1482,7 +1471,6 @@ exports.interval = interval;
 exports.isNil = isNil;
 exports.iterate = iterate;
 exports.juxtA = juxtA;
-exports.juxtO = juxtO;
 exports.leftInnerJoin = leftInnerJoin;
 exports.leftOuterJoin = leftOuterJoin;
 exports.map = map;

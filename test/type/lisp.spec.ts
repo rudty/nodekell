@@ -212,3 +212,15 @@ describe('memoizeWithTimeout', () => {
         const cr5 = await cr3(1, 2) as number; // $ExpectType number
     });
 });
+
+describe('juxtA', () => {
+    it('normal', async () => {
+        const arr = [1, 2, 3, 4, 5];
+
+        const r0 = F.juxtA([Math.max, Math.min])(arr); // $ExpectType Promise<number[]>
+        await r0; // $ExpectType number[]
+
+        const r1 = F.juxtA([Math.max, Math.min], arr); // $ExpectType Promise<number[]>
+        await r1; // $ExpectType number[]
+    });
+});
