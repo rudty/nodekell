@@ -223,4 +223,47 @@ describe('juxtA', () => {
         const r1 = F.juxtA([Math.max, Math.min], arr); // $ExpectType Promise<number[]>
         await r1; // $ExpectType number[]
     });
+
+    it('promise value', async () => {
+        const arr = [Promise.resolve(1),
+            Promise.resolve(2),
+            Promise.resolve(3),
+            Promise.resolve(4),
+            Promise.resolve(5)];
+
+        const r0 = F.juxtA([Math.max, Math.min])(arr); // $ExpectType Promise<number[]>
+        await r0; // $ExpectType number[]
+
+        const r1 = F.juxtA([Math.max, Math.min], arr); // $ExpectType Promise<number[]>
+        await r1; // $ExpectType number[]
+    });
+
+    it('promise + number value', async () => {
+        const arr = [1,
+            Promise.resolve(2),
+            3,
+            Promise.resolve(4),
+            Promise.resolve(5)];
+
+        const r0 = F.juxtA([Math.max, Math.min])(arr); // $ExpectType Promise<number[]>
+        await r0; // $ExpectType number[]
+
+        const r1 = F.juxtA([Math.max, Math.min], arr); // $ExpectType Promise<number[]>
+        await r1; // $ExpectType number[]
+    });
+
+    it('string + number value', async () => {
+        const add = (a: string | number, b: string | number) => a.toString() + b.toString();
+        const arr = [1,
+            Promise.resolve(2),
+            'c',
+            Promise.resolve(4),
+            Promise.resolve(5)];
+
+        const r0 = F.juxtA([add])(arr); // $ExpectType Promise<(string | number)[]>
+        await r0; // $ExpectType (string | number)[]
+
+        const r1 = F.juxtA([add], arr); // $ExpectType Promise<(string | number)[]>
+        await r1; // $ExpectType (string | number)[]
+    });
 });

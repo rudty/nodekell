@@ -6,6 +6,7 @@ import {
     PickElements,
     Accumulator,
     FlatAccumulator,
+    FlatForInternalFn,
 } from "./utils";
 
 /**
@@ -107,5 +108,14 @@ export function memoizeWithTimeout<F extends (...args: any[]) => any>(timeout: n
 export function memoizeWithTimeout<P extends any[], R>(timeout: number): (callFn: (...args: P) => (R | Promise<R>)) => (...args: P) => Promise<R>;
 export function memoizeWithTimeout<F extends (...args: any[]) => any>(timeout: number): (callFn: F) => (...args: Parameters<F>) => Promise<EP<ReturnType<F>>>;
 
-export function juxtA<T>(fn: Iter<Accumulator<T>>, iter: Iter<T>): Promise<T[]>;
-export function juxtA<T>(fn: Iter<Accumulator<T>>): (iter: Iter<T>) => Promise<T[]>;
+/**
+ * https://github.com/rudty/nodekell#juxta
+ * @param fn reduce function iterator
+ * @param iter iterator
+ */
+export function juxtA<T>(fn: Iter<Accumulator<T>>, iter: Iter<T | Promise<T>>): Promise<T[]>;
+
+export function juxtA<T extends Iter<any>>(fn: Iter<FlatAccumulator<T>>, iter: T | Promise<T>): Promise<FlatForInternalFn<T>[]>;
+export function juxtA<T extends Iter<any>>(fn: Iter<FlatAccumulator<T>>): (iter: T | Promise<T>) => Promise<FlatForInternalFn<T>[]>;
+
+export function juxtA<T>(fn: Iter<Accumulator<T>>): (iter: Iter<T | Promise<T>>) => Promise<T[]>;
