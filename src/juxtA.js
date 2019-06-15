@@ -11,9 +11,11 @@ import { collect } from "./collect"
 //juxtA([Math.max, Math.min], []);
 //=>[undefined, undefined]
 export const juxtA = curry(async (af, iter) => {
-    // if (!Array.isArray(af)) {
+    if (!Array.isArray(af)) {
         af = await collect(af);
-    // }
+    } else {
+        af = await Promise.all(af);
+    }
 
     const len = af.length;
     const g = seq(iter);
