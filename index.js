@@ -510,9 +510,11 @@ const iterate = curry(async function*(fn, v) {
 //juxtA([Math.max, Math.min], []);
 //=>[undefined, undefined]
 const juxtA = curry(async (af, iter) => {
-    // if (!Array.isArray(af)) {
+    if (!Array.isArray(af)) {
         af = await collect(af);
-    // }
+    } else {
+        af = await Promise.all(af);
+    }
 
     const len = af.length;
     const g = seq(iter);
@@ -533,8 +535,8 @@ const juxtA = curry(async (af, iter) => {
      * 
      * foldl(async (acc, e) => {
      *   for (let i = 0; i < len; ++i) {
-     *       acc[i] = await (await af[i])(acc[i], e);
-     *       return acc;
+     *       acc[i] = af[i](acc[i], e);
+     *       return Promise.all(acc);
      *   }
      *}, r, g);
      */
