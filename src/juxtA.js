@@ -36,8 +36,8 @@ export const juxtA = curry(async (af, iter) => {
      * 
      * foldl(async (acc, e) => {
      *   for (let i = 0; i < len; ++i) {
-     *       acc[i] = await (await af[i])(acc[i], e);
-     *       return acc;
+     *       acc[i] = af[i](acc[i], e);
+     *       return Promise.all(acc);
      *   }
      *}, r, g);
      */
