@@ -115,7 +115,7 @@ export function memoizeWithTimeout<F extends (...args: any[]) => any>(timeout: n
  */
 export function juxtA<T>(fn: Iter<Accumulator<T>>, iter: Iter<T | Promise<T>>): Promise<T[]>;
 
-export function juxtA<T extends Iter<any>>(fn: Iter<FlatAccumulator<T>>, iter: T | Promise<T>): Promise<FlatForInternalFn<T>[]>;
-export function juxtA<T extends Iter<any>>(fn: Iter<FlatAccumulator<T>>): (iter: T | Promise<T>) => Promise<FlatForInternalFn<T>[]>;
+export function juxtA<T extends Iter<any>>(fn: Iter<FlatAccumulator<T>>, iter: T): Promise<FlatForInternalFn<T>[]>;
+export function juxtA<T extends Iter<any>>(fn: Iter<FlatAccumulator<T>>): (iter: T) => Promise<FlatForInternalFn<T>[]>;
 
 export function juxtA<T>(fn: Iter<Accumulator<T>>): (iter: Iter<T | Promise<T>>) => Promise<T[]>;
