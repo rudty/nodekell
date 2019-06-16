@@ -543,6 +543,29 @@ const juxtA = curry(async (af, iter) => {
     return foldl((acc, e) => forEachIndexed((i, x) => af[i](x, e), acc), r, g);
 });
 
+//juxtO(["A","C"], {A:1,B:2,C:3});
+//=>[1,3]
+
+//juxtO(["A","C"], {});
+//=>[undefined, undefined]
+
+//juxtO(["A","C"],  new Map([["A", 1], ["B", 2], ["C", 3]]));
+//=>[1,2]
+const juxtO = curry(async (ap, obj) => {
+    if (!Array.isArray(ap)) {
+        ap = await collect(ap);
+    } else {
+        ap = await Promise.all(ap);
+    }
+
+    const r = [];
+    for (const k of ap) {
+        r.push(get(k, obj));
+    }
+    
+    return r;
+});
+
 const map =  curry(async function* (fn, iter) {
     for await (const e of iter) {
         yield fn(e);
@@ -1473,6 +1496,7 @@ exports.interval = interval;
 exports.isNil = isNil;
 exports.iterate = iterate;
 exports.juxtA = juxtA;
+exports.juxtO = juxtO;
 exports.leftInnerJoin = leftInnerJoin;
 exports.leftOuterJoin = leftOuterJoin;
 exports.map = map;
