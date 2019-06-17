@@ -9,6 +9,8 @@ import {
     FlatForInternalFn,
 } from "./utils";
 
+import { Getter } from "./core";
+
 /**
  * https://github.com/rudty/nodekell#otherwise
  */
@@ -119,3 +121,11 @@ export function juxtA<T extends Iter<any>>(fn: Iter<FlatAccumulator<T>>, iter: T
 export function juxtA<T extends Iter<any>>(fn: Iter<FlatAccumulator<T>>): (iter: T) => Promise<FlatForInternalFn<T>[]>;
 
 export function juxtA<T>(fn: Iter<Accumulator<T>>): (iter: Iter<T | Promise<T>>) => Promise<T[]>;
+
+/**
+ * https://github.com/rudty/nodekell#juxto
+ * @param key get func
+ * @param target get obj
+ */
+// export function juxtO<T, K extends keyof T>(key: K[], target: T): Getter<T, K>[];
+// export function juxtO<T, K extends keyof T>(key: K[]): (target: T) => Getter<T, K>[];
