@@ -127,5 +127,6 @@ export function juxtA<T>(fn: Iter<Accumulator<T>>): (iter: Iter<T | Promise<T>>)
  * @param key get func
  * @param target get obj
  */
-// export function juxtO<T, K extends keyof T>(key: K[], target: T): Getter<T, K>[];
-// export function juxtO<T, K extends keyof T>(key: K[]): (target: T) => Getter<T, K>[];
+export function juxtO<T, K extends keyof T>(key: K[], target: T): Getter<T, K>[];
+export function juxtO<T, K>(key: K[], target: T): Getter<T, K>[];
+export function juxtO(key: any[]): (target: any) => any[];

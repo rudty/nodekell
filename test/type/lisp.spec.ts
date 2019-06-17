@@ -267,3 +267,57 @@ describe('juxtA', () => {
         await r1; // $ExpectType (string | number)[]
     });
 });
+
+describe('juxtO', () => {
+    describe('from Map', () => {
+        const a = new Map([['a', 1]]);
+        const b = new Map([[1, 'a']]);
+
+        it('has property or key', () => {
+            const ar0 = F.juxtO(['get'])(a); // $ExpectType any[]
+            const ar1 = F.juxtO(['size', 'has'], a); // $ExpectType (number | ((key: string) => boolean))[]
+
+            const br0 = F.juxtO(['set'])(b); // $ExpectType any[]
+            const br1 = F.juxtO(['size'], b); // $ExpectType number[]
+        });
+    });
+
+    describe('from Object', () => {
+        const a = { a: 1, b: 'a', get: 'get' };
+        const b = { a: 1, b: 'a', get: () => {} };
+
+        it('has property', () => {
+            const ar0 = F.juxtO(['b', 'a'])(a); // $ExpectType any[]
+            const ar1 = F.juxtO(['b', 'a'], a); // $ExpectType (string | number)[]
+        });
+
+        it('has not property', () => {
+            const r0 = F.juxtO(['c', 'd'])(a); // $ExpectType any[]
+            const r1 = F.juxtO(['c', 'd'], b); // $ExpectType undefined[]
+        });
+    });
+
+    describe('from Array', () => {
+        const a = [1, 2, 3, 4, 5, 6];
+        const b = ['a', 'b', 'c', 'd', 'e', 'f'];
+
+        it('index', () => {
+            const ar0 = F.juxtO([0], a); // $ExpectType (number | undefined)[]
+            const ar1 = F.juxtO([190], a); // $ExpectType (number | undefined)[]
+
+            const br0 = F.juxtO([0], b); // $ExpectType (string | undefined)[]
+            const br1 = F.juxtO([190], b); // $ExpectType (string | undefined)[]
+        });
+
+        it('has property', () => {
+            const ar0 = F.juxtO(['length'], a); // $ExpectType number[]
+            const ar1 = F.juxtO(['reverse'], a); // $ExpectType (() => number[])[]
+
+            const br0 = F.juxtO(['length'], b); // $ExpectType number[]
+            const br1 = F.juxtO(['reverse'], b); // $ExpectType (() => string[])[]
+
+            const cr0 = F.juxtO(['length', 'reverse'], a); // $ExpectType (number | (() => number[]))[]
+            const cr1 = F.juxtO(['length', 'reverse'], b); // $ExpectType (number | (() => string[]))[]
+        });
+    });
+});
