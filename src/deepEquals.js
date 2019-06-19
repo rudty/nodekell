@@ -1,4 +1,5 @@
 import { curry } from "./curry"
+import { deepEqual } from "assert";
 
 export const deepEquals = curry(async (a, b) => {
     if (a === b) {
@@ -59,6 +60,55 @@ export const deepEquals = curry(async (a, b) => {
         if (a instanceof Date && b instanceof Date) {
             return a.getTime() === b.getTime();
         }
+
+        if (a instanceof RegExp && b instanceof RegExp) {
+
+            if (a.sticky !== b.sticky) {
+                return false;
+            }
+
+            if (a.unicode !== b.unicode) {
+                return false;
+            }
+
+            if (a.ignoreCase !== b.ignoreCase) {
+                return false;
+            }
+
+            if (a.global !== b.global) {
+                return false;
+            }
+
+            if (a.multiline !== b.multiline) {
+                return false;
+            }
+
+            if (a.source !== b.source) {
+                return false;
+            }
+            return true;
+        }
+
+        if (a instanceof Object && b instanceof Object) {
+            const kva = Object.entries(a);
+            const kvb = Object.entries(a);
+
+            if (kva.length !== kvb.length) {
+                return false;
+            }
+
+            const len = kva.length;
+            for (let i = len - 1; i >= 0; --i) {
+                if (kva[i][0] !== kvb[i][0]) {
+                    return false;
+                }
+
+                if (!deepEqual(kva[i][1], kvb[i][1])) {
+                    return false;
+                }
+            }
+        }
+
 
 
     }
