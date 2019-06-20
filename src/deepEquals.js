@@ -1,5 +1,57 @@
 import { curry } from "./curry"
-import { deepEqual } from "assert";
+
+const equalsMap_internal = (lhs, rhs) => {
+    if (lhs.size !== rhs.size) {
+        return false;
+    }
+
+    for (const kv of lhs) {
+        if (rhs.get(kv[0]) !== kv[1]) {
+            return false;
+        }
+    }
+    return true;
+};
+
+const equalsSet_internal = (lhs, rhs) => {
+    if (lhs.size !== rhs.size) {
+        return false;
+    }
+
+    for (const e of lhs) {
+        if (!rhs.has(e)) {
+            return false;
+        }
+    }
+    return true;
+};
+
+const equalsRegExp_internal = (lhs, rhs) => {
+    if (lhs.sticky !== rhs.sticky) {
+        return false;
+    }
+
+    if (lhs.unicode !== rhs.unicode) {
+        return false;
+    }
+
+    if (lhs.ignoreCase !== rhs.ignoreCase) {
+        return false;
+    }
+
+    if (lhs.global !== rhs.global) {
+        return false;
+    }
+
+    if (lhs.multiline !== rhs.multiline) {
+        return false;
+    }
+
+    if (lhs.source !== rhs.source) {
+        return false;
+    }
+    return true;
+};
 
 export const deepEquals = curry(async (a, b) => {
     if (a === b) {
@@ -11,6 +63,7 @@ export const deepEquals = curry(async (a, b) => {
     }
 
     if (a && b) {
+        /*
         if (a[Symbol.iterator] && b[Symbol.iterator]) {
             const it1 = a[Symbol.iterator]();
             const it2 = b[Symbol.iterator]();
@@ -33,8 +86,9 @@ export const deepEquals = curry(async (a, b) => {
             }
             return true;
         }
-/*
+
         if (a[Symbol.asyncIterator] && b[Symbol.asyncIterator]) {
+            
             const it1 = a[Symbol.asyncIterator]();
             const it2 = a[Symbol.asyncIterator]();
         
@@ -55,38 +109,48 @@ export const deepEquals = curry(async (a, b) => {
                 }
             }
             return true;
+            
+           
         }
 */
-        if (a instanceof Date && b instanceof Date) {
-            return a.getTime() === b.getTime();
+        if (a instanceof String || 
+            a.constructor === String || 
+            a instanceof Number || 
+            a.constructor === Number ||
+            a instanceof Boolean ||
+            a.constructor === Boolean ||
+            a instanceof Date) {
+            return a.valueOf() === b.valueOf();
         }
 
-        if (a instanceof RegExp && b instanceof RegExp) {
-
-            if (a.sticky !== b.sticky) {
+        if (a instanceof Array) {
+            const len = lhs.length;
+            if (len !== rhs.length) {
                 return false;
             }
-
-            if (a.unicode !== b.unicode) {
-                return false;
-            }
-
-            if (a.ignoreCase !== b.ignoreCase) {
-                return false;
-            }
-
-            if (a.global !== b.global) {
-                return false;
-            }
-
-            if (a.multiline !== b.multiline) {
-                return false;
-            }
-
-            if (a.source !== b.source) {
-                return false;
+        
+            for (let i = len - 1; i >= 0; --i) {
+                if (!deepEquals(a, b)) {
+                    return false;
+                }
             }
             return true;
+        }
+
+        if (a instanceof Number) {
+            return a === b;
+        }
+
+        if (a instanceof Map) {
+            return equalsMap_internal(a, b);
+        }
+
+        if (a instanceof Set) {
+            return equalsSet_internal(a, b);
+        }
+
+        if (a instanceof RegExp) {
+            return equalsRegExp_internal(a, b);
         }
 
         if (a instanceof Object && b instanceof Object) {
@@ -103,14 +167,16 @@ export const deepEquals = curry(async (a, b) => {
                     return false;
                 }
 
-                if (!deepEqual(kva[i][1], kvb[i][1])) {
+                if (!deepEquals(kva[i][1], kvb[i][1])) {
                     return false;
                 }
             }
         }
-
-
-
+    } else {
+        //NaN === NaN => false
+        if (Number.isNaN(a) && Number.isNaN(b)) {
+            return true;
+        }
     }
     return false;
 });
