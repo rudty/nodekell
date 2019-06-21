@@ -197,16 +197,16 @@ const equalsRegExp_internal = (lhs, rhs) => {
     return true;
 };
 
-const deepEquals = curry((a, b) => {
-    if (a === b) {
+const deepEquals = curry((lhs, rhs) => {
+    if (lhs === rhs) {
         return true;
     }
 
-    if (a.constructor !== b.constructor) {
+    if (lhs.constructor !== rhs.constructor) {
         return false;
     }
 
-    if (a && b) {
+    if (lhs && rhs) {
         /*
         if (a[Symbol.iterator] && b[Symbol.iterator]) {
             const it1 = a[Symbol.iterator]();
@@ -257,49 +257,49 @@ const deepEquals = curry((a, b) => {
            
         }
 */
-        if (a instanceof String || 
-            a.constructor === String || 
-            a instanceof Number || 
-            a.constructor === Number ||
-            a instanceof Boolean ||
-            a.constructor === Boolean ||
-            a instanceof Date) {
-            return a.valueOf() === b.valueOf();
+        if (lhs instanceof String || 
+            lhs.constructor === String || 
+            lhs instanceof Number || 
+            lhs.constructor === Number ||
+            lhs instanceof Boolean ||
+            lhs.constructor === Boolean ||
+            lhs instanceof Date) {
+            return lhs.valueOf() === rhs.valueOf();
         }
 
-        if (a instanceof Array) {
-            const len = a.length;
-            if (len !== b.length) {
+        if (lhs instanceof Array) {
+            const len = lhs.length;
+            if (len !== rhs.length) {
                 return false;
             }
         
             for (let i = len - 1; i >= 0; --i) {
-                if (!deepEquals(a[i], b[i])) {
+                if (!deepEquals(lhs[i], rhs[i])) {
                     return false;
                 }
             }
             return true;
         }
 
-        if (a instanceof Map) {
-            return equalsMap_internal(a, b);
+        if (lhs instanceof Map) {
+            return equalsMap_internal(lhs, rhs);
         }
 
-        if (a instanceof Set) {
-            return equalsSet_internal(a, b);
+        if (lhs instanceof Set) {
+            return equalsSet_internal(lhs, rhs);
         }
 
-        if (a instanceof RegExp) {
-            return equalsRegExp_internal(a, b);
+        if (lhs instanceof RegExp) {
+            return equalsRegExp_internal(lhs, rhs);
         }
 
-        if (a.toString() !== b.toString()) {
+        if (lhs.toString() !== rhs.toString()) {
             return false;
         }
 
-        if (a instanceof Object) {
-            const kva = Object.entries(a);
-            const kvb = Object.entries(a);
+        if (lhs instanceof Object) {
+            const kva = Object.entries(lhs);
+            const kvb = Object.entries(lhs);
 
             if (kva.length !== kvb.length) {
                 return false;
@@ -319,7 +319,7 @@ const deepEquals = curry((a, b) => {
         }
     } else {
         //NaN === NaN => false
-        if (Number.isNaN(a) && Number.isNaN(b)) {
+        if (Number.isNaN(lhs) && Number.isNaN(rhs)) {
             return true;
         }
     }

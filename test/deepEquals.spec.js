@@ -59,5 +59,8 @@ describe('test deepEquals', () => {
         assert.ok(false === F.deepEquals(arr123, arr456));
         assert.ok(false === F.deepEquals(arr123, arr12345));
         assert.ok(false === F.deepEquals(arr123, empty_array));
+
+        assert.ok(false === F.deepEquals(empty_array, "[]"));
+        assert.ok(false === F.deepEquals(empty_array, ""));
     });
 });
