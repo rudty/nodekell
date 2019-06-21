@@ -124,13 +124,13 @@ export const deepEquals = curry((a, b) => {
         }
 
         if (a instanceof Array) {
-            const len = lhs.length;
-            if (len !== rhs.length) {
+            const len = a.length;
+            if (len !== b.length) {
                 return false;
             }
         
             for (let i = len - 1; i >= 0; --i) {
-                if (!deepEquals(a, b)) {
+                if (!deepEquals(a[i], b[i])) {
                     return false;
                 }
             }

@@ -47,5 +47,17 @@ describe('test deepEquals', () => {
         assert.ok(false === F.deepEquals(d1, d3));
     });
 
-    
+    it('array', () =>{
+        const empty_array = [];
+        const arr12345 = [1,2,3,4,5];
+        const arr12345_2 = [1,2,3,4,5];
+        const arr123 = [1,2,3];
+        const arr456 = [4,5,6];
+
+        assert.ok(true === F.deepEquals(arr12345, arr12345_2));
+        assert.ok(false === F.deepEquals(empty_array, arr12345));
+        assert.ok(false === F.deepEquals(arr123, arr456));
+        assert.ok(false === F.deepEquals(arr123, arr12345));
+        assert.ok(false === F.deepEquals(arr123, empty_array));
+    });
 });
