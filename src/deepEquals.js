@@ -53,7 +53,7 @@ const equalsRegExp_internal = (lhs, rhs) => {
     return true;
 };
 
-export const deepEquals = curry(async (a, b) => {
+export const deepEquals = curry((a, b) => {
     if (a === b) {
         return true;
     }
@@ -137,10 +137,6 @@ export const deepEquals = curry(async (a, b) => {
             return true;
         }
 
-        if (a instanceof Number) {
-            return a === b;
-        }
-
         if (a instanceof Map) {
             return equalsMap_internal(a, b);
         }
@@ -153,7 +149,11 @@ export const deepEquals = curry(async (a, b) => {
             return equalsRegExp_internal(a, b);
         }
 
-        if (a instanceof Object && b instanceof Object) {
+        if (a.toString() !== b.toString()) {
+            return false;
+        }
+
+        if (a instanceof Object) {
             const kva = Object.entries(a);
             const kvb = Object.entries(a);
 
@@ -163,7 +163,7 @@ export const deepEquals = curry(async (a, b) => {
 
             const len = kva.length;
             for (let i = len - 1; i >= 0; --i) {
-                if (kva[i][0] !== kvb[i][0]) {
+                if (!deepEquals(kva[i][0], kvb[i][0])) {
                     return false;
                 }
 
@@ -171,6 +171,7 @@ export const deepEquals = curry(async (a, b) => {
                     return false;
                 }
             }
+            return true;
         }
     } else {
         //NaN === NaN => false
