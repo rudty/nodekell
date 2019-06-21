@@ -36,4 +36,16 @@ describe('test deepEquals', () => {
         assert.ok(false === F.deepEquals(str3, str4));
     });
 
+    it('date', () => {
+        const d1 = new Date("2019-06-21");
+        const d2 = new Date("2019-06-21");
+
+        const d3 = new Date("1989-08-07");
+
+        assert.ok(true === F.deepEquals(d1, d1));
+        assert.ok(true === F.deepEquals(d1, d2));
+        assert.ok(false === F.deepEquals(d1, d3));
+    });
+
+    
 });
