@@ -2043,11 +2043,19 @@ const r2 = F.random(1, 42); // print 1 ~ 41, maximum range: 4294967295
 ```
 
 ### equals
-compares strict equals
+compares deep strict equals
 ```javascript
 const a = 1;
 F.equals(a, 1); // true
 F.equals(a, 0); // false
+```
+```javascript
+const o = {a:1};
+F.equals({a:1}, o); // true
+```
+```javascript
+F.equals(NaN, NaN); // true
+F.equals([0,1], [0,1]); // true
 ```
 
 ## License
