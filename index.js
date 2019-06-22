@@ -58,7 +58,7 @@ const buffer = curry(async function*(supply, iter) {
  * make array
  * iterator to array
  */
-const collect$1 = async (iter) => {
+const collect = async (iter) => {
     const res = [];
     for await (const e of iter) {
         res.push(e);
@@ -66,13 +66,13 @@ const collect$1 = async (iter) => {
     return res;
 };
 
-const collectMap = async (iter) => new Map(await collect$1(iter));
+const collectMap = async (iter) => new Map(await collect(iter));
 
 /**
  * [a,1],[b,2],[c,3]]  => {a:1,b:2,c:3} 
  */
 const collectObject = async (iter) => {
-    const c = await collect$1(iter);
+    const c = await collect(iter);
     const o = {};
     for (const e of c) {
         if (!Array.isArray(e)) {
@@ -83,7 +83,7 @@ const collectObject = async (iter) => {
     return o;
 };
 
-const collectSet = async (iter) => new Set(await collect$1(iter));
+const collectSet = async (iter) => new Set(await collect(iter));
 
 const compose = (...fns) => async (...args) => {
     const len = fns.length;
@@ -183,14 +183,14 @@ const distinct = (iter) => distinctBy(identity, iter);
  * do not need to check if iter
  * Symbol.asyncIterator or Symbol.iterator
  */
-const seq$1 = async function*(iter) {
+const seq = async function*(iter) {
     for await (const e of iter) {
         yield e;
     }
 };
 
 const drop =  curry(async function*(count, iter) {
-    const g =  seq$1(iter);
+    const g =  seq(iter);
     for (let i = 0; i < count; i++) {
         const { done } = await g.next();
         if (done) {
@@ -201,7 +201,7 @@ const drop =  curry(async function*(count, iter) {
 });
 
 const dropWhile =  curry(async function*(f, iter) {
-    const g =  seq$1(iter);
+    const g =  seq(iter);
     while (true) {
         const e = await g.next();
         if (e.done) {
@@ -482,7 +482,7 @@ const find = curry(async (fn, iter) => {
 });
 
 const findLast = curry(async (fn, iter) => {
-    iter = Array.isArray(iter) ? iter : await collect$1(iter);
+    iter = Array.isArray(iter) ? iter : await collect(iter);
     for (let i = iter.length - 1; i >= 0; --i) {
         if (await fn(iter[i])) {
             return iter[i];
@@ -527,7 +527,7 @@ const flatMap = fmap;
 
 const fnothing = () => {};
 
-const foldl$1 = curry(async (f, z, iter) => {
+const foldl = curry(async (f, z, iter) => {
     z = await z;
     for await (const e of iter) {
         z = await f(z, e);
@@ -536,17 +536,17 @@ const foldl$1 = curry(async (f, z, iter) => {
 });
 
 const foldl1 = curry(async (f, iter) => {
-    const g =  seq$1(iter);
+    const g =  seq(iter);
     const h = await g.next();
     if (h.done) {
         throw new Error("empty iter");
     }
-    return foldl$1(f, h.value, g);
+    return foldl(f, h.value, g);
 });
 const reduce = foldl1;
 
 const reverse = async function*(iter) {
-    const a = await collect$1(iter);
+    const a = await collect(iter);
     for (let i = a.length - 1; i >= 0; i -= 1) {
         yield a[i];
     }
@@ -581,7 +581,7 @@ const forEach = curry(async (fn, iter) => {
     return Promise.all(wait);
 });
 
-const forEachIndexed$1 = curry(async (fn, iter) => {
+const forEachIndexed = curry(async (fn, iter) => {
     const wait = [];
     let i = 0;
     for await (const e of iter) {
@@ -628,7 +628,7 @@ const has = curry((key, a) => {
 });
 
 const head = async (iter) => {
-    const g =  seq$1(iter);
+    const g =  seq(iter);
     const { value, done } = await g.next();
     if (done) {
         throw new Error("empty iter");
@@ -732,7 +732,7 @@ const juxtA = curry(async (af, iter) => {
 //=>[1,2]
 const juxtO = curry(async (ap, obj) => {
     if (!Array.isArray(ap)) {
-        ap = await collect$1(ap);
+        ap = await collect(ap);
     } else {
         ap = await Promise.all(ap);
     }
@@ -759,7 +759,7 @@ const mapIndexed = curry(async function*(fn, iter) {
 });
 
 const maxBy = curry(async (f, iter) => {
-    const g = seq$1(iter);
+    const g = seq(iter);
     const head = await g.next();
     if (head.done) {
         throw new Error("empty iter");
@@ -820,7 +820,7 @@ const memoizeWithTimeoutBy = (timeout, keyFn, callFn) => {
 const memoizeWithTimeout = curry((timeout, callFn) => memoizeWithTimeoutBy(timeout, (...a) => a, callFn));
 
 const minBy = curry(async (f, iter) => {
-    const g = seq$1(iter);
+    const g = seq(iter);
     const head = await g.next();
     if (head.done) {
         throw new Error("empty iter");
@@ -1010,7 +1010,7 @@ class Queue {
 
 const fetch_call_internal =  async (f, iter) => { 
     const fetch_count = parallel_get_fetch_count_internal();
-    const g = seq$1(iter);
+    const g = seq(iter);
     for (let i = fetch_count; i > 0; --i) {
         const e = await g.next();
         if (e.done) {
@@ -1054,7 +1054,7 @@ const peek = curry(async function*(f, iter) {
 const fetch_filter_internal = async (f, v, fn, iter) => {
     //fetch (n - 1) here
     const fetch_count = parallel_get_fetch_count_internal() - 1;
-    const g = seq$1(iter);
+    const g = seq(iter);
     for (let i = fetch_count; i > 0; --i) {
         const { done, value } = await g.next();
         if (done) {
@@ -1103,11 +1103,11 @@ const pfilter = curry(async function*(fn, iter) {
  * //2
  * //3
  */
-const pipe = (f, ...fns) => (...args) => foldl$1((z, fn) => fn(z), f(...args), fns);
+const pipe = (f, ...fns) => (...args) => foldl((z, fn) => fn(z), f(...args), fns);
 
 const fetch_map_internal = async (f, fn, iter) => {
     const fetch_count = parallel_get_fetch_count_internal() - 1; 
-    const g = seq$1(iter);
+    const g = seq(iter);
     for (let i = fetch_count; i > 0; --i) {
         const e = await g.next();
         if (e.done) {
@@ -1303,7 +1303,7 @@ const repeat = async function*(a, ...b) {
  *  console.log(r); // print [2,3]
  * 
  */
-const run = (iter, ...f) => foldl$1((z, fn) => fn(z), iter, f);
+const run = (iter, ...f) => foldl((z, fn) => fn(z), iter, f);
 
 const scanl = curry(async function*(f, z, iter) {
     z = await z;
@@ -1315,7 +1315,7 @@ const scanl = curry(async function*(f, z, iter) {
 });
 
 const scanl1 = curry(async function*(f, iter) {
-    const g =  seq$1(iter);
+    const g =  seq(iter);
     const h = await g.next();
     if (!h.done) {
         yield* scanl(f, h.value, g);
@@ -1374,7 +1374,7 @@ const sort = sortBy(identity);
  * break is keyword..
  */
 const split = curry(async function*(fn, iter) {
-    const g = seq$1(iter);
+    const g = seq(iter);
     let e;
     yield (async function*() {
         while (true) {
@@ -1440,7 +1440,7 @@ const combine = (a, b) => {
 const _outerJoin = async function*(f, iter1, iter2) {
     const leftCache = [];
     const rightCache = [];
-    const it = seq$1(iter2);
+    const it = seq(iter2);
     start: for await (const e of iter1) {
         leftCache.push(e);
         for (const c of rightCache) {
@@ -1477,7 +1477,7 @@ const _outerJoin = async function*(f, iter1, iter2) {
 const _innerJoin = async function*(f, iter1, iter2) {
     const leftCache = [];
     const rightCache = [];
-    const it = seq$1(iter2);
+    const it = seq(iter2);
     start: for await (const e of iter1) {
         leftCache.push(e);
         for (const c of rightCache) {
@@ -1522,7 +1522,7 @@ const sub = curry((a, b) => a - b);
 const sum = foldl1(add);
 
 const tail = async function*(iter) {
-    const g = seq$1(iter);
+    const g = seq(iter);
     const { done } = await g.next();
     if (done) {
         throw new Error("empty iter");
@@ -1575,7 +1575,7 @@ const timeout = curry(async (duration, a) => {
 const withTimeout = curry(async function*(duration, iter) {
     duration = await getDuration(duration);
 
-    const g = seq$1(iter);
+    const g = seq(iter);
     const s = errorSleep(duration);
 
     while(true) {
@@ -1590,8 +1590,8 @@ const withTimeout = curry(async function*(duration, iter) {
 });
 
 const zipWith = curry(async function*(f, a, b) {
-    a = seq$1(a);
-    b = seq$1(b);
+    a = seq(a);
+    b = seq(b);
 
     while (true) {
         const ap = a.next();
@@ -1611,9 +1611,9 @@ const zipWith = curry(async function*(f, a, b) {
 const zip = curry((iter1, iter2) => zipWith((elem1, elem2) => [elem1, elem2], iter1, iter2));
 
 const zipWith3 = curry(async function*(f, a, b, c){
-    a = seq$1(a);
-    b = seq$1(b);
-    c = seq$1(c);
+    a = seq(a);
+    b = seq(b);
+    c = seq(c);
 
     while (true) {
         const ap = a.next();
@@ -1639,7 +1639,7 @@ exports.add = add;
 exports.asc = asc;
 exports.average = average;
 exports.buffer = buffer;
-exports.collect = collect$1;
+exports.collect = collect;
 exports.collectMap = collectMap;
 exports.collectObject = collectObject;
 exports.collectSet = collectSet;
@@ -1672,12 +1672,12 @@ exports.flat = flat;
 exports.flatMap = flatMap;
 exports.fmap = fmap;
 exports.fnothing = fnothing;
-exports.foldl = foldl$1;
+exports.foldl = foldl;
 exports.foldl1 = foldl1;
 exports.foldr = foldr;
 exports.foldr1 = foldr1;
 exports.forEach = forEach;
-exports.forEachIndexed = forEachIndexed$1;
+exports.forEachIndexed = forEachIndexed;
 exports.get = get;
 exports.groupBy = groupBy;
 exports.has = has;
@@ -1728,7 +1728,7 @@ exports.run = run;
 exports.scanl = scanl;
 exports.scanl1 = scanl1;
 exports.second = second;
-exports.seq = seq$1;
+exports.seq = seq;
 exports.sleep = sleep;
 exports.some = some;
 exports.sort = sort;

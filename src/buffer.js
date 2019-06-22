@@ -1,4 +1,4 @@
-import { curry } from "./curry"
+import { curry } from "./curry";
 export const buffer = curry(async function*(supply, iter) {
     supply = await supply;
 
