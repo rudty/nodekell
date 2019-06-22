@@ -142,7 +142,7 @@ const count = async (iter) => {
     return Object.keys(iter).length;
 };
 
-const dec = a => a - 1;
+const dec = (a) => a - 1;
 
 const desc = (a, b) => a < b ? 1 : a > b ? -1 : 0;
 
@@ -636,9 +636,9 @@ const head = async (iter) => {
     return value;
 };
 
-const inc = a => a + 1;
+const inc = (a) => a + 1;
 
-const sleep = (t) => new Promise(r => {
+const sleep = (t) => new Promise((r) => {
     setTimeout(r, t);
 });
 

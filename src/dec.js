@@ -1,1 +1,1 @@
-export const dec = a => a - 1;
+export const dec = (a) => a - 1;
