@@ -1,5 +1,5 @@
 import { curry } from "./curry";
-export const iterate = curry(async function*(fn, v) {
+export const iterate = curry(async function * (fn, v) {
     v = await v;
     yield v;
     while(true) {

@@ -69,7 +69,7 @@ equalFunction.array_internal = (lhs, rhs) => {
         }
     }
     return true;
-}
+};
 
 equalFunction.numberArray_internal = (lhs, rhs) => {
     const len = lhs.length;

@@ -41,7 +41,7 @@ const combine = (a, b) => {
     throw new Error("join/combine object: not support type");
 };
 
-const _outerJoin = async function*(f, iter1, iter2) {
+const _outerJoin = async function * (f, iter1, iter2) {
     const leftCache = [];
     const rightCache = [];
     const it = seq(iter2);
@@ -78,7 +78,7 @@ const _outerJoin = async function*(f, iter1, iter2) {
     }
 };
 
-const _innerJoin = async function*(f, iter1, iter2) {
+const _innerJoin = async function * (f, iter1, iter2) {
     const leftCache = [];
     const rightCache = [];
     const it = seq(iter2);

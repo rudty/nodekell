@@ -1,5 +1,5 @@
 import { curry } from "./curry";
-export const buffer = curry(async function*(supply, iter) {
+export const buffer = curry(async function * (supply, iter) {
     supply = await supply;
 
     if(supply <= 0) {

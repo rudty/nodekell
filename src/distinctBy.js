@@ -1,6 +1,6 @@
 import { curry } from "./curry";
 
-export const distinctBy = curry(async function*(f, iter) {
+export const distinctBy = curry(async function * (f, iter) {
     const s = new Set();
     for await (const e of iter) {
         const d = await f(e);

@@ -1,4 +1,4 @@
-export const repeat = async function*(a, ...b) {
+export const repeat = async function * (a, ...b) {
     let supply = a;
     let len = Infinity;
     if (b.length > 0) {
