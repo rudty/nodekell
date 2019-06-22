@@ -334,4 +334,33 @@ describe('test deepEquals', () => {
         const r1_1 = {b:2, a:1};
         assert.ok(true === F.deepEquals(r1, r1_1));
     });
+
+    it('custom object', () => {
+        const q1 = new F.Queue();
+        q1.add(1);
+        q1.add(2);
+        q1.add(3);
+
+        const q1_1 = new F.Queue();
+        q1_1.add(1);
+        q1_1.add(2);
+        q1_1.add(3); 
+
+        const q2 = new F.Queue();
+        q2.add(1);
+        q2.add(2);
+        q2.add(100); 
+
+        assert.ok(true === F.deepEquals(q1, q1_1));
+        assert.ok(false === F.deepEquals(q1, q2));
+    });
+
+    it('Promise.resolve(1)', () => {
+        const r1 = Promise.resolve(1);
+        const r1_1 = Promise.resolve(1);
+
+        assert.ok(true === F.deepEquals(r1, r1));
+        assert.ok(false === F.deepEquals(r1, r1_1));
+
+    });
 });
