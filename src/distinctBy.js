@@ -1,4 +1,4 @@
-import { curry } from "./curry"
+import { curry } from "./curry";
 
 export const distinctBy = curry(async function*(f, iter) {
     const s = new Set();

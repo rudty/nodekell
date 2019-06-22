@@ -1,8 +1,8 @@
-import { curry } from "./curry"
-import { foldl } from "./foldl"
-import { forEachIndexed } from "./forEachIndexed"
-import { seq } from "./seq"
-import { collect } from "./collect"
+import { curry } from "./curry";
+import$1;
+import$1;
+import$1;
+import$1;
 
 
 //juxtA([Math.max, Math.min], [1,2,3,4,5]);

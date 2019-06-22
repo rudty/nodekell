@@ -1,6 +1,6 @@
-import { curry } from "./curry"
-import { asc } from "./asc"
-import { desc } from "./desc"
+import { curry } from "./curry";
+import { asc } from "./asc";
+import { desc } from "./desc";
 
 export const sortBy = curry(async function*(f, order, iter) {
     if (order.constructor === ''.constructor) {

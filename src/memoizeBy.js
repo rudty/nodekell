@@ -1,4 +1,4 @@
-import { curry } from "./curry"
+import { curry } from "./curry";
 export const memoizeBy = curry((keyFn, callFn) => {
     const cache = {};
     return async (...arg) => {

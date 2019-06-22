@@ -1,4 +1,4 @@
-import { curry } from "./curry"
+import { curry } from "./curry";
 
 export const groupBy = curry(async (f, iter) => {
     const m = new Map();

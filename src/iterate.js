@@ -1,4 +1,4 @@
-import { curry } from "./curry"
+import { curry } from "./curry";
 export const iterate = curry(async function*(fn, v) {
     v = await v;
     yield v;

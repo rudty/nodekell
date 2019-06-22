@@ -1,4 +1,4 @@
-import { seq } from "./seq"
+import { seq } from "./seq";
 export const head = async (iter) => {
     const g =  seq(iter);
     const { value, done } = await g.next();
