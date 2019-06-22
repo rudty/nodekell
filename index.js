@@ -241,9 +241,8 @@ const enumerate = async function* (iter) {
     }
 };
 
-let _equals;
-
-const equalsMap_internal = (lhs, rhs) => {
+const fns = {};
+fns.equalsMap_internal = (lhs, rhs) => {
     if (lhs.size !== rhs.size) {
         return false;
     }
@@ -253,14 +252,14 @@ const equalsMap_internal = (lhs, rhs) => {
             return false;
         }
 
-        if (!_equals(rhs.get(kv[0]), kv[1])) {
+        if (!fns.equals(rhs.get(kv[0]), kv[1])) {
             return false;
         }
     }
     return true;
 };
 
-const equalsSet_internal = (lhs, rhs) => {
+fns.equalsSet_internal = (lhs, rhs) => {
     if (lhs.size !== rhs.size) {
         return false;
     }
@@ -273,7 +272,7 @@ const equalsSet_internal = (lhs, rhs) => {
     return true;
 };
 
-const equalsRegExp_internal = (lhs, rhs) => {
+fns.equalsRegExp_internal = (lhs, rhs) => {
     if (lhs.sticky !== rhs.sticky) {
         return false;
     }
@@ -300,21 +299,21 @@ const equalsRegExp_internal = (lhs, rhs) => {
     return true;
 };
 
-const equalsArray_internal = (lhs, rhs) => {
+fns.equalsArray_internal = (lhs, rhs) => {
     const len = lhs.length;
     if (len !== rhs.length) {
         return false;
     }
 
     for (let i = len - 1; i >= 0; --i) {
-        if (!_equals(lhs[i], rhs[i])) {
+        if (!fns.equals(lhs[i], rhs[i])) {
             return false;
         }
     }
     return true;
 };
 
-const equalsNumberArray_internal = (lhs, rhs) => {
+fns.equalsNumberArray_internal = (lhs, rhs) => {
     const len = lhs.length;
     if (len !== rhs.length) {
         return false;
@@ -329,7 +328,7 @@ const equalsNumberArray_internal = (lhs, rhs) => {
 };
 
 
-const equalsObject_internal = (lhs, rhs) => {
+fns.equalsObject_internal = (lhs, rhs) => {
 
     const kvl = Object.entries(lhs);
 
@@ -342,7 +341,7 @@ const equalsObject_internal = (lhs, rhs) => {
             return false;
         }
 
-        if (!_equals(v, rhs[k])) {
+        if (!fns.equals(v, rhs[k])) {
             return false;
         }
     }
@@ -350,9 +349,9 @@ const equalsObject_internal = (lhs, rhs) => {
     return true;
 };
 
-const equals_string_internal = a => Object.prototype.toString(a);
+fns.equals_string_internal = a => Object.prototype.toString(a);
 
-_equals = curry((lhs, rhs) => {
+fns.equals = curry((lhs, rhs) => {
     if (lhs === rhs) {
         // undefined === undefined => true
         // null === null => true
@@ -376,7 +375,7 @@ _equals = curry((lhs, rhs) => {
         }
 
         if (lhs instanceof Array) {
-            return equalsArray_internal(lhs, rhs);
+            return fns.equalsArray_internal(lhs, rhs);
         }
 
         if (lhs instanceof Int8Array ||
@@ -386,19 +385,19 @@ _equals = curry((lhs, rhs) => {
             lhs instanceof Uint8ClampedArray ||
             lhs instanceof Uint16Array ||
             lhs instanceof Uint32Array) {
-            return equalsNumberArray_internal(lhs, rhs);
+            return fns.equalsNumberArray_internal(lhs, rhs);
         }
 
         if (lhs instanceof Map) {
-            return equalsMap_internal(lhs, rhs);
+            return fns.equalsMap_internal(lhs, rhs);
         }
 
         if (lhs instanceof Set) {
-            return equalsSet_internal(lhs, rhs);
+            return fns.equalsSet_internal(lhs, rhs);
         }
 
         if (lhs instanceof RegExp) {
-            return equalsRegExp_internal(lhs, rhs);
+            return fns.equalsRegExp_internal(lhs, rhs);
         }
 
         if (lhs instanceof Promise) {
@@ -406,12 +405,12 @@ _equals = curry((lhs, rhs) => {
             return false;
         }
 
-        if (equals_string_internal(lhs) !== equals_string_internal(rhs)) {
+        if (fns.equals_string_internal(lhs) !== fns.equals_string_internal(rhs)) {
             return false;
         }
 
         if (lhs instanceof Object) {
-            return equalsObject_internal(lhs, rhs);
+            return fns.equalsObject_internal(lhs, rhs);
         }
     } else {
         //NaN === NaN => false
@@ -421,7 +420,7 @@ _equals = curry((lhs, rhs) => {
     }
     return false;
 });
-const equals = _equals;
+const equals = fns.equals;
 
 const errorThen = curry(async function*(supply, iter){
     try{
