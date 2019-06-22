@@ -90,10 +90,114 @@ describe('test deepEquals', () => {
         assert.ok(false === F.deepEquals(arr1, arr2));
     });
 
+    it('int16 arr', () => {
+        const arr1 = new Int16Array(new ArrayBuffer(8));
+        const arr1_1 = new Int16Array(new ArrayBuffer(8));
+        const arr2 = new Int16Array(new ArrayBuffer(8));
+
+        arr1[0] = 1;
+        arr1[1] = 2;
+        arr1[2] = 3;
+        arr1[3] = 4;
+
+        arr1_1[0] = 1;
+        arr1_1[1] = 2;
+        arr1_1[2] = 3;
+        arr1_1[3] = 4;
+
+        arr2[0] = 5;
+        arr2[1] = 6;
+        arr2[2] = 7;
+        arr2[3] = 8;
+
+        assert.ok(true === F.deepEquals(arr1, arr1));
+        assert.ok(true === F.deepEquals(arr1, arr1_1));
+        assert.ok(false === F.deepEquals(arr1, arr2));
+        assert.ok(false === F.deepEquals(arr1, arr2));
+    });
+
     it('int32 arr', () => {
         const arr1 = new Int32Array(new ArrayBuffer(16));
         const arr1_1 = new Int32Array(new ArrayBuffer(16));
         const arr2 = new Int32Array(new ArrayBuffer(16));
+
+        arr1[0] = 1;
+        arr1[1] = 2;
+        arr1[2] = 3;
+        arr1[3] = 4;
+
+        arr1_1[0] = 1;
+        arr1_1[1] = 2;
+        arr1_1[2] = 3;
+        arr1_1[3] = 4;
+
+        arr2[0] = 5;
+        arr2[1] = 6;
+        arr2[2] = 7;
+        arr2[3] = 8;
+
+        assert.ok(true === F.deepEquals(arr1, arr1));
+        assert.ok(true === F.deepEquals(arr1, arr1_1));
+        assert.ok(false === F.deepEquals(arr1, arr2));
+        assert.ok(false === F.deepEquals(arr1, arr2));
+    });
+
+    it('uint8 arr', () => {
+        const arr1 = new Uint8Array(new ArrayBuffer(4));
+        const arr1_1 = new Uint8Array(new ArrayBuffer(4));
+        const arr2 = new Uint8Array(new ArrayBuffer(4));
+
+        arr1[0] = 1;
+        arr1[1] = 2;
+        arr1[2] = 3;
+        arr1[3] = 4;
+
+        arr1_1[0] = 1;
+        arr1_1[1] = 2;
+        arr1_1[2] = 3;
+        arr1_1[3] = 4;
+
+        arr2[0] = 5;
+        arr2[1] = 6;
+        arr2[2] = 7;
+        arr2[3] = 8;
+
+        assert.ok(true === F.deepEquals(arr1, arr1));
+        assert.ok(true === F.deepEquals(arr1, arr1_1));
+        assert.ok(false === F.deepEquals(arr1, arr2));
+        assert.ok(false === F.deepEquals(arr1, arr2));
+    });
+
+    it('uint16 arr', () => {
+        const arr1 = new Uint16Array(new ArrayBuffer(8));
+        const arr1_1 = new Uint16Array(new ArrayBuffer(8));
+        const arr2 = new Uint16Array(new ArrayBuffer(8));
+
+        arr1[0] = 1;
+        arr1[1] = 2;
+        arr1[2] = 3;
+        arr1[3] = 4;
+
+        arr1_1[0] = 1;
+        arr1_1[1] = 2;
+        arr1_1[2] = 3;
+        arr1_1[3] = 4;
+
+        arr2[0] = 5;
+        arr2[1] = 6;
+        arr2[2] = 7;
+        arr2[3] = 8;
+
+        assert.ok(true === F.deepEquals(arr1, arr1));
+        assert.ok(true === F.deepEquals(arr1, arr1_1));
+        assert.ok(false === F.deepEquals(arr1, arr2));
+        assert.ok(false === F.deepEquals(arr1, arr2));
+    });
+
+    it('uint32 arr', () => {
+        const arr1 = new Uint32Array(new ArrayBuffer(16));
+        const arr1_1 = new Uint32Array(new ArrayBuffer(16));
+        const arr2 = new Uint32Array(new ArrayBuffer(16));
 
         arr1[0] = 1;
         arr1[1] = 2;
