@@ -152,7 +152,11 @@ const equalsMap_internal = (lhs, rhs) => {
     }
 
     for (const kv of lhs) {
-        if (_deepEquals(rhs.get(kv[0]), kv[1])) {
+        if (!rhs.has(kv[0])) {
+            return false;
+        }
+        
+        if (!_deepEquals(rhs.get(kv[0]), kv[1])) {
             return false;
         }
     }
@@ -251,14 +255,16 @@ const equalsObject_internal = (lhs, rhs) => {
 
 _deepEquals = curry((lhs, rhs) => {
     if (lhs === rhs) {
+        // undefined === undefined => true
+        // null === null => true
+        // 0 === 0 => true
         return true;
     }
 
-    if (lhs.constructor !== rhs.constructor) {
-        return false;
-    }
-
     if (lhs && rhs) {
+        if (lhs.constructor !== rhs.constructor) {
+            return false;
+        }
         /*
         if (a[Symbol.iterator] && b[Symbol.iterator]) {
             const it1 = a[Symbol.iterator]();
@@ -327,6 +333,7 @@ _deepEquals = curry((lhs, rhs) => {
             lhs instanceof Int16Array || 
             lhs instanceof Int32Array ||
             lhs instanceof Uint8Array ||
+            lhs instanceof Uint8ClampedArray ||
             lhs instanceof Uint16Array ||
             lhs instanceof Uint32Array) {
             return equalsNumberArray_internal(lhs, rhs);

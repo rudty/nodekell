@@ -168,6 +168,32 @@ describe('test deepEquals', () => {
         assert.ok(false === F.deepEquals(arr1, arr2));
     });
 
+    it('uint8 clamped arr', () => {
+        const arr1 = new Uint8ClampedArray(new ArrayBuffer(4));
+        const arr1_1 = new Uint8ClampedArray(new ArrayBuffer(4));
+        const arr2 = new Uint8ClampedArray(new ArrayBuffer(4));
+
+        arr1[0] = 1;
+        arr1[1] = 2;
+        arr1[2] = 3;
+        arr1[3] = 4;
+
+        arr1_1[0] = 1;
+        arr1_1[1] = 2;
+        arr1_1[2] = 3;
+        arr1_1[3] = 4;
+
+        arr2[0] = 5;
+        arr2[1] = 6;
+        arr2[2] = 7;
+        arr2[3] = 8;
+
+        assert.ok(true === F.deepEquals(arr1, arr1));
+        assert.ok(true === F.deepEquals(arr1, arr1_1));
+        assert.ok(false === F.deepEquals(arr1, arr2));
+        assert.ok(false === F.deepEquals(arr1, arr2));
+    });
+
     it('uint16 arr', () => {
         const arr1 = new Uint16Array(new ArrayBuffer(8));
         const arr1_1 = new Uint16Array(new ArrayBuffer(8));
@@ -218,5 +244,46 @@ describe('test deepEquals', () => {
         assert.ok(true === F.deepEquals(arr1, arr1_1));
         assert.ok(false === F.deepEquals(arr1, arr2));
         assert.ok(false === F.deepEquals(arr1, arr2));
+    });
+
+    it('regex', () => {
+        const r1 = /hello world/;
+        const r1_1 = /hello world/;
+        const r2 = /Hello js/;
+        const r3 = "Hello js";
+
+        assert.ok(true === F.deepEquals(r1, r1_1));
+        assert.ok(false === F.deepEquals(r1, r2));
+        assert.ok(false === F.deepEquals(r1, r3));
+    });
+
+    it('Map<int, int>', () => {
+        const r1 = new Map([[1,2],[3,4]]);
+        const r1_1 = new Map([[1,2],[3,4]]);
+        const r2 = new Map([[3,4],[5,6]]);
+        const r3 = new Map([[1,2],[3,4],[5,6]]);
+
+        const r4 = new Map([[5,undefined],[3,4]]);
+        const r5 = new Map([[1,2],[3,4]]);
+
+        assert.ok(true === F.deepEquals(r1, r1_1));
+        assert.ok(false === F.deepEquals(r1, r2));
+        assert.ok(false === F.deepEquals(r1, r3));
+
+        assert.ok(false === F.deepEquals(r4, r5));
+    });
+
+    it('Map<int, Map<int,int>>', () => {
+        const r1 = new Map();
+        r1.set(1, new Map([[1,2],[3,4]]));
+
+        const r1_1 = new Map();
+        r1_1.set(1, new Map([[1,2],[3,4]]));
+
+        const r2 = new Map();
+        r2.set(1, new Map([[3,9],[5,7]]));
+
+        assert.ok(true === F.deepEquals(r1, r1_1));
+        assert.ok(false === F.deepEquals(r1, r2));
     });
 });
