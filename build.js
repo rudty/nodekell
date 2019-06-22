@@ -8,7 +8,7 @@ const files = fs.readdirSync("./src");
 let l = `"use strict"\r\n`;
 for (const f of files) {
     if (f.endsWith(".js")) {
-        l += `export * from "./${f}"\r\n`
+        l += `export * from "./${f}";\r\n`
     }
 }
 fs.writeFileSync("./src/index.js", l);

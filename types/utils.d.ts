@@ -1,6 +1,6 @@
 export type Nullable<T, U extends null | undefined = null> = T | U;
 
-export type Length<T extends any[]> = T['length'];
+export type Length<T extends any[]> = T["length"];
 
 export type Cast<T, Y> = T extends Y ? T : Y;
 
