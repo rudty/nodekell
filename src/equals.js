@@ -83,7 +83,7 @@ equalFunction.numberArray_internal = (lhs, rhs) => {
         }
     }
     return true;
-}
+};
 
 
 equalFunction.object_internal = (lhs, rhs) => {
@@ -107,7 +107,7 @@ equalFunction.object_internal = (lhs, rhs) => {
     return true;
 };
 
-equalFunction.toString_internal = a => Object.prototype.toString(a);
+equalFunction.toString_internal = (a) => Object.prototype.toString(a);
 
 equalFunction.fn = curry((lhs, rhs) => {
     if (lhs === rhs) {

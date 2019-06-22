@@ -1,4 +1,4 @@
-export const isNil = v => {
+export const isNil = (v) => {
     if (v) {
         return false;
     }

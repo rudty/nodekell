@@ -3,7 +3,7 @@ export const buffer = curry(async function*(supply, iter) {
     supply = await supply;
 
     if(supply <= 0) {
-        throw new Error("arg supply > 0 required")
+        throw new Error("arg supply > 0 required");
     }
 
     let c = [];

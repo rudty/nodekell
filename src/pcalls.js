@@ -14,7 +14,7 @@ const fetch_call_internal =  async (f, iter) => {
         f.add(e.value());
     }
     return g;
-}
+};
 
 const pcalls_internal = async function*(iter) {
 

@@ -1,4 +1,4 @@
-export const getDuration = async duration => {
+export const getDuration = async (duration) => {
     duration = await duration;
 
     if (duration instanceof Function) {
@@ -6,7 +6,7 @@ export const getDuration = async duration => {
     }
 
     if (duration <= 0) {
-        throw new Error("duration > 0 required")
+        throw new Error("duration > 0 required");
     }
     return duration;
 };

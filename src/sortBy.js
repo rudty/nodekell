@@ -5,14 +5,14 @@ import { desc } from "./desc";
 export const sortBy = curry(async function*(f, order, iter) {
     if (order.constructor === ''.constructor) {
         switch (order.trim().toLowerCase()) {
-            case 'asc':
+            case "asc":
                 order = asc;
                 break;
-            case 'desc':
+            case "desc":
                 order = desc;
                 break;
             default:
-                throw new Error('please set order parameter to ASC or DESC or compare function');
+                throw new Error("please set order parameter to ASC or DESC or compare function");
         }
     }
 

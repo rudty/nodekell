@@ -1,1 +1,1 @@
-export const identity = e => e;
+export const identity = (e) => e;
