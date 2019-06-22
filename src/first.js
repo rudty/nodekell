@@ -1,1 +1,1 @@
-export const first = a => a[0];
+export const first = (a) => a[0];

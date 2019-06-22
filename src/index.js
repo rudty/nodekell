@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 export * from "./add.js";
 export * from "./asc.js";
 export * from "./average.js";

@@ -7,7 +7,7 @@
  * var mySum2 = mySum1(2)
  * var sum = mySum2(3) // <-- real call
  */
-export const curry = fn => (...a) => {
+export const curry = (fn) => (...a) => {
     if (fn.length <= a.length) {
         return fn(...a);
     } else {

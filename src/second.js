@@ -1,1 +1,1 @@
-export const second = a => a[1];
+export const second = (a) => a[1];

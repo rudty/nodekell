@@ -6,7 +6,7 @@ export const interval = (timeout, timerHandler, ...param) => {
         timeout = 10;
     }
     const k = { run: true };
-    (async () =>{
+    (async () => {
         while (k.run) {
             try{
                 const s = sleep(timeout);

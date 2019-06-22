@@ -21,7 +21,7 @@ export class Queue {
         this.tail = n;
     }
 
-    _unsafe_pop() {
+    _unsafePop() {
         const f = this.head;
         if (f !== this.tail) {
             this.head = f.next;
@@ -40,7 +40,7 @@ export class Queue {
         if (this.head === null) {
             throw new Error("no such element");
         }
-        return this._unsafe_pop();
+        return this._unsafePop();
     }
 
     /**
@@ -51,7 +51,7 @@ export class Queue {
         if (this.head === null) {
             return null;
         }
-        return this._unsafe_pop();
+        return this._unsafePop();
     }
 
     /**

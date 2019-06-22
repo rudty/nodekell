@@ -12,7 +12,7 @@ const memoizeWithTimeoutBy = (timeout, keyFn, callFn) => {
             return ret;
         }
         return c.value;
-    }
+    };
 };
 
 export const memoizeWithTimeout = curry((timeout, callFn) => memoizeWithTimeoutBy(timeout, (...a) => a, callFn));
