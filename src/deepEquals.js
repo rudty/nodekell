@@ -11,7 +11,7 @@ const equalsMap_internal = (lhs, rhs) => {
         if (!rhs.has(kv[0])) {
             return false;
         }
-        
+
         if (!_deepEquals(rhs.get(kv[0]), kv[1])) {
             return false;
         }
@@ -89,25 +89,27 @@ const equalsNumberArray_internal = (lhs, rhs) => {
 
 
 const equalsObject_internal = (lhs, rhs) => {
-    const kva = Object.entries(lhs);
-    const kvb = Object.entries(lhs);
 
-    if (kva.length !== kvb.length) {
+    const kvl = Object.entries(lhs);
+
+    if (kvl.length !== Object.keys(rhs).length) {
         return false;
     }
 
-    const len = kva.length;
-    for (let i = len - 1; i >= 0; --i) {
-        if (!_deepEquals(kva[i][0], kvb[i][0])) {
+    for (const [k, v] of kvl) {
+        if (!rhs.hasOwnProperty(k)) {
             return false;
         }
 
-        if (!_deepEquals(kva[i][1], kvb[i][1])) {
+        if (!_deepEquals(v, rhs[k])) {
             return false;
         }
     }
+
     return true;
 };
+
+const equals_string_internal = a => Object.prototype.toString(a);
 
 _deepEquals = curry((lhs, rhs) => {
     if (lhs === rhs) {
@@ -207,7 +209,7 @@ _deepEquals = curry((lhs, rhs) => {
             return equalsRegExp_internal(lhs, rhs);
         }
 
-        if (lhs.toString() !== rhs.toString()) {
+        if (equals_string_internal(lhs) !== equals_string_internal(rhs)) {
             return false;
         }
 

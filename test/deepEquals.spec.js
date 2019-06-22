@@ -17,6 +17,10 @@ describe('test deepEquals', () => {
         assert.ok(false === F.deepEquals(false, true));
     });
 
+    it('NaN', () => {
+        assert.ok(true === F.deepEquals(NaN, NaN));
+    });
+
     it('string', () => {
         const str1 = "Hello World!";
         const str1_1 = "Hello World!";
@@ -285,5 +289,49 @@ describe('test deepEquals', () => {
 
         assert.ok(true === F.deepEquals(r1, r1_1));
         assert.ok(false === F.deepEquals(r1, r2));
+    });
+
+    it('Set<int>', () => {
+        const r1 = new Set([1,2,3,4]);
+        const r1_1 = new Set([1,2,3,4]);
+        const r2 = new Set([5,6,7,8]);
+        
+        assert.ok(true === F.deepEquals(r1, r1_1));
+        assert.ok(false === F.deepEquals(r1, r2));
+    });
+
+    it('obj{}', () =>{
+        const r1 = {};
+        const r1_1 = {};
+        const r2 = {a:1};
+
+        assert.ok(true === F.deepEquals(r1, r1_1));
+        assert.ok(false === F.deepEquals(r1, r2));
+    });
+
+    it('obj{a:1}', () =>{
+        const r1 = {a:1};
+        const r1_1 = {a:1};
+        const r2 = {a:3};
+
+        assert.ok(true === F.deepEquals(r1, r1_1));
+        assert.ok(false === F.deepEquals(r1, r2));
+    });
+
+    it('obj{a:{b:1}}', () =>{
+        const r1 = {a:{b:1}};
+        const r1_1 = {a:{b:1}};
+        const r2 = {a:1};
+        const r3 = {a:{b:2}};
+
+        assert.ok(true === F.deepEquals(r1, r1_1));
+        assert.ok(false === F.deepEquals(r1, r2));
+        assert.ok(false === F.deepEquals(r1, r3));
+    });
+
+    it('obj abba', () =>{
+        const r1 = {a:1, b:2};
+        const r1_1 = {b:2, a:1};
+        assert.ok(true === F.deepEquals(r1, r1_1));
     });
 });
