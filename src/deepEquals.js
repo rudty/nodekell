@@ -1,12 +1,14 @@
 import { curry } from "./curry"
 
+let _deepEquals;
+
 const equalsMap_internal = (lhs, rhs) => {
     if (lhs.size !== rhs.size) {
         return false;
     }
 
     for (const kv of lhs) {
-        if (rhs.get(kv[0]) !== kv[1]) {
+        if (_deepEquals(rhs.get(kv[0]), kv[1])) {
             return false;
         }
     }
@@ -53,7 +55,57 @@ const equalsRegExp_internal = (lhs, rhs) => {
     return true;
 };
 
-export const deepEquals = curry((lhs, rhs) => {
+const equalsArray_internal = (lhs, rhs) => {
+    const len = lhs.length;
+    if (len !== rhs.length) {
+        return false;
+    }
+
+    for (let i = len - 1; i >= 0; --i) {
+        if (!_deepEquals(lhs[i], rhs[i])) {
+            return false;
+        }
+    }
+    return true;
+}
+
+const equalsNumberArray_internal = (lhs, rhs) => {
+    const len = lhs.length;
+    if (len !== rhs.length) {
+        return false;
+    }
+
+    for (let i = len - 1; i >= 0; --i) {
+        if (lhs[i] !== rhs[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
+const equalsObject_internal = (lhs, rhs) => {
+    const kva = Object.entries(lhs);
+    const kvb = Object.entries(lhs);
+
+    if (kva.length !== kvb.length) {
+        return false;
+    }
+
+    const len = kva.length;
+    for (let i = len - 1; i >= 0; --i) {
+        if (!_deepEquals(kva[i][0], kvb[i][0])) {
+            return false;
+        }
+
+        if (!_deepEquals(kva[i][1], kvb[i][1])) {
+            return false;
+        }
+    }
+    return true;
+};
+
+_deepEquals = curry((lhs, rhs) => {
     if (lhs === rhs) {
         return true;
     }
@@ -124,17 +176,16 @@ export const deepEquals = curry((lhs, rhs) => {
         }
 
         if (lhs instanceof Array) {
-            const len = lhs.length;
-            if (len !== rhs.length) {
-                return false;
-            }
-        
-            for (let i = len - 1; i >= 0; --i) {
-                if (!deepEquals(lhs[i], rhs[i])) {
-                    return false;
-                }
-            }
-            return true;
+            return equalsArray_internal(lhs, rhs);
+        }
+
+        if (lhs instanceof Int8Array ||
+            lhs instanceof Int16Array || 
+            lhs instanceof Int32Array ||
+            lhs instanceof Uint8Array ||
+            lhs instanceof Uint16Array ||
+            lhs instanceof Uint32Array) {
+            return equalsNumberArray_internal(lhs, rhs);
         }
 
         if (lhs instanceof Map) {
@@ -154,24 +205,7 @@ export const deepEquals = curry((lhs, rhs) => {
         }
 
         if (lhs instanceof Object) {
-            const kva = Object.entries(lhs);
-            const kvb = Object.entries(lhs);
-
-            if (kva.length !== kvb.length) {
-                return false;
-            }
-
-            const len = kva.length;
-            for (let i = len - 1; i >= 0; --i) {
-                if (!deepEquals(kva[i][0], kvb[i][0])) {
-                    return false;
-                }
-
-                if (!deepEquals(kva[i][1], kvb[i][1])) {
-                    return false;
-                }
-            }
-            return true;
+            return equalsObject_internal(lhs, rhs);
         }
     } else {
         //NaN === NaN => false
@@ -181,3 +215,4 @@ export const deepEquals = curry((lhs, rhs) => {
     }
     return false;
 });
+export const deepEquals = _deepEquals;
