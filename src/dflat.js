@@ -1,4 +1,4 @@
-export const dflat = async function * (...iters) {
+export const dflat = async function *(...iters) {
     for await (const it of iters) {
         if (it) {
             if (it.constructor === String) {

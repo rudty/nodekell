@@ -1,4 +1,4 @@
-export const range = function * (...k) {
+export const range = function *(...k) {
     let begin = 0;
     let end = Infinity;
     let n = 1;

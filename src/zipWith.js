@@ -1,6 +1,6 @@
 import { curry } from "./curry";
 import { seq } from "./seq" ;
-export const zipWith = curry(async function * (f, a, b) {
+export const zipWith = curry(async function *(f, a, b) {
     a = seq(a);
     b = seq(b);
 

@@ -1,6 +1,6 @@
 import { curry } from "./curry";
 
-export const errorThen = curry(async function * (supply, iter){
+export const errorThen = curry(async function *(supply, iter){
     try{
         yield* iter;
     } catch(e) {

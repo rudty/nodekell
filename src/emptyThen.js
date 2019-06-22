@@ -1,6 +1,6 @@
 import { curry } from "./curry";
 
-export const emptyThen = curry(async function * (supply, iter) {
+export const emptyThen = curry(async function *(supply, iter) {
     for await (const e of iter) {
         yield e;
         yield* iter;
