@@ -241,8 +241,8 @@ const enumerate = async function* (iter) {
     }
 };
 
-const fns = {};
-fns.equalsMap_internal = (lhs, rhs) => {
+const equalFunction = {};
+equalFunction.map_internal = (lhs, rhs) => {
     if (lhs.size !== rhs.size) {
         return false;
     }
@@ -252,14 +252,14 @@ fns.equalsMap_internal = (lhs, rhs) => {
             return false;
         }
 
-        if (!fns.equals(rhs.get(kv[0]), kv[1])) {
+        if (!equalFunction.fn(rhs.get(kv[0]), kv[1])) {
             return false;
         }
     }
     return true;
 };
 
-fns.equalsSet_internal = (lhs, rhs) => {
+equalFunction.set_internal = (lhs, rhs) => {
     if (lhs.size !== rhs.size) {
         return false;
     }
@@ -272,7 +272,7 @@ fns.equalsSet_internal = (lhs, rhs) => {
     return true;
 };
 
-fns.equalsRegExp_internal = (lhs, rhs) => {
+equalFunction.regExp_internal = (lhs, rhs) => {
     if (lhs.sticky !== rhs.sticky) {
         return false;
     }
@@ -299,21 +299,21 @@ fns.equalsRegExp_internal = (lhs, rhs) => {
     return true;
 };
 
-fns.equalsArray_internal = (lhs, rhs) => {
+equalFunction.array_internal = (lhs, rhs) => {
     const len = lhs.length;
     if (len !== rhs.length) {
         return false;
     }
 
     for (let i = len - 1; i >= 0; --i) {
-        if (!fns.equals(lhs[i], rhs[i])) {
+        if (!equalFunction.fn(lhs[i], rhs[i])) {
             return false;
         }
     }
     return true;
 };
 
-fns.equalsNumberArray_internal = (lhs, rhs) => {
+equalFunction.numberArray_internal = (lhs, rhs) => {
     const len = lhs.length;
     if (len !== rhs.length) {
         return false;
@@ -328,7 +328,7 @@ fns.equalsNumberArray_internal = (lhs, rhs) => {
 };
 
 
-fns.equalsObject_internal = (lhs, rhs) => {
+equalFunction.object_internal = (lhs, rhs) => {
 
     const kvl = Object.entries(lhs);
 
@@ -341,7 +341,7 @@ fns.equalsObject_internal = (lhs, rhs) => {
             return false;
         }
 
-        if (!fns.equals(v, rhs[k])) {
+        if (!equalFunction.fn(v, rhs[k])) {
             return false;
         }
     }
@@ -349,9 +349,9 @@ fns.equalsObject_internal = (lhs, rhs) => {
     return true;
 };
 
-fns.equals_string_internal = a => Object.prototype.toString(a);
+equalFunction.toString_internal = a => Object.prototype.toString(a);
 
-fns.equals = curry((lhs, rhs) => {
+equalFunction.fn = curry((lhs, rhs) => {
     if (lhs === rhs) {
         // undefined === undefined => true
         // null === null => true
@@ -375,7 +375,7 @@ fns.equals = curry((lhs, rhs) => {
         }
 
         if (lhs instanceof Array) {
-            return fns.equalsArray_internal(lhs, rhs);
+            return equalFunction.array_internal(lhs, rhs);
         }
 
         if (lhs instanceof Int8Array ||
@@ -385,19 +385,19 @@ fns.equals = curry((lhs, rhs) => {
             lhs instanceof Uint8ClampedArray ||
             lhs instanceof Uint16Array ||
             lhs instanceof Uint32Array) {
-            return fns.equalsNumberArray_internal(lhs, rhs);
+            return equalFunction.numberArray_internal(lhs, rhs);
         }
 
         if (lhs instanceof Map) {
-            return fns.equalsMap_internal(lhs, rhs);
+            return equalFunction.map_internal(lhs, rhs);
         }
 
         if (lhs instanceof Set) {
-            return fns.equalsSet_internal(lhs, rhs);
+            return equalFunction.set_internal(lhs, rhs);
         }
 
         if (lhs instanceof RegExp) {
-            return fns.equalsRegExp_internal(lhs, rhs);
+            return equalFunction.regExp_internal(lhs, rhs);
         }
 
         if (lhs instanceof Promise) {
@@ -405,12 +405,12 @@ fns.equals = curry((lhs, rhs) => {
             return false;
         }
 
-        if (fns.equals_string_internal(lhs) !== fns.equals_string_internal(rhs)) {
+        if (equalFunction.toString_internal(lhs) !== equalFunction.toString_internal(rhs)) {
             return false;
         }
 
         if (lhs instanceof Object) {
-            return fns.equalsObject_internal(lhs, rhs);
+            return equalFunction.object_internal(lhs, rhs);
         }
     } else {
         //NaN === NaN => false
@@ -420,7 +420,7 @@ fns.equals = curry((lhs, rhs) => {
     }
     return false;
 });
-const equals = fns.equals;
+const equals = equalFunction.fn;
 
 const errorThen = curry(async function*(supply, iter){
     try{
