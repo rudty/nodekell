@@ -1,4 +1,4 @@
-import { curry } from "./curry";
+import { curry } from "./curry"
 export const take = curry(async function*(count, iter) {
     let it = 0;
     for await (const e of iter) {

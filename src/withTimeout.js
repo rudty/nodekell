@@ -1,7 +1,7 @@
-import { getDuration, errorSleep } from "./internal/timer";
-import { curry } from "./curry";
-import { seq } from "./seq";
-import { fnothing } from "./fnothing";
+import { getDuration, errorSleep } from "./internal/timer"
+import { curry } from "./curry"
+import { seq } from "./seq"
+import { fnothing } from "./fnothing"
 
 export const withTimeout = curry(async function*(duration, iter) {
     duration = await getDuration(duration);

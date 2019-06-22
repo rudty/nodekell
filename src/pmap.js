@@ -1,7 +1,7 @@
-import { curry } from "./curry";
-import { seq } from "./seq";
-import * as P from "./internal/parallel";
-import { Queue } from "./queue";
+import { curry } from "./curry"
+import { seq } from "./seq"
+import * as P from "./internal/parallel"
+import { Queue } from "./queue"
 
 export const fetch_map_internal = async (f, fn, iter) => {
     const fetch_count = P.parallel_get_fetch_count_internal() - 1; 

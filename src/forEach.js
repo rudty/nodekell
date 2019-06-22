@@ -1,4 +1,4 @@
-import { curry } from "./curry";
+import { curry } from "./curry"
 
 export const forEach = curry(async (fn, iter) => {
     const wait = [];

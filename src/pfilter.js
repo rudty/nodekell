@@ -1,7 +1,7 @@
-import { curry } from "./curry";
-import { seq } from "./seq";
-import * as P from "./internal/parallel";
-import { Queue } from "./queue";
+import { curry } from "./curry"
+import { seq } from "./seq"
+import * as P from "./internal/parallel"
+import { Queue } from "./queue"
 
 const fetch_filter_internal = async (f, v, fn, iter) => {
     //fetch (n - 1) here

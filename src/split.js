@@ -1,5 +1,5 @@
-import { curry } from "./curry";
-import { seq } from "./seq";
+import { curry } from "./curry"
+import { seq } from "./seq"
 
 /**
  * break is keyword..

@@ -1,4 +1,4 @@
-import { curry } from "./curry";
+import { curry } from "./curry"
 export const has = curry((key, a) => {
     if (a.has && a.has.constructor === Function) {
         if (a.has(key)) {
