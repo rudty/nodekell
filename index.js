@@ -779,6 +779,13 @@ const maxBy = curry(async (f, iter) => {
     return m;
 });
 
+/**
+ * Gets the max value in the range
+ *
+ * await F.max([1,2,3,4,5]);
+ * 
+ * => 5
+ */
 const max = maxBy(identity);
 
 const memoizeBy = curry((keyFn, callFn) => {
@@ -834,6 +841,13 @@ const minBy = curry(async (f, iter) => {
     return m;
 });
 
+/**
+ * Gets the min value in the range
+ *
+ * await F.min([1,2,3,4,5,0]);
+ * 
+ * => 0
+ */
 const min = minBy(identity);
 
 //deprecated / use isNill instead.
