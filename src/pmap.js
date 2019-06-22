@@ -16,7 +16,7 @@ export const fetch_map_internal = async (f, fn, iter) => {
     return g;
 };
 
-export const pmap = curry(async function* (fn, iter) {
+export const pmap = curry(async function*(fn, iter) {
     const f = new Queue();
     const g = await fetch_map_internal(f, fn, iter);
 
@@ -28,7 +28,7 @@ export const pmap = curry(async function* (fn, iter) {
     yield* f.removeIterator();
 });
 
-export const pfmap = curry(async function* (fn, iter) {
+export const pfmap = curry(async function*(fn, iter) {
     const f = new Queue();
     const g = await fetch_map_internal(f, fn, iter);
 

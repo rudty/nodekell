@@ -94,7 +94,7 @@ const compose = (...fns) => async (...args) => {
     return z;
 };
 
-const concat = curry(async function* (a, b) {
+const concat = curry(async function*(a, b) {
     yield* a;
     yield* b;
 });
@@ -146,7 +146,7 @@ const dec = (a) => a - 1;
 
 const desc = (a, b) => a < b ? 1 : a > b ? -1 : 0;
 
-const dflat = async function* (...iters) {
+const dflat = async function*(...iters) {
     for await (const it of iters) {
         if (it) {
             if (it.constructor === String) {
@@ -183,13 +183,13 @@ const distinct = (iter) => distinctBy(identity, iter);
  * do not need to check if iter
  * Symbol.asyncIterator or Symbol.iterator
  */
-const seq = async function* (iter) {
+const seq = async function*(iter) {
     for await (const e of iter) {
         yield e;
     }
 };
 
-const drop =  curry(async function* (count, iter) {
+const drop =  curry(async function*(count, iter) {
     const g =  seq(iter);
     for (let i = 0; i < count; i++) {
         const { done } = await g.next();
@@ -200,7 +200,7 @@ const drop =  curry(async function* (count, iter) {
     yield* g;
 });
 
-const dropWhile =  curry(async function* (f, iter) {
+const dropWhile =  curry(async function*(f, iter) {
     const g =  seq(iter);
     while (true) {
         const e = await g.next();
@@ -234,7 +234,7 @@ const emptyThen = curry(async function*(supply, iter) {
 /**
  * like python enumerate
  */
-const enumerate = async function* (iter) {
+const enumerate = async function*(iter) {
     let i = 0;
     for await (const e of iter) {
         yield [i++, e];
@@ -447,7 +447,7 @@ const every = curry(async (f, iter) => {
     return true;
 });
 
-const filter = curry(async function* (fn, iter) {
+const filter = curry(async function*(fn, iter) {
     for await (const e of iter) {
         if (await fn(e)) {
             yield e;
@@ -455,7 +455,7 @@ const filter = curry(async function* (fn, iter) {
     }
 });
 
-const filterIndexed = curry(async function* (fn, iter) {
+const filterIndexed = curry(async function*(fn, iter) {
     let i = 0;
     for await (const e of iter) {
         if (await fn(i++, e)) {
@@ -464,7 +464,7 @@ const filterIndexed = curry(async function* (fn, iter) {
     }
 });
 
-const filterNot = curry(async function* (fn, iter) {
+const filterNot = curry(async function*(fn, iter) {
     for await (const e of iter) {
         if (!(await fn(e))) {
             yield e;
@@ -504,7 +504,7 @@ const firstOrGet = curry(async (supply, iter) => {
     return supply;
 });
 
-const flat = async function* (iter) {
+const flat = async function*(iter) {
     for await (const e of iter) {
         if (e && (e[Symbol.iterator] || e[Symbol.asyncIterator])) {
             yield* e;
@@ -514,7 +514,7 @@ const flat = async function* (iter) {
     }
 };
 
-const fmap =  curry(async function* (fn, iter) {
+const fmap =  curry(async function*(fn, iter) {
     for await (const e of iter) {
         if (e && (e[Symbol.iterator] || e[Symbol.asyncIterator])) {
             yield* await fn(e);
@@ -545,7 +545,7 @@ const foldl1 = curry(async (f, iter) => {
 });
 const reduce = foldl1;
 
-const reverse = async function* (iter) {
+const reverse = async function*(iter) {
     const a = await collect(iter);
     for (let i = a.length - 1; i >= 0; i -= 1) {
         yield a[i];
@@ -745,13 +745,13 @@ const juxtO = curry(async (ap, obj) => {
     return r;
 });
 
-const map =  curry(async function* (fn, iter) {
+const map =  curry(async function*(fn, iter) {
     for await (const e of iter) {
         yield fn(e);
     }
 });
 
-const mapIndexed = curry(async function* (fn, iter) {
+const mapIndexed = curry(async function*(fn, iter) {
     let i = 0;
     for await (const e of iter) {
         yield fn(i++, e);
@@ -1021,7 +1021,7 @@ const fetch_call_internal =  async (f, iter) => {
     return g;
 };
 
-const pcalls_internal = async function* (iter) {
+const pcalls_internal = async function*(iter) {
 
     const f = new Queue();
     const g = await fetch_call_internal(f, iter);
@@ -1034,7 +1034,7 @@ const pcalls_internal = async function* (iter) {
     yield* f.removeIterator();
 };
 
-const pcalls = curry(async function* (...a) {
+const pcalls = curry(async function*(...a) {
     if (a.length === 1) {
         if (a[0][Symbol.iterator] || a[0][Symbol.asyncIterator]) {
             yield* pcalls_internal(a[0]);
@@ -1066,7 +1066,7 @@ const fetch_filter_internal = async (f, v, fn, iter) => {
     return g;
 };
 
-const pfilter = curry(async function* (fn, iter) {
+const pfilter = curry(async function*(fn, iter) {
     const f = new Queue();
     const v = new Queue();
     const g = await fetch_filter_internal(f, v, fn, iter);
@@ -1118,7 +1118,7 @@ const fetch_map_internal = async (f, fn, iter) => {
     return g;
 };
 
-const pmap = curry(async function* (fn, iter) {
+const pmap = curry(async function*(fn, iter) {
     const f = new Queue();
     const g = await fetch_map_internal(f, fn, iter);
 
@@ -1130,7 +1130,7 @@ const pmap = curry(async function* (fn, iter) {
     yield* f.removeIterator();
 });
 
-const pfmap = curry(async function* (fn, iter) {
+const pfmap = curry(async function*(fn, iter) {
     const f = new Queue();
     const g = await fetch_map_internal(f, fn, iter);
 
@@ -1209,7 +1209,7 @@ const random = (...k) => {
     }
 };
 
-const range = function* (...k) {
+const range = function*(...k) {
     let begin = 0;
     let end = Infinity;
     let n = 1;
@@ -1272,7 +1272,7 @@ const rangeInterval = async function*(duration, ...k) {
  */
 const rangeOf = (...a) => fmap(identity, a);
 
-const repeat = async function* (a, ...b) {
+const repeat = async function*(a, ...b) {
     let supply = a;
     let len = Infinity;
     if (b.length > 0) {
@@ -1333,7 +1333,7 @@ const some = curry(async (f, iter) => {
     return false;
 });
 
-const sortBy = curry(async function* (f, order, iter) {
+const sortBy = curry(async function*(f, order, iter) {
     if (order.constructor === ''.constructor) {
         switch (order.trim().toLowerCase()) {
             case 'asc':
@@ -1376,7 +1376,7 @@ const sort = sortBy(identity);
 const split = curry(async function*(fn, iter) {
     const g = seq(iter);
     let e;
-    yield (async function* () {
+    yield (async function*() {
         while (true) {
             e = await g.next();
             if ((e.done) || await fn(e.value)) {
@@ -1385,7 +1385,7 @@ const split = curry(async function*(fn, iter) {
             yield e.value;
         }
     })();
-    yield (async function* () {
+    yield (async function*() {
         if (!e.done) {
             yield e.value;
             yield* g;
@@ -1437,7 +1437,7 @@ const combine = (a, b) => {
     throw new Error("join/combine object: not support type");
 };
 
-const _outerJoin = async function* (f, iter1, iter2) {
+const _outerJoin = async function*(f, iter1, iter2) {
     const leftCache = [];
     const rightCache = [];
     const it = seq(iter2);
@@ -1474,7 +1474,7 @@ const _outerJoin = async function* (f, iter1, iter2) {
     }
 };
 
-const _innerJoin = async function* (f, iter1, iter2) {
+const _innerJoin = async function*(f, iter1, iter2) {
     const leftCache = [];
     const rightCache = [];
     const it = seq(iter2);
@@ -1521,7 +1521,7 @@ const sub = curry((a, b) => a - b);
 
 const sum = foldl1(add);
 
-const tail = async function* (iter) {
+const tail = async function*(iter) {
     const g = seq(iter);
     const { done } = await g.next();
     if (done) {
@@ -1530,7 +1530,7 @@ const tail = async function* (iter) {
     yield* g;
 };
 
-const take = curry(async function* (count, iter) {
+const take = curry(async function*(count, iter) {
     let it = 0;
     for await (const e of iter) {
         ++it;
@@ -1541,7 +1541,7 @@ const take = curry(async function* (count, iter) {
     }
 });
 
-const takeWhile =  curry(async function* (f, iter) {
+const takeWhile =  curry(async function*(f, iter) {
     for await (const e of iter) {
         if (!(await f(e))) {
             break;
@@ -1589,7 +1589,7 @@ const withTimeout = curry(async function*(duration, iter) {
     s.catch(fnothing);
 });
 
-const zipWith = curry(async function* (f, a, b) {
+const zipWith = curry(async function*(f, a, b) {
     a = seq(a);
     b = seq(b);
 

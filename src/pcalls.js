@@ -16,7 +16,7 @@ const fetch_call_internal =  async (f, iter) => {
     return g;
 }
 
-const pcalls_internal = async function* (iter) {
+const pcalls_internal = async function*(iter) {
 
     const f = new Queue();
     const g = await fetch_call_internal(f, iter);
@@ -29,7 +29,7 @@ const pcalls_internal = async function* (iter) {
     yield* f.removeIterator();
 };
 
-export const pcalls = curry(async function* (...a) {
+export const pcalls = curry(async function*(...a) {
     if (a.length === 1) {
         if (a[0][Symbol.iterator] || a[0][Symbol.asyncIterator]) {
             yield* pcalls_internal(a[0]);

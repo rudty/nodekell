@@ -7,7 +7,7 @@ import { seq } from "./seq"
 export const split = curry(async function*(fn, iter) {
     const g = seq(iter);
     let e;
-    yield (async function* () {
+    yield (async function*() {
         while (true) {
             e = await g.next();
             if ((e.done) || await fn(e.value)) {
@@ -16,7 +16,7 @@ export const split = curry(async function*(fn, iter) {
             yield e.value;
         }
     })();
-    yield (async function* () {
+    yield (async function*() {
         if (!e.done) {
             yield e.value;
             yield* g;

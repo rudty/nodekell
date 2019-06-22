@@ -18,7 +18,7 @@ const fetch_filter_internal = async (f, v, fn, iter) => {
     return g;
 };
 
-export const pfilter = curry(async function* (fn, iter) {
+export const pfilter = curry(async function*(fn, iter) {
     const f = new Queue();
     const v = new Queue();
     const g = await fetch_filter_internal(f, v, fn, iter);
