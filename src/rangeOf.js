@@ -1,5 +1,5 @@
-import { fmap } from "./fmap"
-import { identity } from "./identity"
+import { fmap } from "./fmap";
+import { identity } from "./identity";
 
 /**
  * **deprecated** 

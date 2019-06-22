@@ -1,5 +1,5 @@
-import { curry } from "./curry"
-import { collect } from "./collect"
+import { curry } from "./curry";
+import { collect } from "./collect";
 
 export const findLast = curry(async (fn, iter) => {
     iter = Array.isArray(iter) ? iter : await collect(iter);

@@ -1,6 +1,6 @@
-import { curry } from "./curry"
-import { get } from "./get"
-import { collect } from "./collect"
+import { curry } from "./curry";
+import { get } from "./get";
+import { collect } from "./collect";
 
 
 //juxtO(["A","C"], {A:1,B:2,C:3});

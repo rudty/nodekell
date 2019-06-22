@@ -1,5 +1,5 @@
-import { curry } from "./curry"
-import { seq } from "./seq"
+import { curry } from "./curry";
+import { seq } from "./seq";
 
 export const minBy = curry(async (f, iter) => {
     const g = seq(iter);

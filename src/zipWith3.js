@@ -1,5 +1,5 @@
-import { curry } from "./curry"
-import { seq } from "./seq"
+import { curry } from "./curry";
+import { seq } from "./seq";
 export const zipWith3 = curry(async function*(f, a, b, c){
     a = seq(a);
     b = seq(b);

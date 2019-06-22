@@ -1,4 +1,4 @@
-import { curry } from "./curry"
+import { curry } from "./curry";
 export const fmap =  curry(async function* (fn, iter) {
     for await (const e of iter) {
         if (e && (e[Symbol.iterator] || e[Symbol.asyncIterator])) {

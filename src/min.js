@@ -1,4 +1,4 @@
-import { identity } from "./identity"
+import { identity } from "./identity";
 import { minBy } from "./minBy";
 /**
  * Gets the min value in the range

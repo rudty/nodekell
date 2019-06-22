@@ -1,5 +1,5 @@
-import { curry } from "./curry"
-import { seq } from "./seq"
+import { curry } from "./curry";
+import { seq } from "./seq";
 
 export const scanl = curry(async function*(f, z, iter) {
     z = await z;

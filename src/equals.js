@@ -1,4 +1,4 @@
-import { curry } from "./curry"
+import { curry } from "./curry";
 const equalFunction = {};
 equalFunction.map_internal = (lhs, rhs) => {
     if (lhs.size !== rhs.size) {

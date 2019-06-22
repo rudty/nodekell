@@ -1,4 +1,4 @@
-import { foldl } from "./foldl"
+import { foldl } from "./foldl";
 
 /**
  * like `$` or `.`

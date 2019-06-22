@@ -1,5 +1,5 @@
-import { curry } from "./curry"
-import { reverse } from "./reverse"
+import { curry } from "./curry";
+import { reverse } from "./reverse";
 const _foldr_internal = async (f, z, iter) => {
     z = await z;
     for await (const e of iter) {

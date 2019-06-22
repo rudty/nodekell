@@ -1,4 +1,4 @@
-import { curry } from "./curry"
+import { curry } from "./curry";
 
 const memoizeWithTimeoutBy = (timeout, keyFn, callFn) => {
     const cache = {};

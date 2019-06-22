@@ -1,4 +1,4 @@
-import { collect } from "./collect"
+import { collect } from "./collect";
 /**
  * [a,1],[b,2],[c,3]]  => {a:1,b:2,c:3} 
  */

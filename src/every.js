@@ -1,4 +1,4 @@
-import { curry } from "./curry"
+import { curry } from "./curry";
 
 export const every = curry(async (f, iter) => {
     for await (const e of iter) {
