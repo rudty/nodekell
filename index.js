@@ -192,8 +192,8 @@ const seq = async function *(iter) {
 const drop =  curry(async function *(count, iter) {
     const g =  seq(iter);
     for (let i = 0; i < count; i++) {
-        const { done } = await g.next();
-        if (done) {
+        const e = await g.next();
+        if (e.done) {
             break;
         }
     }
@@ -1056,12 +1056,12 @@ const fetch_filter_internal = async (f, v, fn, iter) => {
     const fetch_count = parallel_get_fetch_count_internal() - 1;
     const g = seq(iter);
     for (let i = fetch_count; i > 0; --i) {
-        const { done, value } = await g.next();
-        if (done) {
+        const e = await g.next();
+        if (e.done) {
             break;
         }
-        f.add(fn(value));
-        v.add(value);
+        f.add(fn(e.value));
+        v.add(e.value);
     }
     return g;
 };
@@ -1373,7 +1373,7 @@ const sort = sortBy(identity);
 /**
  * break is keyword..
  */
-const split = curry(function *(fn, iter) {
+const split = curry(async function *(fn, iter) {
     const g = seq(iter);
     let e;
     const lhs = async function *() {
