@@ -9,7 +9,7 @@ export const foldl = curry(async (f, z, iter) => {
 });
 
 export const foldl1 = curry(async (f, iter) => {
-    const g =  seq(iter);
+    const g = seq(iter);
     const h = await g.next();
     if (h.done) {
         throw new Error("empty iter");
