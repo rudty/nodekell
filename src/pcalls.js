@@ -3,7 +3,7 @@ import { seq } from "./seq";
 import * as P from "./internal/parallel";
 import { Queue } from "./queue";
 
-const fetch_call_internal =  async (f, iter) => { 
+const fetch_call_internal = async (f, iter) => { 
     const fetch_count = P.parallel_get_fetch_count_internal();
     const g = seq(iter);
     for (let i = fetch_count; i > 0; --i) {

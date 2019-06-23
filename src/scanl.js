@@ -11,7 +11,7 @@ export const scanl = curry(async function *(f, z, iter) {
 });
 
 export const scanl1 = curry(async function *(f, iter) {
-    const g =  seq(iter);
+    const g = seq(iter);
     const h = await g.next();
     if (!h.done) {
         yield* scanl(f, h.value, g);
