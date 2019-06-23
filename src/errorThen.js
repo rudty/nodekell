@@ -1,7 +1,7 @@
 import { curry } from "./curry";
 
 export const errorThen = curry(async function *(supply, iter){
-    try{
+    try {
         yield* iter;
     } catch(e) {
         supply = await supply;

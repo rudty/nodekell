@@ -423,7 +423,7 @@ equalFunction.fn = curry((lhs, rhs) => {
 const equals = equalFunction.fn;
 
 const errorThen = curry(async function *(supply, iter){
-    try{
+    try {
         yield* iter;
     } catch(e) {
         supply = await supply;
@@ -560,7 +560,7 @@ const _foldr_internal = async (f, z, iter) => {
     return z;
 };
 
-const foldr =  curry((f, z, iter) => {
+const foldr = curry((f, z, iter) => {
     return _foldr_internal(f, z, reverse(iter));
 });
 
@@ -650,7 +650,7 @@ const interval = (timeout, timerHandler, ...param) => {
     const k = { run: true };
     (async () => {
         while (k.run) {
-            try{
+            try {
                 const s = sleep(timeout);
                 await timerHandler(...param);
                 await s;
@@ -1150,13 +1150,13 @@ const prop = curry((key, a) => a[key]);
 
 const crypto = require("crypto");
 
-const random_uint_internal = (size) => {
+const randomUintInternal = (size) => {
     const buf = crypto.randomBytes(size);
     const n = buf.readUIntBE(0, size);
     return n;
 };
 
-const random_internal = (begin, end) => {
+const randomInternal = (begin, end) => {
     const randomRange = end - begin - 1;
 
     /**
@@ -1179,7 +1179,7 @@ const random_internal = (begin, end) => {
     const mask = bit - 1;
     const byteSize = Math.floor(step / 8) + 1;
 
-    const v = random_uint_internal(byteSize) & mask;
+    const v = randomUintInternal(byteSize) & mask;
     const randomValue = v / bit;
 
     return Math.ceil(randomValue * randomRange) + begin;
@@ -1199,11 +1199,11 @@ const random = (...k) => {
 
     switch (len) {
     case 0:
-        return random_uint_internal(4);
+        return randomUintInternal(4);
     case 1:
-        return random_internal(0, k[0]);
+        return randomInternal(0, k[0]);
     case 2:
-        return random_internal(k[0], k[1]);
+        return randomInternal(k[0], k[1]);
     default:
         throw new Error("function random: argument must <= 2");
     }
@@ -1248,7 +1248,7 @@ const getDuration = async (duration) => {
     return duration;
 };
 
-const errorSleep = t => new Promise((_, reject) => {
+const errorSleep = (t) => new Promise((_, reject) => {
     setTimeout(() => {
         reject(new Error("timeout error"));
     }, t);
@@ -1334,7 +1334,7 @@ const some = curry(async (f, iter) => {
 });
 
 const sortBy = curry(async function *(f, order, iter) {
-    if (order.constructor === ''.constructor) {
+    if (order.constructor === "".constructor) {
         switch (order.trim().toLowerCase()) {
             case "asc":
                 order = asc;
@@ -1373,10 +1373,10 @@ const sort = sortBy(identity);
 /**
  * break is keyword..
  */
-const split = curry(async function *(fn, iter) {
+const split = curry(function *(fn, iter) {
     const g = seq(iter);
     let e;
-    yield (async function *() {
+    const lhs = async function *() {
         while (true) {
             e = await g.next();
             if ((e.done) || await fn(e.value)) {
@@ -1384,13 +1384,17 @@ const split = curry(async function *(fn, iter) {
             }
             yield e.value;
         }
-    })();
-    yield (async function *() {
+    };
+
+    const rhs = async function *() {
         if (!e.done) {
             yield e.value;
             yield* g;
         }
-    })();
+    };
+
+    yield lhs();
+    yield rhs();
 });
 
 const splitBy = curry(async function *(f, any) {

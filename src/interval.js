@@ -8,7 +8,7 @@ export const interval = (timeout, timerHandler, ...param) => {
     const k = { run: true };
     (async () => {
         while (k.run) {
-            try{
+            try {
                 const s = sleep(timeout);
                 await timerHandler(...param);
                 await s;
