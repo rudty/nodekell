@@ -8,7 +8,7 @@ const _foldr_internal = async (f, z, iter) => {
     return z;
 };
 
-export const foldr =  curry((f, z, iter) => {
+export const foldr = curry((f, z, iter) => {
     return _foldr_internal(f, z, reverse(iter));
 });
 

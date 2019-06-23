@@ -11,7 +11,7 @@ export const getDuration = async (duration) => {
     return duration;
 };
 
-export const errorSleep = t => new Promise((_, reject) => {
+export const errorSleep = (t) => new Promise((_, reject) => {
     setTimeout(() => {
         reject(new Error("timeout error"));
     }, t);

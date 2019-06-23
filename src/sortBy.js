@@ -3,7 +3,7 @@ import { asc } from "./asc";
 import { desc } from "./desc";
 
 export const sortBy = curry(async function *(f, order, iter) {
-    if (order.constructor === ''.constructor) {
+    if (order.constructor === "".constructor) {
         switch (order.trim().toLowerCase()) {
             case "asc":
                 order = asc;
