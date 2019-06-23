@@ -1,6 +1,7 @@
 # nodekell
 Functional library for nodejs 
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/594190c07d124e2494ff857d872f372b)](https://app.codacy.com/app/rudty/nodekell?utm_source=github.com&utm_medium=referral&utm_content=rudty/nodekell&utm_campaign=Badge_Grade_Dashboard)
 [![NPM Version](https://img.shields.io/npm/v/nodekell.svg?style=flat-square)](https://www.npmjs.com/package/nodekell)
 [![NPM Downloads](https://img.shields.io/npm/dt/nodekell.svg)](https://www.npmjs.com/package/nodekell)
 [![Build Status](https://travis-ci.org/rudty/nodekell.svg?branch=master)](https://travis-ci.org/rudty/nodekell)
