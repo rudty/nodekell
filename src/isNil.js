@@ -1,4 +1,4 @@
-import { undefined } from "./internal/undefined";
+import { undefinedValue } from "./internal/undefinedValue";
 
 export const isNil = (v) => {
     if (v) {
@@ -7,7 +7,7 @@ export const isNil = (v) => {
 
     switch(v){
         case null: return true;
-        case undefined: return true;
+        case undefinedValue: return true;
         default: return Number.isNaN(v);
     }
 };

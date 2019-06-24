@@ -590,7 +590,7 @@ const forEachIndexed = curry(async (fn, iter) => {
     return Promise.all(wait);
 });
 
-const undefined$1 = ((v) => v)();
+const undefinedValue = ((v) => v)();
 
 /**
  * support Map, Set, any Object
@@ -598,7 +598,7 @@ const undefined$1 = ((v) => v)();
 const get = curry((key, a) => {
     if (a.get && a.get.constructor === Function) {
         const r = a.get(key);
-        if (r !== undefined$1) {
+        if (r !== undefinedValue) {
             return r;
         }
     }
@@ -626,7 +626,7 @@ const has = curry((key, a) => {
         }
     }
 
-   return a[key] !== undefined$1;
+   return a[key] !== undefinedValue;
 });
 
 const head = async (iter) => {
@@ -671,7 +671,7 @@ const isNil = (v) => {
 
     switch(v){
         case null: return true;
-        case undefined$1: return true;
+        case undefinedValue: return true;
         default: return Number.isNaN(v);
     }
 };

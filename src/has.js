@@ -1,5 +1,5 @@
 import { curry } from "./curry";
-import { undefined } from "./internal/undefined";
+import { undefinedValue } from "./internal/undefinedValue";
 
 export const has = curry((key, a) => {
     if (a.has && a.has.constructor === Function) {
@@ -8,5 +8,5 @@ export const has = curry((key, a) => {
         }
     }
 
-   return a[key] !== undefined;
+   return a[key] !== undefinedValue;
 });
