@@ -1417,6 +1417,7 @@ const split = curry(async function *(fn, iter) {
             yield e.value;
         }
     };
+    yield lhs();
 
     const rhs = async function *() {
         if (!e.done) {
@@ -1424,8 +1425,6 @@ const split = curry(async function *(fn, iter) {
             yield* g;
         }
     };
-
-    yield lhs();
     yield rhs();
 });
 

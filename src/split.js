@@ -16,6 +16,7 @@ export const split = curry(async function *(fn, iter) {
             yield e.value;
         }
     };
+    yield lhs();
 
     const rhs = async function *() {
         if (!e.done) {
@@ -23,7 +24,5 @@ export const split = curry(async function *(fn, iter) {
             yield* g;
         }
     };
-
-    yield lhs();
     yield rhs();
 });
