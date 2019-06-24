@@ -78,6 +78,7 @@ export * from "./run.js";
 export * from "./scanl.js";
 export * from "./second.js";
 export * from "./seq.js";
+export * from "./shuffle.js";
 export * from "./sleep.js";
 export * from "./some.js";
 export * from "./sort.js";

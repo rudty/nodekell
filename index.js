@@ -189,8 +189,8 @@ const seq = async function *(iter) {
     }
 };
 
-const drop =  curry(async function *(count, iter) {
-    const g =  seq(iter);
+const drop = curry(async function *(count, iter) {
+    const g = seq(iter);
     for (let i = 0; i < count; i++) {
         const e = await g.next();
         if (e.done) {
@@ -200,8 +200,8 @@ const drop =  curry(async function *(count, iter) {
     yield* g;
 });
 
-const dropWhile =  curry(async function *(f, iter) {
-    const g =  seq(iter);
+const dropWhile = curry(async function *(f, iter) {
+    const g = seq(iter);
     while (true) {
         const e = await g.next();
         if (e.done) {
@@ -514,7 +514,7 @@ const flat = async function *(iter) {
     }
 };
 
-const fmap =  curry(async function *(fn, iter) {
+const fmap = curry(async function *(fn, iter) {
     for await (const e of iter) {
         if (e && (e[Symbol.iterator] || e[Symbol.asyncIterator])) {
             yield* await fn(e);
@@ -536,7 +536,7 @@ const foldl = curry(async (f, z, iter) => {
 });
 
 const foldl1 = curry(async (f, iter) => {
-    const g =  seq(iter);
+    const g = seq(iter);
     const h = await g.next();
     if (h.done) {
         throw new Error("empty iter");
@@ -628,12 +628,12 @@ const has = curry((key, a) => {
 });
 
 const head = async (iter) => {
-    const g =  seq(iter);
-    const { value, done } = await g.next();
-    if (done) {
+    const g = seq(iter);
+    const e = await g.next();
+    if (e.done) {
         throw new Error("empty iter");
     }
-    return value;
+    return e.value;
 };
 
 const inc = (a) => a + 1;
@@ -745,7 +745,7 @@ const juxtO = curry(async (ap, obj) => {
     return r;
 });
 
-const map =  curry(async function *(fn, iter) {
+const map = curry(async function *(fn, iter) {
     for await (const e of iter) {
         yield fn(e);
     }
@@ -1008,7 +1008,7 @@ class Queue {
     }
 }
 
-const fetch_call_internal =  async (f, iter) => { 
+const fetch_call_internal = async (f, iter) => { 
     const fetch_count = parallel_get_fetch_count_internal();
     const g = seq(iter);
     for (let i = fetch_count; i > 0; --i) {
@@ -1315,7 +1315,7 @@ const scanl = curry(async function *(f, z, iter) {
 });
 
 const scanl1 = curry(async function *(f, iter) {
-    const g =  seq(iter);
+    const g = seq(iter);
     const h = await g.next();
     if (!h.done) {
         yield* scanl(f, h.value, g);
@@ -1323,6 +1323,39 @@ const scanl1 = curry(async function *(f, iter) {
 });
 
 const second = (a) => a[1];
+
+const shuffleInternal = (arr) => {
+    arr = arr.slice();
+    const len = arr.length;
+    for (let i = len - 1; i >= 0; --i) {
+        const where = random(len);
+        if (i !== where) {
+            const tmp = arr[i];
+            arr[i] = arr[where];
+            arr[where] = tmp;
+        }
+    }
+    return arr;
+};
+
+//for AsyncIterable
+const shuffleAsync = async (iter) => {
+    iter = await collect(iter);
+    return shuffleInternal(iter);
+};
+
+/**
+ * return a random permutation of iterator
+ * 
+ * @param {Iterable | AsyncIterable} iter any iterable
+ * @return {Promise<Array>} new shuffle Array
+ */
+const shuffle = (iter) => {
+    if (!Array.isArray(iter)) {
+        return shuffleAsync(iter);
+    }
+    return shuffleInternal(iter);
+};
 
 const some = curry(async (f, iter) => {
     for await (const e of iter) {
@@ -1545,7 +1578,7 @@ const take = curry(async function *(count, iter) {
     }
 });
 
-const takeWhile =  curry(async function *(f, iter) {
+const takeWhile = curry(async function *(f, iter) {
     for await (const e of iter) {
         if (!(await f(e))) {
             break;
@@ -1733,6 +1766,7 @@ exports.scanl = scanl;
 exports.scanl1 = scanl1;
 exports.second = second;
 exports.seq = seq;
+exports.shuffle = shuffle;
 exports.sleep = sleep;
 exports.some = some;
 exports.sort = sort;

@@ -321,3 +321,62 @@ describe('juxtO', () => {
         });
     });
 });
+
+describe('shuffle', () => {
+    it('array', () => {
+        const arri = [1, 2, 3, 4, 5];
+        const ar0 = F.shuffle(arri); // $ExpectType number[]
+
+        const arrs = ["1", "2", "3", "4", "5"];
+        const ar1 = F.shuffle(arrs); // $ExpectType string[]
+
+        const arro = [{ a: 1 }, { a: 1 }, { a: 1 }, { a: 1 }, { a: 1 }];
+        const ar2 = F.shuffle(arro); // $ExpectType { a: number; }[]
+    });
+
+    it('generator', () => {
+        const gi = function*() {
+            for (let i = 0; i < 10; ++i) {
+                yield i;
+            }
+        };
+        const ar0 = F.shuffle(gi()); // $ExpectType Promise<number[]>
+
+        const gs = function*() {
+            for (let i = 0; i < 10; ++i) {
+                yield "" + i;
+            }
+        };
+        const ar1 = F.shuffle(gs()); // $ExpectType Promise<string[]>
+
+        const go = function*() {
+            for (let i = 0; i < 10; ++i) {
+                yield { a: i };
+            }
+        };
+        const ar2 = F.shuffle(go()); // $ExpectType Promise<{ a: number; }[]>
+    });
+
+    it('async generator', () => {
+        const gi = async function*() {
+            for (let i = 0; i < 10; ++i) {
+                yield i;
+            }
+        };
+        const ar0 = F.shuffle(gi()); // $ExpectType Promise<number[]>
+
+        const gs = async function*() {
+            for (let i = 0; i < 10; ++i) {
+                yield "" + i;
+            }
+        };
+        const ar1 = F.shuffle(gs()); // $ExpectType Promise<string[]>
+
+        const go = async function*() {
+            for (let i = 0; i < 10; ++i) {
+                yield { a: i };
+            }
+        };
+        const ar2 = F.shuffle(go()); // $ExpectType Promise<{ a: number; }[]>
+    });
+});

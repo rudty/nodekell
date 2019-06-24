@@ -160,6 +160,7 @@ console.log(v);//[3]
 *    [memoizeBy](#memoizeby)
 *    [equals](#equals)
 *    [random](#random)
+*    [shuffle](#shuffle)
 ---
 
 
@@ -2058,6 +2059,44 @@ F.equals({a:1}, o); // true
 F.equals(NaN, NaN); // true
 F.equals([0,1], [0,1]); // true
 ```
+
+
+### shuffle
+return a random permutation of iterator
+
+**no await** is required for calls to array
+
+```javascript
+const arr = [1,2,3,4,5];
+const sf = F.shuffle(arr);
+console.log(sf);
+//print [5,3,2,1,4]
+```
+```javascript
+const a = function*() {
+    yield 1;
+    yield 2;
+    yield 3;
+    yield 4;
+    yield 5;
+};
+const sf = await F.shuffle(a()); // await required
+console.log(sf);
+//print [5,3,2,1,4];
+```
+```javascript
+const a = async function*() {
+    yield 1;
+    yield 2;
+    yield 3;
+    yield 4;
+    yield 5;
+};
+const sf = await F.shuffle(a()); // await required
+console.log(sf);
+//print [5,3,2,1,4];
+```
+
 
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frudty%2Fnodekell.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Frudty%2Fnodekell?ref=badge_large)

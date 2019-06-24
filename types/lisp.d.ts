@@ -130,3 +130,13 @@ export function juxtA<T>(fn: Iter<Accumulator<T>>): (iter: Iter<T | Promise<T>>)
 export function juxtO<T, K extends keyof T>(key: K[], target: T): Getter<T, K>[];
 export function juxtO<T, K>(key: K[], target: T): Getter<T, K>[];
 export function juxtO(key: any[]): (target: any) => any[];
+
+/**
+ * return a random permutation of iterator
+ * https://github.com/rudty/nodekell#shuffle
+ *
+ * @param {Iterable | AsyncIterable} iter any iterable
+ * @return {Promise<Array>} new shuffle Array
+ */
+export function shuffle<T>(arr: T[]): T[];
+export function shuffle<T>(arr: Iter<T>): Promise<T[]>;
