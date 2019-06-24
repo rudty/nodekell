@@ -1,3 +1,5 @@
+import { undefined } from "./internal/undefined";
+
 export const isNil = (v) => {
     if (v) {
         return false;

@@ -1,4 +1,6 @@
 import { curry } from "./curry";
+import { undefined } from "./internal/undefined";
+
 /**
  * support Map, Set, any Object
  */
