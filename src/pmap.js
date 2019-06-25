@@ -1,20 +1,9 @@
 import { curry } from "./curry";
-import { seq } from "./seq";
 import * as P from "./internal/parallel";
 import { Queue } from "./queue";
 
-export const fetch_map_internal = async (f, fn, iter) => {
-    const fetch_count = P.parallel_get_fetch_count_internal() - 1; 
-    const g = seq(iter);
-    for (let i = fetch_count; i > 0; --i) {
-        const e = await g.next();
-        if (e.done) {
-            break;
-        }
-        f.add(fn(e.value));
-    }
-    return g;
-};
+const fetch_map_internal = (f, fn, iter) =>
+    P.parallel_fetch_map_internal(iter, e => f.add(fn(e)));
 
 export const pmap = curry(async function *(fn, iter) {
     const f = new Queue();

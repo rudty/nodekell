@@ -874,7 +874,19 @@ const parallel_set_fetch_count_internal = (count) => {
     global_fetch_count = count || default_fetch_count;
 };
 
-const parallel_get_fetch_count_internal = () => global_fetch_count;
+const parallel_fetch_map_internal = async (iter, fn) => {
+    // fetch (n - 1) here
+    const fetchCount = global_fetch_count - 1;
+    const g = seq(iter);
+    for (let i = fetchCount; i > 0; --i) {
+        const e = await g.next();
+        if (e.done) {
+            break;
+        }
+        fn(e.value);
+    }
+    return g;
+};
 
 const parallel_set_fetch_count = (count) =>
     parallel_set_fetch_count_internal(count);
@@ -1010,18 +1022,8 @@ class Queue {
     }
 }
 
-const fetch_call_internal = async (f, iter) => { 
-    const fetch_count = parallel_get_fetch_count_internal();
-    const g = seq(iter);
-    for (let i = fetch_count; i > 0; --i) {
-        const e = await g.next();
-        if (e.done) {
-            break;
-        }
-        f.add(e.value());
-    }
-    return g;
-};
+const fetch_call_internal = (f, iter) =>
+    parallel_fetch_map_internal(iter, e => f.add(e()));
 
 const pcalls_internal = async function *(iter) {
 
@@ -1053,20 +1055,11 @@ const peek = curry(async function *(f, iter) {
     }
 });
 
-const fetch_filter_internal = async (f, v, fn, iter) => {
-    //fetch (n - 1) here
-    const fetch_count = parallel_get_fetch_count_internal() - 1;
-    const g = seq(iter);
-    for (let i = fetch_count; i > 0; --i) {
-        const e = await g.next();
-        if (e.done) {
-            break;
-        }
-        f.add(fn(e.value));
-        v.add(e.value);
-    }
-    return g;
-};
+const fetch_filter_internal = (f, v, fn, iter) =>
+    parallel_fetch_map_internal(iter, e => {
+        f.add(fn(e));
+        v.add(e);
+    });
 
 const pfilter = curry(async function *(fn, iter) {
     const f = new Queue();
@@ -1107,18 +1100,8 @@ const pfilter = curry(async function *(fn, iter) {
  */
 const pipe = (f, ...fns) => (...args) => foldl((z, fn) => fn(z), f(...args), fns);
 
-const fetch_map_internal = async (f, fn, iter) => {
-    const fetch_count = parallel_get_fetch_count_internal() - 1; 
-    const g = seq(iter);
-    for (let i = fetch_count; i > 0; --i) {
-        const e = await g.next();
-        if (e.done) {
-            break;
-        }
-        f.add(fn(e.value));
-    }
-    return g;
-};
+const fetch_map_internal = (f, fn, iter) =>
+    parallel_fetch_map_internal(iter, e => f.add(fn(e)));
 
 const pmap = curry(async function *(fn, iter) {
     const f = new Queue();
@@ -1697,7 +1680,6 @@ exports.enumerate = enumerate;
 exports.equals = equals;
 exports.errorThen = errorThen;
 exports.every = every;
-exports.fetch_map_internal = fetch_map_internal;
 exports.filter = filter;
 exports.filterIndexed = filterIndexed;
 exports.filterNot = filterNot;
