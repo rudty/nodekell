@@ -3,7 +3,7 @@ import * as P from "./internal/parallel";
 import { Queue } from "./queue";
 
 const fetch_map_internal = (f, fn, iter) =>
-    P.parallel_fetch_map_internal(iter, e => f.add(fn(e)));
+    P.parallel_fetch_map_internal(iter, (e) => f.add(fn(e)));
 
 export const pmap = curry(async function *(fn, iter) {
     const f = new Queue();

@@ -3,7 +3,7 @@ import * as P from "./internal/parallel";
 import { Queue } from "./queue";
 
 const fetch_call_internal = (f, iter) =>
-    P.parallel_fetch_map_internal(iter, e => f.add(e()));
+    P.parallel_fetch_map_internal(iter, (e) => f.add(e()));
 
 const pcalls_internal = async function *(iter) {
 

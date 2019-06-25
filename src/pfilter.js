@@ -3,7 +3,7 @@ import * as P from "./internal/parallel";
 import { Queue } from "./queue";
 
 const fetch_filter_internal = (f, v, fn, iter) =>
-    P.parallel_fetch_map_internal(iter, e => {
+    P.parallel_fetch_map_internal(iter, (e) => {
         f.add(fn(e));
         v.add(e);
     });
