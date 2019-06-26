@@ -1,16 +1,11 @@
 import { curry } from "./curry";
-import { seq } from "./seq";
+import { _headTail } from "./internal/headTail";
 
 export const minBy = curry(async (f, iter) => {
-    const g = seq(iter);
-    const head = await g.next();
-    if (head.done) {
-        throw new Error("empty iter");
-    }
-    let m = head.value;
+    let [m, tail] = await _headTail(iter);
+    
     let c = await f(m);
-
-    for await (const e of g) {
+    for await (const e of tail) {
         const k = await f(e);
         if (k < c) {
             m = e;

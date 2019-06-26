@@ -1,5 +1,5 @@
 import { curry } from "./curry";
-import { seq } from "./seq";
+import { _headTail } from "./internal/headTail";
 export const foldl = curry(async (f, z, iter) => {
     z = await z;
     for await (const e of iter) {
@@ -9,11 +9,7 @@ export const foldl = curry(async (f, z, iter) => {
 });
 
 export const foldl1 = curry(async (f, iter) => {
-    const g = seq(iter);
-    const h = await g.next();
-    if (h.done) {
-        throw new Error("empty iter");
-    }
-    return foldl(f, h.value, g);
+    const [head, tail] = await _headTail(iter);
+    return foldl(f, head, tail);
 });
 export const reduce = foldl1;

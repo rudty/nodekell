@@ -527,6 +527,20 @@ const flatMap = fmap;
 
 const fnothing = () => {};
 
+/**
+ * get head and tail
+ * @param {Array | Iterable | AsyncIterable} iter 
+ * @returns {Array} [head, tail]
+ */
+const _headTail = async (iter) => {
+    const g = seq(iter);
+    const head = await g.next();
+    if (head.done) {
+        throw new Error("empty iter");
+    }
+    return [head.value, g];
+};
+
 const foldl = curry(async (f, z, iter) => {
     z = await z;
     for await (const e of iter) {
@@ -536,12 +550,8 @@ const foldl = curry(async (f, z, iter) => {
 });
 
 const foldl1 = curry(async (f, iter) => {
-    const g = seq(iter);
-    const h = await g.next();
-    if (h.done) {
-        throw new Error("empty iter");
-    }
-    return foldl(f, h.value, g);
+    const [head, tail] = await _headTail(iter);
+    return foldl(f, head, tail);
 });
 const reduce = foldl1;
 
@@ -761,14 +771,10 @@ const mapIndexed = curry(async function *(fn, iter) {
 });
 
 const maxBy = curry(async (f, iter) => {
-    const g = seq(iter);
-    const head = await g.next();
-    if (head.done) {
-        throw new Error("empty iter");
-    }
-    let m = head.value;
+    let [m, tail] = await _headTail(iter);
+    
     let c = await f(m);
-    for await (const e of g) {
+    for await (const e of tail) {
         const k = await f(e);
         if (k > c) {
             m = e;
@@ -822,15 +828,10 @@ const memoizeWithTimeoutBy = (timeout, keyFn, callFn) => {
 const memoizeWithTimeout = curry((timeout, callFn) => memoizeWithTimeoutBy(timeout, (...a) => a, callFn));
 
 const minBy = curry(async (f, iter) => {
-    const g = seq(iter);
-    const head = await g.next();
-    if (head.done) {
-        throw new Error("empty iter");
-    }
-    let m = head.value;
+    let [m, tail] = await _headTail(iter);
+    
     let c = await f(m);
-
-    for await (const e of g) {
+    for await (const e of tail) {
         const k = await f(e);
         if (k < c) {
             m = e;
@@ -1023,7 +1024,7 @@ class Queue {
 }
 
 const fetch_call_internal = (f, iter) =>
-    parallel_fetch_map_internal(iter, e => f.add(e()));
+    parallel_fetch_map_internal(iter, (e) => f.add(e()));
 
 const pcalls_internal = async function *(iter) {
 
@@ -1056,7 +1057,7 @@ const peek = curry(async function *(f, iter) {
 });
 
 const fetch_filter_internal = (f, v, fn, iter) =>
-    parallel_fetch_map_internal(iter, e => {
+    parallel_fetch_map_internal(iter, (e) => {
         f.add(fn(e));
         v.add(e);
     });
@@ -1101,7 +1102,7 @@ const pfilter = curry(async function *(fn, iter) {
 const pipe = (f, ...fns) => (...args) => foldl((z, fn) => fn(z), f(...args), fns);
 
 const fetch_map_internal = (f, fn, iter) =>
-    parallel_fetch_map_internal(iter, e => f.add(fn(e)));
+    parallel_fetch_map_internal(iter, (e) => f.add(fn(e)));
 
 const pmap = curry(async function *(fn, iter) {
     const f = new Queue();
