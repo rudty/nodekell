@@ -57,34 +57,23 @@ equalFunction.regExp_internal = (lhs, rhs) => {
     return true;
 };
 
-equalFunction.array_internal = (lhs, rhs) => {
+equalFunction._array_internal = (lhs, rhs, comparator) => {
     const len = lhs.length;
     if (len !== rhs.length) {
         return false;
     }
 
     for (let i = len - 1; i >= 0; --i) {
-        if (!equalFunction.fn(lhs[i], rhs[i])) {
+        /**
+         * Array: recur equal(lhs[i], rhs[i])
+         * numeric Array: operator ===
+         */
+        if (!comparator(lhs[i], rhs[i])) {
             return false;
         }
     }
     return true;
 };
-
-equalFunction.numberArray_internal = (lhs, rhs) => {
-    const len = lhs.length;
-    if (len !== rhs.length) {
-        return false;
-    }
-
-    for (let i = len - 1; i >= 0; --i) {
-        if (lhs[i] !== rhs[i]) {
-            return false;
-        }
-    }
-    return true;
-};
-
 
 equalFunction.object_internal = (lhs, rhs) => {
 
@@ -133,7 +122,7 @@ equalFunction.fn = curry((lhs, rhs) => {
         }
 
         if (lhs instanceof Array) {
-            return equalFunction.array_internal(lhs, rhs);
+            return equalFunction._array_internal(lhs, rhs, equalFunction.fn);
         }
 
         if (lhs instanceof Int8Array ||
@@ -143,7 +132,7 @@ equalFunction.fn = curry((lhs, rhs) => {
             lhs instanceof Uint8ClampedArray ||
             lhs instanceof Uint16Array ||
             lhs instanceof Uint32Array) {
-            return equalFunction.numberArray_internal(lhs, rhs);
+            return equalFunction._array_internal(lhs, rhs, (a, b) => a === b);
         }
 
         if (lhs instanceof Map) {

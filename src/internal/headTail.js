@@ -1,6 +1,11 @@
 import { seq } from "../seq";
 /**
  * get head and tail
+ * const [head, tail] = _headTail(iterator);
+ * 
+ * head = value
+ * tail = generator
+ * 
  * @param {Array | Iterable | AsyncIterable} iter 
  * @returns {Array} [head, tail]
  */
