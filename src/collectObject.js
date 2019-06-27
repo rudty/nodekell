@@ -1,9 +1,9 @@
-import { _collectIterable } from "./internal/collectIterable";
+import { _collectInternal } from "./internal/collectInternal";
 /**
  * [a,1],[b,2],[c,3]]  => {a:1,b:2,c:3} 
  */
 export const collectObject = async (iter) => {
-    const c = await _collectIterable(iter);
+    const c = await _collectInternal(iter);
     const o = {};
     for (const e of c) {
         if (!Array.isArray(e)) {

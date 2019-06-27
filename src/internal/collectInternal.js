@@ -1,12 +1,13 @@
 import { collect } from "../collect";
 
 /**
- * remove promise
+ * iterable to array
+ * and resolve promise elements
  * 
  * @param {Array | Iterable | AsyncIterable} iter
- * @returns {Array | AsyncIterator} iterator
+ * @returns {Array}
  */
-export const _collectIterable = (iter) => {
+export const _collectInternal = (iter) => {
     if (Array.isArray(iter)) {
         return Promise.all(iter);
     }
