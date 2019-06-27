@@ -727,7 +727,7 @@ const iterate = curry(async function *(fn, v) {
 //juxtA([Math.max, Math.min], []);
 //=>[undefined, undefined]
 const juxtA = curry(async (af, iter) => {
-    af = await _collectInternal(iter);
+    af = await _collectInternal(af);
 
     const len = af.length;
     const g = seq(iter);

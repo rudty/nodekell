@@ -11,7 +11,7 @@ import { _collectInternal } from "./internal/collectInternal";
 //juxtA([Math.max, Math.min], []);
 //=>[undefined, undefined]
 export const juxtA = curry(async (af, iter) => {
-    af = await _collectInternal(iter);
+    af = await _collectInternal(af);
 
     const len = af.length;
     const g = seq(iter);
