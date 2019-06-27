@@ -2,7 +2,7 @@ import { curry } from "./curry";
 import { foldl } from "./foldl";
 import { forEachIndexed } from "./forEachIndexed";
 import { seq } from "./seq";
-import { collect } from "./collect";
+import { _collectIterable } from "./internal/collectIterable";
 
 
 //juxtA([Math.max, Math.min], [1,2,3,4,5]);
@@ -11,11 +11,7 @@ import { collect } from "./collect";
 //juxtA([Math.max, Math.min], []);
 //=>[undefined, undefined]
 export const juxtA = curry(async (af, iter) => {
-    if (!Array.isArray(af)) {
-        af = await collect(af);
-    } else {
-        af = await Promise.all(af);
-    }
+    af = await _collectIterable(iter);
 
     const len = af.length;
     const g = seq(iter);

@@ -69,10 +69,23 @@ const collect = async (iter) => {
 const collectMap = async (iter) => new Map(await collect(iter));
 
 /**
+ * remove promise
+ * 
+ * @param {Array | Iterable | AsyncIterable} iter
+ * @returns {Array | AsyncIterator} iterator
+ */
+const _collectIterable = (iter) => {
+    if (Array.isArray(iter)) {
+        return Promise.all(iter);
+    }
+    return collect(iter);
+};
+
+/**
  * [a,1],[b,2],[c,3]]  => {a:1,b:2,c:3} 
  */
 const collectObject = async (iter) => {
-    const c = await collect(iter);
+    const c = await _collectIterable(iter);
     const o = {};
     for (const e of c) {
         if (!Array.isArray(e)) {
@@ -471,7 +484,7 @@ const find = curry(async (fn, iter) => {
 });
 
 const findLast = curry(async (fn, iter) => {
-    iter = Array.isArray(iter) ? iter : await collect(iter);
+    iter = await _collectIterable(iter);
     for (let i = iter.length - 1; i >= 0; --i) {
         if (await fn(iter[i])) {
             return iter[i];
@@ -710,11 +723,7 @@ const iterate = curry(async function *(fn, v) {
 //juxtA([Math.max, Math.min], []);
 //=>[undefined, undefined]
 const juxtA = curry(async (af, iter) => {
-    if (!Array.isArray(af)) {
-        af = await collect(af);
-    } else {
-        af = await Promise.all(af);
-    }
+    af = await _collectIterable(iter);
 
     const len = af.length;
     const g = seq(iter);
@@ -752,11 +761,7 @@ const juxtA = curry(async (af, iter) => {
 //juxtO(["A","C"],  new Map([["A", 1], ["B", 2], ["C", 3]]));
 //=>[1,2]
 const juxtO = curry(async (ap, obj) => {
-    if (!Array.isArray(ap)) {
-        ap = await collect(ap);
-    } else {
-        ap = await Promise.all(ap);
-    }
+    ap = await _collectIterable(ap);
 
     const r = [];
     for (const k of ap) {

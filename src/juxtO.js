@@ -1,6 +1,6 @@
 import { curry } from "./curry";
 import { get } from "./get";
-import { collect } from "./collect";
+import { _collectIterable } from "./internal/collectIterable";
 
 
 //juxtO(["A","C"], {A:1,B:2,C:3});
@@ -12,11 +12,7 @@ import { collect } from "./collect";
 //juxtO(["A","C"],  new Map([["A", 1], ["B", 2], ["C", 3]]));
 //=>[1,2]
 export const juxtO = curry(async (ap, obj) => {
-    if (!Array.isArray(ap)) {
-        ap = await collect(ap);
-    } else {
-        ap = await Promise.all(ap);
-    }
+    ap = await _collectIterable(ap);
 
     const r = [];
     for (const k of ap) {
