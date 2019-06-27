@@ -19,6 +19,7 @@ const _headTailIterator = async (iter) => {
     }
     return [head.value, g];
 };
+
 /**
  * get head and tail
  * const [head, tail] = _headTail(iterator);
