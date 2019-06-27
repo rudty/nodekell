@@ -1,12 +1,12 @@
 import { seq } from "../seq";
 
-const throwEmpty = () => {
+const _throwEmpty = () => {
     throw new Error("empty iter");
 };
 
 const _headTailArray = async (arr) => {
     if (arr.length === 0) {
-        throwEmpty();
+        _throwEmpty();
     }
     return [await arr[0], arr.slice(1)];
 };
@@ -15,7 +15,7 @@ const _headTailIterator = async (iter) => {
     const g = seq(iter);
     const head = await g.next();
     if (head.done) {
-        throwEmpty();
+        _throwEmpty();
     }
     return [head.value, g];
 };
