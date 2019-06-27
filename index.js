@@ -54,35 +54,16 @@ const buffer = curry(async function *(supply, iter) {
     }
 });
 
-const generatorConstructor = (function *(){}).constructor;
-
-const _collectAsyncIterable = async (iter) => {
+/**
+ * make array
+ * iterator to array
+ */
+const collect = async (iter) => {
     const res = [];
     for await (const e of iter) {
         res.push(e);
     }
     return res;
-};
-
-const _collectIterable = (iter) => {
-    return Promise.all(iter);
-};
-
-/**
- * make array
- * iterator to array
- */
-const collect = async (a) => {
-
-    if (Array.isArray(a)) {
-        return Promise.all(a);
-    }
-
-    if (a === generatorConstructor) {
-        return _collectIterable(a);
-    }
-    
-    return _collectAsyncIterable(a);
 };
 
 const collectMap = async (iter) => new Map(await collect(iter));
@@ -535,6 +516,25 @@ const flatMap = fmap;
 
 const fnothing = () => {};
 
+const throwEmpty = () => {
+    throw new Error("empty iter");
+};
+
+const _headTailArray = async (arr) => {
+    if (arr.length === 0) {
+        throwEmpty();
+    }
+    return [await arr[0], arr.slice(1)];
+};
+
+const _headTailIterator = async (iter) => {
+    const g = seq(iter);
+    const head = await g.next();
+    if (head.done) {
+        throwEmpty();
+    }
+    return [head.value, g];
+};
 /**
  * get head and tail
  * const [head, tail] = _headTail(iterator);
@@ -543,15 +543,13 @@ const fnothing = () => {};
  * tail = generator
  * 
  * @param {Array | Iterable | AsyncIterable} iter 
- * @returns {Array} [head, tail]
+ * @returns {Array} [head, tail] value, iterable
  */
 const _headTail = async (iter) => {
-    const g = seq(iter);
-    const head = await g.next();
-    if (head.done) {
-        throw new Error("empty iter");
+    if (Array.isArray(iter)) {
+        return _headTailArray(iter);
     }
-    return [head.value, g];
+    return _headTailIterator(iter);
 };
 
 const foldl = curry(async (f, z, iter) => {
