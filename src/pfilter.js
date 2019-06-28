@@ -1,6 +1,6 @@
 import { curry } from "./curry";
 import * as P from "./internal/parallel";
-import { Queue } from "./queue";
+import { _Queue } from "./internal/queue";
 
 const fetch_filter_internal = (f, v, fn, iter) =>
     P.parallel_fetch_map_internal(iter, (e) => {
@@ -9,8 +9,8 @@ const fetch_filter_internal = (f, v, fn, iter) =>
     });
 
 export const pfilter = curry(async function *(fn, iter) {
-    const f = new Queue();
-    const v = new Queue();
+    const f = new _Queue();
+    const v = new _Queue();
     const g = await fetch_filter_internal(f, v, fn, iter);
     for await (const e of g) {
         f.add(fn(e));

@@ -6,7 +6,7 @@
  * 
  * internal only
  */
-export class Queue {
+export class _Queue {
     constructor() {
         this.head = this.tail = null;
     }

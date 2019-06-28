@@ -67,7 +67,6 @@ export * from "./pfilter.js";
 export * from "./pipe.js";
 export * from "./pmap.js";
 export * from "./prop.js";
-export * from "./queue.js";
 export * from "./random.js";
 export * from "./range.js";
 export * from "./rangeInterval.js";

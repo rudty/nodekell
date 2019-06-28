@@ -916,7 +916,7 @@ const parallel_set_fetch_count = (count) =>
  * 
  * internal only
  */
-class Queue {
+class _Queue {
     constructor() {
         this.head = this.tail = null;
     }
@@ -1046,7 +1046,7 @@ const fetch_call_internal = (f, iter) =>
 
 const pcalls_internal = async function *(iter) {
 
-    const f = new Queue();
+    const f = new _Queue();
     const g = await fetch_call_internal(f, iter);
     
     for await(const e of g) {
@@ -1081,8 +1081,8 @@ const fetch_filter_internal = (f, v, fn, iter) =>
     });
 
 const pfilter = curry(async function *(fn, iter) {
-    const f = new Queue();
-    const v = new Queue();
+    const f = new _Queue();
+    const v = new _Queue();
     const g = await fetch_filter_internal(f, v, fn, iter);
     for await (const e of g) {
         f.add(fn(e));
@@ -1123,7 +1123,7 @@ const fetch_map_internal = (f, fn, iter) =>
     parallel_fetch_map_internal(iter, (e) => f.add(fn(e)));
 
 const pmap = curry(async function *(fn, iter) {
-    const f = new Queue();
+    const f = new _Queue();
     const g = await fetch_map_internal(f, fn, iter);
 
     for await (const e of g) {
@@ -1135,7 +1135,7 @@ const pmap = curry(async function *(fn, iter) {
 });
 
 const pfmap = curry(async function *(fn, iter) {
-    const f = new Queue();
+    const f = new _Queue();
     const g = await fetch_map_internal(f, fn, iter);
 
     for await (const e of g) {
@@ -1690,7 +1690,6 @@ const zipWith3 = curry(async function *(f, a, b, c) {
 
 const zip3 = curry((iter1, iter2, iter3) => zipWith3((elem1, elem2, elem3) => [elem1, elem2, elem3], iter1, iter2, iter3));
 
-exports.Queue = Queue;
 exports.add = add;
 exports.asc = asc;
 exports.average = average;
