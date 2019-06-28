@@ -1,6 +1,6 @@
 import { curry } from "./curry";
 import * as P from "./internal/parallel";
-import { _Queue } from "./internal/queue";
+import { _Queue } from "./internal/Queue";
 
 const fetch_map_internal = (f, fn, iter) =>
     P.parallel_fetch_map_internal(iter, (e) => f.add(fn(e)));
