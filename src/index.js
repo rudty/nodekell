@@ -1,4 +1,5 @@
 "use strict";
+export * from "./Queue.js";
 export * from "./add.js";
 export * from "./asc.js";
 export * from "./average.js";

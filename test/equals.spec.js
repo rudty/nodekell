@@ -336,17 +336,17 @@ describe('test equals', () => {
     });
 
     it('custom object', () => {
-        const q1 = new F.Queue();
+        const q1 = new F._Queue();
         q1.add(1);
         q1.add(2);
         q1.add(3);
 
-        const q1_1 = new F.Queue();
+        const q1_1 = new F._Queue();
         q1_1.add(1);
         q1_1.add(2);
         q1_1.add(3); 
 
-        const q2 = new F.Queue();
+        const q2 = new F._Queue();
         q2.add(1);
         q2.add(2);
         q2.add(100); 

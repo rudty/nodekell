@@ -3,6 +3,137 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 /**
+ * collection interface
+ * like java Queue<T>
+ * 
+ * internal only
+ */
+class _Queue {
+    constructor() {
+        this.head = this.tail = null;
+    }
+
+    add(v) {
+        const n = { value: v, next: null };
+        if (this.head) {
+            this.tail.next = n;
+        } else {
+            this.head = n;
+        }
+        this.tail = n;
+    }
+
+    _unsafePop() {
+        const f = this.head;
+        if (f !== this.tail) {
+            this.head = f.next;
+        } else {
+            this.head = this.tail = null;
+        }
+        f.next = null;
+        return f.value;
+    }
+
+    /**
+     * remove head and return
+     * return head or throw Error if empty
+     */
+    remove() {
+        if (this.head === null) {
+            throw new Error("no such element");
+        }
+        return this._unsafePop();
+    }
+
+    /**
+     * remove head and return
+     * return head or null if empty
+     */
+    poll() {
+        if (this.head === null) {
+            return null;
+        }
+        return this._unsafePop();
+    }
+
+    /**
+     * not remove 
+     * return head or throw Error if empty
+     */
+    element() {
+        const f = this.head;
+        if (f === null) {
+            throw new Error("no such element");
+        }
+        return f.value;
+    }
+
+    /**
+     * not remove 
+     * return head or null if empty
+     */
+    peek() {
+        const f = this.head;
+        if (f === null) {
+            return null;
+        }
+        return f.value;
+    }
+
+    isEmpty() {
+        return this.head === null;
+    }
+
+
+    /**
+     * clear all elements
+     */
+    clear() {
+        //remove chain
+        //help gc
+        let it = this.head;
+        while (it) {
+            const n = it.next;
+            it.value = it.next = null;
+            it = n;
+        }
+
+        this.head = this.tail = null;
+    }
+
+    *[Symbol.iterator]() {
+        let it = this.head;
+        while (it) {
+            yield it.value;
+            it = it.next;
+        }
+    }
+
+    /**
+     * yields the value from head and then deletes the value
+     * After the iterator ends, the size of the Queue is zero
+     * 
+     * same as
+     * while (false === q.isEmpty()) {
+     *     yield q.remove();
+     * }
+     * yield value and assign next to null
+     * help gc
+     */
+    *removeIterator() {
+        let it = this.head;
+        while (it) {
+            const p = it;
+            yield p.value;
+            it = p.next;
+
+            p.value = null;
+            p.next = null;
+        }
+    }
+}
+
+/**
  * currying function wrapper
  * ex)
  * var mySum = curry((a,b,c) => {return a+b+c;});
@@ -910,137 +1041,6 @@ const parallel_fetch_map_internal = async (iter, fn) => {
 const parallel_set_fetch_count = (count) =>
     parallel_set_fetch_count_internal(count);
 
-/**
- * collection interface
- * like java Queue<T>
- * 
- * internal only
- */
-class _Queue {
-    constructor() {
-        this.head = this.tail = null;
-    }
-
-    add(v) {
-        const n = { value: v, next: null };
-        if (this.head) {
-            this.tail.next = n;
-        } else {
-            this.head = n;
-        }
-        this.tail = n;
-    }
-
-    _unsafePop() {
-        const f = this.head;
-        if (f !== this.tail) {
-            this.head = f.next;
-        } else {
-            this.head = this.tail = null;
-        }
-        f.next = null;
-        return f.value;
-    }
-
-    /**
-     * remove head and return
-     * return head or throw Error if empty
-     */
-    remove() {
-        if (this.head === null) {
-            throw new Error("no such element");
-        }
-        return this._unsafePop();
-    }
-
-    /**
-     * remove head and return
-     * return head or null if empty
-     */
-    poll() {
-        if (this.head === null) {
-            return null;
-        }
-        return this._unsafePop();
-    }
-
-    /**
-     * not remove 
-     * return head or throw Error if empty
-     */
-    element() {
-        const f = this.head;
-        if (f === null) {
-            throw new Error("no such element");
-        }
-        return f.value;
-    }
-
-    /**
-     * not remove 
-     * return head or null if empty
-     */
-    peek() {
-        const f = this.head;
-        if (f === null) {
-            return null;
-        }
-        return f.value;
-    }
-
-    isEmpty() {
-        return this.head === null;
-    }
-
-
-    /**
-     * clear all elements
-     */
-    clear() {
-        //remove chain
-        //help gc
-        let it = this.head;
-        while (it) {
-            const n = it.next;
-            it.value = it.next = null;
-            it = n;
-        }
-
-        this.head = this.tail = null;
-    }
-
-    *[Symbol.iterator]() {
-        let it = this.head;
-        while (it) {
-            yield it.value;
-            it = it.next;
-        }
-    }
-
-    /**
-     * yields the value from head and then deletes the value
-     * After the iterator ends, the size of the Queue is zero
-     * 
-     * same as
-     * while (false === q.isEmpty()) {
-     *     yield q.remove();
-     * }
-     * yield value and assign next to null
-     * help gc
-     */
-    *removeIterator() {
-        let it = this.head;
-        while (it) {
-            const p = it;
-            yield p.value;
-            it = p.next;
-
-            p.value = null;
-            p.next = null;
-        }
-    }
-}
-
 const fetch_call_internal = (f, iter) =>
     parallel_fetch_map_internal(iter, (e) => f.add(e()));
 
@@ -1690,6 +1690,7 @@ const zipWith3 = curry(async function *(f, a, b, c) {
 
 const zip3 = curry((iter1, iter2, iter3) => zipWith3((elem1, elem2, elem3) => [elem1, elem2, elem3], iter1, iter2, iter3));
 
+exports._Queue = _Queue;
 exports.add = add;
 exports.asc = asc;
 exports.average = average;
