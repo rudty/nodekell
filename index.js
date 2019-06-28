@@ -1276,18 +1276,6 @@ const rangeInterval = async function *(duration, ...k) {
  */
 const rangeOf = (...a) => fmap(identity, a);
 
-const repeatWithFunction = async function *(len, supply) {
-    for (let i = len; i > 0; --i) {
-        yield supply();
-    }
-};
-
-const repeatWithValue = async function *(len, supply) {
-    for (let i = len; i > 0; --i) {
-        yield supply;
-    }
-};
-
 /**
  * arity 1 : [Infinity, arg1]
  * arity 2 : [arg1, arg2]
@@ -1314,9 +1302,13 @@ const repeatFetchArgument = async (a, b) => {
 const repeat = async function *(a, ...b) {
     const [len, supply] = await repeatFetchArgument(a, b);
     if (supply instanceof Function) {
-        yield* repeatWithFunction(len, supply);
+        for (let i = len; i > 0; --i) {
+            yield supply();
+        }
     } else {
-        yield* repeatWithValue(len, supply);
+        for (let i = len; i > 0; --i) {
+            yield supply;
+        }
     }
 };
 
