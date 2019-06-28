@@ -9,9 +9,9 @@ const defaultSize = 32;
  * 
  * like template vector<int>
  * 
- * const int8arr = new _ArrayList(Int8Array);
- * const int16arr = new _ArrayList(Int16Array);
- * const int32arr = new _ArrayList(Int32Array);
+ * const int8arr = new _ArrayList(Int8Array); // ArrayList<Int8>
+ * const int16arr = new _ArrayList(Int16Array); // ArrayList<Int16>
+ * const int32arr = new _ArrayList(Int32Array); // ArrayList<Int32>
  * 
  * internal only
  */
@@ -33,7 +33,7 @@ class _ArrayList {
      */
     constructor(ctor) {
         const buf = new ArrayBuffer(ctor.BYTES_PER_ELEMENT * defaultSize);
-        this._data = new ctor(buf);
+        this._data = new (ctor)(buf);
         this._ctor = ctor;
         this._length = 0;
     }
