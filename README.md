@@ -23,7 +23,7 @@ Functional library for nodejs
 
 ### Import Module 
 ```javascript
-import F from "nodekell"
+import * as F from "nodekell"
 ```
 or
 ```javascript
