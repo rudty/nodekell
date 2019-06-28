@@ -1227,6 +1227,16 @@ for await(const e of r) {
 //3
 //....
 ```
+```javascript
+const r = F.repeat(3, 5);
+for await(const e of r) {
+    console.log(e);
+}
+//print 
+//5
+//5
+//5
+```
 
 
 ### rangeInterval
