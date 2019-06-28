@@ -1,6 +1,8 @@
 import { _ArrayList } from "./ArrayList";
 
 /**
+ * Int32Array.from does not support async generator 
+ * 
  * collect<T>
  * native number
  * 
@@ -21,3 +23,5 @@ export const collectUint8 = _collectNativeArray(Uint8Array);
 export const collectUint16 = _collectNativeArray(Uint16Array);
 export const collectUint32 = _collectNativeArray(Uint32Array);
 export const collectUint8Clamped = _collectNativeArray(Uint8ClampedArray);
+export const collectFloat32 = _collectNativeArray(Float32Array);
+export const collectFloat64 = _collectNativeArray(Float64Array);

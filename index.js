@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const defaultSize = 2;
+const defaultSize = 32;
 
 /**
  * arraylist using native array
@@ -312,6 +312,8 @@ const collect = async (iter) => {
 const collectMap = async (iter) => new Map(await collect(iter));
 
 /**
+ * Int32Array.from does not support async generator 
+ * 
  * collect<T>
  * native number
  * 
@@ -332,6 +334,8 @@ const collectUint8 = _collectNativeArray(Uint8Array);
 const collectUint16 = _collectNativeArray(Uint16Array);
 const collectUint32 = _collectNativeArray(Uint32Array);
 const collectUint8Clamped = _collectNativeArray(Uint8ClampedArray);
+const collectFloat32 = _collectNativeArray(Float32Array);
+const collectFloat64 = _collectNativeArray(Float64Array);
 
 /**
  * iterable to array
@@ -1828,6 +1832,8 @@ exports.asc = asc;
 exports.average = average;
 exports.buffer = buffer;
 exports.collect = collect;
+exports.collectFloat32 = collectFloat32;
+exports.collectFloat64 = collectFloat64;
 exports.collectInt16 = collectInt16;
 exports.collectInt32 = collectInt32;
 exports.collectInt8 = collectInt8;

@@ -1,5 +1,5 @@
 
-const defaultSize = 2;
+const defaultSize = 32;
 
 /**
  * arraylist using native array

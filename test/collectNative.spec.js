@@ -4,11 +4,7 @@ const assert = require("assert");
     
 describe('test collectNative', () => {
     const arrayOf = (ctor) => (arr) => {
-        const a = new F._ArrayList(ctor);
-        for (const e of arr) {
-            a.add(e);
-        }
-        return a.toArray();
+        return ctor.from(arr);
     };
 
     it('collectInt8', async () => {
@@ -44,6 +40,16 @@ describe('test collectNative', () => {
     it('collectUint8Clamped', async () => {
         const r = await F.collectUint8Clamped([1,2,3,4,5]);
         assert.deepStrictEqual(arrayOf(Uint8ClampedArray)([1,2,3,4,5]),r);
+    });
+
+    it('collectFloat32', async () => {
+        const r = await F.collectFloat32([1,2,3,4,5]);
+        assert.deepStrictEqual(arrayOf(Float32Array)([1,2,3,4,5]),r);
+    });
+
+    it('collectFloat64', async () => {
+        const r = await F.collectFloat64([1,2,3,4,5]);
+        assert.deepStrictEqual(arrayOf(Float64Array)([1,2,3,4,5]),r);
     });
 
     it('generator', async () => {
