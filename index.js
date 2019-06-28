@@ -29,12 +29,12 @@ class _ArrayList {
      * Uint16Array
      * Uint32Array
      * 
-     * @param {Function} ctor 
+     * @param {Function} ArrayCtor 
      */
-    constructor(ctor) {
-        const buf = new ArrayBuffer(ctor.BYTES_PER_ELEMENT * defaultSize);
-        this._data = new (ctor)(buf);
-        this._ctor = ctor;
+    constructor(ArrayCtor) {
+        const buf = new ArrayBuffer(ArrayCtor.BYTES_PER_ELEMENT * defaultSize);
+        this._data = new (ArrayCtor)(buf);
+        this._ctor = ArrayCtor;
         this._length = 0;
     }
 
