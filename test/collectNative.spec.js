@@ -78,4 +78,9 @@ describe('test collectNative', () => {
         const r = await F.collectInt32(g());
         assert.deepStrictEqual(arrayOf(Int32Array)([1,2,3]),r);
     });
+
+    it('string?', async () => {
+        const r = await F.collectInt32(["hello","world"]);
+        assert.deepStrictEqual(arrayOf(Int32Array)([0, 0]),r);
+    });
 });

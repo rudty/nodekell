@@ -2,6 +2,115 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
+const defaultSize = 2;
+
+/**
+ * arraylist using native array
+ * 
+ * like template vector<int>
+ * 
+ * const int8arr = new _ArrayList(Int8Array);
+ * const int16arr = new _ArrayList(Int16Array);
+ * const int32arr = new _ArrayList(Int32Array);
+ * 
+ * internal only
+ */
+class _ArrayList {
+    /**
+     * native array constructor
+     * support
+     * 
+     * Int8Array
+     * Int16Array
+     * Int32Array
+     * 
+     * Uint8ClampedArray
+     * Uint8Array
+     * Uint16Array
+     * Uint32Array
+     * 
+     * @param {Function} ctor 
+     */
+    constructor(ctor) {
+        const buf = new ArrayBuffer(ctor.BYTES_PER_ELEMENT * defaultSize);
+        this._data = new ctor(buf);
+        this._ctor = ctor;
+        this._length = 0;
+    }
+
+    /**
+     * [1,2]
+     * grow(4)
+     * [1,2,0,0] <- new 
+     */
+    _grow(size) {
+        const byteSize = this._ctor.BYTES_PER_ELEMENT;
+        const buf = new ArrayBuffer(size * byteSize);
+        const newData = new (this._ctor)(buf);
+        const oldData = this._data;
+
+        //copy old elem
+        for (let i = oldData.length - 1; i >= 0; --i) {
+            newData[i] = oldData[i];
+        }
+        this._data = newData;
+    }
+
+    add(v) {
+        const len = this._length;
+        if (len === this._data.length) {
+            this._grow(len * 2);
+        }
+
+        this._data[len] = v;
+        this._length += 1;
+    }
+
+    /**
+     * get
+     * arr[i]
+     * @param {number} i index
+     */
+    get(i) {
+        return this._data[i];
+    }
+
+    /**
+     * set
+     * arr[i] = e;
+     * @param {number} i index
+     * @param {T} e elem
+     */
+    set(i, e) {
+        this._data[i] = e;
+    }
+
+    /**
+     * @returns {number} length
+     */
+    get length() {
+        return this._length;
+    }
+
+    /**
+     * not really clear
+     * set the length 0 only
+     */
+    clear() {
+        this._length = 0;
+    }
+
+    *[Symbol.iterator]() {
+        for (let i = 0; i < this._length; ++i) {
+            yield this._data[i];
+        }
+    }
+
+    toArray() {
+        return this._data.slice(0, this._length);
+    }
+}
+
 /**
  * collection interface
  * like java Queue<T>
@@ -201,6 +310,28 @@ const collect = async (iter) => {
 };
 
 const collectMap = async (iter) => new Map(await collect(iter));
+
+/**
+ * collect<T>
+ * native number
+ * 
+ * @param {T} ctor 
+ */
+const _collectNativeArray = (ctor) => async (iter) => {
+    const arr = new _ArrayList(ctor);
+    for await (const e of iter) {
+        arr.add(e);
+    }
+    return arr.toArray();
+};
+
+const collectInt8 = _collectNativeArray(Int8Array);
+const collectInt16 = _collectNativeArray(Int16Array);
+const collectInt32 = _collectNativeArray(Int32Array);
+const collectUint8 = _collectNativeArray(Uint8Array);
+const collectUint16 = _collectNativeArray(Uint16Array);
+const collectUint32 = _collectNativeArray(Uint32Array);
+const collectUint8Clamped = _collectNativeArray(Uint8ClampedArray);
 
 /**
  * iterable to array
@@ -1690,15 +1821,23 @@ const zipWith3 = curry(async function *(f, a, b, c) {
 
 const zip3 = curry((iter1, iter2, iter3) => zipWith3((elem1, elem2, elem3) => [elem1, elem2, elem3], iter1, iter2, iter3));
 
+exports._ArrayList = _ArrayList;
 exports._Queue = _Queue;
 exports.add = add;
 exports.asc = asc;
 exports.average = average;
 exports.buffer = buffer;
 exports.collect = collect;
+exports.collectInt16 = collectInt16;
+exports.collectInt32 = collectInt32;
+exports.collectInt8 = collectInt8;
 exports.collectMap = collectMap;
 exports.collectObject = collectObject;
 exports.collectSet = collectSet;
+exports.collectUint16 = collectUint16;
+exports.collectUint32 = collectUint32;
+exports.collectUint8 = collectUint8;
+exports.collectUint8Clamped = collectUint8Clamped;
 exports.compose = compose;
 exports.concat = concat;
 exports.cond = cond;
