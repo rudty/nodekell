@@ -125,6 +125,13 @@ console.log(v);//[3]
 *    [collectMap](#collectmap)
 *    [collectSet](#collectset)
 *    [collectObject](#collectobject)
+*    [collectInt8](#collectint8)
+*    [collectInt16](#collectint16)
+*    [collectInt32](#collectint32)
+*    [collectUint8](#collectuint8)
+*    [collectUint16](#collectuint16)
+*    [collectUint32](#collectuint32)
+*    [collectUint8Clamped](#collectuint8clamped)
 *    [maxBy](#minby)
 *    [minBy](#maxby)
 *    [max](#max)
@@ -1445,6 +1452,86 @@ const a = [[1,2],[3,4]];
 const m = await F.collectObject(a); // {1:2,3:4}
 console.log(m);
 //print { '1': 2, '3': 4 }
+```
+
+
+### collectInt8
+collect native array(char)
+```javascript
+const arr = [1,2,3,4];
+const c = await F.collectInt8(arr);
+console.log(c); 
+//print Int8Array [ 1, 2, 3, 4 ]
+```
+
+
+### collectInt16
+collect native array(short)
+```javascript
+const arr = [1,2,3,4];
+const c = await F.collectInt16(arr);
+console.log(c); 
+//print Int16Array [ 1, 2, 3, 4 ]
+```
+
+
+### collectInt32
+collect native array(int32)
+```javascript
+const arr = [1,2,3,4];
+const c = await F.collectInt32(arr);
+console.log(c); 
+//print Int32Array [ 1, 2, 3, 4 ]
+```
+
+
+### collectUint8
+collect native array(unsigned char)
+```javascript
+const arr = [1,2,3,4];
+const c = await F.collectUint8(arr);
+console.log(c); 
+//print Uint8Array [ 1, 2, 3, 4 ]
+```
+
+
+### collectUint8
+collect native array(unsigned char)
+```javascript
+const arr = [1,2,3,4];
+const c = await F.collectUint8(arr);
+console.log(c); 
+//print Uint8Array [ 1, 2, 3, 4 ]
+```
+
+
+### collectUint16
+collect native array(unsigned short)
+```javascript
+const arr = [1,2,3,4];
+const c = await F.collectUint16(arr);
+console.log(c); 
+//print Uint16Array [ 1, 2, 3, 4 ]
+```
+
+
+### collectUint32
+collect native array(unsigned int32)
+```javascript
+const arr = [1,2,3,4];
+const c = await F.collectUint32(arr);
+console.log(c); 
+//print Uint32Array [ 1, 2, 3, 4 ]
+```
+
+
+### collectUint8Clamped
+collect native array(unsigned char)
+```javascript
+const arr = [1,2,3,4];
+const c = await F.collectUint8Clamped(arr);
+console.log(c); 
+//print Uint32Array [ 1, 2, 3, 4 ]
 ```
 
 
