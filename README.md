@@ -1457,6 +1457,10 @@ console.log(m);
 
 ### collectInt8
 collect native array(char)
+
+Using async generator has better performance than using collect + Int8Array.from().
+
+see also [collect](#collect)
 ```javascript
 const arr = [1,2,3,4];
 const c = await F.collectInt8(arr);
@@ -1467,6 +1471,10 @@ console.log(c);
 
 ### collectInt16
 collect native array(short)
+
+Using async generator has better performance than using collect + Int16Array.from().
+
+see also [collect](#collect)
 ```javascript
 const arr = [1,2,3,4];
 const c = await F.collectInt16(arr);
@@ -1477,6 +1485,10 @@ console.log(c);
 
 ### collectInt32
 collect native array(int32)
+
+Using async generator has better performance than using collect + Int32Array.from().
+
+see also [collect](#collect)
 ```javascript
 const arr = [1,2,3,4];
 const c = await F.collectInt32(arr);
@@ -1487,16 +1499,10 @@ console.log(c);
 
 ### collectUint8
 collect native array(unsigned char)
-```javascript
-const arr = [1,2,3,4];
-const c = await F.collectUint8(arr);
-console.log(c); 
-//print Uint8Array [ 1, 2, 3, 4 ]
-```
 
+Using async generator has better performance than using collect + Uint8Array.from().
 
-### collectUint8
-collect native array(unsigned char)
+see also [collect](#collect)
 ```javascript
 const arr = [1,2,3,4];
 const c = await F.collectUint8(arr);
@@ -1507,6 +1513,10 @@ console.log(c);
 
 ### collectUint16
 collect native array(unsigned short)
+
+Using async generator has better performance than using collect + Uint16Array.from().
+
+see also [collect](#collect)
 ```javascript
 const arr = [1,2,3,4];
 const c = await F.collectUint16(arr);
@@ -1517,6 +1527,10 @@ console.log(c);
 
 ### collectUint32
 collect native array(unsigned int32)
+
+Using async generator has better performance than using collect + Uint32Array.from().
+
+see also [collect](#collect)
 ```javascript
 const arr = [1,2,3,4];
 const c = await F.collectUint32(arr);
@@ -1527,6 +1541,10 @@ console.log(c);
 
 ### collectUint8Clamped
 collect native array(unsigned char)
+
+Using async generator has better performance than using collect + Uint8ClampedArray.from().
+
+see also [collect](#collect)
 ```javascript
 const arr = [1,2,3,4];
 const c = await F.collectUint8Clamped(arr);
