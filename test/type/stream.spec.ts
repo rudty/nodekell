@@ -1134,3 +1134,68 @@ describe('peek', () => {
         }));
     });
 });
+
+describe('collectNative', () => {
+    it('with run', async () => {
+        const arr = ["1", "2", "3"];
+        const r1 = F.run(arr,
+            F.map(parseInt),
+            F.collectInt32);
+        r1; // $ExpectType Promise<Int32Array>
+    });
+    it('collectint8', async () => {
+        const arr = [1, Promise.resolve(2)];
+        const r1 = F.collectInt8(arr); // $ExpectType Promise<Int8Array>
+
+        const arr2 = [1, 2, 3];
+        const r2 = F.collectInt8(arr2); // $ExpectType Promise<Int8Array>
+    });
+
+    it('collectint16', async () => {
+        const arr = [1, Promise.resolve(2)];
+        const r1 = F.collectInt16(arr); // $ExpectType Promise<Int16Array>
+
+        const arr2 = [1, 2, 3];
+        const r2 = F.collectInt16(arr2); // $ExpectType Promise<Int16Array>
+    });
+
+    it('collectint32', async () => {
+        const arr = [1, Promise.resolve(2)];
+        const r1 = F.collectInt32(arr); // $ExpectType Promise<Int32Array>
+
+        const arr2 = [1, 2, 3];
+        const r2 = F.collectInt32(arr2); // $ExpectType Promise<Int32Array>
+    });
+
+    it('collectuint8', async () => {
+        const arr = [1, Promise.resolve(2)];
+        const r1 = F.collectUint8(arr); // $ExpectType Promise<Uint8Array>
+
+        const arr2 = [1, 2, 3];
+        const r2 = F.collectUint8(arr2); // $ExpectType Promise<Uint8Array>
+    });
+
+    it('collectuint16', async () => {
+        const arr = [1, Promise.resolve(2)];
+        const r1 = F.collectUint16(arr); // $ExpectType Promise<Uint16Array>
+
+        const arr2 = [1, 2, 3];
+        const r2 = F.collectUint16(arr2); // $ExpectType Promise<Uint16Array>
+    });
+
+    it('collectuint32', async () => {
+        const arr = [1, Promise.resolve(2)];
+        const r1 = F.collectUint32(arr); // $ExpectType Promise<Uint32Array>
+
+        const arr2 = [1, 2, 3];
+        const r2 = F.collectUint32(arr2); // $ExpectType Promise<Uint32Array>
+    });
+
+    it('collectuint8clamped', async () => {
+        const arr = [1, Promise.resolve(2)];
+        const r1 = F.collectUint8Clamped(arr); // $ExpectType Promise<Uint8ClampedArray>
+
+        const arr2 = [1, 2, 3];
+        const r2 = F.collectUint8Clamped(arr2); // $ExpectType Promise<Uint8ClampedArray>
+    });
+});

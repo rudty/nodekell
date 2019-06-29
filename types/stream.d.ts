@@ -379,3 +379,52 @@ export function peek<T>(f: (elem: T) => any, iter: Iter<T | Promise<T>>): AsyncI
 export function peek<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => any, iter: T): AsyncIterableIterator<FlatForInternalFn<T>>;
 export function peek<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => any): (iter: T) => AsyncIterableIterator<FlatForInternalFn<T>>;
 export function peek<T>(f: (elem: T) => any): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+
+/**
+ * https://github.com/rudty/nodekell#collectint8
+ *
+ * @param iter iterator or async iterator
+ */
+export function collectInt8(iter: Iter<number | Promise<number>>): Promise<Int8Array>;
+
+/**
+ * https://github.com/rudty/nodekell#collectint16
+ *
+ * @param iter iterator or async iterator
+ */
+export function collectInt16(iter: Iter<number | Promise<number>>): Promise<Int16Array>;
+
+/**
+ * https://github.com/rudty/nodekell#collectint32
+ *
+ * @param iter iterator or async iterator
+ */
+export function collectInt32(iter: Iter<number | Promise<number>>): Promise<Int32Array>;
+
+/**
+ * https://github.com/rudty/nodekell#collectuint8
+ *
+ * @param iter iterator or async iterator
+ */
+export function collectUint8(iter: Iter<number | Promise<number>>): Promise<Uint8Array>;
+
+/**
+ * https://github.com/rudty/nodekell#collectuint16
+ *
+ * @param iter iterator or async iterator
+ */
+export function collectUint16(iter: Iter<number | Promise<number>>): Promise<Uint16Array>;
+
+/**
+ * https://github.com/rudty/nodekell#collectuint32
+ *
+ * @param iter iterator or async iterator
+ */
+export function collectUint32(iter: Iter<number | Promise<number>>): Promise<Uint32Array>;
+
+/**
+ * https://github.com/rudty/nodekell#collectuint8clamped
+ *
+ * @param iter iterator or async iterator
+ */
+export function collectUint8Clamped(iter: Iter<number | Promise<number>>): Promise<Uint8ClampedArray>;
