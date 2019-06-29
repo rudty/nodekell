@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const defaultSize = 32;
+const arrayListDefaultSize = 32;
 
 /**
  * arraylist using native array
@@ -32,7 +32,7 @@ class _ArrayList {
      * @param {Function} ArrayCtor 
      */
     constructor(ArrayCtor) {
-        const buf = new ArrayBuffer(ArrayCtor.BYTES_PER_ELEMENT * defaultSize);
+        const buf = new ArrayBuffer(ArrayCtor.BYTES_PER_ELEMENT * arrayListDefaultSize);
         this._data = new (ArrayCtor)(buf);
         this._ctor = ArrayCtor;
         this._length = 0;
@@ -49,10 +49,11 @@ class _ArrayList {
         const newData = new (this._ctor)(buf);
         const oldData = this._data;
 
-        //copy old elem
-        for (let i = oldData.length - 1; i >= 0; --i) {
-            newData[i] = oldData[i];
-        }
+        // //copy old elem
+        // for (let i = oldData.length - 1; i >= 0; --i) {
+        //     newData[i] = oldData[i];
+        // }
+        newData.set(oldData);
         this._data = newData;
     }
 
