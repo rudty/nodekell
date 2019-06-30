@@ -108,7 +108,7 @@ class _ArrayList {
     }
 
     toArray() {
-        return this._data.subarray(0, this._length);
+        return this._data.slice(0, this._length);
     }
 }
 
