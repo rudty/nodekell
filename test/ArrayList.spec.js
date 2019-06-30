@@ -9,7 +9,10 @@ describe('test arraylist', () => {
             ar.add(i);
         }
         assert.strictEqual(ar.length, 100000);
-        assert.strictEqual(ar.toArray().length, 100000);
+
+        const nativeArray = ar.toArray();
+        assert.strictEqual(nativeArray.length, 100000);
+        assert.strictEqual(nativeArray.byteLength, Int32Array.BYTES_PER_ELEMENT * 100000);
     });
 
     it('add int8', async () => {
@@ -17,8 +20,9 @@ describe('test arraylist', () => {
         for(let i = 0; i < 100000; ++i) {
             ar.add(i);
         }
-        assert.strictEqual(ar.length, 100000);
-        assert.strictEqual(ar.toArray().length, 100000);
+        const nativeArray = ar.toArray();
+        assert.strictEqual(nativeArray.length, 100000);
+        assert.strictEqual(nativeArray.byteLength, Int8Array.BYTES_PER_ELEMENT * 100000);
     });
 
     it('get', async () => {
@@ -50,15 +54,19 @@ describe('test arraylist', () => {
     
     it('clear', async () => {
         const ar = new ArrayList(Int32Array);
-        for(let i = 0; i < 100000; ++i) {
+        for(let i = 0; i < 1000000; ++i) {
             ar.add(i);
         }
         ar.clear();
         for(let i = 0; i < 100000; ++i) {
             ar.add(i);
         }
+        
         assert.strictEqual(ar.length, 100000);
-        assert.strictEqual(ar.toArray().length, 100000);
+
+        const nativeArray = ar.toArray();
+        assert.strictEqual(nativeArray.length, 100000);
+        assert.strictEqual(nativeArray.byteLength, Int32Array.BYTES_PER_ELEMENT * 100000);
     });
 
     it('iterator', async () => {
