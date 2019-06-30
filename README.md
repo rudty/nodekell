@@ -1458,7 +1458,7 @@ console.log(m);
 ### collectInt8
 collect native array(char)
 
-support async generator(collect + Int8Array.from())
+support async generator(collect + Int8Array.from)
 
 see also [collect](#collect)
 ```javascript
@@ -1472,7 +1472,7 @@ console.log(c);
 ### collectInt16
 collect native array(short)
 
-support async generator(collect + Int16Array.from())
+support async generator(collect + Int16Array.from)
 
 see also [collect](#collect)
 ```javascript
@@ -1486,7 +1486,7 @@ console.log(c);
 ### collectInt32
 collect native array(int32)
 
-support async generator(collect + Int32Array.from())
+support async generator(collect + Int32Array.from)
 
 see also [collect](#collect)
 ```javascript
@@ -1500,7 +1500,7 @@ console.log(c);
 ### collectUint8
 collect native array(unsigned char)
 
-support async generator(collect + Uint8Array.from())
+support async generator(collect + Uint8Array.from)
 
 see also [collect](#collect)
 ```javascript
@@ -1514,7 +1514,7 @@ console.log(c);
 ### collectUint16
 collect native array(unsigned short)
 
-support async generator(collect + Uint16Array.from())
+support async generator(collect + Uint16Array.from)
 
 see also [collect](#collect)
 ```javascript
@@ -1528,7 +1528,7 @@ console.log(c);
 ### collectUint32
 collect native array(unsigned int32)
 
-support async generator(collect + Uint32Array.from())
+support async generator(collect + Uint32Array.from)
 
 see also [collect](#collect)
 ```javascript
@@ -1542,7 +1542,7 @@ console.log(c);
 ### collectUint8Clamped
 collect native array(unsigned char)
 
-support async generator(collect + Uint8ClampedArray.from())
+support async generator(collect + Uint8ClampedArray.from)
 
 see also [collect](#collect)
 ```javascript
