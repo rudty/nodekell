@@ -1460,6 +1460,8 @@ collect native array(char)
 
 support async generator(collect + Int8Array.from)
 
+if the element is not a number, 0 is assigned
+
 see also [collect](#collect)
 ```javascript
 const arr = [1,2,3,4];
@@ -1473,6 +1475,8 @@ console.log(c);
 collect native array(short)
 
 support async generator(collect + Int16Array.from)
+
+if the element is not a number, 0 is assigned
 
 see also [collect](#collect)
 ```javascript
@@ -1488,6 +1492,8 @@ collect native array(int32)
 
 support async generator(collect + Int32Array.from)
 
+if the element is not a number, 0 is assigned
+
 see also [collect](#collect)
 ```javascript
 const arr = [1,2,3,4];
@@ -1501,6 +1507,8 @@ console.log(c);
 collect native array(unsigned char)
 
 support async generator(collect + Uint8Array.from)
+
+if the element is not a number, 0 is assigned
 
 see also [collect](#collect)
 ```javascript
@@ -1516,6 +1524,8 @@ collect native array(unsigned short)
 
 support async generator(collect + Uint16Array.from)
 
+if the element is not a number, 0 is assigned
+
 see also [collect](#collect)
 ```javascript
 const arr = [1,2,3,4];
@@ -1530,6 +1540,8 @@ collect native array(unsigned int32)
 
 support async generator(collect + Uint32Array.from)
 
+if the element is not a number, 0 is assigned
+
 see also [collect](#collect)
 ```javascript
 const arr = [1,2,3,4];
@@ -1543,6 +1555,8 @@ console.log(c);
 collect native array(unsigned char)
 
 support async generator(collect + Uint8ClampedArray.from)
+
+if the element is not a number, 0 is assigned
 
 see also [collect](#collect)
 ```javascript
