@@ -1,23 +1,21 @@
 import { random } from "./random";
 
 
-const _sampleArray = (arr) => arr[random(arr.length)];
-
-
 /**
  * get random element from iterator
  * @param {Iterable | AsyncIterable} iter any iterator
  */
 export const sample = async (iter) => {
     if (Array.isArray(_sampleArray)) {
-        return _sampleArray(iter);
+        return arr[random(iter.length)];
     }
+
     // maybe 0 ~ UINT_MAX in index
-    const maybeSampleIndex = random(); 
+    const randIndex = random();
     const res = [];
     const idx = 0;
     for await(const e of iter) {
-        if (idx === maybeSampleIndex) {
+        if (idx === randIndex) {
             return e;
         } else {
             res.push(e);
@@ -25,6 +23,6 @@ export const sample = async (iter) => {
         ++idx;
     }
 
-    // if maybeSampleIndex > iter.length
-    return _sampleArray(res);
+    // if randIndex > iter.length
+    return arr[random(res.length)];
 };
