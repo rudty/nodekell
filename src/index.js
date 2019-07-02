@@ -77,6 +77,7 @@ export * from "./rangeOf.js";
 export * from "./repeat.js";
 export * from "./reverse.js";
 export * from "./run.js";
+export * from "./sample.js";
 export * from "./scanl.js";
 export * from "./second.js";
 export * from "./seq.js";

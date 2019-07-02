@@ -1462,6 +1462,33 @@ const repeat = async function *(a, ...b) {
  */
 const run = (iter, ...f) => foldl((z, fn) => fn(z), iter, f);
 
+const _sampleArray = (arr) => arr[random(arr.length)];
+/**
+ * get random element from iterator
+ * @param {Iterable | AsyncIterable} iter any iterator
+ */
+const sample = async (iter) => {
+    if (Array.isArray(iter)) {
+        return _sampleArray(iter);
+    }
+
+    // maybe 0 ~ UINT_MAX in index
+    const randIndex = random();
+    const res = [];
+    let idx = 0;
+    for await(const e of iter) {
+        if (idx === randIndex) {
+            return e;
+        } else {
+            res.push(e);
+        }
+        ++idx;
+    }
+
+    // if randIndex > iter.length
+    return _sampleArray(res);
+};
+
 const scanl = curry(async function *(f, z, iter) {
     z = await z;
     yield z;
@@ -1926,6 +1953,7 @@ exports.reverse = reverse;
 exports.rightInnerJoin = rightInnerJoin;
 exports.rightOuterJoin = rightOuterJoin;
 exports.run = run;
+exports.sample = sample;
 exports.scanl = scanl;
 exports.scanl1 = scanl1;
 exports.second = second;
