@@ -7,7 +7,7 @@ const _sampleArray = (arr) => arr[random(arr.length)];
 const _sampleNotArray = async (iter) => {
     const r = await collect(iter);
     return _sampleArray(r);
-}
+};
 
 /**
  * get random element from iterator
