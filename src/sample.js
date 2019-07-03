@@ -14,7 +14,7 @@ const _sampleNotArray = async (iter) => {
  * @param {Iterable | AsyncIterable} iter any iterator
  */
 export const sample = (iter) => {
-    if (_isArrayLike(iter)) {
+    if (_isArrayLike(iter) || iter.constructor === String) {
         return _sampleArray(iter);
     } 
     return _sampleNotArray(iter);

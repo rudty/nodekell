@@ -24,4 +24,16 @@ describe('test shuffle', () => {
             assert.ok(r < 100);
         }
     });
+
+    it('typearray', async () => {
+        const arr = new Int32Array(100);
+        for (let i = 0; i < 100; ++i) {
+            arr[i] = F.random(100);
+        }
+        assert.ok(F.sample(arr) > 0);
+    });
+    it('typearray length 0', async () => {
+        const arr = new Int32Array(0);
+        assert.ok(!(F.sample(arr) instanceof Promise));
+    })
 });

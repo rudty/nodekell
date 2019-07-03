@@ -1463,18 +1463,29 @@ const repeat = async function *(a, ...b) {
 const run = (iter, ...f) => foldl((z, fn) => fn(z), iter, f);
 
 /**
+ * check 
+ * 
+ * Int8Array
+ * Int16Array 
+ * Int32Array
+ * Uint8Array
+ * Uint8ClampedArray
+ * Uint16Array
+ * Uint32Array
+ * Float32Array
+ * Float64Array
+ * 
+ * @param {any} a 
+ * @returns {bool} true if isTypedArray else false
+ */
+const _isTypedArray = (a) => ArrayBuffer.isView(a) && !(a instanceof DataView);
+
+/**
  * is array like object
  * if not an Array, must have at least one element
  * @param {ArrayLike} any 
  */
-const _isArrayLike = (a) => {
-    if (Array.isArray(a)) {
-        return true;
-    }
-    
-    const len = a.length;
-    return (Number.isInteger(len) && len > 0 && (len - 1) in a);
-};
+const _isArrayLike = (a) => Array.isArray(a) || _isTypedArray(a);
 
 const _sampleArray = (arr) => arr[random(arr.length)];
 
@@ -1488,7 +1499,7 @@ const _sampleNotArray = async (iter) => {
  * @param {Iterable | AsyncIterable} iter any iterator
  */
 const sample = (iter) => {
-    if (_isArrayLike(iter)) {
+    if (_isArrayLike(iter) || iter.constructor === String) {
         return _sampleArray(iter);
     } 
     return _sampleNotArray(iter);
