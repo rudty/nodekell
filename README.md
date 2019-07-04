@@ -2228,7 +2228,7 @@ console.log(sf);
 ```
 
 
-### shuffle
+### sample
 return a random element of iterator
 
 **no await** is required for calls to array
