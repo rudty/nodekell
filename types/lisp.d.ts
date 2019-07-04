@@ -139,4 +139,11 @@ export function juxtO(key: any[]): (target: any) => any[];
  * @return {Promise<Array>} new shuffle Array
  */
 export function shuffle<T>(arr: T[]): T[];
-export function shuffle<T>(arr: Iter<T>): Promise<T[]>;
+export function shuffle<T>(iter: Iter<T>): Promise<T[]>;
+
+/**
+ * return a random element
+ * @param {Iterable | AsyncIterable} iter any iterable
+ */
+export function sample<T>(arr: ArrayLike<T>): T;
+export function sample<T>(iter: Iter<T>): Promise<T>;

@@ -380,3 +380,39 @@ describe('shuffle', () => {
         const ar2 = F.shuffle(go()); // $ExpectType Promise<{ a: number; }[]>
     });
 });
+
+describe('sample', () => {
+    it('array like', () => {
+        const arr = [1, 2, 3, 4, 5];
+        const ar0 = F.sample(arr); // $ExpectType number
+
+        const str = "Hello World";
+        const ar1 = F.sample(str); // $ExpectType string
+
+        const i32a = new Int32Array(0);
+        const ar2 = F.sample(i32a); // $ExpectType number
+    });
+
+    it('generator', () => {
+        const gi = function*() {
+            for (let i = 0; i < 10; ++i) {
+                yield i;
+            }
+        };
+        const ar0 = F.sample(gi()); // $ExpectType Promise<number>
+
+        const gs = function*() {
+            for (let i = 0; i < 10; ++i) {
+                yield "" + i;
+            }
+        };
+        const ar1 = F.sample(gs()); // $ExpectType Promise<string>
+
+        const go = function*() {
+            for (let i = 0; i < 10; ++i) {
+                yield { a: i };
+            }
+        };
+        const ar2 = F.sample(go()); // $ExpectType Promise<{ a: number; }>
+    });
+});
