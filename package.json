@@ -53,6 +53,6 @@
   "devDependencies": {
     "dtslint": "^0.8.0",
     "rollup": "^1.14.2",
-    "typescript": "^3.5.2"
+    "typescript": "^3.4.3"
   }
 }
