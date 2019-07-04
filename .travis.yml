@@ -7,3 +7,4 @@ before_install:
   - npm install -g mocha
   - npm install -g typescript@3.4.3
   - npm install -g ts-node
+  - npm install -g dtslint@0.7.8 
