@@ -51,7 +51,7 @@
   },
   "bugs": "https://github.com/rudty/nodekell/issues",
   "devDependencies": {
-    "dtslint": "^0.8.0",
+    "dtslint": "^0.7.8",
     "rollup": "^1.14.2",
     "typescript": "^3.4.3"
   }
