@@ -4,7 +4,6 @@
 		"target": "es6",
 		"lib": [
             "es6",
-            "esnext",
 			"esnext.asynciterable"
 		],
 		"noImplicitAny": true,
