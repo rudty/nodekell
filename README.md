@@ -2194,8 +2194,7 @@ F.equals([0,1], [0,1]); // true
 ### shuffle
 return a random permutation of iterator
 
-**no await** is required for calls to array
-
+**await** is not required to use for an array.
 ```javascript
 const arr = [1,2,3,4,5];
 const sf = F.shuffle(arr);
@@ -2231,7 +2230,7 @@ console.log(sf);
 ### sample
 return a random element of iterator
 
-**no await** is required for calls to array
+**await** is not required to use for an array.
 ```javascript
 const r = F.sample([1,2,3,4,5,6]);
 console.log(r); //print 1 ~ 6 random
