@@ -6,6 +6,6 @@ node_js:
 before_install:
   - npm install -g mocha
   - npm install -g ts-node
-  - npm install -g typescript
+  - npm install -g typescript@lastest
   - npm install -g dtslint
   - dtslint
