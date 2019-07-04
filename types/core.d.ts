@@ -1,3 +1,5 @@
+// TypeScript Version: 3.4
+
 import {
     CurriedFunction2,
     CurriedFunction3,

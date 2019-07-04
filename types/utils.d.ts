@@ -1,3 +1,5 @@
+// TypeScript Version: 3.4
+
 export type Nullable<T, U extends null | undefined = null> = T | U;
 
 export type Length<T extends any[]> = T["length"];
