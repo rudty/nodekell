@@ -5,6 +5,3 @@ node_js:
   - '12'
 before_install:
   - npm install -g mocha
-  - npm install -g ts-node
-  - npm install -g typescript@3.5.2
-  - npm install -g dtslint
