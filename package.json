@@ -53,7 +53,6 @@
   "devDependencies": {
     "dtslint": "^0.8.0",
     "rollup": "^1.14.2",
-    "ts-node": "^8.3.0",
     "typescript": "^3.5.2"
   }
 }
