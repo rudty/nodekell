@@ -168,6 +168,7 @@ console.log(v);//[3]
 *    [equals](#equals)
 *    [random](#random)
 *    [shuffle](#shuffle)
+*    [sample](#sample)
 ---
 
 
@@ -2226,6 +2227,19 @@ console.log(sf);
 //print [5,3,2,1,4];
 ```
 
+
+### shuffle
+return a random element of iterator
+
+**no await** is required for calls to array
+```javascript
+const r = F.sample([1,2,3,4,5,6]);
+console.log(r); //print 1 ~ 6 random
+```
+```javascript
+const r = await F.sample(F.range(100));
+console.log(r); //print 0 ~ 100 random 
+```
 
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frudty%2Fnodekell.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Frudty%2Fnodekell?ref=badge_large)
