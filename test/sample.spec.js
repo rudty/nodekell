@@ -32,8 +32,14 @@ describe('test shuffle', () => {
         }
         assert.ok(F.sample(arr) > 0);
     });
+
     it('typearray length 0', async () => {
         const arr = new Int32Array(0);
-        assert.ok(!(F.sample(arr) instanceof Promise));
-    })
+        assert.ok(F.sample(arr) === undefined);
+    });
+
+    it('str', async () => {
+        const s = "hello world";
+        assert.ok(F.sample(s).constructor === String);
+    });
 });
