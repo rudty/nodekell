@@ -8,4 +8,3 @@ before_install:
   - npm install -g ts-node
   - npm install -g typescript@3.5.2
   - npm install -g dtslint
-  - dtslint
