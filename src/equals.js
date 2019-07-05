@@ -1,4 +1,5 @@
 import { curry } from "./curry";
+import { _isArrayLike } from "./internal/isArrayLike";
 const equalFunction = {};
 equalFunction.map_internal = (lhs, rhs) => {
     if (lhs.size !== rhs.size) {
@@ -125,13 +126,7 @@ equalFunction.fn = curry((lhs, rhs) => {
             return equalFunction._array_internal(lhs, rhs, equalFunction.fn);
         }
 
-        if (lhs instanceof Int8Array ||
-            lhs instanceof Int16Array || 
-            lhs instanceof Int32Array ||
-            lhs instanceof Uint8Array ||
-            lhs instanceof Uint8ClampedArray ||
-            lhs instanceof Uint16Array ||
-            lhs instanceof Uint32Array) {
+        if (_isArrayLike(lhs)) {
             return equalFunction._array_internal(lhs, rhs, (a, b) => a === b);
         }
 
