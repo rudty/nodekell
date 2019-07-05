@@ -546,9 +546,24 @@ const _isTypedArray = (a) => ArrayBuffer.isView(a) && !(a instanceof DataView);
 /**
  * is array like object
  * if not an Array, must have at least one element
+ * Array, TypedArray, String
  * @param {ArrayLike} any 
  */
-const _isArrayLike = (a) => Array.isArray(a) || _isTypedArray(a);
+const _isArrayLike = (a) => {
+    if(Array.isArray(a) || _isTypedArray(a) || a.constructor === String) {
+        return true;
+    }
+
+    const len = a.length;
+    if (Number.isSafeInteger(len)) {
+        if (len === 1) {
+            return Object.keys(a).length === 1;
+        } else {
+            return (a.length - 1) in a;
+        }
+    }
+    return false;
+};
 
 const equalFunction = {};
 equalFunction.map_internal = (lhs, rhs) => {
@@ -1547,6 +1562,9 @@ const shuffle = (iter) => {
     if (!_isArrayLike(iter)) {
         return shuffleAsync(iter);
     }
+    // if (iter.constructor === String) {
+    //     iter = Array.from(iter);
+    // }
     return shuffleInternal(iter.slice());
 };
 

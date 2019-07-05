@@ -1,5 +1,5 @@
 import { random } from "./random";
-import { _isArrayLike } from "./internal/isArrayLike";
+import { _isArrayLike } from "./internal/typeTraits";
 import { collect } from "./collect";
 
 const _sampleArray = (arr) => arr[random(arr.length)];

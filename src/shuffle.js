@@ -1,6 +1,6 @@
 import { collect } from "./collect";
 import { random } from "./random";
-import { _isArrayLike } from "./internal/isArrayLike";
+import { _isArrayLike } from "./internal/typeTraits";
 
 const shuffleInternal = (arr) => {
     const len = arr.length;
@@ -31,5 +31,8 @@ export const shuffle = (iter) => {
     if (!_isArrayLike(iter)) {
         return shuffleAsync(iter);
     }
+    // if (iter.constructor === String) {
+    //     iter = Array.from(iter);
+    // }
     return shuffleInternal(iter.slice());
 };
