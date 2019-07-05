@@ -1544,7 +1544,7 @@ const shuffleAsync = async (iter) => {
  * @return {Promise<Array>} new shuffle Array
  */
 const shuffle = (iter) => {
-    if (!Array.isArray(iter)) {
+    if (!_isArrayLike(iter)) {
         return shuffleAsync(iter);
     }
     return shuffleInternal(iter.slice());

@@ -1,5 +1,6 @@
 import { collect } from "./collect";
 import { random } from "./random";
+import { _isArrayLike } from "./internal/isArrayLike";
 
 const shuffleInternal = (arr) => {
     const len = arr.length;
@@ -27,7 +28,7 @@ const shuffleAsync = async (iter) => {
  * @return {Promise<Array>} new shuffle Array
  */
 export const shuffle = (iter) => {
-    if (!Array.isArray(iter)) {
+    if (!_isArrayLike(iter)) {
         return shuffleAsync(iter);
     }
     return shuffleInternal(iter.slice());
