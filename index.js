@@ -575,12 +575,6 @@ const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray(a) || _isObjectAr
  */
 const _isReadableArrayLike = (a) => a.constructor === String || _isArrayLike(a);
 
-/**
- * is array like object and writable
- * @param {ArrayLike} a 
- */
-const _isWritableArrayLike = (a) => a.constructor !== String && _isArrayLike(a);
-
 const equalFunction = {};
 equalFunction.map_internal = (lhs, rhs) => {
     if (lhs.size !== rhs.size) {
@@ -1569,19 +1563,16 @@ const shuffleAsync = async (iter) => {
 };
 
 /**
- * return a random permutation of iterator
+ * return a random permutation Array
  * 
  * @param {Iterable | AsyncIterable} iter any iterable
  * @return {Promise<Array>} new shuffle Array
  */
 const shuffle = (iter) => {
-    if (!_isWritableArrayLike(iter)) {
-        return shuffleAsync(iter);
+    if (_isReadableArrayLike(iter)) {
+        return shuffleInternal(Array.from(iter));    
     }
-    // if (iter.constructor === String) {
-    //     iter = Array.from(iter);
-    // }
-    return shuffleInternal(iter.slice());
+    return shuffleAsync(iter);
 };
 
 const some = curry(async (f, iter) => {

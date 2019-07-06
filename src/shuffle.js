@@ -1,6 +1,6 @@
 import { collect } from "./collect";
 import { random } from "./random";
-import { _isWritableArrayLike } from "./internal/typeTraits";
+import { _isReadableArrayLike } from "./internal/typeTraits";
 
 const shuffleInternal = (arr) => {
     const len = arr.length;
@@ -22,17 +22,14 @@ const shuffleAsync = async (iter) => {
 };
 
 /**
- * return a random permutation of iterator
+ * return a random permutation Array
  * 
  * @param {Iterable | AsyncIterable} iter any iterable
  * @return {Promise<Array>} new shuffle Array
  */
 export const shuffle = (iter) => {
-    if (!_isWritableArrayLike(iter)) {
-        return shuffleAsync(iter);
+    if (_isReadableArrayLike(iter)) {
+        return shuffleInternal(Array.from(iter));    
     }
-    // if (iter.constructor === String) {
-    //     iter = Array.from(iter);
-    // }
-    return shuffleInternal(iter.slice());
+    return shuffleAsync(iter);
 };

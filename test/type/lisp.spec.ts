@@ -323,6 +323,11 @@ describe('juxtO', () => {
 });
 
 describe('shuffle', () => {
+    it('string', () => {
+        const s = "Hello World";
+        const ar0 = F.shuffle(s);  // $ExpectType string[]
+    });
+
     it('array', () => {
         const arri = [1, 2, 3, 4, 5];
         const ar0 = F.shuffle(arri); // $ExpectType number[]

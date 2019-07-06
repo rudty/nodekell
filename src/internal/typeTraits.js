@@ -52,4 +52,4 @@ export const _isReadableArrayLike = (a) => a.constructor === String || _isArrayL
  * is array like object and writable
  * @param {ArrayLike} a 
  */
-export const _isWritableArrayLike = (a) => a.constructor !== String && _isArrayLike(a);
+export const _isWritableArrayLike = (a) => a.constructor !== String && !(Object.isFrozen(a)) && _isArrayLike(a);

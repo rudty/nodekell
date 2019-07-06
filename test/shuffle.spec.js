@@ -39,4 +39,11 @@ describe('test shuffle', () => {
         const a = () => [{a:1},{a:2},{a:3},{a:4},{a:5}];
         await shuffleAndCheck(a);
     });
+
+    it('str', async () => {
+        const s = () => "HelloWorld";
+        await shuffleAndCheck(s);
+
+        assert.ok(F.shuffle(s()).constructor === Array);
+    });
 });
