@@ -42,4 +42,17 @@ describe('test sample', () => {
         const s = "hello world";
         assert.ok(F.sample(s).constructor === String);
     });
+
+    it('arrayLike', async () => {
+        const arrlikeEmpty = {
+            length: 0
+        };
+        assert.ok(F.sample(arrlikeEmpty) === undefined);
+
+        const arrlike = {
+            0:1,
+            length: 1
+        };
+        assert.ok(F.sample(arrlike) === 1);
+    });
 });

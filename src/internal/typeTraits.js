@@ -31,7 +31,7 @@ export const _isTypedArray = (a) => ArrayBuffer.isView(a) && !(a instanceof Data
 const _isObjectArray = (a) => {
     const len = a.length;
     if (Number.isSafeInteger(len)) {
-        if (len === 1) {
+        if (len === 0) {
             return Object.keys(a).length === 1;
         } else {
             return Object.prototype.hasOwnProperty.call(a, (a.length - 1));
@@ -52,4 +52,7 @@ export const _isReadableArrayLike = (a) => a.constructor === String || _isArrayL
  * is array like object and writable
  * @param {ArrayLike} a 
  */
-export const _isWritableArrayLike = (a) => a.constructor !== String && !(Object.isFrozen(a)) && _isArrayLike(a);
+export const _isWritableArrayLike = (a) => 
+    a.constructor !== String && 
+    !(Object.isFrozen(a)) && 
+    _isArrayLike(a);

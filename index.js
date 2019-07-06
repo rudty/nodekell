@@ -558,7 +558,7 @@ const _isTypedArray = (a) => ArrayBuffer.isView(a) && !(a instanceof DataView);
 const _isObjectArray = (a) => {
     const len = a.length;
     if (Number.isSafeInteger(len)) {
-        if (len === 1) {
+        if (len === 0) {
             return Object.keys(a).length === 1;
         } else {
             return Object.prototype.hasOwnProperty.call(a, (a.length - 1));
