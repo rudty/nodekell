@@ -16,26 +16,40 @@
  */
 export const _isTypedArray = (a) => ArrayBuffer.isView(a) && !(a instanceof DataView);
 
-export const _isWriteArrayLike = (a) => Array.isArray(a) || _isTypedArray(a);
 /**
- * is array like object
- * if not an Array, must have at least one element
- * Array, TypedArray, String
- * @param {ArrayLike} any 
+ * const o = {
+ *      0: 1,
+ *      1: 2,
+ *      2: 3,
+ *      length: 3
+ * };
+ * console.log(Array.from(o)); 
+ * //print [1,2,3]
+ * 
+ * @param {any} a 
  */
-export const _isReadArrayLike = (a) => {
-    if(_isWriteArrayLike(a) || a.constructor === String) {
-        return true;
-    }
-
+const _isObjectArray = (a) => {
     const len = a.length;
     if (Number.isSafeInteger(len)) {
         if (len === 1) {
             return Object.keys(a).length === 1;
         } else {
-            return (a.length - 1) in a;
+            return Object.prototype.hasOwnProperty.call(a, (a.length - 1));
         }
     }
     return false;
-}
-        
+};
+
+const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray(a) || _isObjectArray(a));
+
+/**
+ * is array like object
+ * @param {ArrayLike} any 
+ */
+export const _isReadableArrayLike = (a) => a.constructor === String || _isArrayLike(a);
+
+/**
+ * is array like object and writable
+ * @param {ArrayLike} a 
+ */
+export const _isWritableArrayLike = (a) => a.constructor !== String && _isArrayLike(a);

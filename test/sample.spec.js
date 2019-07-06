@@ -2,7 +2,7 @@
 const F = require("../index");
 const assert = require("assert");
 
-describe('test shuffle', () => {
+describe('test sample', () => {
     it('array', async () => {
         for (let i = 0; i < 1000; ++i) {
             const r = await F.sample([1,2,3,4,5,6]);

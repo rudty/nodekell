@@ -1,6 +1,6 @@
 import { collect } from "./collect";
 import { random } from "./random";
-import { _isArrayLike } from "./internal/typeTraits";
+import { _isWritableArrayLike } from "./internal/typeTraits";
 
 const shuffleInternal = (arr) => {
     const len = arr.length;
@@ -28,7 +28,7 @@ const shuffleAsync = async (iter) => {
  * @return {Promise<Array>} new shuffle Array
  */
 export const shuffle = (iter) => {
-    if (!_isArrayLike(iter)) {
+    if (!_isWritableArrayLike(iter)) {
         return shuffleAsync(iter);
     }
     // if (iter.constructor === String) {

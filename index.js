@@ -544,26 +544,42 @@ const enumerate = async function *(iter) {
 const _isTypedArray = (a) => ArrayBuffer.isView(a) && !(a instanceof DataView);
 
 /**
- * is array like object
- * if not an Array, must have at least one element
- * Array, TypedArray, String
- * @param {ArrayLike} any 
+ * const o = {
+ *      0: 1,
+ *      1: 2,
+ *      2: 3,
+ *      length: 3
+ * };
+ * console.log(Array.from(o)); 
+ * //print [1,2,3]
+ * 
+ * @param {any} a 
  */
-const _isArrayLike = (a) => {
-    if(Array.isArray(a) || _isTypedArray(a) || a.constructor === String) {
-        return true;
-    }
-
+const _isObjectArray = (a) => {
     const len = a.length;
     if (Number.isSafeInteger(len)) {
         if (len === 1) {
             return Object.keys(a).length === 1;
         } else {
-            return (a.length - 1) in a;
+            return Object.prototype.hasOwnProperty.call(a, (a.length - 1));
         }
     }
     return false;
 };
+
+const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray(a) || _isObjectArray(a));
+
+/**
+ * is array like object
+ * @param {ArrayLike} any 
+ */
+const _isReadableArrayLike = (a) => a.constructor === String || _isArrayLike(a);
+
+/**
+ * is array like object and writable
+ * @param {ArrayLike} a 
+ */
+const _isWritableArrayLike = (a) => a.constructor !== String && _isArrayLike(a);
 
 const equalFunction = {};
 equalFunction.map_internal = (lhs, rhs) => {
@@ -691,7 +707,7 @@ equalFunction.fn = curry((lhs, rhs) => {
             return equalFunction._array_internal(lhs, rhs, equalFunction.fn);
         }
 
-        if (_isArrayLike(lhs)) {
+        if (_isReadableArrayLike(lhs)) {
             return equalFunction._array_internal(lhs, rhs, (a, b) => a === b);
         }
 
@@ -1508,7 +1524,7 @@ const _sampleNotArray = async (iter) => {
  * @param {Iterable | AsyncIterable} iter any iterator
  */
 const sample = (iter) => {
-    if (_isArrayLike(iter) || iter.constructor === String) {
+    if (_isReadableArrayLike(iter) || iter.constructor === String) {
         return _sampleArray(iter);
     } 
     return _sampleNotArray(iter);
@@ -1559,7 +1575,7 @@ const shuffleAsync = async (iter) => {
  * @return {Promise<Array>} new shuffle Array
  */
 const shuffle = (iter) => {
-    if (!_isArrayLike(iter)) {
+    if (!_isWritableArrayLike(iter)) {
         return shuffleAsync(iter);
     }
     // if (iter.constructor === String) {
