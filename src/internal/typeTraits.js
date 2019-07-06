@@ -17,6 +17,18 @@
 export const _isTypedArray = (a) => ArrayBuffer.isView(a) && !(a instanceof DataView);
 
 /**
+ * (a.hasOwnProperty) can be override 
+ * call Object prototype 
+ * @param {ArrayLike} a any object
+ */
+const _isObjectArrayCheckProps = (a) => {
+    if (a.length === 0) {
+        return Object.keys(a).length === 1; 
+    }
+    return Object.prototype.hasOwnProperty.call(a, (a.length - 1)); 
+};
+
+/**
  * const o = {
  *      0: 1,
  *      1: 2,
@@ -29,16 +41,13 @@ export const _isTypedArray = (a) => ArrayBuffer.isView(a) && !(a instanceof Data
  * @param {any} a 
  */
 const _isObjectArray = (a) => {
-    const len = a.length;
-    if (Number.isSafeInteger(len)) {
-        if (len === 0) {
-            return Object.keys(a).length === 1;
-        } else {
-            return Object.prototype.hasOwnProperty.call(a, (a.length - 1));
-        }
+    if (Number.isSafeInteger(a.length)) {
+        return _isObjectArrayCheckProps(a);
     }
     return false;
 };
+
+const _isString = (a) => a.constructor === String;
 
 const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray(a) || _isObjectArray(a));
 
@@ -46,13 +55,19 @@ const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray(a) || _isObjectAr
  * is array like object
  * @param {ArrayLike} any 
  */
-export const _isReadableArrayLike = (a) => a.constructor === String || _isArrayLike(a);
+export const _isReadableArrayLike = (a) =>  _isString(a) || _isArrayLike(a);
 
 /**
  * is array like object and writable
+ * 
+ * Object.isFrozen("string") => true
+ * Object.isFrozen(new String("string")) => false
+ * 
+ * but.. (new String()) cannot modify
+ * 
  * @param {ArrayLike} a 
  */
 export const _isWritableArrayLike = (a) => 
-    a.constructor !== String && 
-    !(Object.isFrozen(a)) && 
+    !(_isString(a)) &&
+    !(Object.isFrozen(a)) &&
     _isArrayLike(a);

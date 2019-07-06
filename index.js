@@ -544,6 +544,18 @@ const enumerate = async function *(iter) {
 const _isTypedArray = (a) => ArrayBuffer.isView(a) && !(a instanceof DataView);
 
 /**
+ * (a.hasOwnProperty) can be override 
+ * call Object prototype 
+ * @param {ArrayLike} a any object
+ */
+const _isObjectArrayCheckProps = (a) => {
+    if (a.length === 0) {
+        return Object.keys(a).length === 1; 
+    }
+    return Object.prototype.hasOwnProperty.call(a, (a.length - 1)); 
+};
+
+/**
  * const o = {
  *      0: 1,
  *      1: 2,
@@ -556,16 +568,13 @@ const _isTypedArray = (a) => ArrayBuffer.isView(a) && !(a instanceof DataView);
  * @param {any} a 
  */
 const _isObjectArray = (a) => {
-    const len = a.length;
-    if (Number.isSafeInteger(len)) {
-        if (len === 0) {
-            return Object.keys(a).length === 1;
-        } else {
-            return Object.prototype.hasOwnProperty.call(a, (a.length - 1));
-        }
+    if (Number.isSafeInteger(a.length)) {
+        return _isObjectArrayCheckProps(a);
     }
     return false;
 };
+
+const _isString = (a) => a.constructor === String;
 
 const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray(a) || _isObjectArray(a));
 
@@ -573,7 +582,7 @@ const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray(a) || _isObjectAr
  * is array like object
  * @param {ArrayLike} any 
  */
-const _isReadableArrayLike = (a) => a.constructor === String || _isArrayLike(a);
+const _isReadableArrayLike = (a) =>  _isString(a) || _isArrayLike(a);
 
 const equalFunction = {};
 equalFunction.map_internal = (lhs, rhs) => {

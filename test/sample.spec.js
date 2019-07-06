@@ -50,7 +50,7 @@ describe('test sample', () => {
         assert.ok(F.sample(arrlikeEmpty) === undefined);
 
         const arrlike = {
-            0:1,
+            0: 1,
             length: 1
         };
         assert.ok(F.sample(arrlike) === 1);
