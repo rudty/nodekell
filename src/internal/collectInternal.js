@@ -1,5 +1,5 @@
 import { collect } from "../collect";
-import { _isReadableArrayLike, _isTypedArray, _isObjectArray, _isString } from "./typeTraits";
+import { _isTypedArray, _isObjectArray, _isString } from "./typeTraits";
 
 /**
  * any iterable to array
