@@ -1,15 +1,30 @@
 import { collect } from "../collect";
+import { _isReadableArrayLike, _isTypedArray, _isObjectArray, _isString } from "./typeTraits";
 
 /**
- * iterable to array
+ * any iterable to array
  * and resolve promise elements
  * 
- * @param {Array | Iterable | AsyncIterable} iter
- * @returns {Array}
+ * @param {ArrayLike | Iterable | AsyncIterable} iter
+ * @returns {Promise<Array>}
  */
 export const _collectInternal = (iter) => {
     if (Array.isArray(iter)) {
         return Promise.all(iter);
     }
+
+    if (_isTypedArray(iter)){
+        //typed array and string does not require await
+        return iter;
+    }
+
+    if(_isString(iter)) {
+        return Array.from(iter);
+    }
+
+    if (_isObjectArray(iter)) {
+        return Promise.all(Array.from(iter));
+    }
+
     return collect(iter);
 };

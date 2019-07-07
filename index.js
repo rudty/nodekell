@@ -339,16 +339,89 @@ const collectFloat32 = _collectNativeArray(Float32Array);
 const collectFloat64 = _collectNativeArray(Float64Array);
 
 /**
- * iterable to array
+ * check 
+ * 
+ * Int8Array
+ * Int16Array 
+ * Int32Array
+ * Uint8Array
+ * Uint8ClampedArray
+ * Uint16Array
+ * Uint32Array
+ * Float32Array
+ * Float64Array
+ * 
+ * @param {any} a 
+ * @returns {bool} true if isTypedArray else false
+ */
+const _isTypedArray = (a) => ArrayBuffer.isView(a) && !(a instanceof DataView);
+
+/**
+ * (a.hasOwnProperty) can be override 
+ * call Object prototype 
+ * @param {ArrayLike} a any object
+ */
+const _isObjectArrayCheckProps = (a) => {
+    if (a.length === 0) {
+        return Object.keys(a).length === 1; 
+    }
+    return Object.prototype.hasOwnProperty.call(a, (a.length - 1)); 
+};
+
+/**
+ * const o = {
+ *      0: 1,
+ *      1: 2,
+ *      2: 3,
+ *      length: 3
+ * };
+ * console.log(Array.from(o)); 
+ * //print [1,2,3]
+ * 
+ * @param {any} a 
+ */
+const _isObjectArray = (a) => {
+    if (Number.isSafeInteger(a.length)) {
+        return _isObjectArrayCheckProps(a);
+    }
+    return false;
+};
+
+const _isString = (a) => a.constructor === String;
+
+const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray(a) || _isObjectArray(a));
+
+/**
+ * is array like object
+ * @param {ArrayLike} any 
+ */
+const _isReadableArrayLike = (a) =>  _isString(a) || _isArrayLike(a);
+
+/**
+ * any iterable to array
  * and resolve promise elements
  * 
- * @param {Array | Iterable | AsyncIterable} iter
- * @returns {Array}
+ * @param {ArrayLike | Iterable | AsyncIterable} iter
+ * @returns {Promise<Array>}
  */
 const _collectInternal = (iter) => {
     if (Array.isArray(iter)) {
         return Promise.all(iter);
     }
+
+    if (_isTypedArray(iter)){
+        //typed array and string does not require await
+        return iter;
+    }
+
+    if(_isString(iter)) {
+        return Array.from(iter);
+    }
+
+    if (_isObjectArray(iter)) {
+        return Promise.all(Array.from(iter));
+    }
+
     return collect(iter);
 };
 
@@ -524,65 +597,6 @@ const enumerate = async function *(iter) {
         yield [i++, e];
     }
 };
-
-/**
- * check 
- * 
- * Int8Array
- * Int16Array 
- * Int32Array
- * Uint8Array
- * Uint8ClampedArray
- * Uint16Array
- * Uint32Array
- * Float32Array
- * Float64Array
- * 
- * @param {any} a 
- * @returns {bool} true if isTypedArray else false
- */
-const _isTypedArray = (a) => ArrayBuffer.isView(a) && !(a instanceof DataView);
-
-/**
- * (a.hasOwnProperty) can be override 
- * call Object prototype 
- * @param {ArrayLike} a any object
- */
-const _isObjectArrayCheckProps = (a) => {
-    if (a.length === 0) {
-        return Object.keys(a).length === 1; 
-    }
-    return Object.prototype.hasOwnProperty.call(a, (a.length - 1)); 
-};
-
-/**
- * const o = {
- *      0: 1,
- *      1: 2,
- *      2: 3,
- *      length: 3
- * };
- * console.log(Array.from(o)); 
- * //print [1,2,3]
- * 
- * @param {any} a 
- */
-const _isObjectArray = (a) => {
-    if (Number.isSafeInteger(a.length)) {
-        return _isObjectArrayCheckProps(a);
-    }
-    return false;
-};
-
-const _isString = (a) => a.constructor === String;
-
-const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray(a) || _isObjectArray(a));
-
-/**
- * is array like object
- * @param {ArrayLike} any 
- */
-const _isReadableArrayLike = (a) =>  _isString(a) || _isArrayLike(a);
 
 const equalFunction = {};
 equalFunction.map_internal = (lhs, rhs) => {

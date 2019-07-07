@@ -40,14 +40,14 @@ const _isObjectArrayCheckProps = (a) => {
  * 
  * @param {any} a 
  */
-const _isObjectArray = (a) => {
+export const _isObjectArray = (a) => {
     if (Number.isSafeInteger(a.length)) {
         return _isObjectArrayCheckProps(a);
     }
     return false;
 };
 
-const _isString = (a) => a.constructor === String;
+export const _isString = (a) => a.constructor === String;
 
 const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray(a) || _isObjectArray(a));
 
