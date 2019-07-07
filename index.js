@@ -395,7 +395,7 @@ const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray(a) || _isObjectAr
  * is array like object
  * @param {ArrayLike} any 
  */
-const _isReadableArrayLike = (a) =>  _isString(a) || _isArrayLike(a);
+const _isReadableArrayLike = (a) => _isString(a) || _isArrayLike(a);
 
 /**
  * any iterable to array

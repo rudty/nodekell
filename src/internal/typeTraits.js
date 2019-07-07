@@ -55,7 +55,7 @@ const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray(a) || _isObjectAr
  * is array like object
  * @param {ArrayLike} any 
  */
-export const _isReadableArrayLike = (a) =>  _isString(a) || _isArrayLike(a);
+export const _isReadableArrayLike = (a) => _isString(a) || _isArrayLike(a);
 
 /**
  * is array like object and writable
