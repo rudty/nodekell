@@ -6,9 +6,9 @@ import { _isTypedArray, _isObjectArray, _isString } from "./typeTraits";
  * and resolve promise elements
  * 
  * @param {ArrayLike | Iterable | AsyncIterable} iter
- * @returns {Promise<Array>}
+ * @returns {Promise<Array> | ArrayLike}
  */
-export const _collectInternal = (iter) => {
+export const _collectArray = (iter) => {
     if (Array.isArray(iter)) {
         return Promise.all(iter);
     }

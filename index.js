@@ -402,9 +402,9 @@ const _isReadableArrayLike = (a) => _isString(a) || _isArrayLike(a);
  * and resolve promise elements
  * 
  * @param {ArrayLike | Iterable | AsyncIterable} iter
- * @returns {Promise<Array>}
+ * @returns {Promise<Array> | ArrayLike}
  */
-const _collectInternal = (iter) => {
+const _collectArray = (iter) => {
     if (Array.isArray(iter)) {
         return Promise.all(iter);
     }
@@ -429,7 +429,7 @@ const _collectInternal = (iter) => {
  * [a,1],[b,2],[c,3]]  => {a:1,b:2,c:3} 
  */
 const collectObject = async (iter) => {
-    const c = await _collectInternal(iter);
+    const c = await _collectArray(iter);
     const o = {};
     for (const e of c) {
         if (!Array.isArray(e)) {
@@ -822,7 +822,7 @@ const find = curry(async (fn, iter) => {
 });
 
 const findLast = curry(async (fn, iter) => {
-    iter = await _collectInternal(iter);
+    iter = await _collectArray(iter);
     for (let i = iter.length - 1; i >= 0; --i) {
         if (await fn(iter[i])) {
             return iter[i];
@@ -1061,7 +1061,7 @@ const iterate = curry(async function *(fn, v) {
 //juxtA([Math.max, Math.min], []);
 //=>[undefined, undefined]
 const juxtA = curry(async (af, iter) => {
-    af = await _collectInternal(af);
+    af = await _collectArray(af);
 
     const len = af.length;
     const g = seq(iter);
@@ -1099,7 +1099,7 @@ const juxtA = curry(async (af, iter) => {
 //juxtO(["A","C"],  new Map([["A", 1], ["B", 2], ["C", 3]]));
 //=>[1,2]
 const juxtO = curry(async (ap, obj) => {
-    ap = await _collectInternal(ap);
+    ap = await _collectArray(ap);
 
     const r = [];
     for (const k of ap) {
