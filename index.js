@@ -897,8 +897,8 @@ const _headTailIterator = async (iter) => {
  * @param {Array | Iterable | AsyncIterable} iter 
  * @returns {Array} [head, tail] value, iterable
  */
-const _headTail = async (iter) => {
-    if (Array.isArray(iter)) {
+const _headTail = (iter) => {
+    if (Array.isArray(iter) || _isTypedArray(iter) || _isString(iter)) {
         return _headTailArray(iter);
     }
     return _headTailIterator(iter);

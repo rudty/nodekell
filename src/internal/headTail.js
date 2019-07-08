@@ -1,4 +1,5 @@
 import { seq } from "../seq";
+import { _isTypedArray, _isString } from "./typeTraits";
 
 const _throwEmpty = () => {
     throw new Error("empty iter");
@@ -30,8 +31,8 @@ const _headTailIterator = async (iter) => {
  * @param {Array | Iterable | AsyncIterable} iter 
  * @returns {Array} [head, tail] value, iterable
  */
-export const _headTail = async (iter) => {
-    if (Array.isArray(iter)) {
+export const _headTail = (iter) => {
+    if (Array.isArray(iter) || _isTypedArray(iter) || _isString(iter)) {
         return _headTailArray(iter);
     }
     return _headTailIterator(iter);
