@@ -1,11 +1,11 @@
 export const count = async (iter) => {
     //array, string
-    if (iter.length && Number.isInteger(iter.length)) {
+    if (Number.isSafeInteger(iter.length)) {
         return iter.length;
     }
 
     //map, set, any collection
-    if (iter.size && Number.isInteger(iter.size)) {
+    if (Number.isSafeInteger(iter.size)) {
         return iter.size;
     }
 

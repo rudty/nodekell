@@ -440,7 +440,7 @@ const collectObject = async (iter) => {
     return o;
 };
 
-const collectSet = async (iter) => new Set(await collect(iter));
+const collectSet = async (iter) => new Set(await _collectArray(iter));
 
 const compose = (...fns) => async (...args) => {
     const len = fns.length;
@@ -477,12 +477,12 @@ const cond = async (...cv) => {
 
 const count = async (iter) => {
     //array, string
-    if (iter.length && Number.isInteger(iter.length)) {
+    if (Number.isSafeInteger(iter.length)) {
         return iter.length;
     }
 
     //map, set, any collection
-    if (iter.size && Number.isInteger(iter.size)) {
+    if (Number.isSafeInteger(iter.size)) {
         return iter.size;
     }
 
