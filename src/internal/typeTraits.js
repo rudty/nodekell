@@ -71,3 +71,6 @@ export const _isWritableArrayLike = (a) =>
     !(_isString(a)) &&
     !(Object.isFrozen(a)) &&
     _isArrayLike(a);
+
+// const _emptyAsyncGenerator = async function *(){};
+// export const _isAsyncGenerator = (a) => a.constructor === _asyncGeneratorConstructor;

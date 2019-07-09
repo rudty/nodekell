@@ -397,6 +397,9 @@ const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray(a) || _isObjectAr
  */
 const _isReadableArrayLike = (a) => _isString(a) || _isArrayLike(a);
 
+// const _emptyAsyncGenerator = async function *(){};
+// export const _isAsyncGenerator = (a) => a.constructor === _asyncGeneratorConstructor;
+
 /**
  * any iterable to array
  * and resolve promise elements
@@ -535,15 +538,21 @@ const identity = (e) => e;
 
 const distinct = (iter) => distinctBy(identity, iter);
 
-/**
- * make generator
- * do not need to check if iter
- * Symbol.asyncIterator or Symbol.iterator
- */
-const seq = async function *(iter) {
+const _seq = async function *(iter) {
     for await (const e of iter) {
         yield e;
     }
+};
+
+/**
+ * make async generator
+ * do not need to check iter is any
+ */
+const seq = (iter) => {
+    if (iter[Symbol.asyncIterator]) {
+        return iter[Symbol.asyncIterator]();
+    }
+    return _seq(iter);
 };
 
 const drop = curry(async function *(count, iter) {
@@ -1230,7 +1239,10 @@ const parallel_set_fetch_count_internal = (count) => {
 const parallel_fetch_map_internal = async (iter, fn) => {
     // fetch (n - 1) here
     const fetchCount = global_fetch_count - 1;
+    console.log(iter.constructor);
     const g = seq(iter);
+    console.log(g);
+    console.log(g.next);
     for (let i = fetchCount; i > 0; --i) {
         const e = await g.next();
         if (e.done) {

@@ -16,7 +16,10 @@ export const parallel_get_fetch_count_internal = () => global_fetch_count;
 export const parallel_fetch_map_internal = async (iter, fn) => {
     // fetch (n - 1) here
     const fetchCount = global_fetch_count - 1;
+    console.log(iter.constructor);
     const g = seq(iter);
+    console.log(g);
+    console.log(g.next);
     for (let i = fetchCount; i > 0; --i) {
         const e = await g.next();
         if (e.done) {
