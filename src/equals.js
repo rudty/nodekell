@@ -1,5 +1,5 @@
 import { curry } from "./curry";
-import { _isReadableArrayLike } from "./internal/typeTraits";
+import { _isObjectArray, _isString } from "./internal/typeTraits";
 const equalFunction = {};
 equalFunction.map_internal = (lhs, rhs) => {
     if (lhs.size !== rhs.size) {
@@ -113,7 +113,7 @@ equalFunction.fn = curry((lhs, rhs) => {
         }
 
         if (lhs instanceof String || 
-            lhs.constructor === String || 
+            _isString(lhs) || 
             lhs instanceof Number || 
             lhs.constructor === Number ||
             lhs instanceof Boolean ||
@@ -126,7 +126,7 @@ equalFunction.fn = curry((lhs, rhs) => {
             return equalFunction._array_internal(lhs, rhs, equalFunction.fn);
         }
 
-        if (_isReadableArrayLike(lhs)) {
+        if (_isTypedArray(lhs) || _isObjectArray(lhs)) {
             return equalFunction._array_internal(lhs, rhs, (a, b) => a === b);
         }
 

@@ -1,6 +1,7 @@
 import { curry } from "./curry";
 import * as P from "./internal/parallel";
 import { _Queue } from "./Queue";
+import { _hasIterator } from "./internal/typeTraits";
 
 const fetch_call_internal = (f, iter) =>
     P.parallel_fetch_map_internal(iter, (e) => f.add(e()));
@@ -20,7 +21,7 @@ const pcalls_internal = async function *(iter) {
 
 export const pcalls = curry(async function *(...a) {
     if (a.length === 1) {
-        if (a[0][Symbol.iterator] || a[0][Symbol.asyncIterator]) {
+        if (_hasIterator(a[0])) {
             yield* pcalls_internal(a[0]);
             return;
         }

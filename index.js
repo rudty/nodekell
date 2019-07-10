@@ -354,7 +354,7 @@ const collectFloat64 = _collectNativeArray(Float64Array);
  * @param {any} a 
  * @returns {bool} true if isTypedArray else false
  */
-const _isTypedArray = (a) => ArrayBuffer.isView(a) && !(a instanceof DataView);
+const _isTypedArray$1 = (a) => ArrayBuffer.isView(a) && !(a instanceof DataView);
 
 /**
  * (a.hasOwnProperty) can be override 
@@ -389,13 +389,23 @@ const _isObjectArray = (a) => {
 
 const _isString = (a) => a.constructor === String;
 
-const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray(a) || _isObjectArray(a));
+const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray$1(a) || _isObjectArray(a));
 
 /**
  * is array like object
  * @param {ArrayLike} any 
  */
 const _isReadableArrayLike = (a) => _isString(a) || _isArrayLike(a);
+
+// const _emptyAsyncGenerator = async function *(){};
+// const _asyncGeneratorConstructor = _emptyAsyncGenerator().constructor;
+
+// export const _isAsyncGenerator = (a) => 
+//     a.constructor === _asyncGeneratorConstructor &&
+//     a.toString() === "[object AsyncGenerator]";
+
+
+const _hasIterator = (a) => a[Symbol.iterator] || a[Symbol.asyncIterator];
 
 /**
  * any iterable to array
@@ -409,7 +419,7 @@ const _collectArray = (iter) => {
         return Promise.all(iter);
     }
 
-    if (_isTypedArray(iter)){
+    if (_isTypedArray$1(iter)){
         //typed array and string does not require await
         return iter;
     }
@@ -487,7 +497,7 @@ const count = async (iter) => {
     }
 
     //iterators
-    if (iter[Symbol.asyncIterator] || iter[Symbol.iterator]) {
+    if (_hasIterator(iter)) {
         let c = 0;
         for await (const _ of iter) {
             ++c;
@@ -506,10 +516,10 @@ const desc = (a, b) => a < b ? 1 : a > b ? -1 : 0;
 const dflat = async function *(...iters) {
     for await (const it of iters) {
         if (it) {
-            if (it.constructor === String) {
+            if (_isString(it)) {
                 yield* it;
                 continue;
-            } else if (it[Symbol.asyncIterator] || it[Symbol.iterator]) {
+            } else if (_hasIterator(it)) {
                 for await (const e of it) {
                     yield* dflat(e);
                 }
@@ -717,7 +727,7 @@ equalFunction.fn = curry((lhs, rhs) => {
         }
 
         if (lhs instanceof String || 
-            lhs.constructor === String || 
+            _isString(lhs) || 
             lhs instanceof Number || 
             lhs.constructor === Number ||
             lhs instanceof Boolean ||
@@ -730,7 +740,7 @@ equalFunction.fn = curry((lhs, rhs) => {
             return equalFunction._array_internal(lhs, rhs, equalFunction.fn);
         }
 
-        if (_isReadableArrayLike(lhs)) {
+        if (_isTypedArray(lhs) || _isObjectArray(lhs)) {
             return equalFunction._array_internal(lhs, rhs, (a, b) => a === b);
         }
 
@@ -778,7 +788,7 @@ const errorThen = curry(async function *(supply, iter){
             supply = await supply(e);
         }
 
-        if(supply && (supply[Symbol.iterator] || supply[Symbol.asyncIterator])) {
+        if(supply && _hasIterator(supply)) {
             yield* supply;
         }
     }
@@ -852,7 +862,7 @@ const firstOrGet = curry(async (supply, iter) => {
 
 const flat = async function *(iter) {
     for await (const e of iter) {
-        if (e && (e[Symbol.iterator] || e[Symbol.asyncIterator])) {
+        if (e && _hasIterator(e)) {
             yield* e;
         } else {
             yield e;
@@ -862,7 +872,7 @@ const flat = async function *(iter) {
 
 const fmap = curry(async function *(fn, iter) {
     for await (const e of iter) {
-        if (e && (e[Symbol.iterator] || e[Symbol.asyncIterator])) {
+        if (e && _hasIterator(e)) {
             yield* await fn(e);
         } else {
             yield e;
@@ -904,7 +914,7 @@ const _headTailIterator = async (iter) => {
  * @returns {Array} [head, tail] value, iterable
  */
 const _headTail = (iter) => {
-    if (Array.isArray(iter) || _isTypedArray(iter) || _isString(iter)) {
+    if (Array.isArray(iter) || _isTypedArray$1(iter) || _isString(iter)) {
         return _headTailArray(iter);
     }
     return _headTailIterator(iter);
@@ -1268,7 +1278,7 @@ const pcalls_internal = async function *(iter) {
 
 const pcalls = curry(async function *(...a) {
     if (a.length === 1) {
-        if (a[0][Symbol.iterator] || a[0][Symbol.asyncIterator]) {
+        if (_hasIterator(a[0])) {
             yield* pcalls_internal(a[0]);
             return;
         }
@@ -1547,7 +1557,7 @@ const _sampleNotArray = async (iter) => {
  * @param {Iterable | AsyncIterable} iter any iterator
  */
 const sample = (iter) => {
-    if (_isReadableArrayLike(iter) || iter.constructor === String) {
+    if (_isReadableArrayLike(iter)) {
         return _sampleArray(iter);
     } 
     return _sampleNotArray(iter);

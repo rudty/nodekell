@@ -1,3 +1,5 @@
+import { _hasIterator } from "./internal/typeTraits";
+
 export const count = async (iter) => {
     //array, string
     if (Number.isSafeInteger(iter.length)) {
@@ -10,7 +12,7 @@ export const count = async (iter) => {
     }
 
     //iterators
-    if (iter[Symbol.asyncIterator] || iter[Symbol.iterator]) {
+    if (_hasIterator(iter)) {
         let c = 0;
         for await (const _ of iter) {
             ++c;

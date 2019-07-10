@@ -1,4 +1,5 @@
 import { curry } from "./curry";
+import { _hasIterator } from "./internal/typeTraits";
 
 export const errorThen = curry(async function *(supply, iter){
     try {
@@ -10,7 +11,7 @@ export const errorThen = curry(async function *(supply, iter){
             supply = await supply(e);
         }
 
-        if(supply && (supply[Symbol.iterator] || supply[Symbol.asyncIterator])) {
+        if(supply && _hasIterator(supply)) {
             yield* supply;
         }
     }
