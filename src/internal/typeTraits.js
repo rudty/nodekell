@@ -72,5 +72,23 @@ export const _isWritableArrayLike = (a) =>
     !(Object.isFrozen(a)) &&
     _isArrayLike(a);
 
-// const _emptyAsyncGenerator = async function *(){};
-// export const _isAsyncGenerator = (a) => a.constructor === _asyncGeneratorConstructor;
+const _emptyAsyncGenerator = async function *(){};
+const _asyncGeneratorConstructor = _emptyAsyncGenerator().constructor;
+
+export const _isAsyncGenerator = (a) => 
+    a.constructor === _asyncGeneratorConstructor &&
+    a.toString() === "[object AsyncGenerator]";
+
+export const _toIterator = (a) => {
+    const it = a[Symbol.iterator];
+    if (it) {
+        return it.call(a);
+    }
+
+    const ait = a[Symbol.asyncIterator];
+    if (ait) {
+        return ait.call(a);
+    }
+
+    //return undefined;
+}

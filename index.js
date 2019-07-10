@@ -397,8 +397,8 @@ const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray(a) || _isObjectAr
  */
 const _isReadableArrayLike = (a) => _isString(a) || _isArrayLike(a);
 
-// const _emptyAsyncGenerator = async function *(){};
-// export const _isAsyncGenerator = (a) => a.constructor === _asyncGeneratorConstructor;
+const _emptyAsyncGenerator = async function *(){};
+const _asyncGeneratorConstructor = _emptyAsyncGenerator().constructor;
 
 /**
  * any iterable to array
