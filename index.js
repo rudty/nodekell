@@ -397,9 +397,6 @@ const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray(a) || _isObjectAr
  */
 const _isReadableArrayLike = (a) => _isString(a) || _isArrayLike(a);
 
-const _emptyAsyncGenerator = async function *(){};
-const _asyncGeneratorConstructor = _emptyAsyncGenerator().constructor;
-
 /**
  * any iterable to array
  * and resolve promise elements
