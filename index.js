@@ -354,7 +354,7 @@ const collectFloat64 = _collectNativeArray(Float64Array);
  * @param {any} a 
  * @returns {bool} true if isTypedArray else false
  */
-const _isTypedArray$1 = (a) => ArrayBuffer.isView(a) && !(a instanceof DataView);
+const _isTypedArray = (a) => ArrayBuffer.isView(a) && !(a instanceof DataView);
 
 /**
  * (a.hasOwnProperty) can be override 
@@ -389,7 +389,7 @@ const _isObjectArray = (a) => {
 
 const _isString = (a) => a.constructor === String;
 
-const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray$1(a) || _isObjectArray(a));
+const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray(a) || _isObjectArray(a));
 
 /**
  * is array like object
@@ -419,7 +419,7 @@ const _collectArray = (iter) => {
         return Promise.all(iter);
     }
 
-    if (_isTypedArray$1(iter)){
+    if (_isTypedArray(iter)){
         //typed array and string does not require await
         return iter;
     }
@@ -914,7 +914,7 @@ const _headTailIterator = async (iter) => {
  * @returns {Array} [head, tail] value, iterable
  */
 const _headTail = (iter) => {
-    if (Array.isArray(iter) || _isTypedArray$1(iter) || _isString(iter)) {
+    if (Array.isArray(iter) || _isTypedArray(iter) || _isString(iter)) {
         return _headTailArray(iter);
     }
     return _headTailIterator(iter);

@@ -1,5 +1,5 @@
 import { curry } from "./curry";
-import { _isObjectArray, _isString } from "./internal/typeTraits";
+import { _isObjectArray, _isTypedArray, _isString } from "./internal/typeTraits";
 const equalFunction = {};
 equalFunction.map_internal = (lhs, rhs) => {
     if (lhs.size !== rhs.size) {
