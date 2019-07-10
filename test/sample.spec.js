@@ -28,7 +28,7 @@ describe('test sample', () => {
     it('typearray', async () => {
         const arr = new Int32Array(100);
         for (let i = 0; i < 100; ++i) {
-            arr[i] = F.random(100);
+            arr[i] = F.random(100) + 1;
         }
         assert.ok(F.sample(arr) > 0);
     });
