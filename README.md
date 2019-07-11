@@ -877,7 +877,7 @@ const v = await F.run([1,2,3,4,5],
 
 
 ### concat
-merge 2 ranges 
+combines two iterables
 ```javascript
 const c = F.concat([1,2,3],[4,5,6]);
 for await(const e of c) {
