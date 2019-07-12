@@ -81,7 +81,7 @@ console.log(v);//[3]
 *    [errorThen](#errorthen)
 *    [distinct](#distinct)
 *    [distinctBy](#distinctby)
-*    [split](#split)
+*    [split](#split)        [**deprecated**]
 *    [splitBy](#splitby)
 *    [innerJoin](#innerjoin)
 *    [leftInnerJoin](#leftinnerjoin)
@@ -723,7 +723,8 @@ for (const m of result) {
 
 
 ### split
-like haskell break 
+**deprecated**
+deprecated.
 ```javascript
 const s = F.split(F.equals(3), [1, 2, 3, 4, 5]);
 for await (const e of s) {

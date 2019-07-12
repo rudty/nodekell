@@ -1662,6 +1662,7 @@ const sort = sortBy(identity);
 
 /**
  * break is keyword..
+ * 
  */
 const split = curry(async function *(fn, iter) {
     const g = seq(iter);

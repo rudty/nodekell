@@ -3,6 +3,7 @@ import { seq } from "./seq";
 
 /**
  * break is keyword..
+ * 
  */
 export const split = curry(async function *(fn, iter) {
     const g = seq(iter);
