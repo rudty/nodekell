@@ -573,6 +573,30 @@ const drop = curry(async function *(count, iter) {
     yield* g;
 });
 
+const addNext = async (q, g) => {
+    const e = await g.next();
+    if (e.done) {
+        return false;
+    }
+    q.add(e.value);
+    return true;
+};
+
+const dropLast = curry(async function *(count, iter) {
+    const g = seq(iter);
+    const q = new _Queue();
+    
+    for (let i = 0; i < count; i++) {
+        if(!(await addNext(q, g))) {
+            return;
+        }
+    }
+    
+    while ((await addNext(q, g))) {
+        yield q.poll();
+    }
+});
+
 const dropWhile = curry(async function *(f, iter) {
     const g = seq(iter);
     while (true) {
@@ -1958,6 +1982,7 @@ exports.dflat = dflat;
 exports.distinct = distinct;
 exports.distinctBy = distinctBy;
 exports.drop = drop;
+exports.dropLast = dropLast;
 exports.dropWhile = dropWhile;
 exports.emptyThen = emptyThen;
 exports.enumerate = enumerate;

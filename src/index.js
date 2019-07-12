@@ -21,6 +21,7 @@ export * from "./dflat.js";
 export * from "./distinct.js";
 export * from "./distinctBy.js";
 export * from "./drop.js";
+export * from "./dropLast.js";
 export * from "./dropWhile.js";
 export * from "./emptyThen.js";
 export * from "./enumerate.js";
