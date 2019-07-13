@@ -43,6 +43,20 @@ export function drop<T>(count: number): (iter: Iter<T | Promise<T>>) => AsyncIte
 // export function drop<T>(count: number): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
 
 /**
+ * https://github.com/rudty/nodekell#droplast
+ *
+ * @param count
+ * @param iter
+ */
+export function dropLast<T>(count: number, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+// export function drop<T>(count: number, iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+
+export function dropLast<T extends Iter<any>>(count: number, iter: T): AsyncIterableIterator<FlatForInternalFn<T>>;
+export function dropLast<T extends Iter<any>>(count: number): (iter: T) => AsyncIterableIterator<FlatForInternalFn<T>>;
+
+export function dropLast<T>(count: number): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+
+/**
  * https://github.com/rudty/nodekell#dropwhile
  *
  * @param f

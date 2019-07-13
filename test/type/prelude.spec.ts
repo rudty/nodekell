@@ -109,6 +109,43 @@ describe('drop', () => {
     });
 });
 
+describe('dropLast', () => {
+    it('from Normal Value', async () => {
+        const a = [1, 2, 3, 4, 5];
+
+        const r0 = F.dropLast<number>(2)(a); // $ExpectType AsyncIterableIterator<number>
+        const r1 = F.dropLast(2, a); // $ExpectType AsyncIterableIterator<number>
+    });
+
+    it('from Promise Value', async () => {
+        const a = [1, 2, 3, Promise.resolve(4), 5];
+
+        const r0 = F.dropLast<number>(2)(a); // $ExpectType AsyncIterableIterator<number>
+        const r1 = F.dropLast(2, a); // $ExpectType AsyncIterableIterator<number>
+    });
+
+    it('from String', async () => {
+        const a = 'hello world';
+
+        const r0 = F.dropLast<string>(2)(a); // $ExpectType AsyncIterableIterator<string>
+        const r1 = F.dropLast(2, a); // $ExpectType AsyncIterableIterator<string>
+    });
+
+    it('from Normal / Promise Union', async () => {
+        const a = [Promise.resolve(1), 2, 'a', Promise.resolve('b')];
+
+        const r0 = F.dropLast<string | number>(2)(a); // $ExpectType AsyncIterableIterator<string | number>
+        const r1 = F.dropLast(2, a); // $ExpectType AsyncIterableIterator<string | number>
+    });
+
+    it('with run', async () => {
+        const a = [Promise.resolve(1), 2, 'a', Promise.resolve('b'), null];
+
+        const r0 = await F.run(a, F.dropLast<string | number | null>(2)); // $ExpectType AsyncIterableIterator<string | number | null>
+        const r1 = await F.run(a, F.dropLast(2)); // $ExpectType AsyncIterableIterator<string | number | null>
+    });
+});
+
 describe('dropWhile', () => {
     it('from Normal Value', async () => {
         const a = [1, 2, 3, 4];
