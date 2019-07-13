@@ -582,6 +582,20 @@ const addNext = async (q, g) => {
     return true;
 };
 
+/**
+ * drop last element
+ * 
+ * const a = [1,2,3,4,5];
+ * const dropIter = F.dropLast(1, a);
+ * for await (const e of dropIter) {
+ *      console.log(e);
+ * }
+ * print 
+ * 1
+ * 2
+ * 3
+ * 4
+ */
 const dropLast = curry(async function *(count, iter) {
     const g = seq(iter);
     const q = new _Queue();

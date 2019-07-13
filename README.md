@@ -76,6 +76,7 @@ console.log(v);//[3]
 *    [zipWith](#zipwith)
 *    [zipWith3](#zipwith3)
 *    [drop](#drop)
+*    [dropLast](#dropLast)
 *    [dropWhile](#dropwhile)
 *    [emptyThen](#emptythen)
 *    [errorThen](#errorthen)
@@ -607,6 +608,7 @@ console.log(arr);
 
 
 ### drop
+drop first element
 ```javascript
 const a = [1,2,3,4,5];
 const r = F.drop(3, a)
@@ -616,6 +618,22 @@ console.log(result); // print [4, 5]
 ```javascript
 const a = [1,2,3,4,5];
 const r = F.drop(Infinity, a)
+const result = await F.collect(r);
+console.log(result); // print []
+```
+
+
+### dropLast
+drop last element
+```javascript
+const a = [1,2,3,4,5];
+const r = F.dropLast(3, a)
+const result = await F.collect(r);
+console.log(result); // print [1, 2]
+```
+```javascript
+const a = [1,2,3,4,5];
+const r = F.dropLast(Infinity, a)
 const result = await F.collect(r);
 console.log(result); // print []
 ```
