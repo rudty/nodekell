@@ -363,4 +363,28 @@ describe('test equals', () => {
         assert.ok(false === F.equals(r1, r1_1));
 
     });
+
+    it('object array equals', () => {
+        const obj1 = {
+            0:1,
+            length:1
+        };
+        const obj2 = {
+            length:1,
+            0:1
+        };
+        assert.ok(F.equals(obj1,obj2));
+    });
+
+    it('object array not equals', () => {
+        const obj1 = {
+            0:1,
+            length:2
+        };
+        const obj2 = {
+            length:1,
+            0:1
+        };
+        assert.ok(false === F.equals(obj1, obj2));
+    });
 });

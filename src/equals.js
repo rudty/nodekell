@@ -1,7 +1,9 @@
 import { curry } from "./curry";
 import { _isObjectArray, _isTypedArray, _isString } from "./internal/typeTraits";
-const equalFunction = {};
-equalFunction.map_internal = (lhs, rhs) => {
+
+let _equals;
+
+const map_internal = (lhs, rhs) => {
     if (lhs.size !== rhs.size) {
         return false;
     }
@@ -11,14 +13,14 @@ equalFunction.map_internal = (lhs, rhs) => {
             return false;
         }
 
-        if (!equalFunction.fn(rhs.get(kv[0]), kv[1])) {
+        if (!_equals(rhs.get(kv[0]), kv[1])) {
             return false;
         }
     }
     return true;
 };
 
-equalFunction.set_internal = (lhs, rhs) => {
+const set_internal = (lhs, rhs) => {
     if (lhs.size !== rhs.size) {
         return false;
     }
@@ -31,7 +33,7 @@ equalFunction.set_internal = (lhs, rhs) => {
     return true;
 };
 
-equalFunction.regExp_internal = (lhs, rhs) => {
+const regExp_internal = (lhs, rhs) => {
     if (lhs.sticky !== rhs.sticky) {
         return false;
     }
@@ -58,25 +60,37 @@ equalFunction.regExp_internal = (lhs, rhs) => {
     return true;
 };
 
-equalFunction._array_internal = (lhs, rhs, comparator) => {
+const typedArray_internal = (lhs, rhs) => {
     const len = lhs.length;
     if (len !== rhs.length) {
         return false;
     }
 
     for (let i = len - 1; i >= 0; --i) {
-        /**
-         * Array: recur equal(lhs[i], rhs[i])
-         * numeric Array: operator ===
-         */
-        if (!comparator(lhs[i], rhs[i])) {
+        // ignore this eslint duplicate warn
+        if (lhs[i] !== rhs[i]) {
             return false;
         }
     }
     return true;
 };
 
-equalFunction.object_internal = (lhs, rhs) => {
+const array_internal = (lhs, rhs) => {
+    const len = lhs.length;
+    if (len !== rhs.length) {
+        return false;
+    }
+
+    for (let i = len - 1; i >= 0; --i) {
+        // ignore this eslint duplicate warn
+        if (!_equals(lhs[i], rhs[i])) {
+            return false;
+        }
+    }
+    return true;
+};
+
+const object_internal = (lhs, rhs) => {
 
     const kvl = Object.entries(lhs);
 
@@ -89,7 +103,7 @@ equalFunction.object_internal = (lhs, rhs) => {
             return false;
         }
 
-        if (!equalFunction.fn(v, rhs[k])) {
+        if (!_equals(v, rhs[k])) {
             return false;
         }
     }
@@ -97,9 +111,9 @@ equalFunction.object_internal = (lhs, rhs) => {
     return true;
 };
 
-equalFunction.toString_internal = (a) => Object.prototype.toString(a);
+const toString_internal = (a) => Object.prototype.toString(a);
 
-equalFunction.fn = curry((lhs, rhs) => {
+_equals = curry((lhs, rhs) => {
     if (lhs === rhs) {
         // undefined === undefined => true
         // null === null => true
@@ -123,23 +137,27 @@ equalFunction.fn = curry((lhs, rhs) => {
         }
 
         if (lhs instanceof Array) {
-            return equalFunction._array_internal(lhs, rhs, equalFunction.fn);
+            return array_internal(lhs, rhs);
         }
 
-        if (_isTypedArray(lhs) || _isObjectArray(lhs)) {
-            return equalFunction._array_internal(lhs, rhs, (a, b) => a === b);
+        if (_isTypedArray(lhs)) {
+            return typedArray_internal(lhs, rhs);
+        }
+
+        if (_isObjectArray(lhs)) {
+            return array_internal(lhs, rhs);
         }
 
         if (lhs instanceof Map) {
-            return equalFunction.map_internal(lhs, rhs);
+            return map_internal(lhs, rhs);
         }
 
         if (lhs instanceof Set) {
-            return equalFunction.set_internal(lhs, rhs);
+            return set_internal(lhs, rhs);
         }
 
         if (lhs instanceof RegExp) {
-            return equalFunction.regExp_internal(lhs, rhs);
+            return regExp_internal(lhs, rhs);
         }
 
         if (lhs instanceof Promise) {
@@ -147,12 +165,12 @@ equalFunction.fn = curry((lhs, rhs) => {
             return false;
         }
 
-        if (equalFunction.toString_internal(lhs) !== equalFunction.toString_internal(rhs)) {
+        if (toString_internal(lhs) !== toString_internal(rhs)) {
             return false;
         }
 
         if (lhs instanceof Object) {
-            return equalFunction.object_internal(lhs, rhs);
+            return object_internal(lhs, rhs);
         }
     } else {
         //NaN === NaN => false
@@ -162,4 +180,5 @@ equalFunction.fn = curry((lhs, rhs) => {
     }
     return false;
 });
-export const equals = equalFunction.fn;
+
+export const equals = _equals;
