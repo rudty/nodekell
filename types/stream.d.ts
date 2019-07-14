@@ -5,6 +5,7 @@ import {
     EP,
     PFlat,
     FlatForInternalFn,
+    ExtractPromise,
 } from './utils';
 
 /**
@@ -442,3 +443,12 @@ export function mostFrequencyBy<T>(f: (elem: T) => any, iter: Iter<T | Promise<T
 export function mostFrequencyBy<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => any, iter: T): Promise<FlatForInternalFn<T> | undefined>;
 export function mostFrequencyBy<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => any): (iter: T) => Promise<FlatForInternalFn<T> | undefined>;
 export function mostFrequencyBy<T>(f: (elem: T) => any): (iter: Iter<T | Promise<T>>) => Promise<T | undefined>;
+
+/**
+ *
+ * https://github.com/rudty/nodekell#mostfrequency
+ *
+ * @param f
+ * @param iter iterable or async iterable
+ */
+export function mostFrequency<T extends Iter<any>>(iter: T): Promise<FlatForInternalFn<T> | undefined>;

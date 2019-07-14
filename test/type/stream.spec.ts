@@ -1269,3 +1269,51 @@ describe('mostFrequencyBy', () => {
         await r1; // $ExpectType string | number | null | undefined
     });
 });
+
+describe('mostFrequency', () => {
+    it('from number Value', async () => {
+        const a = [1, 2, 3, 4, 5];
+
+        const r0 = F.mostFrequency(a); // $ExpectType Promise<number | undefined>
+
+        await r0; // $ExpectType number | undefined
+    });
+
+    it('from Promise Value', async () => {
+        const a = [Promise.resolve(1), 2, 3, 4, 5];
+
+        const r0 = F.mostFrequency(a); // $ExpectType Promise<number | undefined>
+
+        await r0; // $ExpectType number | undefined
+    });
+
+    it('from String', async () => {
+        const a = 'hello world';
+
+        const r0 = F.mostFrequency(a); // $ExpectType Promise<string | undefined>
+
+        await r0; // $ExpectType string | undefined
+    });
+
+    it('from Normal / Promise Union', async () => {
+        const a = [1, Promise.resolve(2), 'a', Promise.resolve('b')];
+
+        const r0 = F.mostFrequency(a); // // $ExpectType Promise<string | number | undefined>
+
+        await r0; // $ExpectType string | number | undefined
+    });
+
+    it('with run', async () => {
+        const a = [1, Promise.resolve(2), 'a', Promise.resolve('b'), null];
+
+        const r0 = F.run(a, e => {
+            return F.mostFrequency(e);
+        });
+
+        await r0; // $ExpectType string | number | null | undefined
+
+        const r1 = F.run(a, F.mostFrequency);
+
+        await r1; // $ExpectType string | number | null | undefined
+    });
+});
