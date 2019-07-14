@@ -23,6 +23,12 @@ describe('test mostFrequencyBy', () => {
         assert.deepEqual(2, r);
     });
 
+
+    it('array4', async () => {
+        const r = await F.mostFrequencyBy(F.identity, [1,2,2,3,4,5,5,5]);
+        assert.deepEqual(5, r);
+    });
+
     it('array + promise', async () => {
         const r = await F.mostFrequencyBy(F.identity, [1,2,Promise.resolve(2),3,4,5]);
         assert.deepEqual(2, r);

@@ -53,6 +53,7 @@ export * from "./isNil.js";
 export * from "./iterate.js";
 export * from "./juxtA.js";
 export * from "./juxtO.js";
+export * from "./leastFrequencyBy.js";
 export * from "./map.js";
 export * from "./mapIndexed.js";
 export * from "./max.js";

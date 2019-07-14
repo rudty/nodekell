@@ -939,24 +939,35 @@ const flatMap = fmap;
 
 const fnothing = () => {};
 
+const undefinedValue = ((v) => v)();
+
+const emptyHeadTail = Object.freeze([undefinedValue, Object.freeze([])]);
+
 const _throwEmpty = () => {
     throw new Error("empty iter");
 };
 
 const _headTailArray = async (arr) => {
-    if (arr.length === 0) {
-        _throwEmpty();
+    if (arr.length !== 0) {
+        return [await arr[0], arr.slice(1)];
     }
-    return [await arr[0], arr.slice(1)];
+    // return undefined;
 };
 
 const _headTailIterator = async (iter) => {
     const g = seq(iter);
     const head = await g.next();
-    if (head.done) {
-        _throwEmpty();
+    if (!head.done) {
+        return [head.value, g];    
     }
-    return [head.value, g];
+    // return undefined;
+};
+
+const _headTailInternal = (iter) => {
+    if (Array.isArray(iter) || _isTypedArray(iter) || _isString(iter)) {
+        return _headTailArray(iter);
+    }
+    return _headTailIterator(iter);
 };
 
 /**
@@ -969,11 +980,12 @@ const _headTailIterator = async (iter) => {
  * @param {Array | Iterable | AsyncIterable} iter 
  * @returns {Array} [head, tail] value, iterable
  */
-const _headTail = (iter) => {
-    if (Array.isArray(iter) || _isTypedArray(iter) || _isString(iter)) {
-        return _headTailArray(iter);
+const _headTail = async (iter) => {
+    const r = await _headTailInternal(iter);
+    if (!r) {
+        _throwEmpty();
     }
-    return _headTailIterator(iter);
+    return r;
 };
 
 const foldl = curry(async (f, z, iter) => {
@@ -1031,8 +1043,6 @@ const forEachIndexed = curry(async (fn, iter) => {
     }
     return Promise.all(wait);
 });
-
-const undefinedValue = ((v) => v)();
 
 /**
  * support Map, Set, any Object
@@ -1181,6 +1191,26 @@ const juxtO = curry(async (ap, obj) => {
     return r;
 });
 
+/**
+ * get frequency
+ * 
+ * @param {Function} keyFn compare, element => key function
+ * @param {Iterable | AsyncIterable} iter
+ */
+const leastFrequencyBy = curry(async (keyFn, iter) => {
+    const groups = await groupBy(keyFn, iter);
+    let minValue;
+    let minCount = Infinity;
+    for (const value of groups.values()) {
+        const len = value.length;
+        if (len < minCount) {
+            minCount = len;
+            minValue = value[0];
+        }
+    }
+    return minValue;
+});
+
 const map = curry(async function *(fn, iter) {
     for await (const e of iter) {
         yield fn(e);
@@ -1274,17 +1304,25 @@ const minBy = curry(async (f, iter) => {
  */
 const min = minBy(identity);
 
-const mostFrequencyBy = curry(async (fn, iter) => {
-    const m = new Map();
+/**
+ * get frequency
+ * 
+ * @param {Function} keyFn compare, element => key function
+ * @param {Iterable | AsyncIterable} iter
+ */
+const mostFrequencyBy = curry(async (keyFn, iter) => {
+
     let mostValue;
     let mostCount = 0;
-    for await (const e of iter) {
-        const v = await fn(e);
-        const frequency = (m.get(v) || 0) + 1;
-        m.set(v, frequency);
 
-        if (frequency > mostCount) {
-            mostCount = frequency;
+    const m = new Map();
+
+    for await (const e of iter) {
+        const v = await keyFn(e);
+        const f = (m.get(v) || 0) + 1;
+        m.set(v, f);
+        if (mostCount < f) {
+            mostCount = f;
             mostValue = e;
         }
     }
@@ -2070,6 +2108,7 @@ exports.isNil = isNil;
 exports.iterate = iterate;
 exports.juxtA = juxtA;
 exports.juxtO = juxtO;
+exports.leastFrequencyBy = leastFrequencyBy;
 exports.leftInnerJoin = leftInnerJoin;
 exports.leftOuterJoin = leftOuterJoin;
 exports.map = map;

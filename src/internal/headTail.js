@@ -1,24 +1,54 @@
 import { seq } from "../seq";
 import { _isTypedArray, _isString } from "./typeTraits";
+import { undefinedValue } from "./undefinedValue";
+
+const emptyHeadTail = Object.freeze([undefinedValue, Object.freeze([])]);
 
 const _throwEmpty = () => {
     throw new Error("empty iter");
 };
 
 const _headTailArray = async (arr) => {
-    if (arr.length === 0) {
-        _throwEmpty();
+    if (arr.length !== 0) {
+        return [await arr[0], arr.slice(1)];
     }
-    return [await arr[0], arr.slice(1)];
+    // return undefined;
 };
 
 const _headTailIterator = async (iter) => {
     const g = seq(iter);
     const head = await g.next();
-    if (head.done) {
-        _throwEmpty();
+    if (!head.done) {
+        return [head.value, g];    
     }
-    return [head.value, g];
+    // return undefined;
+};
+
+const _headTailInternal = (iter) => {
+    if (Array.isArray(iter) || _isTypedArray(iter) || _isString(iter)) {
+        return _headTailArray(iter);
+    }
+    return _headTailIterator(iter);
+};
+
+/**
+ * get head and tail
+ * const [head, tail] = _headTailNoThrow(iterator);
+ * 
+ * head = value
+ * tail = generator
+ * not throw empty
+ * return [undefined []] if iter is empty
+ * 
+ * @param {Array | Iterable | AsyncIterable} iter 
+ * @returns {Array} [head, tail] value, iterable
+ */
+export const _headTailNoThrow = async (iter) => {
+    const r = await _headTailInternal(iter);
+    if (!r) {
+        return emptyHeadTail;
+    }
+    return r;
 };
 
 /**
@@ -31,9 +61,10 @@ const _headTailIterator = async (iter) => {
  * @param {Array | Iterable | AsyncIterable} iter 
  * @returns {Array} [head, tail] value, iterable
  */
-export const _headTail = (iter) => {
-    if (Array.isArray(iter) || _isTypedArray(iter) || _isString(iter)) {
-        return _headTailArray(iter);
+export const _headTail = async (iter) => {
+    const r = await _headTailInternal(iter);
+    if (!r) {
+        _throwEmpty();
     }
-    return _headTailIterator(iter);
+    return r;
 };
