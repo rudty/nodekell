@@ -62,6 +62,7 @@ export * from "./memoizeBy.js";
 export * from "./memoizeWithTimeout.js";
 export * from "./min.js";
 export * from "./minBy.js";
+export * from "./mostFrequency.js";
 export * from "./mostFrequencyBy.js";
 export * from "./notNil.js";
 export * from "./otherwise.js";

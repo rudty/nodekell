@@ -430,3 +430,15 @@ export function collectUint32(iter: Iter<number | Promise<number>>): Promise<Uin
  * @param iter iterator or async iterator
  */
 export function collectUint8Clamped(iter: Iter<number | Promise<number>>): Promise<Uint8ClampedArray>;
+
+/**
+ *
+ * https://github.com/rudty/nodekell#mostfrequencyby
+ *
+ * @param f
+ * @param iter iterable or async iterable
+ */
+export function mostFrequencyBy<T>(f: (elem: T) => any, iter: Iter<T | Promise<T>>): Promise<T | undefined>;
+export function mostFrequencyBy<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => any, iter: T): Promise<FlatForInternalFn<T> | undefined>;
+export function mostFrequencyBy<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => any): (iter: T) => Promise<FlatForInternalFn<T> | undefined>;
+export function mostFrequencyBy<T>(f: (elem: T) => any): (iter: Iter<T | Promise<T>>) => Promise<T | undefined>;

@@ -1199,3 +1199,73 @@ describe('collectNative', () => {
         const r2 = F.collectUint8Clamped(arr2); // $ExpectType Promise<Uint8ClampedArray>
     });
 });
+
+describe('mostFrequencyBy', () => {
+    it('from number Value', async () => {
+        const a = [1, 2, 3, 4, 5];
+
+        const r0 = F.mostFrequencyBy<number>(F.identity)(a); // $ExpectType Promise<number | undefined>
+        const r1 = F.mostFrequencyBy(F.identity, a); // $ExpectType Promise<number | undefined>
+
+        await r0; // $ExpectType number | undefined
+        await r1; // $ExpectType number | undefined
+    });
+
+    it('from Promise Value', async () => {
+        const a = [Promise.resolve(1), 2, 3, 4, 5];
+
+        const r0 = F.mostFrequencyBy<number>(F.identity)(a); // $ExpectType Promise<number | undefined>
+        const r1 = F.mostFrequencyBy(F.identity, a); // $ExpectType Promise<number | undefined>
+
+        await r0; // $ExpectType number | undefined
+        await r1; // $ExpectType number | undefined
+    });
+
+    it('from String', async () => {
+        const a = 'hello world';
+
+        const r0 = F.mostFrequencyBy<string>(F.identity)(a); // $ExpectType Promise<string | undefined>
+        const r1 = F.mostFrequencyBy(F.identity, a); // $ExpectType Promise<string | undefined>
+
+        await r0; // $ExpectType string | undefined
+        await r1; // $ExpectType string | undefined
+    });
+
+    it('from object', async () => {
+        const a = [{ a: 1 }, { a: 2 }, { a: 2 }];
+
+        const r0 = F.mostFrequencyBy<typeof a>(e => e.a)(a); // $ExpectType Promise<{ a: number; } | undefined>
+        const r1 = F.mostFrequencyBy(e => e.a, a); // $ExpectType Promise<{ a: number; } | undefined>
+
+        await r0; // $ExpectType { a: number; } | undefined
+        await r1; // $ExpectType { a: number; } | undefined
+    });
+
+    it('from Normal / Promise Union', async () => {
+        const a = [1, Promise.resolve(2), 'a', Promise.resolve('b')];
+
+        const r0 = F.mostFrequencyBy<string | number>(F.identity)(a); // $ExpectType Promise<string | number | undefined>
+        const r1 = F.mostFrequencyBy(F.identity, a); // // $ExpectType Promise<string | number | undefined>
+
+        await r0; // $ExpectType string | number | undefined
+        await r1; // $ExpectType string | number | undefined
+    });
+
+    it('with run', async () => {
+        const a = [1, Promise.resolve(2), 'a', Promise.resolve('b'), null];
+
+        const r0 = F.run(a, F.mostFrequencyBy<string | number | null>(e => {
+            e; // $ExpectType string | number | null
+            return e;
+        }));
+
+        await r0; // $ExpectType string | number | null | undefined
+
+        const r1 = F.run(a, F.mostFrequencyBy(e => {
+            e; // $ExpectType string | number | null
+            return e;
+        }));
+
+        await r1; // $ExpectType string | number | null | undefined
+    });
+});

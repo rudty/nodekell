@@ -1292,6 +1292,8 @@ const mostFrequencyBy = curry(async (fn, iter) => {
     return mostValue;
 });
 
+const mostFrequency = mostFrequencyBy(identity);
+
 //deprecated / use isNill instead.
 const notNil = (a) => !isNil(a);
 
@@ -2079,6 +2081,7 @@ exports.memoizeBy = memoizeBy;
 exports.memoizeWithTimeout = memoizeWithTimeout;
 exports.min = min;
 exports.minBy = minBy;
+exports.mostFrequency = mostFrequency;
 exports.mostFrequencyBy = mostFrequencyBy;
 exports.notNil = notNil;
 exports.order = order;
