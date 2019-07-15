@@ -1045,6 +1045,22 @@ const forEachIndexed = curry(async (fn, iter) => {
 });
 
 /**
+ * frequency Count
+ * 
+ * @param {Promise<Map>} frequencyMap
+ */
+const frequencies = curry(async (iter) => {
+    const m = new Map();
+
+    for await (const e of iter) {
+        const cnt = (m.get(e) || 0) + 1;
+        m.set(e, cnt);
+    }
+
+    return m;
+});
+
+/**
  * support Map, Set, any Object
  */
 const get = curry((key, a) => {
@@ -1189,26 +1205,6 @@ const juxtO = curry(async (ap, obj) => {
     }
     
     return r;
-});
-
-/**
- * get frequency
- * 
- * @param {Function} keyFn compare, element => key function
- * @param {Iterable | AsyncIterable} iter
- */
-const leastFrequencyBy = curry(async (keyFn, iter) => {
-    const groups = await groupBy(keyFn, iter);
-    let minValue;
-    let minCount = Infinity;
-    for (const value of groups.values()) {
-        const len = value.length;
-        if (len < minCount) {
-            minCount = len;
-            minValue = value[0];
-        }
-    }
-    return minValue;
 });
 
 const map = curry(async function *(fn, iter) {
@@ -2096,6 +2092,7 @@ exports.foldr = foldr;
 exports.foldr1 = foldr1;
 exports.forEach = forEach;
 exports.forEachIndexed = forEachIndexed;
+exports.frequencies = frequencies;
 exports.get = get;
 exports.groupBy = groupBy;
 exports.has = has;
@@ -2108,7 +2105,6 @@ exports.isNil = isNil;
 exports.iterate = iterate;
 exports.juxtA = juxtA;
 exports.juxtO = juxtO;
-exports.leastFrequencyBy = leastFrequencyBy;
 exports.leftInnerJoin = leftInnerJoin;
 exports.leftOuterJoin = leftOuterJoin;
 exports.map = map;

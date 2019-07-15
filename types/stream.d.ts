@@ -451,4 +451,14 @@ export function mostFrequencyBy<T>(f: (elem: T) => any): (iter: Iter<T | Promise
  * @param f
  * @param iter iterable or async iterable
  */
-export function mostFrequency<T extends Iter<any>>(iter: T): Promise<FlatForInternalFn<T> | undefined>;
+// export function mostFrequency<T extends Iter<any>>(iter: T): Promise<FlatForInternalFn<T> | undefined>;
+export function mostFrequency<T>(iter: Iter<T>): Promise<EP<T> | undefined>;
+
+/**
+ *
+ * https://github.com/rudty/nodekell#frequencies
+ *
+ * @param iter iterable or async iterable
+ */
+// export function frequencies<T>(iter: Iter<T>): Promise<Map<EP<T>, number>>;
+export function frequencies<T extends Iter<any>>(iter: T): Promise<Map<FlatForInternalFn<T>, number>>;

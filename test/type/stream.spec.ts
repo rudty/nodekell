@@ -1,4 +1,5 @@
 import * as F from '../../';
+import { foldl } from 'types/prelude';
 
 type DoneFn = () => any;
 
@@ -1315,5 +1316,43 @@ describe('mostFrequency', () => {
         const r1 = F.run(a, F.mostFrequency);
 
         await r1; // $ExpectType string | number | null | undefined
+    });
+});
+
+describe('frequencies', () => {
+    it('from Object Array', async () => {
+        const a = [{ type: 'human', name: 'syrflover' }, { type: 'kinggod', name: 'gyungdal' }, { type: 'human', name: 'cenox' }];
+
+        const r1 = await F.frequencies(a); // $ExpectType Map<{ type: string; name: string; }, number>
+    });
+
+    it('from Array', async () => {
+        const a = ['h', 1, 'e', 2, 'l', 3, 'l', 4, 'o', 5];
+
+        const r1 = await F.frequencies(a); // $ExpectType Map<string | number, number>
+    });
+
+    it('from Promise Array', async () => {
+        const a = ['h', 1, Promise.resolve('e'), 2, 'l', Promise.resolve(3), 'l', 4, 'o', 5];
+
+        const r1 = await F.frequencies(a); // $ExpectType Map<string | number, number>
+    });
+
+    it('from String', async () => {
+        const a = 'hello world';
+
+        const r1 = await F.frequencies(a); // $ExpectType Map<string, number>
+    });
+
+    it('from Normal / Promise Union', async () => {
+        const a = [1, Promise.resolve(2), 'a', Promise.resolve('b')];
+
+        const r1 = await F.frequencies(a); // $ExpectType Map<string | number, number>
+    });
+
+    it('with run', async () => {
+        const a = [1, Promise.resolve(2), 'a', Promise.resolve('b'), null];
+
+        const r1 = await F.run(a, F.frequencies); // $ExpectType Map<string | number | null, number>
     });
 });
