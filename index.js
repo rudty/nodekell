@@ -1300,34 +1300,6 @@ const minBy = curry(async (f, iter) => {
  */
 const min = minBy(identity);
 
-/**
- * get frequency
- * 
- * @param {Function} keyFn compare, element => key function
- * @param {Iterable | AsyncIterable} iter
- */
-const mostFrequencyBy = curry(async (keyFn, iter) => {
-
-    let mostValue;
-    let mostCount = 0;
-
-    const m = new Map();
-
-    for await (const e of iter) {
-        const v = await keyFn(e);
-        const f = (m.get(v) || 0) + 1;
-        m.set(v, f);
-        if (mostCount < f) {
-            mostCount = f;
-            mostValue = e;
-        }
-    }
-
-    return mostValue;
-});
-
-const mostFrequency = mostFrequencyBy(identity);
-
 //deprecated / use isNill instead.
 const notNil = (a) => !isNil(a);
 
@@ -2116,8 +2088,6 @@ exports.memoizeBy = memoizeBy;
 exports.memoizeWithTimeout = memoizeWithTimeout;
 exports.min = min;
 exports.minBy = minBy;
-exports.mostFrequency = mostFrequency;
-exports.mostFrequencyBy = mostFrequencyBy;
 exports.notNil = notNil;
 exports.order = order;
 exports.orderBy = orderBy;
