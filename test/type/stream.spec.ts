@@ -1,5 +1,4 @@
 import * as F from '../../';
-import { foldl } from 'types/prelude';
 
 type DoneFn = () => any;
 

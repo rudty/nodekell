@@ -2,7 +2,7 @@ import { seq } from "../seq";
 import { _isTypedArray, _isString } from "./typeTraits";
 import { undefinedValue } from "./undefinedValue";
 
-const emptyHeadTail = Object.freeze([undefinedValue, Object.freeze([])]);
+// const emptyHeadTail = Object.freeze([undefinedValue, Object.freeze([])]);
 
 const _throwEmpty = () => {
     throw new Error("empty iter");
@@ -43,13 +43,13 @@ const _headTailInternal = (iter) => {
  * @param {Array | Iterable | AsyncIterable} iter 
  * @returns {Array} [head, tail] value, iterable
  */
-export const _headTailNoThrow = async (iter) => {
-    const r = await _headTailInternal(iter);
-    if (!r) {
-        return emptyHeadTail;
-    }
-    return r;
-};
+// export const _headTailNoThrow = async (iter) => {
+//     const r = await _headTailInternal(iter);
+//     if (!r) {
+//         return emptyHeadTail;
+//     }
+//     return r;
+// };
 
 /**
  * get head and tail
