@@ -1,6 +1,6 @@
 import { seq } from "../seq";
 import { _isTypedArray, _isString } from "./typeTraits";
-import { undefinedValue } from "./undefinedValue";
+// import { undefinedValue } from "./undefinedValue";
 
 // const emptyHeadTail = Object.freeze([undefinedValue, Object.freeze([])]);
 

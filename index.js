@@ -939,9 +939,9 @@ const flatMap = fmap;
 
 const fnothing = () => {};
 
-const undefinedValue = ((v) => v)();
+// import { undefinedValue } from "./undefinedValue";
 
-const emptyHeadTail = Object.freeze([undefinedValue, Object.freeze([])]);
+// const emptyHeadTail = Object.freeze([undefinedValue, Object.freeze([])]);
 
 const _throwEmpty = () => {
     throw new Error("empty iter");
@@ -969,6 +969,26 @@ const _headTailInternal = (iter) => {
     }
     return _headTailIterator(iter);
 };
+
+/**
+ * get head and tail
+ * const [head, tail] = _headTailNoThrow(iterator);
+ * 
+ * head = value
+ * tail = generator
+ * not throw empty
+ * return [undefined []] if iter is empty
+ * 
+ * @param {Array | Iterable | AsyncIterable} iter 
+ * @returns {Array} [head, tail] value, iterable
+ */
+// export const _headTailNoThrow = async (iter) => {
+//     const r = await _headTailInternal(iter);
+//     if (!r) {
+//         return emptyHeadTail;
+//     }
+//     return r;
+// };
 
 /**
  * get head and tail
@@ -1059,6 +1079,8 @@ const frequencies = curry(async (iter) => {
 
     return m;
 });
+
+const undefinedValue = ((v) => v)();
 
 /**
  * support Map, Set, any Object
