@@ -147,6 +147,7 @@ console.log(v);//[3]
 *    [sortBy](#sortby)
 *    [order](#order)
 *    [sort](#sort)
+*    [frequencies](#frequencies)
 
 ## util / else
 *    [sleep](#sleep)
@@ -1792,6 +1793,18 @@ await F.collect(sortedByASC).then(e => [e.join('')]);
 // ['  BCHaekklloorrrssuy']
 await F.collect(sortedByDESC).then(e => [e.join('')]);
 // ['yussrrroollkkeaHCB  ']
+```
+
+
+### frequencies
+returns a Map. keys are the items that remove duplicates
+value is the number of times key appears
+```javascript
+const arr = [1,1,2,3,4,5,5];
+const r = await F.frequencies(arr);
+console.log(r);
+//print
+//Map { 1 => 2, 2 => 1, 3 => 1, 4 => 1, 5 => 2 }
 ```
 
 
