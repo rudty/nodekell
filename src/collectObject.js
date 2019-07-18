@@ -7,7 +7,7 @@ export const collectObject = async (iter) => {
     const o = {};
     for (const e of c) {
         if (!Array.isArray(e)) {
-            throw new TypeError("value is not array");
+            throw new TypeError("collectObject value is not array require [k,v] ");
         }
         o[e[0]] = e[1];
     }
