@@ -1,17 +1,9 @@
-import { curry } from "./curry";
+import { identity } from "./identity";
 
 /**
  * frequency Count
  * 
- * @param {Promise<Map>} frequencyMap
+ * @param {Iterable | AsyncIterable} iter any iterable
+ * @return {Promise<Map>} frequencyMap
  */
-export const frequencies = curry(async (iter) => {
-    const m = new Map();
-
-    for await (const e of iter) {
-        const cnt = (m.get(e) || 0) + 1;
-        m.set(e, cnt);
-    }
-
-    return m;
-});
+export const frequencies = frequenciesBy(identity);
