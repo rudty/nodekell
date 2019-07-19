@@ -148,6 +148,7 @@ console.log(v);//[3]
 *    [order](#order)
 *    [sort](#sort)
 *    [frequencies](#frequencies)
+*    [frequenciesBy](#frequenciesBy)
 
 ## util / else
 *    [sleep](#sleep)
@@ -1807,6 +1808,32 @@ console.log(r);
 //Map { 1 => 2, 2 => 1, 3 => 1, 4 => 1, 5 => 2 }
 ```
 
+
+### frequenciesBy
+returns a Map. keys are the items that remove duplicates
+value is the number of times key appears
+```javascript
+const arr = [1,1,2,3,4,5,5];
+const r = await F.frequenciesBy(F.identity, arr);
+console.log(r);
+//print
+//Map { 
+//      1 => 2, 
+//      2 => 1, 
+//      3 => 1, 
+//      4 => 1, 
+//      5 => 2 }
+```
+```javascript
+const obj = [{a:1},{a:2},{a:1},{a:3}];
+const r = await F.frequenciesBy(e => e.a, obj);
+console.log(r);
+//print
+//Map { 
+//      1 => 2, 
+//      2 => 1, 
+//      3 => 1 }
+```
 
 ### sleep
 like other language 
