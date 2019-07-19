@@ -434,31 +434,23 @@ export function collectUint8Clamped(iter: Iter<number | Promise<number>>): Promi
 
 /**
  *
- * https://github.com/rudty/nodekell#mostfrequencyby
- *
- * @param f
- * @param iter iterable or async iterable
- */
-export function mostFrequencyBy<T>(f: (elem: T) => any, iter: Iter<T | Promise<T>>): Promise<T | undefined>;
-export function mostFrequencyBy<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => any, iter: T): Promise<FlatForInternalFn<T> | undefined>;
-export function mostFrequencyBy<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => any): (iter: T) => Promise<FlatForInternalFn<T> | undefined>;
-export function mostFrequencyBy<T>(f: (elem: T) => any): (iter: Iter<T | Promise<T>>) => Promise<T | undefined>;
-
-/**
- *
- * https://github.com/rudty/nodekell#mostfrequency
- *
- * @param f
- * @param iter iterable or async iterable
- */
-// export function mostFrequency<T extends Iter<any>>(iter: T): Promise<FlatForInternalFn<T> | undefined>;
-export function mostFrequency<T>(iter: Iter<T>): Promise<EP<T> | undefined>;
-
-/**
- *
  * https://github.com/rudty/nodekell#frequencies
  *
  * @param iter iterable or async iterable
  */
 // export function frequencies<T>(iter: Iter<T>): Promise<Map<EP<T>, number>>;
 export function frequencies<T extends Iter<any>>(iter: T): Promise<Map<FlatForInternalFn<T>, number>>;
+
+/**
+ *
+ * https://github.com/rudty/nodekell#frequenciesby
+ * 
+ * @param f key function
+ * @param iter iterable or async iterable
+ */
+export function frequenciesBy<K, T>(f: (elem: T) => (K | Promise<K>), iter: Iter<T | Promise<T>>): Promise<Map<K, number>>;
+
+export function frequenciesBy<K, T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => K, iter: T): Promise<Map<EP<K>, number>>;
+export function frequenciesBy<K, T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => K): (iter: T) => Promise<Map<EP<K>, number>>;
+
+export function frequenciesBy<K, T>(f: (elem: T) => (K | Promise<K>)): (iter: Iter<T | Promise<T>>) => Promise<Map<K, number>>;
