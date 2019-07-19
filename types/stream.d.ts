@@ -444,7 +444,7 @@ export function frequencies<T extends Iter<any>>(iter: T): Promise<Map<FlatForIn
 /**
  *
  * https://github.com/rudty/nodekell#frequenciesby
- * 
+ *
  * @param f key function
  * @param iter iterable or async iterable
  */

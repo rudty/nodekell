@@ -1237,3 +1237,71 @@ describe('frequencies', () => {
         const r1 = await F.run(a, F.frequencies); // $ExpectType Map<string | number | null, number>
     });
 });
+
+describe('frequenciesBy', () => {
+    it('from Object Array', async () => {
+        const a = [{ type: 'human', name: 'syrflover' }, { type: 'kinggod', name: 'gyungdal' }, { type: 'human', name: 'cenox' }];
+
+        const r1 = await F.frequenciesBy(F.identity, a); // $ExpectType Map<{ type: string; name: string; }, number>
+    });
+
+    it('from Object Array2', async () => {
+        const a = [{ type: 'human', name: 'syrflover' }, { type: 'kinggod', name: 'gyungdal' }, { type: 'human', name: 'cenox' }];
+
+        const r1 = await F.frequenciesBy(e => e.type, a); // $ExpectType Map<string, number>
+    });
+
+    it('from Object Array3', async () => {
+        const a = [{ type: 'human', name: 'syrflover' }, { type: 'kinggod', name: 'gyungdal' }, { type: 'human', name: 'cenox' }];
+
+        const r1 = await F.frequenciesBy(e => e.name, a); // $ExpectType Map<string, number>
+    });
+
+    it('from Object Array4', async () => {
+        const a = [{ type: 'human', value: 1 }, { type: 'kinggod', value: 'gyungdal' }, { type: 'human', value: () => {} }];
+
+        const r1 = await F.frequenciesBy(e => e.value, a); // $ExpectType Map<string | number | (() => void), number>
+    });
+
+    it('from Object Array5', async () => {
+        const a = [{ type: 'human', value: 1 }, { type: 'kinggod', value: 'gyungdal' }, { type: 'human' }];
+
+        const r1 = await F.frequenciesBy(e => e.value, a); // $ExpectType Map<string | number | undefined, number>
+    });
+
+    it('from Object Array6', async () => {
+        const a = [{ type: 'human', value: 1 }, { type: 'kinggod', value: Promise.resolve('gyungdal') }, { type: 'human' }];
+
+        const r1 = await F.frequenciesBy(e => e.value, a); // $ExpectType Map<string | number | undefined, number>
+    });
+
+    it('from Array', async () => {
+        const a = ['h', 1, 'e', 2, 'l', 3, 'l', 4, 'o', 5];
+
+        const r1 = await F.frequenciesBy(F.identity, a); // $ExpectType Map<string | number, number>
+    });
+
+    it('from Promise Array', async () => {
+        const a = ['h', 1, Promise.resolve('e'), 2, 'l', Promise.resolve(3), 'l', 4, 'o', 5];
+
+        const r1 = await F.frequenciesBy(F.identity, a); // $ExpectType Map<string | number, number>
+    });
+
+    it('from String', async () => {
+        const a = 'hello world';
+
+        const r1 = await F.frequenciesBy(F.identity, a); // $ExpectType Map<string, number>
+    });
+
+    it('from Normal / Promise Union', async () => {
+        const a = [1, Promise.resolve(2), 'a', Promise.resolve('b')];
+
+        const r1 = await F.frequenciesBy(F.identity, a); // $ExpectType Map<string | number, number>
+    });
+
+    it('with run', async () => {
+        const a = [1, Promise.resolve(2), 'a', Promise.resolve('b'), null];
+
+        const r1 = await F.run(a, F.frequenciesBy(F.identity)); // $ExpectType Map<string | number | null, number>
+    });
+});
