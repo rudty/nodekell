@@ -397,14 +397,6 @@ const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray(a) || _isObjectAr
  */
 const _isReadableArrayLike = (a) => _isString(a) || _isArrayLike(a);
 
-// const _emptyAsyncGenerator = async function *(){};
-// const _asyncGeneratorConstructor = _emptyAsyncGenerator().constructor;
-
-// export const _isAsyncGenerator = (a) => 
-//     a.constructor === _asyncGeneratorConstructor &&
-//     a.toString() === "[object AsyncGenerator]";
-
-
 const _hasIterator = (a) => a[Symbol.iterator] || a[Symbol.asyncIterator];
 
 /**
@@ -443,7 +435,7 @@ const collectObject = async (iter) => {
     const o = {};
     for (const e of c) {
         if (!Array.isArray(e)) {
-            throw new TypeError("value is not array");
+            throw new TypeError("collectObject value is not array require [k,v] ");
         }
         o[e[0]] = e[1];
     }
@@ -1065,20 +1057,40 @@ const forEachIndexed = curry(async (fn, iter) => {
 });
 
 /**
- * frequency Count
+ * get frequency count by function
  * 
- * @param {Promise<Map>} frequencyMap
+ *  (async () => {
+ *      const arr = [{a:1},{a:2},{a:1}];
+ *      const f = await frequenciesBy(e => e.a, arr);
+ *      console.log(f);
+ *  })();
+ * 
+ * //count by elem.a
+ * //print Map { 1 => 2, 2 => 1 }
+ * 
+ * @param {Function} fn frequency_function
+ * @param {Iterable | AsyncIterable} iter any iterable
+ * @return {Promise<Map>} frequencyMap
  */
-const frequencies = curry(async (iter) => {
+const frequenciesBy = curry(async (fn, iter) => {
     const m = new Map();
 
-    for await (const e of iter) {
+    for await (const v of iter) {
+        const e = await fn(v);
         const cnt = (m.get(e) || 0) + 1;
         m.set(e, cnt);
     }
 
     return m;
 });
+
+/**
+ * frequency Count
+ * 
+ * @param {Iterable | AsyncIterable} iter any iterable
+ * @return {Promise<Map>} frequencyMap
+ */
+const frequencies = frequenciesBy(identity);
 
 const undefinedValue = ((v) => v)();
 
@@ -2087,6 +2099,7 @@ exports.foldr1 = foldr1;
 exports.forEach = forEach;
 exports.forEachIndexed = forEachIndexed;
 exports.frequencies = frequencies;
+exports.frequenciesBy = frequenciesBy;
 exports.get = get;
 exports.groupBy = groupBy;
 exports.has = has;

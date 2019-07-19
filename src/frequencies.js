@@ -1,4 +1,5 @@
 import { identity } from "./identity";
+import { frequenciesBy } from "./frequenciesBy";
 
 /**
  * frequency Count

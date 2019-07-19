@@ -43,6 +43,7 @@ export * from "./foldr.js";
 export * from "./forEach.js";
 export * from "./forEachIndexed.js";
 export * from "./frequencies.js";
+export * from "./frequenciesBy.js";
 export * from "./get.js";
 export * from "./groupBy.js";
 export * from "./has.js";
