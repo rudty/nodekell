@@ -399,6 +399,13 @@ const _isReadableArrayLike = (a) => _isString(a) || _isArrayLike(a);
 
 const _hasIterator = (a) => a[Symbol.iterator] || a[Symbol.asyncIterator];
 
+
+/**
+ * function is 
+ * (a) => {...} 
+ */
+const _isCallable = (a) => a.constructor === Function && a.length === 1;
+
 /**
  * any iterable to array
  * and resolve promise elements
@@ -1254,6 +1261,29 @@ const mapIndexed = curry(async function *(fn, iter) {
         yield fn(i++, e);
     }
 });
+
+/**
+ *  const value = 1;
+ * 
+ *  F.match(value,
+ *      0, console.log("value is 0"),
+ *      1, console.log("value is 1"),
+ *      2, console.log("value is 2")
+ *  );
+ * @param {any} value match value
+ * @param  {...any} cv must even [0]:compare, [1]: value, ...
+ */
+const match = (value, ...cv) => {
+    for (let i = 0; i < cv.length; i += 2) {
+        if (equals(value, cv[i])) {
+            if (_isCallable(cv[i + 1])) {
+                return cv[i + 1](cv[i]);
+            }
+            return cv[i + 1];
+        }
+    }
+    //return undefined;
+};
 
 const maxBy = curry(async (f, iter) => {
     let [m, tail] = await _headTail(iter);
@@ -2117,6 +2147,7 @@ exports.leftInnerJoin = leftInnerJoin;
 exports.leftOuterJoin = leftOuterJoin;
 exports.map = map;
 exports.mapIndexed = mapIndexed;
+exports.match = match;
 exports.max = max;
 exports.maxBy = maxBy;
 exports.memoize = memoize;

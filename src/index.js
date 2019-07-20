@@ -57,6 +57,7 @@ export * from "./juxtA.js";
 export * from "./juxtO.js";
 export * from "./map.js";
 export * from "./mapIndexed.js";
+export * from "./match.js";
 export * from "./max.js";
 export * from "./maxBy.js";
 export * from "./memoize.js";

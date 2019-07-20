@@ -88,3 +88,10 @@ export const _toIterator = (a) => {
     }
     //return undefined;
 };
+
+
+/**
+ * function is 
+ * (a) => {...} 
+ */
+export const _isCallable = (a) => a.constructor === Function && a.length === 1;
