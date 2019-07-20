@@ -9,8 +9,9 @@ const _seq = async function *(iter) {
  * do not need to check iter is any
  */
 export const seq = (iter) => {
-    if (iter[Symbol.asyncIterator]) {
-        return iter[Symbol.asyncIterator]();
+    const it = iter[Symbol.asyncIterator];
+    if (it) {
+        return it.call(iter);
     }
     return _seq(iter);
 };
