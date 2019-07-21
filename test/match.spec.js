@@ -3,13 +3,46 @@ const F = require("../index.js");
 const assert = require("assert");
     
 describe('test match', () => {
-    it('match', async () => {
+    it('value', async () => {
         const value = 1;
 
-        F.match(value,
-            0, () => console.log("value is 0"),
-            1, () => console.log("value is 1"),
-            2, () => console.log("value is 2")
+        const r = F.match(value,
+            0, 9,
+            1, 8,
+            2, 7,
         );
+        assert.strictEqual(r, 8);
+    });
+
+    it('function', async () => {
+        const value = 1;
+
+        const r = F.match(value,
+            0, () => 9,
+            1, () => 8,
+            2, () => 7,
+        );
+        assert.strictEqual(r, 8);
+    });
+
+    it('function1', async () => {
+        const value = 1;
+
+        const r = F.match(value,
+            0, assert.fail,
+            1, e => assert.ok(e === 1),
+            2, assert.fail,
+        );
+        assert.strictEqual(r, undefined);
+    });
+
+    it('arr', async () => {
+        const value = [1,2];
+
+        const r = F.match(value,
+            [1, F._], e => assert.deepStrictEqual(e, [1,2]),
+            F._, assert.fail,
+        );
+        assert.strictEqual(r, undefined);
     });
 });

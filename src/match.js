@@ -20,7 +20,7 @@ export const match = (value, ...cv) => {
     for (let i = 0; i < cv.length; i += 2) {
         if (equals(value, cv[i])) {
             if (_isCallable(cv[i + 1])) {
-                return cv[i + 1](cv[i]);
+                return cv[i + 1](value);
             }
             return cv[i + 1];
         }
