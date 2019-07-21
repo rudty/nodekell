@@ -452,6 +452,13 @@ describe('match', () => {
 
         const r2 = F.match(arr, F._, async () => ({}));
         r2; // $ExpectType Promise<{}> | undefined
+
+        const r3 = F.match(arr,
+            [3, 2], () => {
+                return ([1, 2])[Symbol.iterator]();
+            },
+            [1, 2], () => "2" + 1);
+        r3; // $ExpectType string | IterableIterator<number> | undefined
     });
 
     it('match6', () => {
