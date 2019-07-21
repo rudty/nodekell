@@ -421,3 +421,51 @@ describe('sample', () => {
         const ar2 = F.sample(go()); // $ExpectType Promise<{ a: number; }>
     });
 });
+
+describe('match', () => {
+    it('match2', () => {
+        const arr = [1, 2];
+        const r0 = F.match(arr, [1, 2], () => 1 + 1);
+        r0; // $ExpectType number | undefined
+
+        const r1 = F.match(arr, [1, 2], async () => 1 + 1);
+        r1; // $ExpectType Promise<number> | undefined
+
+        const r2 = F.match(arr, F._, async () => ({}));
+        r2; // $ExpectType Promise<{}> | undefined
+
+        const r3 = F.match(arr, [0], async () => ({}));
+        r3; // $ExpectType Promise<{}> | undefined
+    });
+
+    it('match4', () => {
+        const arr = [1, 2];
+        const r0 = F.match(arr,
+            [3, 2], () => 1,
+            [1, 2], () => "2" + 1);
+        r0; // $ExpectType string | number | undefined
+
+        const r1 = F.match(arr,
+            [1, 2], async () => 1,
+            [3, 4], () => 3 + 1);
+        r1; // $ExpectType number | Promise<number> | undefined
+
+        const r2 = F.match(arr, F._, async () => ({}));
+        r2; // $ExpectType Promise<{}> | undefined
+    });
+
+    it('match6', () => {
+        const arr = [1, 2];
+        const r0 = F.match(arr,
+            [3, 2], () => 1,
+            [1, 2], () => "2" + 1,
+            F._, () => "hello" + 1);
+        r0; // $ExpectType string | number | undefined
+
+        const r1 = F.match(arr,
+            [3, 2], () => 1,
+            [1, 2], () => "2" + 1,
+            F._, () => ({ a: 1, b: 2 }));
+        r1; // $ExpectType string | number | { a: number; b: number; } | undefined
+    });
+});

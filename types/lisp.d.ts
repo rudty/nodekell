@@ -9,6 +9,7 @@ import {
     Accumulator,
     FlatAccumulator,
     FlatForInternalFn,
+    ReturnTypePickElements,
 } from "./utils";
 
 import { Getter } from "./core";
@@ -149,3 +150,17 @@ export function shuffle<T>(iter: Iter<T>): Promise<T[]>;
  */
 export function sample<T>(arr: ArrayLike<T>): T;
 export function sample<T>(iter: Iter<T>): Promise<T>;
+
+export const _: any;
+export const underBar: any;
+
+ export function match<T, P extends PairRepeat<2, T, (...args: any[]) => any>>(value: T, ...a: P): ReturnType<P[1]> | undefined;
+ export function match<T, P extends PairRepeat<4, T, (...args: any[]) => any>>(value: T, ...a: P): ReturnTypePickElements<1, P> | undefined;
+ export function match<T, P extends PairRepeat<6, T, (...args: any[]) => any>>(value: T, ...a: P): ReturnTypePickElements<1, P> | undefined;
+ export function match<T, P extends PairRepeat<8, T, (...args: any[]) => any>>(value: T, ...a: P): ReturnTypePickElements<1, P> | undefined;
+ export function match<T, P extends PairRepeat<10, T, (...args: any[]) => any>>(value: T, ...a: P): ReturnTypePickElements<1, P> | undefined;
+ export function match<T, P extends PairRepeat<12, T, (...args: any[]) => any>>(value: T, ...a: P): ReturnTypePickElements<1, P> | undefined;
+ export function match<T, P extends PairRepeat<14, T, (...args: any[]) => any>>(value: T, ...a: P): ReturnTypePickElements<1, P> | undefined;
+ export function match<T, P extends PairRepeat<16, T, (...args: any[]) => any>>(value: T, ...a: P): ReturnTypePickElements<1, P> | undefined;
+ export function match<T, P extends PairRepeat<18, T, (...args: any[]) => any>>(value: T, ...a: P): ReturnTypePickElements<1, P> | undefined;
+ export function match<T, P extends PairRepeat<20, T, (...args: any[]) => any>>(value: T, ...a: P): ReturnTypePickElements<1, P> | undefined;

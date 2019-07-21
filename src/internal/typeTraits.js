@@ -96,4 +96,4 @@ export const _toIterator = (a) => {
  * or
  * (a) => {...} 
  */
-export const _isCallable = (a) => a && a.constructor === Function && a.length <= 1;
+export const _isFunction = (a) => a && a.constructor === Function;

@@ -422,7 +422,7 @@ const _hasIterator = (a) => a[Symbol.iterator] || a[Symbol.asyncIterator];
  * or
  * (a) => {...} 
  */
-const _isCallable = (a) => a && a.constructor === Function && a.length <= 1;
+const _isFunction = (a) => a && a.constructor === Function;
 
 /**
  * any iterable to array
@@ -1313,7 +1313,7 @@ const mapIndexed = curry(async function *(fn, iter) {
 const match = (value, ...cv) => {
     for (let i = 0; i < cv.length; i += 2) {
         if (equals(value, cv[i])) {
-            if (_isCallable(cv[i + 1])) {
+            if (_isFunction(cv[i + 1])) {
                 return cv[i + 1](value);
             }
             return cv[i + 1];
