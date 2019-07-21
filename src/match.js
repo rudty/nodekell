@@ -1,13 +1,18 @@
 import { equals } from "./equals";
 import { _isCallable } from "./internal/typeTraits";
 /**
+ *  for pattern matching 
+ * @example
+ * 
  *  const value = 1;
  * 
  *  F.match(value,
- *      0, console.log("value is 0"),
- *      1, console.log("value is 1"),
- *      2, console.log("value is 2")
+ *      0, () => console.log("value is 0"),
+ *      1, () => console.log("value is 1"),
+ *      2, () => console.log("value is 2")
  *  );
+ * //print value is 1
+ * 
  * @param {any} value match value
  * @param  {...any} cv must even [0]:compare, [1]: value, ...
  */

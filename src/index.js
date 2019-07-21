@@ -1,6 +1,7 @@
 "use strict";
 export * from "./ArrayList.js";
 export * from "./Queue.js";
+export * from "./_.js";
 export * from "./add.js";
 export * from "./asc.js";
 export * from "./average.js";

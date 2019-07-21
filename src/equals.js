@@ -1,5 +1,6 @@
 import { curry } from "./curry";
 import { _isObjectArray, _isTypedArray, _isString } from "./internal/typeTraits";
+import { underBar } from "./_";
 
 let _equals;
 
@@ -120,6 +121,11 @@ _equals = curry((lhs, rhs) => {
         // 0 === 0 => true
         return true;
     }
+
+    if (lhs === underBar || rhs === underBar) {
+        //for pattern matching
+        return true;
+    } 
 
     if (lhs && rhs) {
         if (lhs.constructor !== rhs.constructor) {

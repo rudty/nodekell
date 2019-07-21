@@ -244,6 +244,22 @@ class _Queue {
 }
 
 /**
+ * empty object
+ * it is always return true when used as an argument in `equals` and `match` function
+ * @example
+ * 
+ *      F.equals(1, F._); // true
+ *      F.equals({}, F._); // true
+ *      F.equals({ a: 1 }, { a: F._ }); //true
+ * 
+ *      {} === F._; // false
+ *      1 === F._; // false
+ *      
+ */
+const underBar = Object.freeze({});
+const _ = underBar;
+
+/**
  * currying function wrapper
  * ex)
  * var mySum = curry((a,b,c) => {return a+b+c;});
@@ -402,9 +418,11 @@ const _hasIterator = (a) => a[Symbol.iterator] || a[Symbol.asyncIterator];
 
 /**
  * function is 
+ * () => {...}
+ * or
  * (a) => {...} 
  */
-const _isCallable = (a) => a.constructor === Function && a.length === 1;
+const _isCallable = (a) => a && a.constructor === Function && a.length <= 1;
 
 /**
  * any iterable to array
@@ -771,6 +789,11 @@ _equals = curry((lhs, rhs) => {
         // 0 === 0 => true
         return true;
     }
+
+    if (lhs === underBar || rhs === underBar) {
+        //for pattern matching
+        return true;
+    } 
 
     if (lhs && rhs) {
         if (lhs.constructor !== rhs.constructor) {
@@ -1263,13 +1286,18 @@ const mapIndexed = curry(async function *(fn, iter) {
 });
 
 /**
+ *  for pattern matching 
+ * @example
+ * 
  *  const value = 1;
  * 
  *  F.match(value,
- *      0, console.log("value is 0"),
- *      1, console.log("value is 1"),
- *      2, console.log("value is 2")
+ *      0, () => console.log("value is 0"),
+ *      1, () => console.log("value is 1"),
+ *      2, () => console.log("value is 2")
  *  );
+ * //print value is 1
+ * 
  * @param {any} value match value
  * @param  {...any} cv must even [0]:compare, [1]: value, ...
  */
@@ -2075,6 +2103,7 @@ const zipWith3 = curry(async function *(f, a, b, c) {
 
 const zip3 = curry((iter1, iter2, iter3) => zipWith3((elem1, elem2, elem3) => [elem1, elem2, elem3], iter1, iter2, iter3));
 
+exports._ = _;
 exports._ArrayList = _ArrayList;
 exports._Queue = _Queue;
 exports.add = add;
@@ -2199,6 +2228,7 @@ exports.takeWhile = takeWhile;
 exports.tap = tap;
 exports.then = then;
 exports.timeout = timeout;
+exports.underBar = underBar;
 exports.union = union;
 exports.withTimeout = withTimeout;
 exports.zip = zip;
