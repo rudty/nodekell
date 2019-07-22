@@ -134,14 +134,16 @@ export type PickElements<N extends 0 | 1, T extends any[], I extends any[] = []>
             1 : 2 : 0
 ];
 
+export type ReturnTypeIfFunction<T> = T extends (...args: any) => any ? ReturnType<T> : T;
+
 /**
  * if PickElements is () => string | () => number
  * ReturnType<PickElements<...>> error
  */
 export type ReturnTypePickElements<N extends 0 | 1, T extends any[], I extends any[] = []> = {
-    0: ReturnTypePickElements<N, Drop<2, T>, Prepend<N extends 0 ? ReturnType<Head<T>> : ReturnType<Second<T>>, I>>;
-    1: ReturnType<Head<T>> | Flat<I>;
-    2: ReturnType<Second<T>> | Flat<I>;
+    0: ReturnTypePickElements<N, Drop<2, T>, Prepend<N extends 0 ? ReturnTypeIfFunction<Head<T>> : ReturnTypeIfFunction<Second<T>>, I>>;
+    1: ReturnTypeIfFunction<Head<T>> | Flat<I>;
+    2: ReturnTypeIfFunction<Second<T>> | Flat<I>;
 }[
     Length<T> extends 0 ?
         N extends 0 ?

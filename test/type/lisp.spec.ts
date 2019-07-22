@@ -436,17 +436,20 @@ describe('match', () => {
 
         const r3 = F.match(arr, [0], async () => ({}));
         r3; // $ExpectType Promise<{}> | undefined
+
+        const r4 = F.match(arr, [0], 1 + 1);
+        r4; // $ExpectType number | undefined
     });
 
     it('match4', () => {
         const arr = [1, 2];
         const r0 = F.match(arr,
-            [3, 2], () => 1,
+            [3, 2], () => 1 + 1,
             [1, 2], () => "2" + 1);
         r0; // $ExpectType string | number | undefined
 
         const r1 = F.match(arr,
-            [1, 2], async () => 1,
+            [1, 2], async () => 1 + 1,
             [3, 4], () => 3 + 1);
         r1; // $ExpectType number | Promise<number> | undefined
 
@@ -459,20 +462,33 @@ describe('match', () => {
             },
             [1, 2], () => "2" + 1);
         r3; // $ExpectType string | IterableIterator<number> | undefined
+
+        const r4 = F.match(arr,
+            [3, 2], () => {
+                return ([1, 2])[Symbol.iterator]();
+            },
+            [5, 6], "2" + 1);
+        r4; // $ExpectType string | IterableIterator<number> | undefined
     });
 
     it('match6', () => {
         const arr = [1, 2];
         const r0 = F.match(arr,
-            [3, 2], () => 1,
+            [3, 2], () => 1 + 1,
             [1, 2], () => "2" + 1,
             F._, () => "hello" + 1);
         r0; // $ExpectType string | number | undefined
 
         const r1 = F.match(arr,
-            [3, 2], () => 1,
+            [3, 2], () => 1 + 1,
             [1, 2], () => "2" + 1,
             F._, () => ({ a: 1, b: 2 }));
         r1; // $ExpectType string | number | { a: number; b: number; } | undefined
+
+        const r2 = F.match(arr,
+            [3, 2], () => 1 + 1,
+            [1, 2], "2" + 1,
+            F._, () => ({ a: 1, b: 2 }));
+        r2; // $ExpectType string | number | { a: number; b: number; } | undefined
     });
 });
