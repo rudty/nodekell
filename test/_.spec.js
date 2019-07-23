@@ -16,8 +16,6 @@ describe('test average', () => {
 
     it('===', async () => {
         assert.ok(F._ === F._);
-        assert.ok(F._ !== {});
-        assert.ok(F._ !== []);
         assert.ok(F._ !== "{}");
     });
 
