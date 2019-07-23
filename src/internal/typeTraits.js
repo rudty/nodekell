@@ -97,3 +97,9 @@ export const _toIterator = (a) => {
  * (a) => {...} 
  */
 export const _isFunction = (a) => a && a.constructor === Function;
+
+export const mustEvenArguments = (arr) => {
+    if ((arr.length) & 1) {
+        throw new Error("requires an even arguments");
+    }
+};

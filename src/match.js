@@ -1,5 +1,5 @@
 import { equals } from "./equals";
-import { _isFunction } from "./internal/typeTraits";
+import { _isFunction, mustEvenArguments } from "./internal/typeTraits";
 /**
  *  for pattern matching 
  *  F._ is any match 
@@ -26,6 +26,7 @@ import { _isFunction } from "./internal/typeTraits";
  * @param  {...any} cv must even [0]:compare, [1]: value, ...
  */
 export const match = (value, ...cv) => {
+    mustEvenArguments(cv);
     for (let i = 0; i < cv.length; i += 2) {
         if (equals(value, cv[i])) {
             if (_isFunction(cv[i + 1])) {

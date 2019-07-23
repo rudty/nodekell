@@ -424,6 +424,12 @@ const _hasIterator = (a) => a[Symbol.iterator] || a[Symbol.asyncIterator];
  */
 const _isFunction = (a) => a && a.constructor === Function;
 
+const mustEvenArguments = (arr) => {
+    if ((arr.length) & 1) {
+        throw new Error("requires an even arguments");
+    }
+};
+
 /**
  * any iterable to array
  * and resolve promise elements
@@ -483,12 +489,6 @@ const concat = curry(async function *(a, b) {
     yield* b;
 });
 const union = concat;
-
-const mustEvenArguments = (arr) => {
-    if ((arr.length) & 1) {
-        throw new Error("requires an even arguments");
-    }
-};
 
 const cond = async (...cv) => {
     mustEvenArguments(cv);
@@ -1311,6 +1311,7 @@ const mapIndexed = curry(async function *(fn, iter) {
  * @param  {...any} cv must even [0]:compare, [1]: value, ...
  */
 const match = (value, ...cv) => {
+    mustEvenArguments(cv);
     for (let i = 0; i < cv.length; i += 2) {
         if (equals(value, cv[i])) {
             if (_isFunction(cv[i + 1])) {

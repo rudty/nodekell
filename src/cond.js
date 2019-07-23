@@ -1,8 +1,4 @@
-const mustEvenArguments = (arr) => {
-    if ((arr.length) & 1) {
-        throw new Error("requires an even arguments");
-    }
-};
+import { mustEvenArguments } from "./internal/typeTraits";
 
 export const cond = async (...cv) => {
     mustEvenArguments(cv);

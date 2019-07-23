@@ -151,6 +151,7 @@ console.log(v);//[3]
 *    [frequenciesBy](#frequenciesBy)
 
 ## util / else
+*    [_](#_)
 *    [sleep](#sleep)
 *    [head](#head)
 *    [tail](#tail)
@@ -172,6 +173,7 @@ console.log(v);//[3]
 *    [random](#random)
 *    [shuffle](#shuffle)
 *    [sample](#sample)
+*    [match](#match)
 ---
 
 
@@ -1835,6 +1837,26 @@ console.log(r);
 //      3 => 1 }
 ```
 
+
+### _
+always returns true when used in [equals](#equals)
+
+always matches when used in [match](#match)
+```javascript
+const r = F.equals(1, F._);
+console.log(r); 
+//print true
+```
+```javascript
+const value = [1, 2];
+F.match(value,
+    [0, 1], () => console.log("match [0, 1]"),
+    F._, () => console.log("match F._")
+);
+//print match F._
+```
+
+
 ### sleep
 like other language 
 ```javascript
@@ -2298,6 +2320,41 @@ console.log(r); //print 1 ~ 6 random
 const r = await F.sample(F.range(100));
 console.log(r); //print 0 ~ 100 random 
 ```
+
+
+### match
+pattern matching
+
+call or return first match
+
+From the second argument requires a pair of arguments. 
+
+ pair first argument is the value to compare, second argument is the function to use
+
+[F._](#_) matches all patterns.
+
+see also [_](#_)
+```javascript
+const value = [1, 2];
+
+F.match(value,
+    [0, 1], () => console.log("match [0, 1]"),
+    [1, F._], () => console.log("match [1, any]")
+);
+
+//print match [1, any]
+```
+```javascript
+const value = [1, 2];
+const res = F.match(value,
+    [0, 1], () => 3,
+    [1, 2], () => 4
+);
+console.log("match returns " + res);
+//print match 4
+```
+
+
 
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frudty%2Fnodekell.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Frudty%2Fnodekell?ref=badge_large)
