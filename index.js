@@ -580,94 +580,73 @@ const seq = (iter) => {
     return _seq(iter);
 };
 
-const drop = curry(async function *(count, iter) {
-    const g = seq(iter);
-    for (let i = 0; i < count; i++) {
-        const e = await g.next();
-        if (e.done) {
-            break;
-        }
-    }
-    yield* g;
-});
+// import { undefinedValue } from "./undefinedValue";
 
-const addNext = async (q, g) => {
-    const e = await g.next();
-    if (e.done) {
-        return false;
+// const emptyHeadTail = Object.freeze([undefinedValue, Object.freeze([])]);
+
+const _throwEmpty = () => {
+    throw new Error("empty iter");
+};
+
+const _headTailArray = async (arr) => {
+    if (arr.length !== 0) {
+        return [await arr[0], arr.slice(1)];
     }
-    q.add(e.value);
-    return true;
+    // return undefined;
+};
+
+const _headTailIterator = async (iter) => {
+    const g = seq(iter);
+    const head = await g.next();
+    if (!head.done) {
+        return [head.value, g];    
+    }
+    // return undefined;
+};
+
+const _headTailInternal = (iter) => {
+    if (Array.isArray(iter) || _isTypedArray(iter) || _isString(iter)) {
+        return _headTailArray(iter);
+    }
+    return _headTailIterator(iter);
 };
 
 /**
- * drop last element
+ * get head and tail
+ * const [head, tail] = _headTailNoThrow(iterator);
  * 
- * const a = [1,2,3,4,5];
- * const dropIter = F.dropLast(1, a);
- * for await (const e of dropIter) {
- *      console.log(e);
- * }
- * print 
- * 1
- * 2
- * 3
- * 4
+ * head = value
+ * tail = generator
+ * not throw empty
+ * return [undefined []] if iter is empty
+ * 
+ * @param {Array | Iterable | AsyncIterable} iter 
+ * @returns {Array} [head, tail] value, iterable
  */
-const dropLast = curry(async function *(count, iter) {
-    const g = seq(iter);
-    const q = new _Queue();
-    
-    for (let i = 0; i < count; i++) {
-        if(!(await addNext(q, g))) {
-            return;
-        }
-    }
-    
-    while ((await addNext(q, g))) {
-        yield q.poll();
-    }
-});
-
-const dropWhile = curry(async function *(f, iter) {
-    const g = seq(iter);
-    while (true) {
-        const e = await g.next();
-        if (e.done) {
-            return;
-        }
-
-        if(!(await f(e.value))) {
-            yield e.value;
-            break;
-        }
-    }
-    yield* g;
-});
-
-const emptyThen = curry(async function *(supply, iter) {
-    for await (const e of iter) {
-        yield e;
-        yield* iter;
-        return;
-    }
-
-    supply = await supply;
-    if (supply instanceof Function) {
-        yield* await supply();
-    } else {
-        yield* supply;
-    }
-});
+// export const _headTailNoThrow = async (iter) => {
+//     const r = await _headTailInternal(iter);
+//     if (!r) {
+//         return emptyHeadTail;
+//     }
+//     return r;
+// };
 
 /**
- * like python enumerate
+ * get head and tail
+ * const [head, tail] = _headTail(iterator);
+ * 
+ * head = value
+ * tail = generator
+ * 
+ * @param {Array | Iterable | AsyncIterable} iter 
+ * @returns {Array} [head, tail] value, iterable
  */
-const enumerate = async function *(iter) {
-    let i = 0;
-    for await (const e of iter) {
-        yield [i++, e];
+const _headTail = async (iter) => {
+    const r = await _headTailInternal(iter);
+    if (!r) {
+        _throwEmpty();
     }
+    return r;
 };
 
 let _equals;
@@ -857,6 +836,110 @@ _equals = curry((lhs, rhs) => {
 
 const equals = _equals;
 
+const distinctUntilChangedBy = curry(async function *(f, iter) {
+    let [head, g] = await _headTail(iter);
+    yield head;
+    head = await f(head);
+
+    for await (const e of g) {
+        const v = await f(e);
+        if (!equals(head, v)) {
+            head = v;
+            yield e;
+        }
+    }
+});
+
+const drop = curry(async function *(count, iter) {
+    const g = seq(iter);
+    for (let i = 0; i < count; i++) {
+        const e = await g.next();
+        if (e.done) {
+            break;
+        }
+    }
+    yield* g;
+});
+
+const addNext = async (q, g) => {
+    const e = await g.next();
+    if (e.done) {
+        return false;
+    }
+    q.add(e.value);
+    return true;
+};
+
+/**
+ * drop last element
+ * 
+ * const a = [1,2,3,4,5];
+ * const dropIter = F.dropLast(1, a);
+ * for await (const e of dropIter) {
+ *      console.log(e);
+ * }
+ * print 
+ * 1
+ * 2
+ * 3
+ * 4
+ */
+const dropLast = curry(async function *(count, iter) {
+    const g = seq(iter);
+    const q = new _Queue();
+    
+    for (let i = 0; i < count; i++) {
+        if(!(await addNext(q, g))) {
+            return;
+        }
+    }
+    
+    while ((await addNext(q, g))) {
+        yield q.poll();
+    }
+});
+
+const dropWhile = curry(async function *(f, iter) {
+    const g = seq(iter);
+    while (true) {
+        const e = await g.next();
+        if (e.done) {
+            return;
+        }
+
+        if(!(await f(e.value))) {
+            yield e.value;
+            break;
+        }
+    }
+    yield* g;
+});
+
+const emptyThen = curry(async function *(supply, iter) {
+    for await (const e of iter) {
+        yield e;
+        yield* iter;
+        return;
+    }
+
+    supply = await supply;
+    if (supply instanceof Function) {
+        yield* await supply();
+    } else {
+        yield* supply;
+    }
+});
+
+/**
+ * like python enumerate
+ */
+const enumerate = async function *(iter) {
+    let i = 0;
+    for await (const e of iter) {
+        yield [i++, e];
+    }
+};
+
 const errorThen = curry(async function *(supply, iter){
     try {
         yield* iter;
@@ -961,75 +1044,6 @@ const fmap = curry(async function *(fn, iter) {
 const flatMap = fmap;
 
 const fnothing = () => {};
-
-// import { undefinedValue } from "./undefinedValue";
-
-// const emptyHeadTail = Object.freeze([undefinedValue, Object.freeze([])]);
-
-const _throwEmpty = () => {
-    throw new Error("empty iter");
-};
-
-const _headTailArray = async (arr) => {
-    if (arr.length !== 0) {
-        return [await arr[0], arr.slice(1)];
-    }
-    // return undefined;
-};
-
-const _headTailIterator = async (iter) => {
-    const g = seq(iter);
-    const head = await g.next();
-    if (!head.done) {
-        return [head.value, g];    
-    }
-    // return undefined;
-};
-
-const _headTailInternal = (iter) => {
-    if (Array.isArray(iter) || _isTypedArray(iter) || _isString(iter)) {
-        return _headTailArray(iter);
-    }
-    return _headTailIterator(iter);
-};
-
-/**
- * get head and tail
- * const [head, tail] = _headTailNoThrow(iterator);
- * 
- * head = value
- * tail = generator
- * not throw empty
- * return [undefined []] if iter is empty
- * 
- * @param {Array | Iterable | AsyncIterable} iter 
- * @returns {Array} [head, tail] value, iterable
- */
-// export const _headTailNoThrow = async (iter) => {
-//     const r = await _headTailInternal(iter);
-//     if (!r) {
-//         return emptyHeadTail;
-//     }
-//     return r;
-// };
-
-/**
- * get head and tail
- * const [head, tail] = _headTail(iterator);
- * 
- * head = value
- * tail = generator
- * 
- * @param {Array | Iterable | AsyncIterable} iter 
- * @returns {Array} [head, tail] value, iterable
- */
-const _headTail = async (iter) => {
-    const r = await _headTailInternal(iter);
-    if (!r) {
-        _throwEmpty();
-    }
-    return r;
-};
 
 const foldl = curry(async (f, z, iter) => {
     z = await z;
@@ -2143,6 +2157,7 @@ exports.desc = desc;
 exports.dflat = dflat;
 exports.distinct = distinct;
 exports.distinctBy = distinctBy;
+exports.distinctUntilChangedBy = distinctUntilChangedBy;
 exports.drop = drop;
 exports.dropLast = dropLast;
 exports.dropWhile = dropWhile;
