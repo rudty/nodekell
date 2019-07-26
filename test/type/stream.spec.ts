@@ -1305,3 +1305,40 @@ describe('frequenciesBy', () => {
         const r1 = await F.run(a, F.frequenciesBy(F.identity)); // $ExpectType Map<string | number | null, number>
     });
 });
+
+describe('distinctUntilChangedBy', () => {
+    it('from Normal Value', async () => {
+        const a = [{ id: 1 }, { id: 1 }, { id: 2 }];
+
+        const r0 = F.distinctUntilChangedBy<{ id: number }>(e => e.id)(a); // $ExpectType AsyncIterableIterator<{ id: number; }>
+        const r1 = F.distinctUntilChangedBy(e => e.id, a); // $ExpectType AsyncIterableIterator<{ id: number; }>
+    });
+
+    it('from Promise Value', async () => {
+        const a = [Promise.resolve({ id: 1 }), Promise.resolve({ id: 1 }), { id: 2 }];
+
+        const r0 = F.distinctUntilChangedBy<{ id: number; }>(async e => e.id)(a); // $ExpectType AsyncIterableIterator<{ id: number; }>
+        const r1 = F.distinctUntilChangedBy(async e => e.id, a); // $ExpectType AsyncIterableIterator<{ id: number; }>
+    });
+
+    it('from String', async () => {
+        const a = 'hello world';
+
+        const r0 = F.distinctUntilChangedBy<string>(e => e)(a); // $ExpectType AsyncIterableIterator<string>
+        const r1 = F.distinctUntilChangedBy(e => e, a); // $ExpectType AsyncIterableIterator<string>
+    });
+
+    it('from Normal / Promise Union', async () => {
+        const a = [Promise.resolve('a'), 1, Promise.resolve(1), 'a'];
+
+        const r0 = F.distinctUntilChangedBy<string | number>(e => e)(a); // $ExpectType AsyncIterableIterator<string | number>
+        const r1 = F.distinctUntilChangedBy(e => e, a); // $ExpectType AsyncIterableIterator<string | number>
+    });
+
+    it('with run', async () => {
+        const a = [Promise.resolve('a'), 1, Promise.resolve(1), 'a', null];
+
+        const r0 = await F.run(a, F.distinctUntilChangedBy<string | number | null>(e => e)); // $ExpectType AsyncIterableIterator<string | number | null>
+        const r1 = await F.run(a, F.distinctUntilChangedBy(e => e)); // $ExpectType AsyncIterableIterator<string | number | null>
+    });
+});

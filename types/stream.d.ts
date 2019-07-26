@@ -454,3 +454,14 @@ export function frequenciesBy<K, T extends Iter<any>>(f: (elem: FlatForInternalF
 export function frequenciesBy<K, T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => K): (iter: T) => Promise<Map<EP<K>, number>>;
 
 export function frequenciesBy<K, T>(f: (elem: T) => (K | Promise<K>)): (iter: Iter<T | Promise<T>>) => Promise<Map<K, number>>;
+
+/**
+ * https://github.com/rudty/nodekell#distinctuntilchangedby
+ *
+ * @param f
+ * @param iter
+ */
+export function distinctUntilChangedBy<T>(f: (elem: T) => any, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+export function distinctUntilChangedBy<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => any, iter: T): AsyncIterableIterator<FlatForInternalFn<T>>;
+export function distinctUntilChangedBy<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => any): (iter: T) => AsyncIterableIterator<FlatForInternalFn<T>>;
+export function distinctUntilChangedBy<T>(f: (elem: T) => any): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
