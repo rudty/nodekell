@@ -82,6 +82,8 @@ console.log(v);//[3]
 *    [errorThen](#errorthen)
 *    [distinct](#distinct)
 *    [distinctBy](#distinctby)
+*    [distinctUntilChanged](#distinctuntilchanged)
+*    [distinctUntilChangedBy](#distinctuntilchangedby)
 *    [split](#split)        [**deprecated**]
 *    [splitBy](#splitby)
 *    [innerJoin](#innerjoin)
@@ -741,6 +743,58 @@ for (const m of result) {
 //print
 //{num:1}
 //{num:2}
+```
+
+
+### distinctUntilChanged
+```javascript
+const a = [{num:1}, {num:1}, {num:2}];
+const r = F.distinctUntilChanged(a);
+for await (const e of r) {
+    console.log(e);
+}
+//print
+//{ num: 1 }
+//{ num: 2 }
+```
+```javascript
+const a = [1,2,2,3,3,3,4,4,5,5,5,5];
+const r = F.distinctUntilChanged(a);
+for await (const e of r) {
+    console.log(e);
+}
+//print
+//1
+//2
+//3
+//4
+//5
+```
+
+
+### distinctUntilChangedBy
+```javascript
+const a = [{num:1}, {num:1}, {num:2}];
+const r = F.distinctUntilChangedBy(e => e.num, a);
+for await (const e of r) {
+    console.log(e);
+}
+//print
+//{ num: 1 }
+//{ num: 2 }
+```
+```javascript
+const a = [1,2,2,3,3,3,4,4,5,5,5,5];
+const r = F.distinctUntilChangedBy(F.identity, a);
+for await (const e of r) {
+    console.log(e);
+}
+//print
+//1
+//2
+//3
+//4
+//5
 ```
 
 
