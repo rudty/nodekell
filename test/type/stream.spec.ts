@@ -1342,3 +1342,35 @@ describe('distinctUntilChangedBy', () => {
         const r1 = await F.run(a, F.distinctUntilChangedBy(e => e)); // $ExpectType AsyncIterableIterator<string | number | null>
     });
 });
+
+describe('distinctUntilChanged', () => {
+    it('from Normal Value', async () => {
+        const a = [1, 1, 1, 2, 3];
+
+        const r0 = F.distinctUntilChanged(a); // $ExpectType AsyncIterableIterator<number>
+    });
+
+    it('from Promise Value', async () => {
+        const a = [Promise.resolve(1), Promise.resolve(1), 1, Promise.resolve(2), 3];
+
+        const r0 = F.distinctUntilChanged(a); // $ExpectType AsyncIterableIterator<number>
+    });
+
+    it('from String', async () => {
+        const a = 'hello world';
+
+        const r0 = F.distinctUntilChanged(a); // $ExpectType AsyncIterableIterator<string>
+    });
+
+    it('from Normal / Promise Union', async () => {
+        const a = [1, Promise.resolve(1), 'a', Promise.resolve('a')];
+
+        const r0 = F.distinctUntilChanged(a); // $ExpectType AsyncIterableIterator<string | number>
+    });
+
+    it('with run', async () => {
+        const a = [1, Promise.resolve(1), 'a', Promise.resolve('a')];
+
+        const r0 = await F.run(a, F.distinctUntilChanged); // $ExpectType AsyncIterableIterator<string | number>
+    });
+});

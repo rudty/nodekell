@@ -465,3 +465,10 @@ export function distinctUntilChangedBy<T>(f: (elem: T) => any, iter: Iter<T | Pr
 export function distinctUntilChangedBy<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => any, iter: T): AsyncIterableIterator<FlatForInternalFn<T>>;
 export function distinctUntilChangedBy<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>) => any): (iter: T) => AsyncIterableIterator<FlatForInternalFn<T>>;
 export function distinctUntilChangedBy<T>(f: (elem: T) => any): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+
+/**
+ * https://github.com/rudty/nodekell#distinctuntilchangedby
+ *
+ * @param iter
+ */
+export function distinctUntilChanged<T>(iter: Iter<T>): AsyncIterableIterator<EP<T>>;

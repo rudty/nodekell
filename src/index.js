@@ -21,6 +21,7 @@ export * from "./desc.js";
 export * from "./dflat.js";
 export * from "./distinct.js";
 export * from "./distinctBy.js";
+export * from "./distinctUntilChanged.js";
 export * from "./distinctUntilChangedBy.js";
 export * from "./drop.js";
 export * from "./dropLast.js";

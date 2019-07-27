@@ -836,6 +836,22 @@ _equals = curry((lhs, rhs) => {
 
 const equals = _equals;
 
+/**
+ *  @param {Function} function
+ *  @param {Iterable | AsyncIterable} iter 
+ *  @example
+ *      const a = [1,2,2,3,3,3,4,4,5,5,5,5];
+ *      const r = F.distinctUntilChangedBy(F.identity, a);
+ *      for await (const e of r) {
+ *          console.log(e);
+ *      }
+ *      //print
+ *      //1
+ *      //2
+ *      //3
+ *      //4
+ *      //5
+ */
 const distinctUntilChangedBy = curry(async function *(f, iter) {
     let [head, g] = await _headTail(iter);
     yield head;
@@ -849,6 +865,23 @@ const distinctUntilChangedBy = curry(async function *(f, iter) {
         }
     }
 });
+
+/**
+ *  @param {Iterable | AsyncIterable} iter 
+ *  @example
+ *      const a = [1,2,2,3,3,3,4,4,5,5,5,5];
+ *      const r = F.distinctUntilChanged(a);
+ *      for await (const e of r) {
+ *          console.log(e);
+ *      }
+ *      //print
+ *      //1
+ *      //2
+ *      //3
+ *      //4
+ *      //5
+ */
+const distinctUntilChanged = distinctUntilChangedBy(identity);
 
 const drop = curry(async function *(count, iter) {
     const g = seq(iter);
@@ -2157,6 +2190,7 @@ exports.desc = desc;
 exports.dflat = dflat;
 exports.distinct = distinct;
 exports.distinctBy = distinctBy;
+exports.distinctUntilChanged = distinctUntilChanged;
 exports.distinctUntilChangedBy = distinctUntilChangedBy;
 exports.drop = drop;
 exports.dropLast = dropLast;
