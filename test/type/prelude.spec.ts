@@ -1437,3 +1437,30 @@ describe('random', () => {
         const r2 = F.random(0, 1); // $ExpectType number
     });
 });
+
+describe('fnil', () => {
+    it('sayhello', async () => {
+        function sayHello(who: any) {
+            return "hello " + who;
+        }
+
+        const sayHelloWithDefault = F.fnil(sayHello, "javascript");
+        const r0 = sayHelloWithDefault("node"); // $ExpectType string
+        const r1 = sayHelloWithDefault(); // $ExpectType string
+    });
+
+    it('default argment', async () => {
+        const stringAddWithDefault = F.fnil((a, b) => {
+            return `${a}${b}`;
+        }, 1, 2);
+        const r0 = stringAddWithDefault("3", 4); // $ExpectType string
+        const r1 = stringAddWithDefault(); // $ExpectType string
+
+        const promiseStringAddWithDefault = F.fnil(async (a, b) => {
+            return `${a}${b}`;
+        }, 1, 2);
+
+        const r2 = promiseStringAddWithDefault("3", 4); // $ExpectType Promise<string>
+        const r3 = promiseStringAddWithDefault(); // $ExpectType Promise<string>
+    });
+});

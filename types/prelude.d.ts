@@ -601,3 +601,25 @@ export function compose<T extends any[], R0, R1, R2, R3, R4, R5, R6, R7, R8, R9,
  */
 export function random(end?: number): number;
 export function random(begin: number, end?: number): number;
+
+/**
+ *
+ * first argument is the calling function. from the second argument,
+ * the argument is entered as the first argument.
+ * returns a function calls first argument,
+ * if a function has a argument, it acts as a substitute for an existing argument.
+ *
+ * @example
+ *      function sayHello(who: any) {
+ *          console.log("hello " + who);
+ *      }
+ *
+ *      const sayHelloWithDefault = F.fnil(sayHello, "javascript");
+ *      sayHelloWithDefault(); // print hello javascript
+ *      sayHelloWithDefault("leanne"); // print hello leanne
+ *
+ * @param fn call function
+ * @param dArgs defaultArguments
+ * @return function that calls fn
+ */
+export function fnil<R>(fn: (...args: any) => R, ...dArgs: any): (...args: any) => R;
