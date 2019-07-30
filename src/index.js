@@ -40,6 +40,7 @@ export * from "./first.js";
 export * from "./firstOrGet.js";
 export * from "./flat.js";
 export * from "./fmap.js";
+export * from "./fnil.js";
 export * from "./fnothing.js";
 export * from "./foldl.js";
 export * from "./foldr.js";
