@@ -176,6 +176,7 @@ console.log(v);//[3]
 *    [shuffle](#shuffle)
 *    [sample](#sample)
 *    [match](#match)
+*    [fnil](#fnil)
 ---
 
 
@@ -2409,6 +2410,23 @@ console.log("match returns " + res);
 ```
 
 
+### fnil
+first argument is the calling function. from the second argument, 
+
+the argument is entered as the first argument.
+
+returns a function calls first argument,
+
+if a function has a argument, it acts as a substitute for an existing argument.
+```javascript
+function sayHello(who) {
+    console.log("hello " + who);
+}
+
+const sayHelloWithDefault = F.fnil(sayHello, "javascript");
+sayHelloWithDefault(); // print hello javascript
+sayHelloWithDefault("leanne"); // print hello leanne
+```
 
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frudty%2Fnodekell.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Frudty%2Fnodekell?ref=badge_large)
