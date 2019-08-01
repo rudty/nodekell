@@ -421,8 +421,6 @@ const _hasIterator = (a) => a[Symbol.iterator] || a[Symbol.asyncIterator];
 /**
  * function is 
  * () => {...}
- * or
- * (a) => {...} 
  */
 const _isFunction = (a) => a && a.constructor === Function;
 

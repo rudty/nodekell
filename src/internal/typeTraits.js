@@ -95,8 +95,6 @@ export const _toIterator = (a) => {
 /**
  * function is 
  * () => {...}
- * or
- * (a) => {...} 
  */
 export const _isFunction = (a) => a && a.constructor === Function;
 
