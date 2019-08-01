@@ -354,6 +354,8 @@ const collectUint8Clamped = _collectNativeArray(Uint8ClampedArray);
 const collectFloat32 = _collectNativeArray(Float32Array);
 const collectFloat64 = _collectNativeArray(Float64Array);
 
+const util = require("util");
+
 /**
  * check 
  * 
@@ -370,7 +372,7 @@ const collectFloat64 = _collectNativeArray(Float64Array);
  * @param {any} a 
  * @returns {bool} true if isTypedArray else false
  */
-const _isTypedArray = (a) => ArrayBuffer.isView(a) && !(a instanceof DataView);
+const _isTypedArray = util.types.isTypedArray;
 
 /**
  * (a.hasOwnProperty) can be override 
