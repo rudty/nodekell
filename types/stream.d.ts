@@ -473,6 +473,8 @@ export function distinctUntilChangedBy<T>(f: (elem: T) => any): (iter: Iter<T | 
  */
 export function distinctUntilChanged<T>(iter: Iter<T>): AsyncIterableIterator<EP<T>>;
 
+export type AssociateMap<T> = T extends any[] ? Map<T[0], T[1]> : Map<T, T>;
+
 /**
  * https://github.com/rudty/nodekell#associateby
  *
@@ -499,9 +501,6 @@ export function distinctUntilChanged<T>(iter: Iter<T>): AsyncIterableIterator<EP
  * @param iter any iterator
  */
 export function associateBy<T, R>(fn: (arg: T) => R, iter: Iter<T | Promise<T>>):
-    R extends any[] ?
-    Promise<Map<R[0], R[1]>> :
-    R extends Promise<infer PR> ? PR extends any[] ?
-    Promise<Map<PR[0], PR[1]>> :
-    Promise<Map<PR, PR>> :
-    Promise<Map<ExtractPromise<R>, ExtractPromise<R>>>;
+    R extends Promise<infer PR> ?
+    Promise<AssociateMap<PR>> :
+    Promise<AssociateMap<R>>;
