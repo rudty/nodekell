@@ -150,7 +150,8 @@ console.log(v);//[3]
 *    [order](#order)
 *    [sort](#sort)
 *    [frequencies](#frequencies)
-*    [frequenciesBy](#frequenciesBy)
+*    [frequenciesBy](#frequenciesby)
+*    [associateBy](#associateby)
 
 ## util / else
 *    [_](#_)
@@ -1891,6 +1892,27 @@ console.log(r);
 //      2 => 1, 
 //      3 => 1 }
 ```
+
+
+### associateBy
+returns a Map using iterator.
+when the function returns Array
+
+it uses the first argument as key and the second argument as value.
+
+when not in an array, the key and value are both return values.
+```javascript
+const arr0 = [1, 2, 3];
+const m0 = await F.associateBy(e => [e, e * 2], arr0);
+console.log(m0);
+//print Map { 1 => 2, 2 => 4, 3 => 6 }
+```
+```javascript
+const arr1 = [1, 2, 3];
+const m1 = await F.associateBy(e => e + 1, arr1);
+console.log(m1);
+//print Map { 2 => 2, 3 => 3, 4 => 4 
+ ```
 
 
 ### _
