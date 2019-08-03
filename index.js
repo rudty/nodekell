@@ -3,126 +3,55 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const arrayListDefaultSize = 32;
-
-/**
- * arraylist using native array
- * 
- * like template vector<int>
- * 
- * const int8arr = new _ArrayList(Int8Array); // ArrayList<Int8>
- * const int16arr = new _ArrayList(Int16Array); // ArrayList<Int16>
- * const int32arr = new _ArrayList(Int32Array); // ArrayList<Int32>
- * 
- * internal only
- */
 class _ArrayList {
-    /**
-     * native array constructor
-     * support
-     * 
-     * Int8Array
-     * Int16Array
-     * Int32Array
-     * 
-     * Uint8ClampedArray
-     * Uint8Array
-     * Uint16Array
-     * Uint32Array
-     * 
-     * @param {Function} ArrayCtor 
-     */
     constructor(ArrayCtor) {
         const buf = new ArrayBuffer(ArrayCtor.BYTES_PER_ELEMENT * arrayListDefaultSize);
         this._data = new (ArrayCtor)(buf);
         this._ctor = ArrayCtor;
         this._length = 0;
     }
-
-    /**
-     * [1,2]
-     * grow(4)
-     * [1,2,0,0] <- new 
-     */
     _grow(size) {
         const byteSize = this._ctor.BYTES_PER_ELEMENT;
         const buf = new ArrayBuffer(size * byteSize);
         const newData = new (this._ctor)(buf);
         const oldData = this._data;
-
-        // //copy old elem
-        // for (let i = oldData.length - 1; i >= 0; --i) {
-        //     newData[i] = oldData[i];
-        // }
         newData.set(oldData);
         this._data = newData;
     }
-
     add(v) {
         const len = this._length;
         if (len === this._data.length) {
             this._grow(len * 2);
         }
-
         this._data[len] = v;
         this._length += 1;
     }
-
-    /**
-     * get
-     * arr[i]
-     * @param {number} i index
-     */
     get(i) {
         return this._data[i];
     }
-
-    /**
-     * set
-     * arr[i] = e;
-     * @param {number} i index
-     * @param {T} e elem
-     */
     set(i, e) {
         this._data[i] = e;
     }
-
-    /**
-     * @returns {number} length
-     */
     get length() {
         return this._length;
     }
-
-    /**
-     * not really clear
-     * set the length 0 only
-     */
     clear() {
         this._length = 0;
     }
-
     *[Symbol.iterator]() {
         for (let i = 0; i < this._length; ++i) {
             yield this._data[i];
         }
     }
-
     toArray() {
         return this._data.slice(0, this._length);
     }
 }
 
-/**
- * collection interface
- * like java Queue<T>
- * 
- * internal only
- */
 class _Queue {
     constructor() {
         this.head = this.tail = null;
     }
-
     add(v) {
         const n = { value: v, next: null };
         if (this.head) {
@@ -132,7 +61,6 @@ class _Queue {
         }
         this.tail = n;
     }
-
     _unsafePop() {
         const f = this.head;
         if (f !== this.tail) {
@@ -143,33 +71,18 @@ class _Queue {
         f.next = null;
         return f.value;
     }
-
-    /**
-     * remove head and return
-     * return head or throw Error if empty
-     */
     remove() {
         if (this.head === null) {
             throw new Error("no such element");
         }
         return this._unsafePop();
     }
-
-    /**
-     * remove head and return
-     * return head or null if empty
-     */
     poll() {
         if (this.head === null) {
             return null;
         }
         return this._unsafePop();
     }
-
-    /**
-     * not remove 
-     * return head or throw Error if empty
-     */
     element() {
         const f = this.head;
         if (f === null) {
@@ -177,11 +90,6 @@ class _Queue {
         }
         return f.value;
     }
-
-    /**
-     * not remove 
-     * return head or null if empty
-     */
     peek() {
         const f = this.head;
         if (f === null) {
@@ -189,28 +97,18 @@ class _Queue {
         }
         return f.value;
     }
-
     isEmpty() {
         return this.head === null;
     }
-
-
-    /**
-     * clear all elements
-     */
     clear() {
-        //remove chain
-        //help gc
         let it = this.head;
         while (it) {
             const n = it.next;
             it.value = it.next = null;
             it = n;
         }
-
         this.head = this.tail = null;
     }
-
     *[Symbol.iterator]() {
         let it = this.head;
         while (it) {
@@ -218,56 +116,21 @@ class _Queue {
             it = it.next;
         }
     }
-
-    /**
-     * yields the value from head and then deletes the value
-     * After the iterator ends, the size of the Queue is zero
-     * 
-     * same as
-     * while (false === q.isEmpty()) {
-     *     yield q.remove();
-     * }
-     * yield value and assign next to null
-     * help gc
-     */
     *removeIterator() {
         let it = this.head;
         while (it) {
             const p = it;
             yield p.value;
             it = p.next;
-
             p.value = null;
             p.next = null;
         }
     }
 }
 
-/**
- * empty object
- * it is always return true when used as an argument in `equals` and `match` function
- * @example
- * 
- *      F.equals(1, F._); // true
- *      F.equals({}, F._); // true
- *      F.equals({ a: 1 }, { a: F._ }); //true
- * 
- *      {} === F._; // false
- *      1 === F._; // false
- *      
- */
 const underBar = Object.freeze({});
 const _ = underBar;
 
-/**
- * currying function wrapper
- * ex)
- * var mySum = curry((a,b,c) => {return a+b+c;});
- *
- * var mySum1 = mySum(1)
- * var mySum2 = mySum1(2)
- * var sum = mySum2(3) // <-- real call
- */
 const curry = (fn) => (...a) => {
     if (fn.length <= a.length) {
         return fn(...a);
@@ -281,102 +144,30 @@ const add = curry((a, b) => a + b);
 const asc = (a, b) => a > b ? 1 : a < b ? -1 : 0;
 
 const util = require("util");
-
-/**
- * check 
- * 
- * Int8Array
- * Int16Array 
- * Int32Array
- * Uint8Array
- * Uint8ClampedArray
- * Uint16Array
- * Uint32Array
- * Float32Array
- * Float64Array
- * 
- * @param {any} a 
- * @returns {bool} true if isTypedArray else false
- */
 const _isTypedArray = util.types.isTypedArray;
-
-/**
- * (a.hasOwnProperty) can be override 
- * call Object prototype 
- * @param {ArrayLike} a any object
- */
 const _isObjectArrayCheckProps = (a) => {
     if (a.length === 0) {
-        return Object.keys(a).length === 1; 
+        return Object.keys(a).length === 1;
     }
-    return Object.prototype.hasOwnProperty.call(a, (a.length - 1)); 
+    return Object.prototype.hasOwnProperty.call(a, (a.length - 1));
 };
-
-/**
- * const o = {
- *      0: 1,
- *      1: 2,
- *      2: 3,
- *      length: 3
- * };
- * console.log(Array.from(o)); 
- * //print [1,2,3]
- * 
- * @param {any} a 
- */
 const _isObjectArray = (a) => {
     if (Number.isSafeInteger(a.length)) {
         return _isObjectArrayCheckProps(a);
     }
     return false;
 };
-
 const _isString = (a) => a.constructor === String;
-
 const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray(a) || _isObjectArray(a));
-
-/**
- * is array like object
- * @param {ArrayLike} any 
- */
 const _isReadableArrayLike = (a) => _isString(a) || _isArrayLike(a);
-
 const _hasIterator = (a) => a[Symbol.iterator] || a[Symbol.asyncIterator];
-
-
-/**
- * function is 
- * () => {...}
- */
 const _isFunction = (a) => a && a.constructor === Function;
-
 const mustEvenArguments = (arr) => {
     if ((arr.length) & 1) {
         throw new Error("requires an even arguments");
     }
 };
 
-/**
- * returns a Map using iterator.
- * when the function returns Array
- * it uses the first argument as key and the second argument as value.
- * when not in an array, the key and value are both return values.
- * 
- * @example
- *      const arr0 = [1, 2, 3];
- *      const m0 = await F.associateBy(e => [e, e * 2], arr0); 
- *      console.log(m0);
- *      // => Map { 1 => 2, 2 => 4, 3 => 6 }
- *      
- *      const arr1 = [1, 2, 3];
- *      const m1 = await F.associateBy(e => e + 1, arr1);
- *      console.log(m1);
- *      // => Map { 2 => 2, 3 => 3, 4 => 4 }
- * 
- * @param {Function} fn convert function
- * @param {Iterable | AsyncIterable} iter any iterator
- * @returns {Map} convert Map
- */
 const associateBy = async (fn, iter) => {
     const m = new Map();
     for await (const e of iter) {
@@ -402,11 +193,9 @@ const average = async (iter) => {
 
 const buffer = curry(async function *(supply, iter) {
     supply = await supply;
-
     if(supply <= 0) {
         throw new Error("arg supply > 0 required");
     }
-
     let c = [];
     for await (const e of iter) {
         const len = c.push(e);
@@ -415,19 +204,11 @@ const buffer = curry(async function *(supply, iter) {
             c = [];
         }
     }
-
     if (c.length !== 0) {
         yield c;
     }
 });
 
-/**
- * iterable to array
- * and resolve promise elements
- * 
- * @param {Array | Iterable | AsyncIterable} iter
- * @returns {Array}
- */
 const collect = async (iter) => {
     const res = [];
     for await (const e of iter) {
@@ -438,14 +219,6 @@ const collect = async (iter) => {
 
 const collectMap = async (iter) => new Map(await collect(iter));
 
-/**
- * Int32Array.from does not support async generator 
- * 
- * collect<T>
- * native number
- * 
- * @param {T} ctor 
- */
 const _collectNativeArray = (ctor) => async (iter) => {
     const arr = new _ArrayList(ctor);
     for await (const e of iter) {
@@ -453,7 +226,6 @@ const _collectNativeArray = (ctor) => async (iter) => {
     }
     return arr.toArray();
 };
-
 const collectInt8 = _collectNativeArray(Int8Array);
 const collectInt16 = _collectNativeArray(Int16Array);
 const collectInt32 = _collectNativeArray(Int32Array);
@@ -464,37 +236,22 @@ const collectUint8Clamped = _collectNativeArray(Uint8ClampedArray);
 const collectFloat32 = _collectNativeArray(Float32Array);
 const collectFloat64 = _collectNativeArray(Float64Array);
 
-/**
- * any iterable to array
- * and resolve promise elements
- * 
- * @param {ArrayLike | Iterable | AsyncIterable} iter
- * @returns {Promise<Array> | ArrayLike}
- */
 const _collectArray = (iter) => {
     if (Array.isArray(iter)) {
         return Promise.all(iter);
     }
-
     if (_isTypedArray(iter)){
-        //typed array and string does not require await
         return iter;
     }
-
     if(_isString(iter)) {
         return Array.from(iter);
     }
-
     if (_isObjectArray(iter)) {
         return Promise.all(Array.from(iter));
     }
-
     return collect(iter);
 };
 
-/**
- * [a,1],[b,2],[c,3]]  => {a:1,b:2,c:3} 
- */
 const collectObject = async (iter) => {
     const c = await _collectArray(iter);
     const o = {};
@@ -526,28 +283,20 @@ const union = concat;
 
 const cond = async (...cv) => {
     mustEvenArguments(cv);
-
     for (let i = 0; i < cv.length; i += 2) {
-
         if (await cv[i]) {
             return cv[i + 1];
         }
     }
-    // return undefined
 };
 
 const count = async (iter) => {
-    //array, string
     if (Number.isSafeInteger(iter.length)) {
         return iter.length;
     }
-
-    //map, set, any collection
     if (Number.isSafeInteger(iter.size)) {
         return iter.size;
     }
-
-    //iterators
     if (_hasIterator(iter)) {
         let c = 0;
         for await (const _ of iter) {
@@ -555,8 +304,6 @@ const count = async (iter) => {
         }
         return c;
     }
-
-    //object
     return Object.keys(iter).length;
 };
 
@@ -601,11 +348,6 @@ const _seq = async function *(iter) {
         yield e;
     }
 };
-
-/**
- * make async generator
- * do not need to check iter is any
- */
 const seq = (iter) => {
     const it = iter[Symbol.asyncIterator];
     if (it) {
@@ -614,67 +356,27 @@ const seq = (iter) => {
     return _seq(iter);
 };
 
-// import { undefinedValue } from "./undefinedValue";
-
-// const emptyHeadTail = Object.freeze([undefinedValue, Object.freeze([])]);
-
 const _throwEmpty = () => {
     throw new Error("empty iter");
 };
-
 const _headTailArray = async (arr) => {
     if (arr.length !== 0) {
         return [await arr[0], arr.slice(1)];
     }
-    // return undefined;
 };
-
 const _headTailIterator = async (iter) => {
     const g = seq(iter);
     const head = await g.next();
     if (!head.done) {
-        return [head.value, g];    
+        return [head.value, g];
     }
-    // return undefined;
 };
-
 const _headTailInternal = (iter) => {
     if (Array.isArray(iter) || _isTypedArray(iter) || _isString(iter)) {
         return _headTailArray(iter);
     }
     return _headTailIterator(iter);
 };
-
-/**
- * get head and tail
- * const [head, tail] = _headTailNoThrow(iterator);
- * 
- * head = value
- * tail = generator
- * not throw empty
- * return [undefined []] if iter is empty
- * 
- * @param {Array | Iterable | AsyncIterable} iter 
- * @returns {Array} [head, tail] value, iterable
- */
-// export const _headTailNoThrow = async (iter) => {
-//     const r = await _headTailInternal(iter);
-//     if (!r) {
-//         return emptyHeadTail;
-//     }
-//     return r;
-// };
-
-/**
- * get head and tail
- * const [head, tail] = _headTail(iterator);
- * 
- * head = value
- * tail = generator
- * 
- * @param {Array | Iterable | AsyncIterable} iter 
- * @returns {Array} [head, tail] value, iterable
- */
 const _headTail = async (iter) => {
     const r = await _headTailInternal(iter);
     if (!r) {
@@ -684,29 +386,24 @@ const _headTail = async (iter) => {
 };
 
 let _equals;
-
 const map_internal = (lhs, rhs) => {
     if (lhs.size !== rhs.size) {
         return false;
     }
-
     for (const kv of lhs) {
         if (!rhs.has(kv[0])) {
             return false;
         }
-
         if (!_equals(rhs.get(kv[0]), kv[1])) {
             return false;
         }
     }
     return true;
 };
-
 const set_internal = (lhs, rhs) => {
     if (lhs.size !== rhs.size) {
         return false;
     }
-
     for (const e of lhs) {
         if (!rhs.has(e)) {
             return false;
@@ -714,183 +411,127 @@ const set_internal = (lhs, rhs) => {
     }
     return true;
 };
-
 const regExp_internal = (lhs, rhs) => {
     if (lhs.sticky !== rhs.sticky) {
         return false;
     }
-
     if (lhs.unicode !== rhs.unicode) {
         return false;
     }
-
     if (lhs.ignoreCase !== rhs.ignoreCase) {
         return false;
     }
-
     if (lhs.global !== rhs.global) {
         return false;
     }
-
     if (lhs.multiline !== rhs.multiline) {
         return false;
     }
-
     if (lhs.source !== rhs.source) {
         return false;
     }
     return true;
 };
-
 const typedArray_internal = (lhs, rhs) => {
     const len = lhs.length;
     if (len !== rhs.length) {
         return false;
     }
-
     for (let i = len - 1; i >= 0; --i) {
-        // ignore this eslint duplicate warn
         if (lhs[i] !== rhs[i]) {
             return false;
         }
     }
     return true;
 };
-
 const array_internal = (lhs, rhs) => {
     const len = lhs.length;
     if (len !== rhs.length) {
         return false;
     }
-
     for (let i = len - 1; i >= 0; --i) {
-        // ignore this eslint duplicate warn
         if (!_equals(lhs[i], rhs[i])) {
             return false;
         }
     }
     return true;
 };
-
 const object_internal = (lhs, rhs) => {
-
     const kvl = Object.entries(lhs);
-
     if (kvl.length !== Object.keys(rhs).length) {
         return false;
     }
-
     for (const [k, v] of kvl) {
         if (!rhs.hasOwnProperty(k)) {
             return false;
         }
-
         if (!_equals(v, rhs[k])) {
             return false;
         }
     }
-
     return true;
 };
-
 const toString_internal = (a) => Object.prototype.toString(a);
-
 _equals = curry((lhs, rhs) => {
     if (lhs === rhs) {
-        // undefined === undefined => true
-        // null === null => true
-        // 0 === 0 => true
         return true;
     }
-
     if (lhs === underBar || rhs === underBar) {
-        //for pattern matching
         return true;
-    } 
-
+    }
     if (lhs && rhs) {
         if (lhs.constructor !== rhs.constructor) {
             return false;
         }
-
-        if (lhs instanceof String || 
-            _isString(lhs) || 
-            lhs instanceof Number || 
+        if (lhs instanceof String ||
+            _isString(lhs) ||
+            lhs instanceof Number ||
             lhs.constructor === Number ||
             lhs instanceof Boolean ||
             lhs.constructor === Boolean ||
             lhs instanceof Date) {
             return lhs.valueOf() === rhs.valueOf();
         }
-
         if (lhs instanceof Array) {
             return array_internal(lhs, rhs);
         }
-
         if (_isTypedArray(lhs)) {
             return typedArray_internal(lhs, rhs);
         }
-
         if (_isObjectArray(lhs)) {
             return array_internal(lhs, rhs);
         }
-
         if (lhs instanceof Map) {
             return map_internal(lhs, rhs);
         }
-
         if (lhs instanceof Set) {
             return set_internal(lhs, rhs);
         }
-
         if (lhs instanceof RegExp) {
             return regExp_internal(lhs, rhs);
         }
-
         if (lhs instanceof Promise) {
-            // :(
             return false;
         }
-
         if (toString_internal(lhs) !== toString_internal(rhs)) {
             return false;
         }
-
         if (lhs instanceof Object) {
             return object_internal(lhs, rhs);
         }
     } else {
-        //NaN === NaN => false
         if (Number.isNaN(lhs) && Number.isNaN(rhs)) {
             return true;
         }
     }
     return false;
 });
-
 const equals = _equals;
 
-/**
- *  @param {Function} function
- *  @param {Iterable | AsyncIterable} iter 
- *  @example
- *      const a = [1,2,2,3,3,3,4,4,5,5,5,5];
- *      const r = F.distinctUntilChangedBy(F.identity, a);
- *      for await (const e of r) {
- *          console.log(e);
- *      }
- *      //print
- *      //1
- *      //2
- *      //3
- *      //4
- *      //5
- */
 const distinctUntilChangedBy = curry(async function *(f, iter) {
     let [head, g] = await _headTail(iter);
     yield head;
     head = await f(head);
-
     for await (const e of g) {
         const v = await f(e);
         if (!equals(head, v)) {
@@ -900,21 +541,6 @@ const distinctUntilChangedBy = curry(async function *(f, iter) {
     }
 });
 
-/**
- *  @param {Iterable | AsyncIterable} iter 
- *  @example
- *      const a = [1,2,2,3,3,3,4,4,5,5,5,5];
- *      const r = F.distinctUntilChanged(a);
- *      for await (const e of r) {
- *          console.log(e);
- *      }
- *      //print
- *      //1
- *      //2
- *      //3
- *      //4
- *      //5
- */
 const distinctUntilChanged = distinctUntilChangedBy(identity);
 
 const drop = curry(async function *(count, iter) {
@@ -936,31 +562,14 @@ const addNext = async (q, g) => {
     q.add(e.value);
     return true;
 };
-
-/**
- * drop last element
- * 
- * const a = [1,2,3,4,5];
- * const dropIter = F.dropLast(1, a);
- * for await (const e of dropIter) {
- *      console.log(e);
- * }
- * print 
- * 1
- * 2
- * 3
- * 4
- */
 const dropLast = curry(async function *(count, iter) {
     const g = seq(iter);
     const q = new _Queue();
-    
     for (let i = 0; i < count; i++) {
         if(!(await addNext(q, g))) {
             return;
         }
     }
-    
     while ((await addNext(q, g))) {
         yield q.poll();
     }
@@ -973,7 +582,6 @@ const dropWhile = curry(async function *(f, iter) {
         if (e.done) {
             return;
         }
-
         if(!(await f(e.value))) {
             yield e.value;
             break;
@@ -988,7 +596,6 @@ const emptyThen = curry(async function *(supply, iter) {
         yield* iter;
         return;
     }
-
     supply = await supply;
     if (supply instanceof Function) {
         yield* await supply();
@@ -997,9 +604,6 @@ const emptyThen = curry(async function *(supply, iter) {
     }
 });
 
-/**
- * like python enumerate
- */
 const enumerate = async function *(iter) {
     let i = 0;
     for await (const e of iter) {
@@ -1012,11 +616,9 @@ const errorThen = curry(async function *(supply, iter){
         yield* iter;
     } catch(e) {
         supply = await supply;
-
         if (supply instanceof Function) {
             supply = await supply(e);
         }
-
         if(supply && _hasIterator(supply)) {
             yield* supply;
         }
@@ -1063,7 +665,6 @@ const find = curry(async (fn, iter) => {
             return e;
         }
     }
-    //return undefined;
 });
 
 const findLast = curry(async (fn, iter) => {
@@ -1073,7 +674,6 @@ const findLast = curry(async (fn, iter) => {
             return iter[i];
         }
     }
-    //return undefined;
 });
 
 const first = (a) => a[0];
@@ -1110,26 +710,6 @@ const fmap = curry(async function *(fn, iter) {
 });
 const flatMap = fmap;
 
-/**
- * 
- * first argument is the calling function. from the second argument, 
- * the argument is entered as the first argument.
- * returns a function calls first argument,
- * if a function has a argument, it acts as a substitute for an existing argument.
- * 
- * @example
- *      function sayHello(who) {
- *          console.log("hello " + who);
- *      }
- * 
- *      const sayHelloWithDefault = F.fnil(sayHello, "javascript");
- *      sayHelloWithDefault(); // print hello javascript
- *      sayHelloWithDefault("leanne"); // print hello leanne
- * 
- * @param {Function} fn call function
- * @param {...any} dArgs defaultArguments
- * @return {Function} function that calls fn
- */
 const fnil = (fn, ...dArgs) => (...args) => {
     return fn(...Object.assign(dArgs, args));
 };
@@ -1143,7 +723,6 @@ const foldl = curry(async (f, z, iter) => {
     }
     return z;
 });
-
 const foldl1 = curry(async (f, iter) => {
     const [head, tail] = await _headTail(iter);
     return foldl(f, head, tail);
@@ -1164,11 +743,9 @@ const _foldr_internal = async (f, z, iter) => {
     }
     return z;
 };
-
 const foldr = curry((f, z, iter) => {
     return _foldr_internal(f, z, reverse(iter));
 });
-
 const foldr1 = curry(async (f, iter) => {
     const r = reverse(iter);
     const [head, tail] = await _headTail(r);
@@ -1192,47 +769,20 @@ const forEachIndexed = curry(async (fn, iter) => {
     return Promise.all(wait);
 });
 
-/**
- * get frequency count by function
- * 
- *  (async () => {
- *      const arr = [{a:1},{a:2},{a:1}];
- *      const f = await frequenciesBy(e => e.a, arr);
- *      console.log(f);
- *  })();
- * 
- * //count by elem.a
- * //print Map { 1 => 2, 2 => 1 }
- * 
- * @param {Function} fn frequency_function
- * @param {Iterable | AsyncIterable} iter any iterable
- * @return {Promise<Map>} frequencyMap
- */
 const frequenciesBy = curry(async (fn, iter) => {
     const m = new Map();
-
     for await (const v of iter) {
         const e = await fn(v);
         const cnt = (m.get(e) || 0) + 1;
         m.set(e, cnt);
     }
-
     return m;
 });
 
-/**
- * frequency Count
- * 
- * @param {Iterable | AsyncIterable} iter any iterable
- * @return {Promise<Map>} frequencyMap
- */
 const frequencies = frequenciesBy(identity);
 
 const undefinedValue = ((v) => v)();
 
-/**
- * support Map, Set, any Object
- */
 const get = curry((key, a) => {
     if (a.get && a.get.constructor === Function) {
         const r = a.get(key);
@@ -1263,7 +813,6 @@ const has = curry((key, a) => {
             return true;
         }
     }
-
    return a[key] !== undefinedValue;
 });
 
@@ -1283,7 +832,6 @@ const sleep = (t) => new Promise((r) => {
 });
 
 const interval = (timeout, timerHandler, ...param) => {
-
     if(!timeout || timeout < 10) {
         timeout = 10;
     }
@@ -1295,7 +843,6 @@ const interval = (timeout, timerHandler, ...param) => {
                 await timerHandler(...param);
                 await s;
             } catch {
-                //ignore
             }
         }
     })();
@@ -1306,7 +853,6 @@ const isNil = (v) => {
     if (v) {
         return false;
     }
-
     switch(v){
         case null: return true;
         case undefinedValue: return true;
@@ -1323,57 +869,26 @@ const iterate = curry(async function *(fn, v) {
     }
 });
 
-//juxtA([Math.max, Math.min], [1,2,3,4,5]);
-//=>[1,5]
-
-//juxtA([Math.max, Math.min], []);
-//=>[undefined, undefined]
 const juxtA = curry(async (af, iter) => {
     af = await _collectArray(af);
-
     const len = af.length;
     const g = seq(iter);
     const r = [];
     r.length = len;
-    
-    
     const firstElem = await g.next();
     if(firstElem.done) {
-       //empty [undefined, undefined]
-       return r; 
+       return r;
     }
-
     r.fill(firstElem.value);
-
-    /**
-     * same 
-     * 
-     * foldl(async (acc, e) => {
-     *   for (let i = 0; i < len; ++i) {
-     *       acc[i] = af[i](acc[i], e);
-     *       return Promise.all(acc);
-     *   }
-     *}, r, g);
-     */
     return foldl((acc, e) => forEachIndexed((i, x) => af[i](x, e), acc), r, g);
 });
 
-//juxtO(["A","C"], {A:1,B:2,C:3});
-//=>[1,3]
-
-//juxtO(["A","C"], {});
-//=>[undefined, undefined]
-
-//juxtO(["A","C"],  new Map([["A", 1], ["B", 2], ["C", 3]]));
-//=>[1,2]
 const juxtO = curry(async (ap, obj) => {
     ap = await _collectArray(ap);
-
     const r = [];
     for (const k of ap) {
         r.push(get(k, obj));
     }
-    
     return r;
 });
 
@@ -1390,31 +905,6 @@ const mapIndexed = curry(async function *(fn, iter) {
     }
 });
 
-/**
- *  for pattern matching 
- *  F._ is any match 
- * 
- * @example
- * 
- *  const value = 1;
- * 
- *  F.match(value,
- *      0, () => console.log("value is 0"),
- *      1, () => console.log("value is 1"),
- *      2, () => console.log("value is 2")
- *  );
- * //print value is 1
- * 
- *  const value2 = [1, 2, 3, 4, 5];
- *  F.match(value2, 
- *      [1, 2], () => console.log("value is [1,2]"),
- *      [1, F._, F._, F._, F._], () => console.log("value is [1, any, any, any, any]")
- *  );
- *  //print value is [1, any, any, any, any]
- * 
- * @param {any} value match value
- * @param  {...any} cv must even [0]:compare, [1]: value, ...
- */
 const match = (value, ...cv) => {
     mustEvenArguments(cv);
     for (let i = 0; i < cv.length; i += 2) {
@@ -1425,12 +915,10 @@ const match = (value, ...cv) => {
             return cv[i + 1];
         }
     }
-    //return undefined;
 };
 
 const maxBy = curry(async (f, iter) => {
     let [m, tail] = await _headTail(iter);
-    
     let c = await f(m);
     for await (const e of tail) {
         const k = await f(e);
@@ -1442,13 +930,6 @@ const maxBy = curry(async (f, iter) => {
     return m;
 });
 
-/**
- * Gets the max value in the range
- *
- * await F.max([1,2,3,4,5]);
- * 
- * => 5
- */
 const max = maxBy(identity);
 
 const memoizeBy = curry((keyFn, callFn) => {
@@ -1482,12 +963,10 @@ const memoizeWithTimeoutBy = (timeout, keyFn, callFn) => {
         return c.value;
     };
 };
-
 const memoizeWithTimeout = curry((timeout, callFn) => memoizeWithTimeoutBy(timeout, (...a) => a, callFn));
 
 const minBy = curry(async (f, iter) => {
     let [m, tail] = await _headTail(iter);
-    
     let c = await f(m);
     for await (const e of tail) {
         const k = await f(e);
@@ -1499,32 +978,14 @@ const minBy = curry(async (f, iter) => {
     return m;
 });
 
-/**
- * Gets the min value in the range
- *
- * await F.min([1,2,3,4,5,0]);
- * 
- * => 0
- */
 const min = minBy(identity);
 
-//deprecated / use isNill instead.
 const notNil = (a) => !isNil(a);
 
-/**
- * if (F.otherwise) {
- *  // work
- * }
- * 
- * if (F.otherwise()) {
- *  // work
- * }
- */
 const otherwise = () => true;
 
 const default_fetch_count = 100;
 let global_fetch_count = default_fetch_count;
-
 const parallel_set_fetch_count_internal = (count) => {
     count = Number(count);
     if (count <= 0) {
@@ -1532,9 +993,7 @@ const parallel_set_fetch_count_internal = (count) => {
     }
     global_fetch_count = count || default_fetch_count;
 };
-
 const parallel_fetch_map_internal = async (iter, fn) => {
-    // fetch (n - 1) here
     const fetchCount = global_fetch_count - 1;
     const g = seq(iter);
     for (let i = fetchCount; i > 0; --i) {
@@ -1552,20 +1011,15 @@ const parallel_set_fetch_count = (count) =>
 
 const fetch_call_internal = (f, iter) =>
     parallel_fetch_map_internal(iter, (e) => f.add(e()));
-
 const pcalls_internal = async function *(iter) {
-
     const f = new _Queue();
     const g = await fetch_call_internal(f, iter);
-    
     for await(const e of g) {
         f.add(e());
         yield f.poll();
-    } 
-
+    }
     yield* f.removeIterator();
 };
-
 const pcalls = curry(async function *(...a) {
     if (a.length === 1) {
         if (_hasIterator(a[0])) {
@@ -1588,7 +1042,6 @@ const fetch_filter_internal = (f, v, fn, iter) =>
         f.add(fn(e));
         v.add(e);
     });
-
 const pfilter = curry(async function *(fn, iter) {
     const f = new _Queue();
     const v = new _Queue();
@@ -1596,120 +1049,68 @@ const pfilter = curry(async function *(fn, iter) {
     for await (const e of g) {
         f.add(fn(e));
         v.add(e);
-
         const c = v.poll();
         if (await f.poll()) {
             yield c;
         }
     }
-
     while (!v.isEmpty()) {
-        const c = v.poll(); 
+        const c = v.poll();
         if (await f.poll()) {
             yield c;
         }
     }
 });
 
-/**
- * like `.` or `->>`
- *      let r = await F.pipe(
- *              F.map(e => e + 1), // a = [2,3,4,5,6]
- *              F.filter(e => e < 4), // a = [2,3]
- *              F.take(Infinity));
- * 
- *      let a = [1,2,3,4,5];
- *      for await (const e of await r(a)) {
- *          console.log(e);
- *      }
- * //result
- * //2
- * //3
- */
 const pipe = (f, ...fns) => (...args) => foldl((z, fn) => fn(z), f(...args), fns);
 
 const fetch_map_internal = (f, fn, iter) =>
     parallel_fetch_map_internal(iter, (e) => f.add(fn(e)));
-
 const pmap = curry(async function *(fn, iter) {
     const f = new _Queue();
     const g = await fetch_map_internal(f, fn, iter);
-
     for await (const e of g) {
         f.add(fn(e));
         yield f.poll();
     }
-
     yield* f.removeIterator();
 });
-
 const pfmap = curry(async function *(fn, iter) {
     const f = new _Queue();
     const g = await fetch_map_internal(f, fn, iter);
-
     for await (const e of g) {
         f.add(fn(e));
         yield* await f.poll();
     }
-
     while(!f.isEmpty()) {
         yield* await f.poll();
     }
 });
-
 const pflatMap = pfmap;
 
 const prop = curry((key, a) => a[key]);
 
 const crypto = require("crypto");
-
 const randomUintInternal = (size) => {
     const buf = crypto.randomBytes(size);
     const n = buf.readUIntBE(0, size);
     return n;
 };
-
 const randomInternal = (begin, end) => {
     const randomRange = end - begin - 1;
-
-    /**
-     * mask: binary digit, equal or greater than randomRange
-     * bit: multiple of 2 greater than randomRange
-     * 
-     * randomRange: 0~255 byteSize:1
-     * randomRange: 256~65535 byteSize:2
-     * randomRange: 65536~16777215 byteSize:3
-     * ...
-     * ...
-     */
-
     let step = 0;
     let bit = 1;
     for (;randomRange >= bit; ++step) {
         bit <<= 1;
     }
-
     const mask = bit - 1;
     const byteSize = Math.floor(step / 8) + 1;
-
     const v = randomUintInternal(byteSize) & mask;
     const randomValue = v / bit;
-
     return Math.ceil(randomValue * randomRange) + begin;
 };
-
-/**
- * random() => 0 ~ 4294967295 (unsigned int max)
- * random(10) => 0 ~ 9 [begin end) max: 4294967295
- * random(1, 42) => 1 ~ 41 [begin end) max: 4294967295
- * 
- * maximum value is uint max
- * 
- * @param  {...any} k 0 ~ 2 argument
- */
 const random = (...k) => {
     const len = k.length;
-
     switch (len) {
     case 0:
         return randomUintInternal(4);
@@ -1727,7 +1128,6 @@ const range = function *(...k) {
     let end = Infinity;
     let n = 1;
     const len = k.length;
-
     switch(len) {
     case 1:
         end = k[0];
@@ -1742,7 +1142,6 @@ const range = function *(...k) {
         n = k[2];
         break;
     }
-
     for (let i = begin; i !== end; i += n) {
         yield i;
     }
@@ -1750,17 +1149,14 @@ const range = function *(...k) {
 
 const getDuration = async (duration) => {
     duration = await duration;
-
     if (duration instanceof Function) {
         duration = await duration();
     }
-
     if (duration <= 0) {
         throw new Error("duration > 0 required");
     }
     return duration;
 };
-
 const errorSleep = (t) => new Promise((_, reject) => {
     setTimeout(() => {
         reject(new Error("timeout error"));
@@ -1769,7 +1165,6 @@ const errorSleep = (t) => new Promise((_, reject) => {
 
 const rangeInterval = async function *(duration, ...k) {
     duration = await getDuration(duration);
-
     await sleep(duration);
     for (const e of range(...k)) {
         yield e;
@@ -1777,18 +1172,8 @@ const rangeInterval = async function *(duration, ...k) {
     }
 };
 
-/**
- * **deprecated** 
- * deprecated. use flat or dflat instead.
- * 
- * @param  {...any} a any range
- */
 const rangeOf = (...a) => fmap(identity, a);
 
-/**
- * arity 1 : [Infinity, arg1]
- * arity 2 : [arg1, arg2]
- */
 const repeatFetchArgument = async (a, b) => {
     a = await a;
     if (b.length > 0) {
@@ -1796,18 +1181,6 @@ const repeatFetchArgument = async (a, b) => {
     }
     return [Infinity, a];
 };
-
-/**
- * supply
- * F.repeat(5) => [5,5,5,....]
- * 
- * count and supply
- * F.repeat(3, 5) => [5,5,5]
- * 
- * 
- * @param {Number | any} a  count or supply
- * @param  {any?} b supply
- */
 const repeat = async function *(a, ...b) {
     const [len, supply] = await repeatFetchArgument(a, b);
     if (supply instanceof Function) {
@@ -1821,35 +1194,17 @@ const repeat = async function *(a, ...b) {
     }
 };
 
-/**
- * like `$` or `.`
- *  let a = [1,2,3,4,5];
- *  let r = await F.run(a,
- *           F.map(e => e + 1), // a = [2,3,4,5,6]
- *           F.filter(e => e < 4), // a = [2,3]
- *           F.take(Infinity),
- *           F.collect);
- * 
- *  console.log(r); // print [2,3]
- * 
- */
 const run = (iter, ...f) => foldl((z, fn) => fn(z), iter, f);
 
 const _sampleArray = (arr) => arr[random(arr.length)];
-
 const _sampleNotArray = async (iter) => {
     const r = await collect(iter);
     return _sampleArray(r);
 };
-
-/**
- * get random element from iterator
- * @param {Iterable | AsyncIterable} iter any iterator
- */
 const sample = (iter) => {
     if (_isReadableArrayLike(iter)) {
         return _sampleArray(iter);
-    } 
+    }
     return _sampleNotArray(iter);
 };
 
@@ -1861,7 +1216,6 @@ const scanl = curry(async function *(f, z, iter) {
         yield z;
     }
 });
-
 const scanl1 = curry(async function *(f, iter) {
     const g = seq(iter);
     const h = await g.next();
@@ -1884,22 +1238,13 @@ const shuffleInternal = (arr) => {
     }
     return arr;
 };
-
-//for Iterable, AsyncIterable
 const shuffleAsync = async (iter) => {
     iter = await collect(iter);
     return shuffleInternal(iter);
 };
-
-/**
- * return a random permutation Array
- * 
- * @param {Iterable | AsyncIterable} iter any iterable
- * @return {Promise<Array>} new shuffle Array
- */
 const shuffle = (iter) => {
     if (_isReadableArrayLike(iter)) {
-        return shuffleInternal(Array.from(iter));    
+        return shuffleInternal(Array.from(iter));
     }
     return shuffleAsync(iter);
 };
@@ -1926,34 +1271,25 @@ const sortBy = curry(async function *(f, order, iter) {
                 throw new Error("please set order parameter to ASC or DESC or compare function");
         }
     }
-
     const t = [];
     const m = new Map();
-
     for await (const e of iter) {
         t.push(e);
         if (!m.has(e)) {
             m.set(e, await f(e));
         }
     }
-
     yield* t.sort((a, b) => {
         const ma = m.get(a);
         const mb = m.get(b);
-
         return order(ma, mb);
     });
 });
-
 const orderBy = sortBy;
 
 const order = sortBy(identity);
 const sort = sortBy(identity);
 
-/**
- * break is keyword..
- * 
- */
 const split = curry(async function *(fn, iter) {
     const g = seq(iter);
     let e;
@@ -1961,13 +1297,12 @@ const split = curry(async function *(fn, iter) {
         while (true) {
             e = await g.next();
             if ((e.done) || await fn(e.value)) {
-                break;    
+                break;
             }
             yield e.value;
         }
     };
     yield lhs();
-
     const rhs = async function *() {
         if (!e.done) {
             yield e.value;
@@ -1982,12 +1317,6 @@ const splitBy = curry(async function *(f, any) {
 });
 
 const combineMap = (a, b) => new Map([...b, ...a]);
-
-
-/**
- * support iterable + set method
- * a is overwrite b value
- */
 const combineCollection = (a, b) => {
     const r = new a.constructor();
     for (const e of b) {
@@ -1998,29 +1327,22 @@ const combineCollection = (a, b) => {
     }
     return r;
 };
-
 const combineObject = (a, b) => Object.assign({}, b, a);
-
 const combine = (a, b) => {
     if (a.constructor !== b.constructor) {
         throw new Error("join/combine object: object is not same");
     }
-
     if (a instanceof Map) {
         return combineMap(a, b);
     }
-
     if (a[Symbol.iterator] && a.set && typeof (a.set) === "function") {
         return combineCollection(a, b);
     }
-
     if (a instanceof Object) {
         return combineObject(a, b);
     }
-
     throw new Error("join/combine object: not support type");
 };
-
 const _outerJoin = async function *(f, iter1, iter2) {
     const leftCache = [];
     const rightCache = [];
@@ -2033,7 +1355,6 @@ const _outerJoin = async function *(f, iter1, iter2) {
                 continue start;
             }
         }
-
         while (true) {
             const { value, done } = await it.next();
             if (done) {
@@ -2045,10 +1366,8 @@ const _outerJoin = async function *(f, iter1, iter2) {
                 continue start;
             }
         }
-
         yield e;
     }
-
     for await (const e of it) {
         for (const c of leftCache) {
             if (await f(c, e)) {
@@ -2057,7 +1376,6 @@ const _outerJoin = async function *(f, iter1, iter2) {
         }
     }
 };
-
 const _innerJoin = async function *(f, iter1, iter2) {
     const leftCache = [];
     const rightCache = [];
@@ -2070,7 +1388,6 @@ const _innerJoin = async function *(f, iter1, iter2) {
                 continue start;
             }
         }
-
         while (true) {
             const { value, done } = await it.next();
             if (done) {
@@ -2083,7 +1400,6 @@ const _innerJoin = async function *(f, iter1, iter2) {
             }
         }
     }
-
     for await (const e of it) {
         for (const c of leftCache) {
             if (await f(c, e)) {
@@ -2092,11 +1408,9 @@ const _innerJoin = async function *(f, iter1, iter2) {
         }
     }
 };
-
 const leftInnerJoin = curry(_innerJoin);
 const innerJoin = curry(_innerJoin);
 const rightInnerJoin = curry((f, a, b) => _innerJoin(f, b, a));
-
 const leftOuterJoin = curry(_outerJoin);
 const outerJoin = curry(_outerJoin);
 const rightOuterJoin = curry((f, a, b) => _outerJoin(f, b, a));
@@ -2143,13 +1457,10 @@ const then = curry((f, arg) => f(arg));
 
 const timeout = curry(async (duration, a) => {
     duration = await getDuration(duration);
-
     const s = errorSleep(duration);
-
     if (a instanceof Function) {
         a = a();
     }
-
     const r = Promise.race([s, a]);
     const e = await r;
     s.catch(fnothing);
@@ -2158,10 +1469,8 @@ const timeout = curry(async (duration, a) => {
 
 const withTimeout = curry(async function *(duration, iter) {
     duration = await getDuration(duration);
-
     const g = seq(iter);
     const s = errorSleep(duration);
-
     while(true) {
         const it = g.next();
         const e = await Promise.race([s, it]);
@@ -2176,18 +1485,14 @@ const withTimeout = curry(async function *(duration, iter) {
 const zipWith = curry(async function *(f, a, b) {
     a = seq(a);
     b = seq(b);
-
     while (true) {
         const ap = a.next();
         const bp = b.next();
-
         const ae = await ap;
         const be = await bp;
-
         if (ae.done || be.done) {
             break;
         }
-
         yield f(ae.value, be.value);
     }
 });
@@ -2198,20 +1503,16 @@ const zipWith3 = curry(async function *(f, a, b, c) {
     a = seq(a);
     b = seq(b);
     c = seq(c);
-
     while (true) {
         const ap = a.next();
         const bp = b.next();
         const cp = c.next();
-
         const ae = await ap;
         const be = await bp;
         const ce = await cp;
-
         if (ae.done || be.done || ce.done) {
             break;
         }
-
         yield f(ae.value, be.value, ce.value);
     }
 });
