@@ -1374,3 +1374,79 @@ describe('distinctUntilChanged', () => {
         const r0 = await F.run(a, F.distinctUntilChanged); // $ExpectType AsyncIterableIterator<string | number>
     });
 });
+
+describe('associateBy', () => {
+    it('number', async () => {
+        const a = [1, 1, 1, 2, 3];
+
+        const r0 = F.associateBy(n => {
+            return n * n;
+        }, a);
+        r0; // $ExpectType Promise<Map<number, number>>
+    });
+
+    it('string', async () => {
+        const a = "hello world";
+
+        const r0 = F.associateBy(n => {
+            return n + "a";
+        }, a);
+        r0; // $ExpectType Promise<Map<string, string>>
+    });
+
+    it('string[]', async () => {
+        const a = "hello world";
+
+        const r0 = F.associateBy(n => {
+            return [n, n];
+        }, a);
+        r0; // $ExpectType Promise<Map<string, string>>
+    });
+
+    it('(number, string)[]', async () => {
+        const a = "hello world";
+
+        const r0 = F.associateBy(n => {
+            return [0, n];
+        }, a);
+        r0; // $ExpectType Promise<Map<string | number, string | number>>
+
+        const r1 = F.associateBy(n => {
+            return [0, n] as [number, string];
+        }, a);
+        r1; // $ExpectType Promise<Map<number, string>>
+    });
+
+    it('Promise<number>', async () => {
+        const a = [1, 1, 1, 2, 3];
+
+        const r0 = F.associateBy(async n => {
+            return n * n;
+        }, a);
+        r0; // $ExpectType Promise<Map<number, number>>
+    });
+
+    it('Promise<(number, string)[]>', async () => {
+        const a = "hello world";
+
+        const r0 = F.associateBy(async n => {
+            return [0, n];
+        }, a);
+        r0; // $ExpectType Promise<Map<string | number, string | number>>
+
+        const r1 = F.associateBy(async n => {
+            return [0, n] as [number, string];
+        }, a);
+        r1; // $ExpectType Promise<Map<number, string>>
+    });
+
+    it('comment example', async () => {
+        const arr0 = [1, 2, 3];
+        const m0 = await F.associateBy(e => [e, e * 2], arr0);
+        m0; // $ExpectType Map<number, number>
+
+        const arr1 = [1, 2, 3];
+        const m1 = await F.associateBy(e => e + 1, arr1);
+        m1; // $ExpectType Map<number, number>
+    });
+});

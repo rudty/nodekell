@@ -280,80 +280,6 @@ const add = curry((a, b) => a + b);
 
 const asc = (a, b) => a > b ? 1 : a < b ? -1 : 0;
 
-const average = async (iter) => {
-    let c = 0;
-    let sum = 0;
-    for await (const e of iter) {
-        ++c;
-        sum += e;
-    }
-    return sum / c;
-};
-
-const buffer = curry(async function *(supply, iter) {
-    supply = await supply;
-
-    if(supply <= 0) {
-        throw new Error("arg supply > 0 required");
-    }
-
-    let c = [];
-    for await (const e of iter) {
-        const len = c.push(e);
-        if (len >= supply) {
-            yield c;
-            c = [];
-        }
-    }
-
-    if (c.length !== 0) {
-        yield c;
-    }
-});
-
-/**
- * iterable to array
- * and resolve promise elements
- * 
- * @param {Array | Iterable | AsyncIterable} iter
- * @returns {Array}
- */
-const collect = async (iter) => {
-    const res = [];
-    for await (const e of iter) {
-        res.push(e);
-    }
-    return res;
-};
-
-const collectMap = async (iter) => new Map(await collect(iter));
-
-/**
- * Int32Array.from does not support async generator 
- * 
- * collect<T>
- * native number
- * 
- * @param {T} ctor 
- */
-const _collectNativeArray = (ctor) => async (iter) => {
-    const arr = new _ArrayList(ctor);
-    for await (const e of iter) {
-        arr.add(e);
-    }
-    return arr.toArray();
-};
-
-const collectInt8 = _collectNativeArray(Int8Array);
-const collectInt16 = _collectNativeArray(Int16Array);
-const collectInt32 = _collectNativeArray(Int32Array);
-const collectUint8 = _collectNativeArray(Uint8Array);
-const collectUint16 = _collectNativeArray(Uint16Array);
-const collectUint32 = _collectNativeArray(Uint32Array);
-const collectUint8Clamped = _collectNativeArray(Uint8ClampedArray);
-const collectFloat32 = _collectNativeArray(Float32Array);
-const collectFloat64 = _collectNativeArray(Float64Array);
-
 const util = require("util");
 
 /**
@@ -429,6 +355,114 @@ const mustEvenArguments = (arr) => {
         throw new Error("requires an even arguments");
     }
 };
+
+/**
+ * returns a Map using iterator.
+ * when the function returns Array
+ * it uses the first argument as key and the second argument as value.
+ * when not in an array, the key and value are both return values.
+ * 
+ * @example
+ *      const arr0 = [1, 2, 3];
+ *      const m0 = await F.associateBy(e => [e, e * 2], arr0); 
+ *      console.log(m0);
+ *      // => Map { 1 => 2, 2 => 4, 3 => 6 }
+ *      
+ *      const arr1 = [1, 2, 3];
+ *      const m1 = await F.associateBy(e => e + 1, arr1);
+ *      console.log(m1);
+ *      // => Map { 2 => 2, 3 => 3, 4 => 4 }
+ * 
+ * @param {Function} fn convert function
+ * @param {Iterable | AsyncIterable} iter any iterator
+ * @returns {Map} convert Map
+ */
+const associateBy = async (fn, iter) => {
+    const m = new Map();
+    for await (const e of iter) {
+        const v = await fn(e);
+        if (_isReadableArrayLike(v)) {
+            m.set(v[0], v[1]);
+        } else {
+            m.set(v, v);
+        }
+    }
+    return m;
+};
+
+const average = async (iter) => {
+    let c = 0;
+    let sum = 0;
+    for await (const e of iter) {
+        ++c;
+        sum += e;
+    }
+    return sum / c;
+};
+
+const buffer = curry(async function *(supply, iter) {
+    supply = await supply;
+
+    if(supply <= 0) {
+        throw new Error("arg supply > 0 required");
+    }
+
+    let c = [];
+    for await (const e of iter) {
+        const len = c.push(e);
+        if (len >= supply) {
+            yield c;
+            c = [];
+        }
+    }
+
+    if (c.length !== 0) {
+        yield c;
+    }
+});
+
+/**
+ * iterable to array
+ * and resolve promise elements
+ * 
+ * @param {Array | Iterable | AsyncIterable} iter
+ * @returns {Array}
+ */
+const collect = async (iter) => {
+    const res = [];
+    for await (const e of iter) {
+        res.push(e);
+    }
+    return res;
+};
+
+const collectMap = async (iter) => new Map(await collect(iter));
+
+/**
+ * Int32Array.from does not support async generator 
+ * 
+ * collect<T>
+ * native number
+ * 
+ * @param {T} ctor 
+ */
+const _collectNativeArray = (ctor) => async (iter) => {
+    const arr = new _ArrayList(ctor);
+    for await (const e of iter) {
+        arr.add(e);
+    }
+    return arr.toArray();
+};
+
+const collectInt8 = _collectNativeArray(Int8Array);
+const collectInt16 = _collectNativeArray(Int16Array);
+const collectInt32 = _collectNativeArray(Int32Array);
+const collectUint8 = _collectNativeArray(Uint8Array);
+const collectUint16 = _collectNativeArray(Uint16Array);
+const collectUint32 = _collectNativeArray(Uint32Array);
+const collectUint8Clamped = _collectNativeArray(Uint8ClampedArray);
+const collectFloat32 = _collectNativeArray(Float32Array);
+const collectFloat64 = _collectNativeArray(Float64Array);
 
 /**
  * any iterable to array
@@ -2189,6 +2223,7 @@ exports._ArrayList = _ArrayList;
 exports._Queue = _Queue;
 exports.add = add;
 exports.asc = asc;
+exports.associateBy = associateBy;
 exports.average = average;
 exports.buffer = buffer;
 exports.collect = collect;

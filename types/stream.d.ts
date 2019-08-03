@@ -6,6 +6,7 @@ import {
     PFlat,
     FlatForInternalFn,
     ExtractPromise,
+    AssociateMap,
 } from './utils';
 
 /**
@@ -472,3 +473,30 @@ export function distinctUntilChangedBy<T>(f: (elem: T) => any): (iter: Iter<T | 
  * @param iter
  */
 export function distinctUntilChanged<T>(iter: Iter<T>): AsyncIterableIterator<EP<T>>;
+
+/**
+ * https://github.com/rudty/nodekell#associateby
+ *
+ * returns a Map using iterator.
+ * when the function returns Array
+ * it uses the first argument as key and the second argument as value.
+ * when not in an array, the key and value are both return values.
+ *
+ * **Note**
+ * - if want you high quality type, use type assertion
+ *
+ * @example
+ *      const arr0 = [1, 2, 3];
+ *      const m0 = await F.associateBy(e => [e, e * 2], arr0);
+ *      console.log(m0);
+ *      // => Map { 1 => 2, 2 => 4, 3 => 6 }
+ *
+ *      const arr1 = [1, 2, 3];
+ *      const m1 = await F.associateBy(e => e + 1, arr1);
+ *      console.log(m1);
+ *      // => Map { 2 => 2, 3 => 3, 4 => 4 }
+ *
+ * @param fn convert function
+ * @param iter any iterator
+ */
+export function associateBy<T, R>(fn: (arg: T) => R, iter: Iter<T | Promise<T>>): Promise<AssociateMap<ExtractPromise<R>>>;
