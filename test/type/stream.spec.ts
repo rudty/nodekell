@@ -1439,4 +1439,14 @@ describe('associateBy', () => {
         }, a);
         r1; // $ExpectType Promise<Map<number, string>>
     });
+
+    it('comment example', async () => {
+        const arr0 = [1, 2, 3];
+        const m0 = await F.associateBy(e => [e, e * 2], arr0);
+        m0; // $ExpectType Map<number, number>
+
+        const arr1 = [1, 2, 3];
+        const m1 = await F.associateBy(e => e + 1, arr1);
+        m1; // $ExpectType Map<number, number>
+    });
 });

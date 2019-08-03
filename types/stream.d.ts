@@ -6,6 +6,7 @@ import {
     PFlat,
     FlatForInternalFn,
     ExtractPromise,
+    AssociateMap,
 } from './utils';
 
 /**
@@ -473,8 +474,6 @@ export function distinctUntilChangedBy<T>(f: (elem: T) => any): (iter: Iter<T | 
  */
 export function distinctUntilChanged<T>(iter: Iter<T>): AsyncIterableIterator<EP<T>>;
 
-export type AssociateMap<T> = T extends any[] ? Map<T[0], T[1]> : Map<T, T>;
-
 /**
  * https://github.com/rudty/nodekell#associateby
  *
@@ -500,7 +499,4 @@ export type AssociateMap<T> = T extends any[] ? Map<T[0], T[1]> : Map<T, T>;
  * @param fn convert function
  * @param iter any iterator
  */
-export function associateBy<T, R>(fn: (arg: T) => R, iter: Iter<T | Promise<T>>):
-    R extends Promise<infer PR> ?
-    Promise<AssociateMap<PR>> :
-    Promise<AssociateMap<R>>;
+export function associateBy<T, R>(fn: (arg: T) => R, iter: Iter<T | Promise<T>>): Promise<AssociateMap<ExtractPromise<R>>>;

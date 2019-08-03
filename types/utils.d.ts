@@ -215,3 +215,5 @@ export interface CurriedFunction8<T1, T2, T3, T4, T5, T6, T7, T8, R> {
 
 export type Accumulator<T> = (acc: T, elem: T) => (T| Promise<T>);
 export type FlatAccumulator<T> = (acc: FlatForInternalFn<T>, elem: FlatForInternalFn<T>) => (FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>);
+
+export type AssociateMap<T> = T extends any[] ? Map<T[0], T[1]> : Map<T, T>;
