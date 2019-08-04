@@ -1459,5 +1459,7 @@ describe('associateBy', () => {
 
         const arr1 = [1, Promise.resolve(2), 'a', Promise.resolve('b'), null];
         const r1 = await F.run(arr1, F.associateBy(e => e)); // $ExpectType Map<string | number | null, string | number | null>
+
+        const r2 = await F.run(arr1, F.associateBy(e => ["a", e] as [string, typeof e])); // $ExpectType Map<string, string | number | null>
     });
 });
