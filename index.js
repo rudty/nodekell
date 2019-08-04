@@ -159,7 +159,7 @@ const _isObjectArray = (a) => {
 };
 const _isString = (a) => a.constructor === String;
 const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray(a) || _isObjectArray(a));
-const _isReadableArrayLike = (a) => _isString(a) || _isArrayLike(a);
+const _isReadableArrayLike = (a) => a && (_isString(a) || _isArrayLike(a));
 const _hasIterator = (a) => a[Symbol.iterator] || a[Symbol.asyncIterator];
 const _isFunction = (a) => a && a.constructor === Function;
 const mustEvenArguments = (arr) => {
@@ -168,7 +168,7 @@ const mustEvenArguments = (arr) => {
     }
 };
 
-const associateBy = async (fn, iter) => {
+const associateBy = curry(async (fn, iter) => {
     const m = new Map();
     for await (const e of iter) {
         const v = await fn(e);
@@ -179,7 +179,7 @@ const associateBy = async (fn, iter) => {
         }
     }
     return m;
-};
+});
 
 const average = async (iter) => {
     let c = 0;

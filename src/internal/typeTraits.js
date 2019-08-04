@@ -57,7 +57,7 @@ const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray(a) || _isObjectAr
  * is array like object
  * @param {ArrayLike} any 
  */
-export const _isReadableArrayLike = (a) => _isString(a) || _isArrayLike(a);
+export const _isReadableArrayLike = (a) => a && (_isString(a) || _isArrayLike(a));
 
 /**
  * is array like object and writable
@@ -70,6 +70,7 @@ export const _isReadableArrayLike = (a) => _isString(a) || _isArrayLike(a);
  * @param {ArrayLike} a 
  */
 export const _isWritableArrayLike = (a) => 
+    a &&
     !(_isString(a)) &&
     !(Object.isFrozen(a)) &&
     _isArrayLike(a);

@@ -1,4 +1,5 @@
 import { _isReadableArrayLike } from "./internal/typeTraits";
+import { curry } from "./curry";
 
 /**
  * returns a Map using iterator.
@@ -21,7 +22,7 @@ import { _isReadableArrayLike } from "./internal/typeTraits";
  * @param {Iterable | AsyncIterable} iter any iterator
  * @returns {Map} convert Map
  */
-export const associateBy = async (fn, iter) => {
+export const associateBy = curry(async (fn, iter) => {
     const m = new Map();
     for await (const e of iter) {
         const v = await fn(e);
@@ -32,4 +33,4 @@ export const associateBy = async (fn, iter) => {
         }
     }
     return m;
-};
+});

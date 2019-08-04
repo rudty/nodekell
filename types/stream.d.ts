@@ -499,4 +499,6 @@ export function distinctUntilChanged<T>(iter: Iter<T>): AsyncIterableIterator<EP
  * @param fn convert function
  * @param iter any iterator
  */
-export function associateBy<T, R>(fn: (arg: T) => R, iter: Iter<T | Promise<T>>): Promise<AssociateMap<ExtractPromise<R>>>;
+export function associateBy<T, R>(fn: (arg: T) => R, iter: Iter<T | Promise<T>>): Promise<AssociateMap<R>>;
+export function associateBy<T extends Iter<any>, R>(fn: (arg: FlatForInternalFn<T>) => R, iter: T): Promise<AssociateMap<R>>;
+export function associateBy<T extends Iter<any>, R>(fn: (arg: FlatForInternalFn<T>) => R): (iter: T) => Promise<AssociateMap<R>>;

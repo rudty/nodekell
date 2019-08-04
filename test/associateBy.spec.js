@@ -42,4 +42,13 @@ describe('test average', () => {
         assert.deepStrictEqual(m, new Map([
             [NaN, NaN]]));
     });
+
+    it('with run', async () => {
+        const arr = [1, 2, 3];
+        const r = await F.run(arr, F.associateBy(e => e));
+        assert.deepStrictEqual(r, new Map([
+            [1,1],
+            [2,2],
+            [3,3]]));
+    });
 });

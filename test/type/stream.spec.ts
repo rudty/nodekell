@@ -1438,6 +1438,9 @@ describe('associateBy', () => {
             return [0, n] as [number, string];
         }, a);
         r1; // $ExpectType Promise<Map<number, string>>
+
+        const arr1 = [1, Promise.resolve(2), 'a', Promise.resolve('b'), null];
+        const r2 = await F.associateBy(e => e, arr1); // $ExpectType Map<string | number | null, string | number | null>
     });
 
     it('comment example', async () => {
@@ -1448,5 +1451,13 @@ describe('associateBy', () => {
         const arr1 = [1, 2, 3];
         const m1 = await F.associateBy(e => e + 1, arr1);
         m1; // $ExpectType Map<number, number>
+    });
+
+    it('with run', async () => {
+        const arr0 = [1, 2, 3];
+        const r0 = await F.run(arr0, F.associateBy(e => e)); // $ExpectType Map<number, number>
+
+        const arr1 = [1, Promise.resolve(2), 'a', Promise.resolve('b'), null];
+        const r1 = await F.run(arr1, F.associateBy(e => e)); // $ExpectType Map<string | number | null, string | number | null>
     });
 });
