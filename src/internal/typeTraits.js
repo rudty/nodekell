@@ -1,5 +1,3 @@
-const util = require("util");
-
 /**
  * check 
  * 
@@ -16,7 +14,7 @@ const util = require("util");
  * @param {any} a 
  * @returns {bool} true if isTypedArray else false
  */
-export const _isTypedArray = util.types.isTypedArray;
+export const _isTypedArray = (a) => ArrayBuffer.isView(a) && !(a instanceof DataView);
 
 /**
  * (a.hasOwnProperty) can be override 

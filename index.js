@@ -143,8 +143,7 @@ const add = curry((a, b) => a + b);
 
 const asc = (a, b) => a > b ? 1 : a < b ? -1 : 0;
 
-const util = require("util");
-const _isTypedArray = util.types.isTypedArray;
+const _isTypedArray = (a) => ArrayBuffer.isView(a) && !(a instanceof DataView);
 const _isObjectArrayCheckProps = (a) => {
     if (a.length === 0) {
         return Object.keys(a).length === 1;
