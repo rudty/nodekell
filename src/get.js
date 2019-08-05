@@ -1,5 +1,6 @@
 import { curry } from "./curry";
 import { undefinedValue } from "./internal/undefinedValue";
+import { prop } from "./prop";
 
 /**
  * support Map, Set, any Object
@@ -11,5 +12,5 @@ export const get = curry((key, a) => {
             return r;
         }
     }
-    return a[key];
+    return prop(key, a);
 });

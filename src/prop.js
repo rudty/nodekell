@@ -1,2 +1,10 @@
 import { curry } from "./curry";
-export const prop = curry((key, a) => a[key]);
+import { isNil } from "./isNil";
+import { undefinedValue } from "./internal/undefinedValue";
+
+export const prop = curry((key, a) => {
+    if (isNil(key) || !a) {
+        return undefinedValue;
+    }
+    return a[key];
+});
