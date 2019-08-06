@@ -782,14 +782,40 @@ const frequencies = frequenciesBy(identity);
 
 const undefinedValue = ((v) => v)();
 
+const isNil = (v) => {
+    if (v) {
+        return false;
+    }
+    switch(v){
+        case null: return true;
+        case undefinedValue: return true;
+        default: return Number.isNaN(v);
+    }
+};
+
+const prop = curry((key, a) => {
+    if (isNil(key) || !a) {
+        return undefinedValue;
+    }
+    return a[key];
+});
+
 const get = curry((key, a) => {
-    if (a.get && a.get.constructor === Function) {
+    if (a && a.get && a.get.constructor === Function) {
         const r = a.get(key);
         if (r !== undefinedValue) {
             return r;
         }
     }
-    return a[key];
+    return prop(key, a);
+});
+
+const getOrElse = curry((key, defaultValue, a) => {
+    const r = get(key, a);
+    if (r === undefinedValue) {
+        return defaultValue;
+    }
+    return r;
 });
 
 const groupBy = curry(async (f, iter) => {
@@ -846,17 +872,6 @@ const interval = (timeout, timerHandler, ...param) => {
         }
     })();
     return k;
-};
-
-const isNil = (v) => {
-    if (v) {
-        return false;
-    }
-    switch(v){
-        case null: return true;
-        case undefinedValue: return true;
-        default: return Number.isNaN(v);
-    }
 };
 
 const iterate = curry(async function *(fn, v) {
@@ -1087,7 +1102,13 @@ const pfmap = curry(async function *(fn, iter) {
 });
 const pflatMap = pfmap;
 
-const prop = curry((key, a) => a[key]);
+const propOrElse = curry((key, defaultValue, a) => {
+    const r = prop(key, a);
+    if (r === undefinedValue) {
+        return defaultValue;
+    }
+    return r;
+});
 
 const crypto = require("crypto");
 const randomUintInternal = (size) => {
@@ -1580,6 +1601,7 @@ exports.forEachIndexed = forEachIndexed;
 exports.frequencies = frequencies;
 exports.frequenciesBy = frequenciesBy;
 exports.get = get;
+exports.getOrElse = getOrElse;
 exports.groupBy = groupBy;
 exports.has = has;
 exports.head = head;
@@ -1617,6 +1639,7 @@ exports.pfmap = pfmap;
 exports.pipe = pipe;
 exports.pmap = pmap;
 exports.prop = prop;
+exports.propOrElse = propOrElse;
 exports.random = random;
 exports.range = range;
 exports.rangeInterval = rangeInterval;
