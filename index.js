@@ -782,26 +782,15 @@ const frequencies = frequenciesBy(identity);
 
 const undefinedValue = ((v) => v)();
 
-const isNil = (v) => {
-    if (v) {
-        return false;
-    }
-    switch(v){
-        case null: return true;
-        case undefinedValue: return true;
-        default: return Number.isNaN(v);
-    }
-};
-
 const prop = curry((key, a) => {
-    if (isNil(key) || !a) {
+    if (a === undefinedValue || a === null) {
         return undefinedValue;
     }
     return a[key];
 });
 
 const get = curry((key, a) => {
-    if (a && a.get && a.get.constructor === Function) {
+    if (a && _isFunction(a.get)) {
         const r = a.get(key);
         if (r !== undefinedValue) {
             return r;
@@ -872,6 +861,17 @@ const interval = (timeout, timerHandler, ...param) => {
         }
     })();
     return k;
+};
+
+const isNil = (v) => {
+    if (v) {
+        return false;
+    }
+    switch(v){
+        case null: return true;
+        case undefinedValue: return true;
+        default: return Number.isNaN(v);
+    }
 };
 
 const iterate = curry(async function *(fn, v) {
