@@ -174,6 +174,29 @@ export function get<T, K extends keyof T>(key: K): (target: T) => Getter<T, K>;
 export function get<T, K>(key: K): (target: T) => Getter<T, K>;
 
 /**
+ * https://github.com/rudty/nodekell#getorelse
+ *
+ * ```ts
+ * let obj = {
+ *   "world": 1
+ * };
+ * F.getOrElse("world", 0, obj) === 1;
+ * F.getOrElse("hello", 0, obj) === 0;
+ * ```
+ *
+ * @param key
+ * @param target
+ */
+export function getOrElse<T, D, K extends keyof T>(key: K, defaultValue: D, target: T): Getter<T, K> extends undefined ? D: Getter<T, K> | D;
+export function getOrElse<T, D, K>(key: K, defaultValue: D, target: T): Getter<T, K> extends undefined ? D: Getter<T, K> | D;
+
+export function getOrElse<T, D, K extends keyof T>(key: K, defaultValue: D): (target: T) => Getter<T, K> extends undefined ? D: Getter<T, K> | D;
+export function getOrElse<T, D, K>(key: K, defaultValue: D): (target: T) => Getter<T, K> extends undefined ? D: Getter<T, K> | D;
+
+export function getOrElse<T, D, K extends keyof T>(key: K): (defaultValue: D, target: T) => Getter<T, K> extends undefined ? D: Getter<T, K> | D;
+export function getOrElse<T, D, K>(key: K): (defaultValue: D, target: T) => Getter<T, K> extends undefined ? D: Getter<T, K> | D;
+
+/**
  * https://github.com/rudty/nodekell#has
  *
  * @param key
@@ -196,6 +219,16 @@ export function has<T>(key: any): (target: T) => boolean;
 export function prop<T, K extends keyof T>(key: K, target: T): T[K];
 
 export function prop<T, K extends keyof T>(key: K): (target: T) => T[K];
+
+/**
+ * https://github.com/rudty/nodekell#proporelse
+ *
+ * @param key
+ * @param target
+ */
+export function propOrElse<T, D, K extends keyof T>(key: K, defaultValue: D, target: T): T[K] extends undefined ? D : T[K] | D;
+export function propOrElse<T, D, K extends keyof T>(key: K, defaultValue: D): (target: T) => T[K] extends undefined ? D : T[K] | D;
+export function propOrElse<T, D, K extends keyof T>(key: K): (defaultValue: D, target: T) => T[K] extends undefined ? D : T[K] | D;
 
 /**
  *

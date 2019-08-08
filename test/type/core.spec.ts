@@ -207,3 +207,95 @@ describe('prop', () => {
         const r0 = F.sortBy(F.prop('length'), F.asc, a); // $ExpectType AsyncIterableIterator<string>
     });
 });
+
+describe('getOrElse', () => {
+    describe('from Map', () => {
+        const a = new Map([['a', 1]]);
+        const b = new Map([[1, 'a']]);
+
+        it('has property or key', () => {
+            const ar0 = F.getOrElse<typeof a, 0, 'get'>('get', 0)(a); // $ExpectType number | ((key: string) => number | undefined)
+            const ar1 = F.getOrElse('size', "hello" + 0, a); // $ExpectType string | number
+
+            const br0 = F.getOrElse<typeof b, number, 'set'>('set')(0, b); // $ExpectType number | ((key: number, value: string) => Map<number, string>)
+            const br1 = F.getOrElse('size', 0, b); // $ExpectType number
+        });
+
+        it('has key', () => {
+            const ar0 = F.getOrElse<typeof a, string, 'a'>('a', 'b')(a); // $ExpectType string | number | undefined
+            const ar1 = F.getOrElse('b', 0, a); // $ExpectType number | undefined
+
+            const br0 = F.getOrElse<typeof b, string, 1>(1, "hello")(b); // $ExpectType string | undefined
+            const br1 = F.getOrElse(2, "world", b); // $ExpectType string | undefined
+        });
+
+        it('has not property', () => {
+            const r0 = F.getOrElse<typeof a, number, 1>(1, 1)(a); // $ExpectType number
+            const r1 = F.getOrElse('d', 'a' + 0, b); // $ExpectType string
+        });
+    });
+
+    describe('from Object', () => {
+        const a = { a: 1, b: 'a', get: 'get' };
+        const b = { a: 1, b: 'a', get: () => {} };
+
+        it('has property', () => {
+            const ar0 = F.getOrElse<typeof a, number, 'get'>('get', 1)(a); // $ExpectType string | number
+            const ar1 = F.getOrElse('b', 0, a); // $ExpectType string | number
+
+            const br0 = F.getOrElse<typeof b, number, 'b'>('b')(0, b); // $ExpectType string | number
+            const br1 = F.getOrElse('get', 2 + 1, b); // $ExpectType number | (() => void)
+        });
+
+        it('has not property', () => {
+            const r0 = F.getOrElse<typeof a, number, 'c'>('c', 1)(a); // $ExpectType number
+            const r1 = F.getOrElse('d', 2, b); // $ExpectType number
+        });
+    });
+
+    describe('from Array', () => {
+        const a = [1, 2, 3, 4, 5, 6];
+        const b = ['a', 'b', 'c', 'd', 'e', 'f'];
+
+        it('index', () => {
+            const ar0 = F.getOrElse<typeof a, string, 0>(0, "a", a); // $ExpectType string | number | undefined
+            const ar1 = F.getOrElse(190, "a", a); // $ExpectType string | number | undefined
+
+            const br0 = F.getOrElse<typeof b, number, 0>(0, 1, b); // $ExpectType string | number | undefined
+            const br1 = F.getOrElse(190, 0, b); // $ExpectType string | number | undefined
+        });
+
+        it('has property', () => {
+            const ar0 = F.getOrElse<typeof a, number, 'length'>('length', 0, a); // $ExpectType number
+            const ar1 = F.getOrElse('reverse', () => 3 + 0, a); // $ExpectType (() => number[]) | (() => number)
+
+            const br0 = F.getOrElse<typeof b, number, 'length'>('length', 0, b); // $ExpectType number
+            const br1 = F.getOrElse('reverse', 3, b); // $ExpectType number | (() => string[])
+        });
+
+        it('has not property', () => {
+            const r0 = F.getOrElse<typeof a, number, 'n'>('n', 3)(a); // $ExpectType number
+            const r1 = F.getOrElse('d', 3, b); // $ExpectType number
+        });
+    });
+
+    it('get & sort array', async () => {
+        const a = [{ value: 1 }, { value: 3 }, { value: 0 }];
+        const r0 = F.sortBy(F.getOrElse('value', 0), F.asc, a); // $ExpectType AsyncIterableIterator<{ value: number; }>
+    });
+});
+
+describe('propOrElse', () => {
+    it('string', () => {
+        const a = 'hello world';
+
+        const r0 = F.propOrElse<string, string, 'valueOf'>('valueOf', "a")(a); // $ExpectType string | (() => string)
+        const r1 = F.propOrElse('length', 3 + 0, a); // $ExpectType number
+    });
+
+    it('with sortBy', () => {
+        const a = ['hello world', 'a', 'ab', 'abcde', 'abcd', 'abc'];
+
+        const r0 = F.sortBy(F.propOrElse('length', 0), F.asc, a); // $ExpectType AsyncIterableIterator<string>
+    });
+});
