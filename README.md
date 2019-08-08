@@ -166,6 +166,7 @@ console.log(v);//[3]
 *    [cond](#cond)
 *    [otherwise](#otherwise)
 *    [get](#get)
+*    [getOrElse](#getorelse)
 *    [prop](#prop)
 *    [has](#has)
 *    [find](#find)
@@ -2180,6 +2181,7 @@ call **get** function or object property
 if there is no value, returns undefined
 
 see also [prop](#prop)
+see also [getOrElse](#getorelse)
 ```javascript
 const obj = { name: "hello", value: 42 };
 console.log(F.get("name", obj)); //print hello
@@ -2191,6 +2193,30 @@ const m = new Map([
 console.log(F.get("name", m)); //print hello map
 console.log(F.get("size", m)); //print 1
 ```
+
+
+### getOrElse
+if object have a get function, 
+
+call it or get the properties of that object. 
+
+if there is no value, it returns defaultValue.
+
+support Map, Set, any Object
+
+see also [get](#get)
+```javascript
+const m = new Map([
+    ["name", "hello map"],
+    ["value", 84]
+]);
+const r0 = F.getOrElse("name", "world", m);
+console.log(r0); // print hello map
+
+const r1 = F.getOrElse("foo", "world", m);
+console.log(r1); // print world
+```
+
 
 ### prop
 get object property
@@ -2204,6 +2230,23 @@ see also [get](#get)
 const obj = { name: "hello", value: 42 };
 console.log(F.prop("name", obj)); //print hello
 ```
+
+
+### propOrElse
+get the properties of that object. 
+
+if there is no value, it returns defaultValue.
+
+see also [prop](#prop)
+```javascript 
+const arr = [1, 2, 3];
+const r0 = F.propOrElse("0", 100, arr); // arr[0]
+console.log(r0); // print 1
+
+const r1 = F.propOrElse("5", 100, arr); // arr[100]
+console.log(r1); // print 100
+```
+  
 
 
 ### has
