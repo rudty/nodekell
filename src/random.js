@@ -1,11 +1,29 @@
-const crypto = require("crypto");
+let randomUintInternal;
 
-const randomUintInternal = (size) => {
-    const buf = crypto.randomBytes(size);
-    const n = buf.readUIntBE(0, size);
-    return n;
-};
+if (typeof exports === "object" && 
+    typeof module !== "undefined" && 
+    typeof crypto === "undefined") {
+    const crypto = require("crypto");
 
+    randomUintInternal = (size) => {
+        const buf = crypto.randomBytes(size);
+        const n = buf.readUIntBE(0, size);
+        return n;
+    };
+} else {
+    randomUintInternal = (size) => {
+        const buf = new ArrayBuffer(4);
+        const ar = new Uint8Array(buf);
+        const v = new DataView(buf);
+        crypto.getRandomValues(ar);
+        switch(size) {
+            case 1: return v.getUint8();
+            case 2: return v.getUint16();
+            case 3: return v.getUint32() & 16777215;
+            default: return v.getUint32();
+        }
+    };
+}
 const randomInternal = (begin, end) => {
     const randomRange = end - begin - 1;
 

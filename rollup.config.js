@@ -8,6 +8,7 @@ module.exports = {
     ],
     output: {
         file: "./index.js",
-        format: "cjs" 
+        name: "F",
+        format: "umd" 
     }
 }
