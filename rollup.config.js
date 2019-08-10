@@ -6,9 +6,12 @@ module.exports = {
     plugins: [
         cleanup()
     ],
-    output: {
+    output: [{
         file: "./index.js",
+        format: "cjs" 
+    },{
+        file: "./nodekell.js",
         name: "F",
         format: "umd" 
-    }
+    }]
 }
