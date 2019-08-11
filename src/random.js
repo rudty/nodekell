@@ -17,10 +17,10 @@ if (typeof exports === "object" &&
         const v = new DataView(buf);
         crypto.getRandomValues(ar);
         switch(size) {
-            case 1: return v.getUint8();
-            case 2: return v.getUint16();
-            case 3: return v.getUint32() & 16777215;
-            default: return v.getUint32();
+            case 1: return v.getUint8(0);
+            case 2: return v.getUint16(0);
+            case 3: return v.getUint32(0) & 16777215;
+            default: return v.getUint32(0);
         }
     };
 }
