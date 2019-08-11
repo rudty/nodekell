@@ -1,17 +1,29 @@
 "use strict"
 require("./build.js");
 const cleanup = require("rollup-plugin-cleanup");
-module.exports = {
+const terser = require("rollup-plugin-terser").terser;
+module.exports = [{
     input: "./src/index.js",
     plugins: [
-        cleanup()
+        cleanup(),
     ],
     output: [{
         file: "./index.js",
-        format: "cjs" 
-    },{
+        format: "cjs"
+    }, {
         file: "./nodekell.js",
         name: "F",
-        format: "umd" 
+        format: "umd"
     }]
-}
+}, {
+    input: "./src/index.js",
+    plugins: [
+        cleanup(),
+        terser(),
+    ],
+    output: [{
+        file: "./nodekell.min.js",
+        name: "F",
+        format: "umd"
+    }]
+}];
