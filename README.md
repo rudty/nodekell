@@ -18,7 +18,15 @@ Functional library for nodejs
 
 
 ### Installation
+in nodejs
+
 ```npm install nodekell```
+
+in browser
+
+```<script src="nodekell.js"></script>```
+
+```<script src="nodekell.min.js"></script>```
 
 
 ### Import Module 
