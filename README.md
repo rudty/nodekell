@@ -18,18 +18,13 @@ Functional library for nodejs
 
 
 ### Installation
-in nodejs
-
 ```npm install nodekell```
 
-in browser
-
-```<script src="nodekell.js"></script>```
-
-```<script src="nodekell.min.js"></script>```
 
 
 ### Import Module 
+in nodejs
+
 ```javascript
 import * as F from "nodekell"
 ```
@@ -37,6 +32,11 @@ or
 ```javascript
 const F = require("nodekell");
 ```
+
+in browser
+
+```<script src="nodekell.js"></script>```
+
 
 ### Quick Example
 ```javascript
