@@ -104,6 +104,7 @@ export * from "./sub.js";
 export * from "./sum.js";
 export * from "./tail.js";
 export * from "./take.js";
+export * from "./takeLast.js";
 export * from "./takeWhile.js";
 export * from "./tap.js";
 export * from "./then.js";

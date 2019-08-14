@@ -1477,6 +1477,11 @@ const take = curry(async function *(count, iter) {
     }
 });
 
+const takeLast = curry(async function *(count, iter) {
+    iter = await _collectArray(iter);
+    yield* iter.slice(iter.length - count);
+});
+
 const takeWhile = curry(async function *(f, iter) {
     for await (const e of iter) {
         if (!(await f(e))) {
@@ -1684,6 +1689,7 @@ exports.sub = sub;
 exports.sum = sum;
 exports.tail = tail;
 exports.take = take;
+exports.takeLast = takeLast;
 exports.takeWhile = takeWhile;
 exports.tap = tap;
 exports.then = then;
