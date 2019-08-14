@@ -201,6 +201,17 @@ export function take<T>(count: number): (iter: Iter<T | Promise<T>>) => AsyncIte
 // export function take<T>(count: number): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
 
 /**
+ * https://github.com/rudty/nodekell#takelast
+ *
+ * @param count
+ * @param iter
+ */
+export function takeLast<T>(count: number, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+export function takeLast<T extends Iter<any>>(count: number, iter: T): AsyncIterableIterator<FlatForInternalFn<T>>;
+export function takeLast<T extends Iter<any>>(count: number): (iter: T) => AsyncIterableIterator<FlatForInternalFn<T>>;
+export function takeLast<T>(count: number): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+
+/**
  * https://github.com/rudty/nodekell#takewhile
  *
  * @param f

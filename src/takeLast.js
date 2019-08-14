@@ -12,6 +12,10 @@ import { _collectArray } from "./internal/collectArray";
  *      // print 
  *      // 4
  *      // 5
+ * 
+ * @param {Number} count take N count
+ * @param {Iterable | AsyncIterable} iter any iterable
+ * @returns {AsyncIterator}
  */
 export const takeLast = curry(async function *(count, iter) {
     iter = await _collectArray(iter);
