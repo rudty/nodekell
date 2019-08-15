@@ -1464,3 +1464,40 @@ describe('fnil', () => {
         const r3 = promiseStringAddWithDefault(); // $ExpectType Promise<string>
     });
 });
+
+describe('takeLast', () => {
+    it('from Normal Value', async () => {
+        const a = [1, 2, 3, 4];
+
+        const r0 = F.takeLast<number>(5)(a); // $ExpectType AsyncIterableIterator<number>
+        const r1 = F.takeLast(5, a); // $ExpectType AsyncIterableIterator<number>
+    });
+
+    it('from Promise Value', async () => {
+        const a = [Promise.resolve(1), 2, 3, 4];
+
+        const r0 = F.takeLast<number>(5)(a); // $ExpectType AsyncIterableIterator<number>
+        const r1 = F.takeLast(5, a); // $ExpectType AsyncIterableIterator<number>
+    });
+
+    it('from String', async () => {
+        const a = 'hello world';
+
+        const r0 = F.takeLast<string>(5)(a); // $ExpectType AsyncIterableIterator<string>
+        const r1 = F.takeLast(5, a); // $ExpectType AsyncIterableIterator<string>
+    });
+
+    it('from Normal / Promise Union', async () => {
+        const a = [1, Promise.resolve(2), Promise.resolve('a'), 'b'];
+
+        const r0 = F.takeLast<string | number>(5)(a); // $ExpectType AsyncIterableIterator<string | number>
+        const r1 = F.takeLast(5, a); // $ExpectType AsyncIterableIterator<string | number>
+    });
+
+    it('with run', async () => {
+        const a = [1, Promise.resolve(2), Promise.resolve('a'), 'b', null];
+
+        const r0 = await F.run(a, F.takeLast<string | number | null>(5)); // $ExpectType AsyncIterableIterator<string | number | null>
+        const r1 = await F.run(a, F.takeLast(5)); // $ExpectType AsyncIterableIterator<string | number | null>
+    });
+});

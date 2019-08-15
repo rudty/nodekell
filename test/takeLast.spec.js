@@ -37,4 +37,10 @@ describe('test take', () => {
         const c = await F.collect(r);
         assert.deepStrictEqual(c, []);
     });
+
+    it('promise', async () => {
+        const a = [1, Promise.resolve(2), Promise.resolve('a'), 'b', null];
+        const r = await F.run(a, F.takeLast(5), F.collect); 
+        assert.deepStrictEqual(r, [1,2,'a','b',null]);
+    });
 });
