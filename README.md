@@ -23,7 +23,7 @@ Functional library for nodejs
 
 
 ### Import Module 
-in nodejs
+nodejs
 
 ```javascript
 import * as F from "nodekell"
@@ -33,7 +33,7 @@ or
 const F = require("nodekell");
 ```
 
-in browser
+browser
 
 ```<script src="nodekell.js"></script>```
 
