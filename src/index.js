@@ -85,6 +85,8 @@ export * from "./random.js";
 export * from "./range.js";
 export * from "./rangeInterval.js";
 export * from "./rangeOf.js";
+export * from "./reFindAll.js";
+export * from "./reFindAllSubmatch.js";
 export * from "./repeat.js";
 export * from "./reverse.js";
 export * from "./run.js";

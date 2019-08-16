@@ -1,7 +1,8 @@
 import { curry } from "./curry";
-import { reFindAllSubmatch } from "./reFindAllSubmatch";
+import { findAllSubMatch } from "./internal/regex";
 
 export const reFindAll = curry((re, str) => {
-    const r = reFindAllSubmatch(re, str);
-    return r.map(e => e[0]);
+    const r = [];
+    findAllSubMatch(re, str, e => r.push(e[0]));
+    return r;
 });

@@ -1,23 +1,8 @@
 import { curry } from "./curry";
-
-const toGlobalRegex = (r) => {
-    if (r.constructor === RegExp && r.global) {
-        return r;
-    }
-    return new RegExp(r, "g");
-};
+import { findAllSubMatch } from "./internal/regex";
 
 export const reFindAllSubmatch = curry((re, str) => {
     const r = [];
-    re = toGlobalRegex(re);
-    
-    while (true) {
-        const m = re.exec(str);
-        if (!m) {
-            break;
-        }
-        r.push(m);
-    }
-
+    findAllSubMatch(re, str, e => r.push(e));
     return r;
 });

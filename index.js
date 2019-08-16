@@ -1212,6 +1212,36 @@ const rangeInterval = async function *(duration, ...k) {
 
 const rangeOf = (...a) => fmap(identity, a);
 
+const toGlobalRegex = (r) => {
+    if (r.constructor === RegExp && r.global) {
+        r.lastIndex = 0;
+        return r;
+    }
+    return new RegExp(r, "g");
+};
+const findAllSubMatch = (re, str, callback) => {
+    re = toGlobalRegex(re);
+    while (true) {
+        const m = re.exec(str);
+        if (!m) {
+            break;
+        }
+        callback(m);
+    }
+};
+
+const reFindAll = curry((re, str) => {
+    const r = [];
+    findAllSubMatch(re, str, e => r.push(e[0]));
+    return r;
+});
+
+const reFindAllSubmatch = curry((re, str) => {
+    const r = [];
+    findAllSubMatch(re, str, e => r.push(e));
+    return r;
+});
+
 const repeatFetchArgument = async (a, b) => {
     a = await a;
     if (b.length > 0) {
@@ -1667,6 +1697,8 @@ exports.random = random;
 exports.range = range;
 exports.rangeInterval = rangeInterval;
 exports.rangeOf = rangeOf;
+exports.reFindAll = reFindAll;
+exports.reFindAllSubmatch = reFindAllSubmatch;
 exports.reduce = reduce;
 exports.repeat = repeat;
 exports.reverse = reverse;
