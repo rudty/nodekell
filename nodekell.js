@@ -1214,6 +1214,19 @@
 
     const rangeOf = (...a) => fmap(identity, a);
 
+    const reFindSubmatch = curry((re, str) => {
+        if (re.constructor !== RegExp) {
+            re = new RegExp(re);
+        }
+        const m = re.exec(str);
+        return m || [];
+    });
+
+    const reFind = curry((re, str) => {
+        const r = reFindSubmatch(re, str);
+        return r[0] || "";
+    });
+
     const toGlobalRegex = (r) => {
         if (r.constructor === RegExp && r.global) {
             r.lastIndex = 0;
@@ -1699,8 +1712,10 @@
     exports.range = range;
     exports.rangeInterval = rangeInterval;
     exports.rangeOf = rangeOf;
+    exports.reFind = reFind;
     exports.reFindAll = reFindAll;
     exports.reFindAllSubmatch = reFindAllSubmatch;
+    exports.reFindSubmatch = reFindSubmatch;
     exports.reduce = reduce;
     exports.repeat = repeat;
     exports.reverse = reverse;
