@@ -13,7 +13,7 @@ import { reFindSubmatch } from "./reFindSubmatch";
  * 
  * @param {RegExp} re find regex
  * @param {String} str find String
- * @returns {Array} Array<String> matching strings and groups
+ * @returns {String} first matching string
  */
 export const reFind = curry((re, str) => {
     const r = reFindSubmatch(re, str);
