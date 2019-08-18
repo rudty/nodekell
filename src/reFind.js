@@ -5,9 +5,8 @@ import { reFindSubmatch } from "./reFindSubmatch";
  * Use regular expression
  * return first matching in str and groups
  * @example
- *      const r = F.reFindSubmatch(/H(\d)/, "H1ello H2World");
- *      console.log(r[0]); // print H1
- *      console.log(r[1]); // print 1 
+ *      const r = F.reFind(/H(\d)/, "H1ello H2World");
+ *      console.log(r); // print H1
  * 
  *      
  * 

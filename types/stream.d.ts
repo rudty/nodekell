@@ -502,3 +502,70 @@ export function distinctUntilChanged<T>(iter: Iter<T>): AsyncIterableIterator<EP
 export function associateBy<T, R>(fn: (arg: T) => R, iter: Iter<T | Promise<T>>): Promise<AssociateMap<R>>;
 export function associateBy<T extends Iter<any>, R>(fn: (arg: FlatForInternalFn<T>) => R, iter: T): Promise<AssociateMap<R>>;
 export function associateBy<T extends Iter<any>, R>(fn: (arg: FlatForInternalFn<T>) => R): (iter: T) => Promise<AssociateMap<R>>;
+
+/**
+ * Use regular expression
+ * return first matching in str and groups
+ * @example
+ *      const r = F.reFind(/H(\d)/, "H1ello H2World");
+ *      console.log(r); // print H1
+ *
+ *
+ *
+ * @param {RegExp} re find regex
+ * @param {String} str find String
+ * @returns first matching string
+ */
+export function reFind(re: RegExp, str: string): string;
+export function reFind(re: RegExp): (str: string) => string;
+
+/**
+ * Use regular expression
+ * return first matching in str and groups
+ * @example
+ *      const r = F.reFindSubmatch(/H(\d)/, "H1ello H2World");
+ *      console.log(r[0]); // print H1
+ *      console.log(r[1]); // print 1
+ *
+ *
+ *
+ * @param {RegExp} re find regex
+ * @param {String} str find String
+ * @returns Array<String> matching strings and groups
+ */
+export function reFindSubmatch(re: RegExp, str: string): string[];
+export function reFindSubmatch(re: RegExp): (str: string) => string[];
+
+/**
+ * Use regular expression
+ * return all matching in str
+ * @example
+ *      const r = F.reFindAll(/H(\d)/, "H1ello H2World");
+ *      console.log(r);
+ *      //print ['H1', 'H2']
+ *
+ * @param {RegExp} re find regex
+ * @param {String} str find String
+ * @returns matching strings
+ */
+export function reFindAll(re: RegExp, str: string): string[];
+export function reFindAll(re: RegExp): (str: string) => string[];
+
+/**
+ * Use regular expression
+ * return all matching in str and groups
+ * @example
+ *      const r = F.reFindAllSubmatch(/H(\d)/, "H1ello H2World");
+ *      console.log(r[0][0]); // print H1
+ *      console.log(r[0][1]); // print 1
+ *
+ *      console.log(r[1][0]); // print H2
+ *      console.log(r[1][1]); // print 2
+ *
+ *
+ * @param {RegExp} re find regex
+ * @param {String} str find String
+ * @returns Array<Array<String>> matching strings and groups
+ */
+export function reFindAllSubmatch(re: RegExp, str: string): string[][];
+export function reFindAllSubmatch(re: RegExp): (str: string) => string[][];
