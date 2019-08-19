@@ -41,6 +41,17 @@ describe('test interval', () => {
                     // console.log("END");
                 }));
         });
-        x.run = false; //remove for test
+        x.run = false; 
+    });
+
+    it('async', async () =>{
+        let runCount = 0;
+        const x = F.interval(10, async () => {
+            runCount += 1;
+            await F.sleep(50);
+            x.run = false;
+        });
+        await F.sleep(300);
+        assert.strictEqual(runCount, 1);
     });
 });
