@@ -1235,24 +1235,21 @@ const toGlobalRegex = (r) => {
 };
 const findAllSubMatch = (re, str, callback) => {
     re = toGlobalRegex(re);
-    while (true) {
-        const m = re.exec(str);
-        if (!m) {
-            break;
-        }
+    let m;
+    while (m = re.exec(str)) {
         callback(m);
     }
 };
 
 const reFindAll = curry((re, str) => {
     const r = [];
-    findAllSubMatch(re, str, e => r.push(e[0]));
+    findAllSubMatch(re, str, (e) => r.push(e[0]));
     return r;
 });
 
 const reFindAllSubmatch = curry((re, str) => {
     const r = [];
-    findAllSubMatch(re, str, e => r.push(e));
+    findAllSubMatch(re, str, (e) => r.push(e));
     return r;
 });
 
