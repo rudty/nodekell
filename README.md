@@ -2012,29 +2012,9 @@ works like built-in function setInterval
 - available async function.
 - only one function is executed at a time.
 ```javascript
-F.interval(1000, async () => {
-    await F.run(
-        F.range(5),
-        F.then(async _ =>{
-            await F.sleep(100);
-            console.log("WORK!");
-        }));
-});
-///print 
-//WORK!
-// 1 sec 
-//WORK!
-// 1 sec
-//... 
-```
-```javascript
 F.interval(10, async () => {
-    await F.run(
-        F.range(5),
-        F.then(async _ =>{
-            await F.sleep(1000);
-            console.log("WORK!");
-        }));
+    await F.sleep(1000);
+    console.log("WORK!");
 });
 ///print 
 //WORK!
@@ -2043,6 +2023,7 @@ F.interval(10, async () => {
 // 1 sec
 //... 
 ```
+
 ### timeout
 @changed iterator timeout use [withTimeout](#withtimeout) instead.
 
