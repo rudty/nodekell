@@ -3,7 +3,7 @@ import { reFindSubmatch } from "./reFindSubmatch";
 
 /**
  * Use regular expression
- * return first matching in str and groups
+ * return first matching in str
  * @example
  *      const r = F.reFind(/H(\d)/, "H1ello H2World");
  *      console.log(r); // print H1

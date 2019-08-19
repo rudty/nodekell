@@ -117,6 +117,12 @@ console.log(v);//[3]
 *    [pfmap](#pfmap)
 *    [pcalls](#pcalls)
 
+## functional / string
+*    [reFind](#refind)
+*    [reFindSubmatch](#refindsubmatch)
+*    [reFindAll](#refindall)
+*    [reFindAllSubmatch](#refindallsubmatch)
+
 ## generator
 *    [range](#range)
 *    [seq](#seq)
@@ -1248,6 +1254,48 @@ const fn4 = async () => {
 const c = F.pcalls(fn1, fn2, fn3, fn4);
 const r = await F.collect(c);
 console.log(r); //print [1,2,3,4]
+```
+
+
+### reFind
+Use regular expression
+return first matching in str
+```javascript
+const r = F.reFind(/H(\d)/, "H1ello H2World");
+console.log(r); // print H1
+```
+
+
+### reFindSubmatch
+Use regular expression
+return first matching in str and groups
+```javascript 
+const r = F.reFindSubmatch(/H(\d)/, "H1ello H2World");
+console.log(r[0]); // print H1
+console.log(r[1]); // print 1
+```
+
+
+### reFindAll
+Use regular expression
+return all matching in str
+```javascript
+const r = F.reFindAll(/H(\d)/, "H1ello H2World");
+console.log(r);
+//print ['H1', 'H2']
+```
+
+
+### reFindAllSubmatch
+Use regular expression
+return all matching in str and groups
+```javascript
+const r = F.reFindAllSubmatch(/H(\d)/, "H1ello H2World");
+console.log(r[0][0]); // print H1
+console.log(r[0][1]); // print 1
+
+console.log(r[1][0]); // print H2
+console.log(r[1][1]); // print 2
 ```
 
 
