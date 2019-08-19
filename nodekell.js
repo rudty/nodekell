@@ -1237,8 +1237,11 @@
     };
     const findAllSubMatch = (re, str, callback) => {
         re = toGlobalRegex(re);
-        let m;
-        while (m = re.exec(str)) {
+        while (true) {
+            const m = re.exec(str);
+            if (!m) {
+                break;
+            }
             callback(m);
         }
     };
