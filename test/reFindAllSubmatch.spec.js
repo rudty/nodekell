@@ -49,4 +49,11 @@ describe('test reFindAllSubmatch', () => {
         assert.deepStrictEqual(r[0][0], "hello");
         assert.deepStrictEqual(r[0][1], "ello");
     });
+
+    it('ignorecase', async () => {
+        const r = F.reFindAllSubmatch(/hello/i, "Hello world hello");
+        // console.log(/h/gi.flags);
+        // console.log(r);
+        // assert.deepStrictEqual(r, "Hello");
+    });
 });

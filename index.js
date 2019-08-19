@@ -1227,7 +1227,10 @@ const reFind = curry((re, str) => {
 });
 
 const toGlobalRegex = (r) => {
-    if (r.constructor === RegExp && r.global) {
+    if (r.constructor === RegExp) {
+        if (!r.global) {
+            r = new RegExp(r, r.flags + "g");
+        }
         r.lastIndex = 0;
         return r;
     }

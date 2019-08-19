@@ -13,6 +13,11 @@ describe('test reFind', () => {
         assert.deepStrictEqual(r, "hello");
     });
 
+    it('ignorecase', async () => {
+        const r = F.reFind(/hello/i, "Hello world hello");
+        assert.deepStrictEqual(r, "Hello");
+    });
+
     it('no group string', async () => {
         const r = F.reFind(/(hello)/, "hello world");
         assert.deepStrictEqual(r, "hello");
