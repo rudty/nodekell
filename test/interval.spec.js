@@ -54,4 +54,18 @@ describe('test interval', () => {
         await F.sleep(300);
         assert.strictEqual(runCount, 1);
     });
+
+    it('asyncAndThrow', async () =>{
+        let runCount = 0;
+        const x = F.interval(10, async () => {
+            runCount += 1;
+            await F.sleep(50);
+            if (runCount === 3) {
+                x.run = false;
+            }
+            throw new Error("test");
+        });
+        await F.sleep(300);
+        assert.strictEqual(runCount, 3);
+    });
 });

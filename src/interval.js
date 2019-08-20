@@ -6,16 +6,16 @@ export const interval = (timeout, timerHandler, ...param) => {
         timeout = 10;
     }
     const k = { run: true };
-    
+
     const recur = async () => {
+        const s = sleep(timeout);
         try {
-            const s = sleep(timeout);
             await timerHandler(...param);
-            if (k.run) {
-                s.then(recur);
-            }
         } catch {
             // ignore
+        }
+        if (k.run) {
+            s.then(recur);
         }
     };
 
