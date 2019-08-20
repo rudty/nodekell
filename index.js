@@ -854,7 +854,7 @@ const interval = (timeout, timerHandler, ...param) => {
         const s = sleep(timeout);
         try {
             await timerHandler(...param);
-        } catch {
+        } catch (_) {
         }
         if (k.run) {
             s.then(recur);
@@ -1238,7 +1238,7 @@ const toGlobalRegex = (r) => {
 };
 const findAllSubMatch = (re, str, callback) => {
     re = toGlobalRegex(re);
-    while (true) {
+    for (;;) {
         const m = re.exec(str);
         if (!m) {
             break;

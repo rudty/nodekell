@@ -65,3 +65,5 @@ typings/
 # ide
 .vscode
 .idea/
+.eslintrc.js
+.eslintignore

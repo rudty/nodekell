@@ -11,7 +11,7 @@ export const interval = (timeout, timerHandler, ...param) => {
         const s = sleep(timeout);
         try {
             await timerHandler(...param);
-        } catch {
+        } catch (_) {
             // ignore
         }
         if (k.run) {

@@ -12,7 +12,7 @@ const toGlobalRegex = (r) => {
 export const findAllSubMatch = (re, str, callback) => {
     re = toGlobalRegex(re);
     
-    while (true) {
+    for (;;) {
         const m = re.exec(str);
         if (!m) {
             break;
