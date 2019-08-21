@@ -634,3 +634,14 @@ export function random(begin: number, end?: number): number;
  * @return function that calls fn
  */
 export function fnil<R>(fn: (...args: any) => R, ...dArgs: any): (...args: any) => R;
+
+/**
+ * take all elements of Iterable or AsyncIterable.
+ * No element is returned. Use [collect] if you want to use it.
+ * @example
+ *      await F.run([1,2,3,4,5],
+ *          F.map(NetworkSomthingJob),
+ *          F.blocking);
+ * @param {Iterable | AsyncIterable} iter any iterator
+ */
+export function blocking(iter: Iter<any>): Promise<void>;

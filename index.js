@@ -190,6 +190,9 @@ const average = async (iter) => {
     return sum / c;
 };
 
+const blocking = async (iter) => {
+};
+
 const buffer = curry(async function *(supply, iter) {
     supply = await supply;
     if(supply <= 0) {
@@ -1616,6 +1619,7 @@ exports.add = add;
 exports.asc = asc;
 exports.associateBy = associateBy;
 exports.average = average;
+exports.blocking = blocking;
 exports.buffer = buffer;
 exports.collect = collect;
 exports.collectFloat32 = collectFloat32;
