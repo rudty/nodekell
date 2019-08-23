@@ -1502,17 +1502,6 @@ describe('takeLast', () => {
     });
 });
 
-describe('blocking', () => {
-    it('block', async () => {
-        const r0 = F.blocking([1, 2, 3, 4, 5]); // $ExpectType Promise<void>
-        const r1 = F.run([1, 2, 3],
-            F.map(e => e + 1),
-            F.take(1),
-            F.blocking);
-        r1; // $ExpectType Promise<void>
-    });
-});
-
 describe('assign', () => {
     it('default', async () => {
         const obj0 = { a: 1 };
