@@ -193,6 +193,8 @@ console.log(v);//[3]
 *    [sample](#sample)
 *    [match](#match)
 *    [fnil](#fnil)
+*    [assign](#assign)
+*    [assign3](#assign3)
 ---
 
 
@@ -2529,6 +2531,37 @@ const sayHelloWithDefault = F.fnil(sayHello, "javascript");
 sayHelloWithDefault(); // print hello javascript
 sayHelloWithDefault("leanne"); // print hello leanne
 ```
+
+
+### assign
+curry with Object.assign
+
+Returns the target object.
+```javascript
+const obj0 = { a: 1 };
+const obj1 = { b: 1 };
+const r = F.assign(obj0);
+console.log(r(obj1));
+//print { a: 1, b: 1 };
+```
+
+
+### assign3
+curry with Object.assign
+
+Returns the target object.
+
+must have at least 3 arguments
+```javascript
+const obj0 = { a: 1 };
+const obj1 = { b: 1 };
+const obj2 = { c: 1 };
+const r = F.assign3(obj0, obj1);
+console.log(r(obj2));
+//print { a: 1, b: 1, c: 1 };
+```
+
+
 
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frudty%2Fnodekell.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Frudty%2Fnodekell?ref=badge_large)
