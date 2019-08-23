@@ -645,3 +645,31 @@ export function fnil<R>(fn: (...args: any) => R, ...dArgs: any): (...args: any) 
  * @param {Iterable | AsyncIterable} iter any iterator
  */
 export function blocking(iter: Iter<any>): Promise<void>;
+
+/**
+ * curry with Object.assign
+ * Returns the target object.
+ *
+ * @param {any} target target object to copy to
+ * @param {any} source source objects from which to copy properties
+ */
+export function assign<T, U>(target: T, source1: U): T & U;
+export function assign<T, U, V>(target: T, source1: U, source2: V): T & U & V;
+export function assign<T, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W;
+export function assign(target: any, source1: any, source2: any, source3: any, source4: any, ...sources: any[]): any;
+export function assign(target: any): (source1: any, ...sources: any[]) => any;
+
+/**
+ * curry with Object.assign
+ * Returns the target object.
+ * must have at least 3 arguments
+ *
+ * @param {any} target target object to copy to
+ * @param {any} source source objects from which to copy properties
+ */
+export function assign3<T, U, V>(target: T, source1: U, source2: V): T & U & V;
+export function assign3<T, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W;
+export function assign3<T, U, V, W, Y>(target: T, source1: U, source2: V, source3: W, source4: Y): T & U & V & W & Y;
+export function assign3(target: any, source1: any, source2: any, source3: any, source4: any, source5: any, ...sources: any[]): any;
+export function assign3(target: any): (source1: any, source2: any, ...sources: any[]) => any;
+export function assign3(target: any, source1: any): (source2: any, ...sources: any[]) => any;

@@ -145,6 +145,14 @@
 
     const asc = (a, b) => a > b ? 1 : a < b ? -1 : 0;
 
+    const assign = curry((target, source, ...sources) => {
+        return Object.assign(target, source, ...sources);
+    });
+
+    const assign3 = curry((target, source1, source2, ...sources) => {
+        return Object.assign(target, source1, source2, ...sources);
+    });
+
     const _isTypedArray = (a) => ArrayBuffer.isView(a) && !(a instanceof DataView);
     const _isObjectArrayCheckProps = (a) => {
         if (a.length === 0) {
@@ -1619,6 +1627,8 @@
     exports._Queue = _Queue;
     exports.add = add;
     exports.asc = asc;
+    exports.assign = assign;
+    exports.assign3 = assign3;
     exports.associateBy = associateBy;
     exports.average = average;
     exports.blocking = blocking;

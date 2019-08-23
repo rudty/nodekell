@@ -4,6 +4,8 @@ export * from "./Queue.js";
 export * from "./_.js";
 export * from "./add.js";
 export * from "./asc.js";
+export * from "./assign.js";
+export * from "./assign3.js";
 export * from "./associateBy.js";
 export * from "./average.js";
 export * from "./blocking.js";
