@@ -38,6 +38,22 @@ describe('test take', () => {
         assert.deepStrictEqual(c, []);
     });
 
+
+    it('elem 1', async () => {
+        const a = [1];
+        const r = F.takeLast(-1, a);
+        const c = await F.collect(r);
+        assert.deepStrictEqual(c, []);
+    });
+
+
+    it('elem 1 (2)', async () => {
+        const a = [1];
+        const r = F.takeLast(30, a);
+        const c = await F.collect(r);
+        assert.deepStrictEqual(c, [1]);
+    });
+
     it('promise', async () => {
         const a = [1, Promise.resolve(2), Promise.resolve('a'), 'b', null];
         const r = await F.run(a, F.takeLast(5), F.collect); 

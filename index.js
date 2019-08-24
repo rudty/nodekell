@@ -1007,6 +1007,19 @@ const notNil = (a) => !isNil(a);
 
 const otherwise = () => true;
 
+const _fetchAndGetIterator = async (fetchCount, iter, fn) => {
+    fetchCount = Math.max(fetchCount, 0);
+    const g = seq(iter);
+    for (let i = fetchCount; i > 0; --i) {
+        const e = await g.next();
+        if (e.done) {
+            break;
+        }
+        fn(e.value);
+    }
+    return g;
+};
+
 const default_fetch_count = 100;
 let global_fetch_count = default_fetch_count;
 const parallel_set_fetch_count_internal = (count) => {
@@ -1018,15 +1031,7 @@ const parallel_set_fetch_count_internal = (count) => {
 };
 const parallel_fetch_map_internal = async (iter, fn) => {
     const fetchCount = global_fetch_count - 1;
-    const g = seq(iter);
-    for (let i = fetchCount; i > 0; --i) {
-        const e = await g.next();
-        if (e.done) {
-            break;
-        }
-        fn(e.value);
-    }
-    return g;
+    return _fetchAndGetIterator(fetchCount, iter, fn);
 };
 
 const parallel_set_fetch_count = (count) =>
@@ -1533,8 +1538,13 @@ const take = curry(async function *(count, iter) {
 });
 
 const takeLast = curry(async function *(count, iter) {
-    iter = await _collectArray(iter);
-    yield* iter.slice(iter.length - count);
+    const q = new _Queue();
+    const g = await _fetchAndGetIterator(count, iter, (e) => q.add(e));
+    for await (const e of g) {
+        q.add(e);
+        q.poll();
+    }
+    yield* q.removeIterator();
 });
 
 const takeWhile = curry(async function *(f, iter) {

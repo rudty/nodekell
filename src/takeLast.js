@@ -1,5 +1,6 @@
 import { curry } from "./curry";
-import { _collectArray } from "./internal/collectArray";
+import { _Queue } from "./Queue";
+import { _fetchAndGetIterator } from "./internal/fetchIterator";
 
 /**
  * take last n element
@@ -18,6 +19,13 @@ import { _collectArray } from "./internal/collectArray";
  * @returns {AsyncIterator}
  */
 export const takeLast = curry(async function *(count, iter) {
-    iter = await _collectArray(iter);
-    yield* iter.slice(iter.length - count);
+    const q = new _Queue();
+    const g = await _fetchAndGetIterator(count, iter, (e) => q.add(e));
+
+    for await (const e of g) {
+        q.add(e);
+        q.poll();
+    }
+    
+    yield* q.removeIterator();
 });
