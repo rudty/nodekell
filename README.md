@@ -35,8 +35,7 @@ const F = require("nodekell");
 
 browser
 
-```<script src="nodekell.js"></script>```
-
+download or link to a CDN such as [jsDelivr](https://www.jsdelivr.com/package/npm/nodekell) [nodekell.min.js](https://cdn.jsdelivr.net/npm/nodekell@1.31.0/nodekell.min.js)
 
 ### Quick Example
 ```javascript
