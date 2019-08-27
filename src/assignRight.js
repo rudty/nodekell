@@ -2,7 +2,7 @@ import { curry } from "./curry";
 
 /**
  * curry with Object.assign
- * Returns the target object.
+ * merge from right to left 
  * 
  * @param {any} target target object to copy to
  * @param {any} source source objects from which to copy properties
