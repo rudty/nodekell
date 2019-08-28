@@ -9,6 +9,6 @@ import { curry } from "./curry";
  * @param  {...any} sources 
  * @returns {Object}
  */
-export const merge = curry((target, source, ...sources) => {
-    return Object.assign({}, target, source, ...sources);
+export const mergeObjectRight = curry((target, source1, source2, ...sources) => {
+    
 });

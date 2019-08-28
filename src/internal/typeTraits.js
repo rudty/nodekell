@@ -75,22 +75,6 @@ export const _isWritableArrayLike = (a) =>
 
 export const _hasIterator = (a) => a[Symbol.iterator] || a[Symbol.asyncIterator];
 
-export const _toIterator = (a) => {
-    if (a) {
-        const it = a[Symbol.iterator];
-        if (it) {
-            return it.call(a);
-        }
-
-        const ait = a[Symbol.asyncIterator];
-        if (ait) {
-            return ait.call(a);
-        }
-    }
-    //return undefined;
-};
-
-
 /**
  * function is 
  * () => {...}

@@ -153,6 +153,10 @@
         return Object.assign(target, source1, source2, ...sources);
     });
 
+    const assignRight = curry((target, source, ...sources) => {
+        return Object.assign.call(null, [target, source, ...sources].reverse());
+    });
+
     const _isTypedArray = (a) => ArrayBuffer.isView(a) && !(a instanceof DataView);
     const _isObjectArrayCheckProps = (a) => {
         if (a.length === 0) {
@@ -990,6 +994,42 @@
     };
     const memoizeWithTimeout = curry((timeout, callFn) => memoizeWithTimeoutBy(timeout, (...a) => a, callFn));
 
+    const run = (iter, ...f) => foldl((z, fn) => fn(z), iter, f);
+
+    const objectIterator = function* (object) {
+        const keys = Object.keys(object);
+        for (const k of keys) {
+            yield [k, object[k]];
+        }
+    };
+    const _toIterator = (a) => {
+        if (a) {
+            const it = a[Symbol.iterator];
+            if (it) {
+                return it.call(a);
+            }
+            const ait = a[Symbol.asyncIterator];
+            if (ait) {
+                return ait.call(a);
+            }
+            return objectIterator(a);
+        }
+    };
+
+    const mergeMap = curry(async (source1, source2, ...sources) =>
+        new Map(await run([source1, source2, ...sources],
+            map(_toIterator),
+            flat,
+            collect)));
+
+    const mergeObject = curry(async (source1, source2, ...sources) => {
+        return {
+        };
+    });
+
+    const mergeObjectRight = curry((target, source1, source2, ...sources) => {
+    });
+
     const minBy = curry(async (f, iter) => {
         let [m, tail] = await _headTail(iter);
         let c = await f(m);
@@ -1293,8 +1333,6 @@
             }
         }
     };
-
-    const run = (iter, ...f) => foldl((z, fn) => fn(z), iter, f);
 
     const _sampleArray = (arr) => arr[random(arr.length)];
     const _sampleNotArray = async (iter) => {
@@ -1636,6 +1674,7 @@
     exports.asc = asc;
     exports.assign = assign;
     exports.assign3 = assign3;
+    exports.assignRight = assignRight;
     exports.associateBy = associateBy;
     exports.average = average;
     exports.buffer = buffer;
@@ -1715,6 +1754,9 @@
     exports.memoize = memoize;
     exports.memoizeBy = memoizeBy;
     exports.memoizeWithTimeout = memoizeWithTimeout;
+    exports.mergeMap = mergeMap;
+    exports.mergeObject = mergeObject;
+    exports.mergeObjectRight = mergeObjectRight;
     exports.min = min;
     exports.minBy = minBy;
     exports.notNil = notNil;
