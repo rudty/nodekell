@@ -22,13 +22,3 @@ export const _toIterator = (a) => {
     }
     //return undefined;
 };
-
-// /**
-//  * concat itererator
-//  * @param  {...Iterable} iterators 
-//  */
-// export const _flatIterator = async function* (iterators) {
-//     for await (const iter of iterators) {
-//         yield* _toIterator(iter);
-//     }
-// };
