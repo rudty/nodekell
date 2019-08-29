@@ -1,5 +1,5 @@
 import { curry } from "./curry";
-
+import { mergeObject } from "./mergeObject";
 /**
  * Create a new object by combining the arguments of the function.
  * If the key exists, the value on the right is used.
@@ -9,6 +9,5 @@ import { curry } from "./curry";
  * @param  {...any} sources 
  * @returns {Object}
  */
-export const mergeObjectRight = curry((target, source1, source2, ...sources) => {
-    
-});
+export const mergeObjectRight = curry((source1, source2, ...sources) => 
+    mergeObject.apply(null, [source1, source2, ...sources].reverse()));

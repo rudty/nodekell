@@ -73,6 +73,7 @@ export * from "./memoize.js";
 export * from "./memoizeBy.js";
 export * from "./memoizeWithTimeout.js";
 export * from "./mergeMap.js";
+export * from "./mergeMapRight.js";
 export * from "./mergeObject.js";
 export * from "./mergeObjectRight.js";
 export * from "./min.js";

@@ -1,10 +1,6 @@
 import { curry } from "./curry";
-import { collect } from "./collect";
-import { run } from "./run";
-import { _toIterator } from "./internal/toIterator";
-import { map } from "./map";
-import { flat } from "./flat";
-import { reverse } from "./reverse";
+import { mergeMap } from "./mergeMap";
+
 
 /**
  * Create a new Map by combining the arguments of the function.
@@ -15,9 +11,5 @@ import { reverse } from "./reverse";
  * @param  {...(Map | Object)} sources 
  * @returns {Promise<Map>}
  */
-export const mergeMapRight = curry(async (source1, source2, ...sources) =>
-    new Map(await run([source1, source2, ...sources], 
-        map(_toIterator),
-        flat,
-        reverse,
-        collect)));
+export const mergeMapRight = curry((source1, source2, ...sources) =>
+    mergeMap.apply(null, [source1, source2, ...sources].reverse()));

@@ -1015,18 +1015,22 @@ const _toIterator = (a) => {
 };
 
 const mergeMap = curry(async (source1, source2, ...sources) =>
-    new Map(await run([source1, source2, ...sources],
+    await run([source1, source2, ...sources],
         map(_toIterator),
         flat,
-        collect)));
+        collectMap));
 
-const mergeObject = curry(async (source1, source2, ...sources) => {
-    return {
-    };
-});
+const mergeMapRight = curry((source1, source2, ...sources) =>
+    mergeMap.apply(null, [source1, source2, ...sources].reverse()));
 
-const mergeObjectRight = curry((target, source1, source2, ...sources) => {
-});
+const mergeObject = curry(async (source1, source2, ...sources) =>
+    await run([source1, source2, ...sources],
+        map(_toIterator),
+        flat,
+        collectObject));
+
+const mergeObjectRight = curry((source1, source2, ...sources) =>
+    mergeObject.apply(null, [source1, source2, ...sources].reverse()));
 
 const minBy = curry(async (f, iter) => {
     let [m, tail] = await _headTail(iter);
@@ -1753,6 +1757,7 @@ exports.memoize = memoize;
 exports.memoizeBy = memoizeBy;
 exports.memoizeWithTimeout = memoizeWithTimeout;
 exports.mergeMap = mergeMap;
+exports.mergeMapRight = mergeMapRight;
 exports.mergeObject = mergeObject;
 exports.mergeObjectRight = mergeObjectRight;
 exports.min = min;
