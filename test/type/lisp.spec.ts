@@ -502,6 +502,8 @@ describe('mergeMap', () => {
         const r0 = F.mergeMap(m1, m1); // $ExpectType Promise<Map<string, string>>
         const r1 = F.mergeMap(m1, m2); // $ExpectType Promise<Map<string, string>>
         const r2 = F.mergeMap(m2, m3); // $ExpectType Promise<Map<string | number, string | number>>
+        const r3 = F.mergeMap(m1, m1, m1); // $ExpectType Promise<Map<string, string>>
+        const r4 = F.mergeMap(m1, m1, m3, m2); // $ExpectType Promise<Map<any, any>>
     });
 
     it('map object', async () => {
@@ -572,5 +574,87 @@ describe('mergeMapRight', () => {
         const o1 = { a: Promise.resolve("") };
         const r0 = F.mergeMapRight(m1)(m1); // $ExpectType Promise<Map<any, any>>
         const r1 = F.mergeMapRight(o1)(m1); // $ExpectType Promise<Map<any, any>>
+    });
+});
+
+describe('mergeObject', () => {
+    it('map map', async () => {
+        const m1 = new Map([["a", "b"]]);
+        const m2 = new Map([[Promise.resolve("a"), "b"]]);
+        const m3 = new Map([[Promise.resolve(3), Promise.resolve(1)]]);
+
+        const r0 = F.mergeObject(m1, m1); // $ExpectType Promise<any>
+        const r1 = F.mergeObject(m1, m2); // $ExpectType Promise<any>
+        const r2 = F.mergeObject(m2, m3); // $ExpectType Promise<any>
+    });
+
+    it('map object', async () => {
+        const o1 = { a: 1 };
+        const o2 = { a: Promise.resolve(1) };
+        const m1 = new Map([["a", Promise.resolve("b")]]);
+        const m2 = new Map([[Promise.resolve("a"), "b"]]);
+
+        const r0 = F.mergeObject(m1, o1); // $ExpectType Promise<any>
+        const r1 = F.mergeObject(m1, o2); // $ExpectType Promise<any>
+        const r2 = F.mergeObject(o1, m1); // $ExpectType Promise<any>
+        const r3 = F.mergeObject(o1, m2); // $ExpectType Promise<any>
+    });
+
+    it('object object', async () => {
+        const o1 = { a: Promise.resolve("") };
+        const o2 = { a: Promise.resolve(1) };
+        const o3 = { a: Promise.resolve([1, 2, 3]) };
+
+        const r0 = F.mergeObject(o1, o1); // $ExpectType Promise<any>
+        const r1 = F.mergeObject(o1, o2); // $ExpectType Promise<any>
+        const r2 = F.mergeObject(o1, o3); // $ExpectType Promise<any>
+    });
+
+    it('curry', async () => {
+        const m1 = new Map([["a", Promise.resolve("b")]]);
+        const o1 = { a: Promise.resolve("") };
+        const r0 = F.mergeObject(m1)(m1); // $ExpectType Promise<any>
+        const r1 = F.mergeObject(o1)(m1); // $ExpectType Promise<any>
+    });
+});
+
+describe('mergeObjectRight', () => {
+    it('map map', async () => {
+        const m1 = new Map([["a", "b"]]);
+        const m2 = new Map([[Promise.resolve("a"), "b"]]);
+        const m3 = new Map([[Promise.resolve(3), Promise.resolve(1)]]);
+
+        const r0 = F.mergeObjectRight(m1, m1); // $ExpectType Promise<any>
+        const r1 = F.mergeObjectRight(m1, m2); // $ExpectType Promise<any>
+        const r2 = F.mergeObjectRight(m2, m3); // $ExpectType Promise<any>
+    });
+
+    it('map object', async () => {
+        const o1 = { a: 1 };
+        const o2 = { a: Promise.resolve(1) };
+        const m1 = new Map([["a", Promise.resolve("b")]]);
+        const m2 = new Map([[Promise.resolve("a"), "b"]]);
+
+        const r0 = F.mergeObjectRight(m1, o1); // $ExpectType Promise<any>
+        const r1 = F.mergeObjectRight(m1, o2); // $ExpectType Promise<any>
+        const r2 = F.mergeObjectRight(o1, m1); // $ExpectType Promise<any>
+        const r3 = F.mergeObjectRight(o1, m2); // $ExpectType Promise<any>
+    });
+
+    it('object object', async () => {
+        const o1 = { a: Promise.resolve("") };
+        const o2 = { a: Promise.resolve(1) };
+        const o3 = { a: Promise.resolve([1, 2, 3]) };
+
+        const r0 = F.mergeObjectRight(o1, o1); // $ExpectType Promise<any>
+        const r1 = F.mergeObjectRight(o1, o2); // $ExpectType Promise<any>
+        const r2 = F.mergeObjectRight(o1, o3); // $ExpectType Promise<any>
+    });
+
+    it('curry', async () => {
+        const m1 = new Map([["a", Promise.resolve("b")]]);
+        const o1 = { a: Promise.resolve("") };
+        const r0 = F.mergeObjectRight(m1)(m1); // $ExpectType Promise<any>
+        const r1 = F.mergeObjectRight(o1)(m1); // $ExpectType Promise<any>
     });
 });

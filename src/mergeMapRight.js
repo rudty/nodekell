@@ -4,7 +4,7 @@ import { mergeMap } from "./mergeMap";
 
 /**
  * Create a new Map by combining the arguments of the function.
- * If the key exists, the value on the right is used.
+ * If the key exists, the value on the left is used.
  * 
  * @example
  *      const m1 = new Map([[1, 2], [3, 4]]);

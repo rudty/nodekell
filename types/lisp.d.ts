@@ -191,15 +191,17 @@ export function match<T, P extends PairRepeat<30, T, any>>(value: T, ...a: P): R
  * @param source2 source from which to copy properties
  */
 export function mergeMap<K1, V1, K2, V2>(source1: Iter<[K1, V1]>, source2: Iter<[K2, V2]>): Promise<Map<ExtractPromise<K1> | ExtractPromise<K2>, ExtractPromise<V1> | ExtractPromise<V2>>>;
+export function mergeMap<T extends Iter<[any, any]>>(source1: T, source2: T, source3: T, ...sources: T[]): T extends Iter<[infer K, infer V]> ? Promise<Map<ExtractPromise<K>, ExtractPromise<V>>> : Promise<Map<any, any>>;
+export function mergeMap(source1: any, source2: any, source3: any, ...sources: any[]): Promise<Map<any, any>>;
 export function mergeMap<K1, V1, O1 extends object>(source1: Iter<[K1, V1]>, source2: O1): Promise<Map<ExtractPromise<K1> | string, ExtractPromise<V1> | ExtractPromise<O1[keyof O1]>>>;
 export function mergeMap<K1, V1, O1 extends object>(source1: O1, source2: Map<K1, V1>): Promise<Map<ExtractPromise<K1> | string, ExtractPromise<V1> | ExtractPromise<O1[keyof O1]>>>;
 export function mergeMap<O1 extends object, O2 extends object>(source1: O1, source2: O2): Promise<Map<string, ExtractPromise<O1[keyof O1]> | ExtractPromise<O2[keyof O2]>>>;
-export function mergeMap(source1: Map<any, any>): (source2: object | Iter<[any, any]>) => Promise<Map<any, any>>;
-export function mergeMap(source1: object | Iter<[any, any]>): (source2: object | Iter<[any, any]>) => Promise<Map<any, any>>;
+export function mergeMap(source1: Map<any, any>): (source2: object | Iter<[any, any]>, ...sources: (object | Iter<[any, any]>)[]) => Promise<Map<any, any>>;
+export function mergeMap(source1: object | Iter<[any, any]>): (source2: object | Iter<[any, any]>, ...sources: (object | Iter<[any, any]>)[]) => Promise<Map<any, any>>;
 
 /**
  * Create a new Map by combining the arguments of the function.
- * If the key exists, the value on the right is used.
+ * If the key exists, the value on the left is used.
  *
  * @example
  *      const m1 = new Map([[1, 2], [3, 4]]);
@@ -215,9 +217,40 @@ export function mergeMap(source1: object | Iter<[any, any]>): (source2: object |
  * @param source1 source from which to copy properties
  * @param source2 source from which to copy properties
  */
-export function mergeMapRight<K1, V1, K2, V2>(source1: Map<K1, V1>, source2: Map<K2, V2>): Promise<Map<ExtractPromise<K1> | ExtractPromise<K2>, ExtractPromise<V1> | ExtractPromise<V2>>>;
+export function mergeMapRight<K1, V1, K2, V2>(source1: Iter<[K1, V1]>, source2: Iter<[K2, V2]>): Promise<Map<ExtractPromise<K1> | ExtractPromise<K2>, ExtractPromise<V1> | ExtractPromise<V2>>>;
+export function mergeMapRight<T extends Iter<[any, any]>>(source1: T, source2: T, source3: T, ...sources: T[]): T extends Iter<[infer K, infer V]> ? Promise<Map<ExtractPromise<K>, ExtractPromise<V>>> : Promise<Map<any, any>>;
+export function mergeMapRight(source1: any, source2: any, source3: any, ...sources: any[]): Promise<Map<any, any>>;
 export function mergeMapRight<K1, V1, O1 extends object>(source1: Map<K1, V1>, source2: O1): Promise<Map<ExtractPromise<K1> | string, ExtractPromise<V1> | ExtractPromise<O1[keyof O1]>>>;
 export function mergeMapRight<K1, V1, O1 extends object>(source1: O1, source2: Map<K1, V1>): Promise<Map<ExtractPromise<K1> | string, ExtractPromise<V1> | ExtractPromise<O1[keyof O1]>>>;
 export function mergeMapRight<O1 extends object, O2 extends object>(source1: O1, source2: O2): Promise<Map<string, ExtractPromise<O1[keyof O1]> | ExtractPromise<O2[keyof O2]>>>;
-export function mergeMapRight(source1: Map<any, any>): (source2: object | Iter<[any, any]>) => Promise<Map<any, any>>;
-export function mergeMapRight(source1: object | Iter<[any, any]>): (source2: object | Iter<[any, any]>) => Promise<Map<any, any>>;
+export function mergeMapRight(source1: Map<any, any>): (source2: object | Iter<[any, any]>, ...sources: (object | Iter<[any, any]>)[]) => Promise<Map<any, any>>;
+export function mergeMapRight(source1: object | Iter<[any, any]>): (source2: object | Iter<[any, any]>, ...sources: (object | Iter<[any, any]>)[]) => Promise<Map<any, any>>;
+
+/**
+ * Create a new object by combining the arguments of the function.
+ * If the key exists, the value on the right is used.
+ *
+ * @example
+ *      const m1 = new Map([[1, 2], [3, 4]]);
+ *      const o1 = { 5: 6, 7: 8 };
+ *      const r1 = await F.mergeObject(m1, o1);
+ *      console.log(r1); // print { '1': 2, '3': 4, '5': 6, '7': 8 }
+ */
+export function mergeObject(source1: Iter<[any, any]> | object, source2: Iter<[any, any]> | object, ...sources: (Iter<[any, any]> | object)[]): Promise<any>;
+export function mergeObject(source1: Iter<[any, any]> | object): (source2: Iter<[any, any]> | object, ...sources: (Iter<[any, any]> | object)[]) => Promise<any>;
+
+/**
+ * Create a new object by combining the arguments of the function.
+ * If the key exists, the value on the left is used.
+ *
+ * @example
+ *      const m1 = new Map([[1, 2], [3, 4]]);
+ *      const o1 = { 5: 6, 7: 8 };
+ *      const r1 = await F.mergeObjectRight(m1, o1);
+ *      console.log(r1); // print { '1': 2, '3': 4, '5': 6, '7': 8 }
+ *
+ * @param source1 source from which to copy properties
+ * @param source2 source from which to copy properties
+ */
+export function mergeObjectRight(source1: Iter<[any, any]> | object, source2: Iter<[any, any]> | object, ...sources: (Iter<[any, any]> | object)[]): Promise<any>;
+export function mergeObjectRight(source1: Iter<[any, any]> | object): (source2: Iter<[any, any]> | object, ...sources: (Iter<[any, any]> | object)[]) => Promise<any>;
