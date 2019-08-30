@@ -492,3 +492,85 @@ describe('match', () => {
         r2; // $ExpectType string | number | { a: number; b: number; } | undefined
     });
 });
+
+describe('mergeMap', () => {
+    it('map map', async () => {
+        const m1 = new Map([["a", "b"]]);
+        const m2 = new Map([[Promise.resolve("a"), "b"]]);
+        const m3 = new Map([[Promise.resolve(3), Promise.resolve(1)]]);
+
+        const r0 = F.mergeMap(m1, m1); // $ExpectType Promise<Map<string, string>>
+        const r1 = F.mergeMap(m1, m2); // $ExpectType Promise<Map<string, string>>
+        const r2 = F.mergeMap(m2, m3); // $ExpectType Promise<Map<string | number, string | number>>
+    });
+
+    it('map object', async () => {
+        const o1 = { a: 1 };
+        const o2 = { a: Promise.resolve(1) };
+        const m1 = new Map([["a", Promise.resolve("b")]]);
+        const m2 = new Map([[Promise.resolve("a"), "b"]]);
+
+        const r0 = F.mergeMap(m1, o1); // $ExpectType Promise<Map<string, string | number>>
+        const r1 = F.mergeMap(m1, o2); // $ExpectType Promise<Map<string, string | number>>
+        const r2 = F.mergeMap(o1, m1); // $ExpectType Promise<Map<string, string | number>>
+        const r3 = F.mergeMap(o1, m2); // $ExpectType Promise<Map<string, string | number>>
+    });
+
+    it('object object', async () => {
+        const o1 = { a: Promise.resolve("") };
+        const o2 = { a: Promise.resolve(1) };
+        const o3 = { a: Promise.resolve([1, 2, 3]) };
+
+        const r0 = F.mergeMap(o1, o1); // $ExpectType Promise<Map<string, string>>
+        const r1 = F.mergeMap(o1, o2); // $ExpectType Promise<Map<string, string | number>>
+        const r2 = F.mergeMap(o1, o3); // $ExpectType Promise<Map<string, string | number[]>>
+    });
+
+    it('curry', async () => {
+        const m1 = new Map([["a", Promise.resolve("b")]]);
+        const o1 = { a: Promise.resolve("") };
+        const r0 = F.mergeMap(m1)(m1); // $ExpectType Promise<Map<any, any>>
+        const r1 = F.mergeMap(o1)(m1); // $ExpectType Promise<Map<any, any>>
+    });
+});
+
+describe('mergeMapRight', () => {
+    it('map map', async () => {
+        const m1 = new Map([["a", "b"]]);
+        const m2 = new Map([[Promise.resolve("a"), "b"]]);
+        const m3 = new Map([[Promise.resolve(3), Promise.resolve(1)]]);
+
+        const r0 = F.mergeMapRight(m1, m1); // $ExpectType Promise<Map<string, string>>
+        const r1 = F.mergeMapRight(m1, m2); // $ExpectType Promise<Map<string, string>>
+        const r2 = F.mergeMapRight(m2, m3); // $ExpectType Promise<Map<string | number, string | number>>
+    });
+
+    it('map object', async () => {
+        const o1 = { a: 1 };
+        const o2 = { a: Promise.resolve(1) };
+        const m1 = new Map([["a", Promise.resolve("b")]]);
+        const m2 = new Map([[Promise.resolve("a"), "b"]]);
+
+        const r0 = F.mergeMapRight(m1, o1); // $ExpectType Promise<Map<string, string | number>>
+        const r1 = F.mergeMapRight(m1, o2); // $ExpectType Promise<Map<string, string | number>>
+        const r2 = F.mergeMapRight(o1, m1); // $ExpectType Promise<Map<string, string | number>>
+        const r3 = F.mergeMapRight(o1, m2); // $ExpectType Promise<Map<string, string | number>>
+    });
+
+    it('object object', async () => {
+        const o1 = { a: Promise.resolve("") };
+        const o2 = { a: Promise.resolve(1) };
+        const o3 = { a: Promise.resolve([1, 2, 3]) };
+
+        const r0 = F.mergeMapRight(o1, o1); // $ExpectType Promise<Map<string, string>>
+        const r1 = F.mergeMapRight(o1, o2); // $ExpectType Promise<Map<string, string | number>>
+        const r2 = F.mergeMapRight(o1, o3); // $ExpectType Promise<Map<string, string | number[]>>
+    });
+
+    it('curry', async () => {
+        const m1 = new Map([["a", Promise.resolve("b")]]);
+        const o1 = { a: Promise.resolve("") };
+        const r0 = F.mergeMapRight(m1)(m1); // $ExpectType Promise<Map<any, any>>
+        const r1 = F.mergeMapRight(o1)(m1); // $ExpectType Promise<Map<any, any>>
+    });
+});
