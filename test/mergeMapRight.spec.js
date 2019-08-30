@@ -2,7 +2,7 @@
 const F = require("../index");
 const assert = require("assert");
 
-describe('test mergeMap', () => {
+describe('test mergeMapRight', () => {
     it('map', async () => {
         const m1 = new Map([[1, 2], [3, 4]]);
         const m2 = new Map([[5, 6], [7, 8]]);
