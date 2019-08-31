@@ -834,12 +834,13 @@ const groupBy = curry(async (f, iter) => {
 });
 
 const has = curry((key, a) => {
-    if (a && _isFunction(a.has)) {
-        if (a.has(key)) {
+    if (a) {
+        if (_isFunction(a.has) && a.has(key)) {
             return true;
         }
+        return a[key] !== undefinedValue;
     }
-    return a[key] !== undefinedValue;
+    return false;
 });
 
 const head = async (iter) => {

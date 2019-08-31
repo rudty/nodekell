@@ -3,11 +3,11 @@ import { undefinedValue } from "./internal/undefinedValue";
 import { _isFunction } from "./internal/typeTraits";
 
 export const has = curry((key, a) => {
-    if (a && _isFunction(a.has)) {
-        if (a.has(key)) {
+    if (a) {
+        if (_isFunction(a.has) && a.has(key)) {
             return true;
         }
+        return a[key] !== undefinedValue;
     }
-
-    return a[key] !== undefinedValue;
+    return false;
 });
