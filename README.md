@@ -86,7 +86,7 @@ console.log(v);//[3]
 *    [dropLast](#dropLast)
 *    [dropWhile](#dropwhile)
 *    [emptyThen](#emptythen)
-*    [errorThen](#errorthen)
+*    [errorThen](#errorthen) [**deprecated**]
 *    [distinct](#distinct)
 *    [distinctBy](#distinctby)
 *    [distinctUntilChanged](#distinctuntilchanged)
@@ -2565,64 +2565,63 @@ console.log(r(obj2));
 ```
 
 ### mergeMap
- Create a new Map by combining the arguments of the function.
+Create a new Map by combining the arguments of the function.
 
- If the key exists, the value on the right is used.
- ```javascript
- const m1 = new Map([[1, 2], [3, 4]]);
- const m2 = new Map([[5, 6], [7, 8]]);
- const r1 = await F.mergeMap(m1, m2);
- console.log(r1); // print Map { 1 => 2, 3 => 4, 5 => 6, 7 => 8 }
+If the key exists, the value on the right is used.
+```javascript
+const m1 = new Map([[1, 2], [3, 4]]);
+const m2 = new Map([[5, 6], [7, 8]]);
+const r1 = await F.mergeMap(m1, m2);
+console.log(r1); // print Map { 1 => 2, 3 => 4, 5 => 6, 7 => 8 }
 
 const m3 = new Map([[1, 2], [3, 4]]);
 const o1 = { 5: 6, 7: 8 };
 const r2 = await F.mergeMap(m3, o1);
 console.log(r2); // print Map { 1 => 2, 3 => 4, '5' => 6, '7' => 8 }
- ```
+```
 
- 
+
 ### mergeMapRight
 Create a new Map by combining the arguments of the function.
- 
+
 If the key exists, the value on the left is used.
- ```javascript
- const m1 = new Map([[1, 2], [3, 4]]);
- const m2 = new Map([[5, 6], [7, 8]]);
- const r1 = await F.mergeMapRight(m1, m2);
- console.log(r1); // print Map { 5 => 6, 7 => 8, 1 => 2, 3 => 4 }
- 
- const m2 = new Map([[1, 2], [3, 4]]);
- const o2 = { 5: 6, 7: 8 };
- const r2 = await F.mergeMapRight(m2, o2);
- console.log(r2); // Map { '5' => 6, '7' => 8, 1 => 2, 3 => 4 }
- ```
+```javascript
+const m1 = new Map([[1, 2], [3, 4]]);
+const m2 = new Map([[5, 6], [7, 8]]);
+const r1 = await F.mergeMapRight(m1, m2);
+console.log(r1); // print Map { 5 => 6, 7 => 8, 1 => 2, 3 => 4 }
+
+const m2 = new Map([[1, 2], [3, 4]]);
+const o2 = { 5: 6, 7: 8 };
+const r2 = await F.mergeMapRight(m2, o2);
+console.log(r2); // Map { '5' => 6, '7' => 8, 1 => 2, 3 => 4 }
+```
 
 
 ### mergeObject
-/**
- Create a new object by combining the arguments of the function.
- 
- If the key exists, the value on the right is used.
- ```javascript
- const m1 = new Map([[1, 2], [3, 4]]);
- const o1 = { 5: 6, 7: 8 };
- const r1 = await F.mergeObject(m1, o1);
- console.log(r1); // print { '1': 2, '3': 4, '5': 6, '7': 8 }
- ```
+Create a new object by combining the arguments of the function.
+
+If the key exists, the value on the right is used.
+```javascript
+const m1 = new Map([[1, 2], [3, 4]]);
+const o1 = { 5: 6, 7: 8 };
+const r1 = await F.mergeObject(m1, o1);
+console.log(r1); // print { '1': 2, '3': 4, '5': 6, '7': 8 }
+```
 
 
 ### mergeObjectRight
 Create a new object by combining the arguments of the function.
 
 If the key exists, the value on the left is used.
- 
- ```javascript
+
+```javascript
 const m1 = new Map([[1, 2], [3, 4]]);
 const o1 = { 5: 6, 7: 8 };
 const r1 = await F.mergeObjectRight(m1, o1);
 console.log(r1); // print { '1': 2, '3': 4, '5': 6, '7': 8 }
 
- ```
+```
 
 
 ## License
