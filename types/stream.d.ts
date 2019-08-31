@@ -281,6 +281,7 @@ export function splitBy<T, R>(f: (t: T) => (Iter<R> | Promise<Iter<R>>), any: T)
 export function splitBy<T, R>(f: (t: T) => (Iter<R> | Promise<Iter<R>>)): (any: T) => AsyncIterableIterator<R>;
 
 /**
+ * [**deprecated**]
  * https://github.com/rudty/nodekell#errorthen
  *
  * @param supply

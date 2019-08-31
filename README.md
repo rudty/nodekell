@@ -710,6 +710,7 @@ console.log(v); //2,3,4
 
 
 ### errorThen
+**deprecated**
 catch error 
 ```javascript
 const v = await F.run([1,2,3,4,5],
