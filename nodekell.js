@@ -861,8 +861,9 @@
     });
 
     const interval = (timeout, timerHandler, ...param) => {
-        if(!timeout || timeout < 10) {
-            timeout = 10;
+        timeout = Number(timeout);
+        if(Number.isNaN(timeout) && timeout < 1) {
+            timeout = 1;
         }
         const k = { run: true };
         const recur = async () => {
