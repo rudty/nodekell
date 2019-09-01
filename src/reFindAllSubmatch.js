@@ -14,7 +14,7 @@ import { findAllSubMatch } from "./internal/regex";
  *      
  * 
  * @param {RegExp} re find regex
- * @param {String} str find String
+ * @param {string} str find String
  * @returns {Array} Array<Array<String>> matching strings and groups
  */
 export const reFindAllSubmatch = curry((re, str) => {

@@ -14,10 +14,10 @@ import { undefinedValue } from "./internal/undefinedValue";
  *      const r1 = F.propOrElse("5", 100, arr);
  *      console.log(r1); // print 100
  * 
- * @param {any} key any key value
- * @param {any} defaultValue a[key] is undefined return defaultValue
- * @param {any} a any object
- * @returns {any} a[key] or defaultValue
+ * @param {Object} key any key value
+ * @param {Object} defaultValue a[key] is undefined return defaultValue
+ * @param {Object} a any object
+ * @returns {Object} a[key] or defaultValue
  */
 export const propOrElse = curry((key, defaultValue, a) => {
     const r = prop(key, a);

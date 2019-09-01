@@ -18,9 +18,9 @@ import { _isFunction } from "./internal/typeTraits";
  *      const r = F.get("name", m);
  *      console.log(r); // print hello map
  * 
- * @param {any} key any key value
- * @param {any} a any object
- * @returns {any | undefined} a.get or a[key] or undefined
+ * @param {Object} key any key value
+ * @param {Object} a any object
+ * @returns {Object | undefined} a.get or a[key] or undefined
  */
 export const get = curry((key, a) => {
     if (a && _isFunction(a.get)) {

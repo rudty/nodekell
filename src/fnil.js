@@ -15,7 +15,7 @@
  *      sayHelloWithDefault("leanne"); // print hello leanne
  * 
  * @param {Function} fn call function
- * @param {...any} dArgs defaultArguments
+ * @param {...Object} dArgs defaultArguments
  * @return {Function} function that calls fn
  */
 export const fnil = (fn, ...dArgs) => (...args) => {

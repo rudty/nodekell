@@ -18,8 +18,8 @@ const repeatFetchArgument = async (a, b) => {
  * F.repeat(3, 5) => [5,5,5]
  * 
  * 
- * @param {Number | any} a  count or supply
- * @param  {any?} b supply
+ * @param {Number | Object} a  count or supply
+ * @param {Object?} b supply
  */
 export const repeat = async function *(a, ...b) {
     const [len, supply] = await repeatFetchArgument(a, b);

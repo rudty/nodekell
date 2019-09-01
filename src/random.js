@@ -60,7 +60,7 @@ const randomInternal = (begin, end) => {
  * 
  * maximum value is uint max
  * 
- * @param  {...any} k 0 ~ 2 argument
+ * @param  {...Object} k 0 ~ 2 argument
  */
 export const random = (...k) => {
     const len = k.length;

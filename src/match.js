@@ -22,8 +22,8 @@ import { _isFunction, mustEvenArguments } from "./internal/typeTraits";
  *  );
  *  //print value is [1, any, any, any, any]
  * 
- * @param {any} value match value
- * @param  {...any} cv must even [0]:compare, [1]: value, ...
+ * @param {Object} value match value
+ * @param  {...Object} cv must even [0]:compare, [1]: value, ...
  */
 export const match = (value, ...cv) => {
     mustEvenArguments(cv);

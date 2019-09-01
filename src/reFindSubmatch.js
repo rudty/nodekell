@@ -11,7 +11,7 @@ import { curry } from "./curry";
  *      
  * 
  * @param {RegExp} re find regex
- * @param {String} str find String
+ * @param {string} str find String
  * @returns {Array} Array<String> matching strings and groups
  */
 export const reFindSubmatch = curry((re, str) => {

@@ -11,7 +11,7 @@
  * Float32Array
  * Float64Array
  * 
- * @param {any} a 
+ * @param {Object} a 
  * @returns {bool} true if isTypedArray else false
  */
 export const _isTypedArray = (a) => ArrayBuffer.isView(a) && !(a instanceof DataView);
@@ -38,7 +38,7 @@ const _isObjectArrayCheckProps = (a) => {
  * console.log(Array.from(o)); 
  * //print [1,2,3]
  * 
- * @param {any} a 
+ * @param {Object} a 
  */
 export const _isObjectArray = (a) => {
     if (Number.isSafeInteger(a.length)) {

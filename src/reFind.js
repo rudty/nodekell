@@ -11,8 +11,8 @@ import { reFindSubmatch } from "./reFindSubmatch";
  *      
  * 
  * @param {RegExp} re find regex
- * @param {String} str find String
- * @returns {String} first matching string
+ * @param {string} str find String
+ * @returns {string} first matching string
  */
 export const reFind = curry((re, str) => {
     const r = reFindSubmatch(re, str);

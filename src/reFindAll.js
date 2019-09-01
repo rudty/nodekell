@@ -9,7 +9,7 @@ import { findAllSubMatch } from "./internal/regex";
  *      //print ['H1', 'H2']
  * 
  * @param {RegExp} re find regex
- * @param {String} str find String
+ * @param {string} str find String
  * @returns {Array} Array<String> matching strings
  */
 export const reFindAll = curry((re, str) => {
