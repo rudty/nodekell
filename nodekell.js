@@ -204,6 +204,42 @@
         return sum / c;
     };
 
+    const objectIterator = function* (object) {
+        const keys = Object.keys(object);
+        for (const k of keys) {
+            yield [k, object[k]];
+        }
+    };
+    const _toIterator = (a) => {
+        if (a) {
+            const it = a[Symbol.iterator];
+            if (it) {
+                return it.call(a);
+            }
+            const ait = a[Symbol.asyncIterator];
+            if (ait) {
+                return ait.call(a);
+            }
+            return objectIterator(a);
+        }
+    };
+
+    const block = async (...iters) => {
+        iters = await Promise.all(iters);
+        for (const iter of iters) {
+            if (iter) {
+                const it = _toIterator(iter);
+                for (; ;) {
+                    const { value, done } = await it.next();
+                    await value;
+                    if (done) {
+                        break;
+                    }
+                }
+            }
+        }
+    };
+
     const buffer = curry(async function *(supply, iter) {
         supply = await supply;
         if(supply <= 0) {
@@ -998,26 +1034,6 @@
 
     const run = (iter, ...f) => foldl((z, fn) => fn(z), iter, f);
 
-    const objectIterator = function* (object) {
-        const keys = Object.keys(object);
-        for (const k of keys) {
-            yield [k, object[k]];
-        }
-    };
-    const _toIterator = (a) => {
-        if (a) {
-            const it = a[Symbol.iterator];
-            if (it) {
-                return it.call(a);
-            }
-            const ait = a[Symbol.asyncIterator];
-            if (ait) {
-                return ait.call(a);
-            }
-            return objectIterator(a);
-        }
-    };
-
     const mergeMap = curry(async (source1, source2, ...sources) =>
         await run([source1, source2, ...sources],
             map(_toIterator),
@@ -1683,6 +1699,7 @@
     exports.assignRight = assignRight;
     exports.associateBy = associateBy;
     exports.average = average;
+    exports.block = block;
     exports.buffer = buffer;
     exports.collect = collect;
     exports.collectFloat32 = collectFloat32;

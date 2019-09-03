@@ -9,6 +9,7 @@ export * from "./assign3.js";
 export * from "./assignRight.js";
 export * from "./associateBy.js";
 export * from "./average.js";
+export * from "./block.js";
 export * from "./buffer.js";
 export * from "./collect.js";
 export * from "./collectMap.js";
