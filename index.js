@@ -208,7 +208,7 @@ const objectIterator = function* (object) {
         yield [k, object[k]];
     }
 };
-const _toIterator = (a) => {
+const _toStrictIterator = (a) => {
     if (a) {
         const it = a[Symbol.iterator];
         if (it) {
@@ -218,6 +218,14 @@ const _toIterator = (a) => {
         if (ait) {
             return ait.call(a);
         }
+    }
+};
+const _toIterator = (a) => {
+    if (a) {
+        const s = _toStrictIterator(a);
+        if (s) {
+            return s;
+        }
         return objectIterator(a);
     }
 };
@@ -225,14 +233,14 @@ const _toIterator = (a) => {
 const block = async (...iters) => {
     iters = await Promise.all(iters);
     for (const iter of iters) {
-        if (iter) {
-            const it = _toIterator(iter);
+        const it = _toStrictIterator(iter);
+        if (it) {
             for (; ;) {
                 const { value, done } = await it.next();
-                await value;
                 if (done) {
                     break;
                 }
+                await value;
             }
         }
     }

@@ -6,7 +6,7 @@ const objectIterator = function* (object) {
     }
 };
 
-export const _toIterator = (a) => {
+export const _toStrictIterator = (a) => {
     if (a) {
         const it = a[Symbol.iterator];
         if (it) {
@@ -17,7 +17,16 @@ export const _toIterator = (a) => {
         if (ait) {
             return ait.call(a);
         }
+    }
+    //return undefined;
+};
 
+export const _toIterator = (a) => {
+    if (a) {
+        const s = _toStrictIterator(a);
+        if (s) {
+            return s;
+        }
         return objectIterator(a);
     }
     //return undefined;

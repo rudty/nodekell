@@ -21,6 +21,27 @@ describe('test block', () => {
         assert.strictEqual(check, 2);
     });
 
+    it('empty', async () => {
+        await F.block(null);
+        await F.block([null]);
+    });
+
+    it('generator', async () => {
+        let check = 0;
+        const a = (function*(){
+            yield Promise.resolve(0);
+            yield Promise.resolve(0);
+            yield (async () => {
+                await Promise.resolve(1);
+                check += 1;
+            })();
+            yield "a";
+            
+        });
+        await F.block(a(), a());
+        assert.strictEqual(check, 2);
+    });
+
     it('async function', async () => {
         let check = 0;
         const a = (async () => {
