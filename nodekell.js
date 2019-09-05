@@ -232,9 +232,9 @@
         }
     };
 
-    const block = async (...iters) => {
-        iters = await Promise.all(iters);
-        for (const iter of iters) {
+    const block = async (...values) => {
+        values = await Promise.all(values);
+        for (const iter of values) {
             const it = _toStrictIterator(iter);
             if (it) {
                 for (; ;) {

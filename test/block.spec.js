@@ -59,4 +59,19 @@ describe('test block', () => {
         assert.strictEqual(check, 1);
     });
     
+    it('not iter', async () => {
+        await F.block(1, null, 1);
+    });
+
+    it('with run', async () => {
+        let check = 0;
+        const r = await F.run([1,2,3,4,5],
+        F.map(e => e + 1),
+        F.map(e => {
+            check += 1;
+            return e;
+        }),
+        F.block);
+        assert.deepStrictEqual(check, 5);
+    });
 });
