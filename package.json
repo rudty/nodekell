@@ -1,6 +1,6 @@
 {
   "name": "nodekell",
-  "version": "1.32.9",
+  "version": "1.33.0",
   "description": "async functional library",
   "repository": {
     "type": "git",
