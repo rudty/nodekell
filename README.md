@@ -165,6 +165,7 @@ console.log(v);//[3]
 *    [frequencies](#frequencies)
 *    [frequenciesBy](#frequenciesby)
 *    [associateBy](#associateby)
+*    [block](#block)
 
 ## util / else
 *    [_](#_)
@@ -1976,6 +1977,26 @@ const m1 = await F.associateBy(e => e + 1, arr1);
 console.log(m1);
 //print Map { 2 => 2, 3 => 3, 4 => 4 
  ```
+
+
+### block
+1. await promise
+2. Fetch all the elements of type iterator. 
+    When an element returns a promise, it waits for it to finish. 
+3. Fetch all elements of async iterator type.
+```javascript
+const r = await F.run([1,2,3,4,5],
+    F.map(SomethingNetworkJob), 
+    F.map(console.log),
+    F.block);
+```
+```javascript
+const somethingNetworkJob = Promise.resolve(1);
+const somthingNetworkIterator = async function*() {
+    yield 1;
+};
+await F.block(somethingNetworkJob, somthingNetworkIterator());
+```
 
 
 ### _

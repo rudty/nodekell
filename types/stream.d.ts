@@ -570,3 +570,16 @@ export function reFindAll(re: RegExp): (str: string) => string[];
  */
 export function reFindAllSubmatch(re: RegExp, str: string): string[][];
 export function reFindAllSubmatch(re: RegExp): (str: string) => string[][];
+
+/**
+ * 1. await promise
+ * 2. Fetch all the elements of type iterator. 
+ *    When an element returns a promise, it waits for it to finish. 
+ * 3. Fetch all elements of async iterator type.
+ * @example
+ *      const r = await F.run([1,2,3,4,5],
+ *          F.map(SomethingNetworkJob), 
+ *          F.map(console.log),
+ *          F.block);
+ */
+export function block(...value: any[]): Promise<void>;
