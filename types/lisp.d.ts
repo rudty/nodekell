@@ -128,7 +128,7 @@ export function juxtA<T>(fn: Iter<Accumulator<T>>): (iter: Iter<T | Promise<T>>)
 
 /**
  * Similar `get`, get the value of an array element from an object or map.
- * 
+ *
  * @example
  *      const r0 = await juxtO(["A","C"], {A:1,B:2,C:3});
  *      console.log(r0); // print [1, 3]
