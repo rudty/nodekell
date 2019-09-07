@@ -957,9 +957,8 @@ const juxtA = curry(async (af, iter) => {
 });
 
 const juxtO = curry(async (ap, obj) => {
-    ap = await _collectArray(ap);
     const r = [];
-    for (const k of ap) {
+    for await (const k of ap) {
         r.push(get(k, obj));
     }
     return r;

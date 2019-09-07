@@ -127,9 +127,20 @@ export function juxtA<T extends Iter<any>>(fn: Iter<FlatAccumulator<T>>): (iter:
 export function juxtA<T>(fn: Iter<Accumulator<T>>): (iter: Iter<T | Promise<T>>) => Promise<T[]>;
 
 /**
- * https://github.com/rudty/nodekell#juxto
- * @param key get func
- * @param target get obj
+ * Similar `get`, get the value of an array element from an object or map.
+ * 
+ * @example
+ *      const r0 = await juxtO(["A","C"], {A:1,B:2,C:3});
+ *      console.log(r0); // print [1, 3]
+ *
+ *      const r1 = await juxtO(["A","C"], {});
+ *      console.log(r1); // print [undefined, undefined] 
+ *
+ *      const r2 = await juxtO(["A","C"],  new Map([["A", 1], ["B", 2], ["C", 3]]));
+ *      console.log(r2); // print [1,2]
+ *
+ * @param key get array
+ * @param target get obj or map
  */
 export function juxtO<T, K extends keyof T>(key: K[], target: T): Getter<T, K>[];
 export function juxtO<T, K>(key: K[], target: T): Getter<T, K>[];
