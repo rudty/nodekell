@@ -46,4 +46,16 @@ describe('test juxtA', () => {
          assert.deepStrictEqual(a,[5,1,15]);
      });
 
+     it("t0", async () => {
+        const add = (a,b) => a.toString() + b.toString();
+        const arr = [1,
+            Promise.resolve(2),
+            'c',
+            Promise.resolve(4),
+            Promise.resolve(5)];
+
+        const r0 = F.juxtA([add])(arr); // $ExpectType Promise<(string | number)[]>
+        console.log(await r0);
+     });
+
 });

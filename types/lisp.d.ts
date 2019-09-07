@@ -119,12 +119,12 @@ export function memoizeWithTimeout<F extends (...args: any[]) => any>(timeout: n
  * @param fn reduce function iterator
  * @param iter iterator
  */
-export function juxtA<T>(fn: Iter<Accumulator<T>>, iter: Iter<T | Promise<T>>): Promise<T[]>;
+// export function juxtA<T>(fn: Iter<Accumulator<T>>, iter: Iter<T | Promise<T>>): Promise<T[]>;
 
-export function juxtA<T extends Iter<any>>(fn: Iter<FlatAccumulator<T>>, iter: T): Promise<FlatForInternalFn<T>[]>;
-export function juxtA<T extends Iter<any>>(fn: Iter<FlatAccumulator<T>>): (iter: T) => Promise<FlatForInternalFn<T>[]>;
+export function juxtA<T extends Iter<any>, F extends FlatAccumulator<T>>(fn: Iter<F>, iter: T): Promise<ReturnType<F>[]>;
+export function juxtA<T extends Iter<any>, F extends FlatAccumulator<T>>(fn: Iter<F>): (iter: T) => Promise<ReturnType<F>[]>;
 
-export function juxtA<T>(fn: Iter<Accumulator<T>>): (iter: Iter<T | Promise<T>>) => Promise<T[]>;
+// export function juxtA<T>(fn: Iter<Accumulator<T>>): (iter: Iter<T | Promise<T>>) => Promise<ReturnType<Accumulator<T>>>;
 
 /**
  * Similar `get`, get the value of an array element from an object or map.

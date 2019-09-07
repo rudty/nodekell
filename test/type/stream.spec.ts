@@ -622,7 +622,7 @@ describe('maxBy', () => {
     it('with run', async () => {
         const a = [Promise.resolve({ id: 1 }), { id: 5 }, { id: 2 }, { id: 4 }, { id: 3 }];
 
-        const r0 = await F.run(a, F.maxBy(e => e.id)); // $ExpectType { id: number; }
+        const r0 = await F.run(a, F.maxBy((e: { id: number; }) => e.id)); // $ExpectType { id: number; }
     });
 });
 
@@ -650,7 +650,8 @@ describe('minBy', () => {
     it('with run', async () => {
         const a = [Promise.resolve({ id: 1 }), { id: 5 }, { id: 2 }, { id: 4 }, { id: 3 }];
 
-        const r0 = await F.run(a, F.minBy(e => e.id)); // $ExpectType { id: number; }
+        const r0 = await F.minBy(e => e.id, a); // $ExpectType { id: number; }
+        const r1 = await F.run(a, F.minBy((e: { id: number; }) => e.id)); // $ExpectType { id: number; }
     });
 });
 
@@ -869,10 +870,10 @@ describe('errorThen', () => {
         const ar2 = F.errorThen<string | number, { id: number; } | null>(testSupplyFunc(e))(a); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | null>
         const ar3 = F.errorThen<string | number, { id: number; } | null>(Promise.resolve(testSupplyFunc(e)))(a); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | null>
 
-        const br0 = F.errorThen(e, a); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | { id: number; } | null>
-        const br1 = F.errorThen(Promise.resolve(e), a); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | { id: number; } | null>
-        const br2 = F.errorThen(testSupplyFunc(e), a); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | { id: number; } | null>
-        const br3 = F.errorThen(Promise.resolve(testSupplyFunc(e)), a); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | { id: number; } | null>
+        // const br0 = F.errorThen(e, a); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | { id: number; } | null>
+        // const br1 = F.errorThen(Promise.resolve(e), a); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | { id: number; } | null>
+        // const br2 = F.errorThen(testSupplyFunc(e), a); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | { id: number; } | null>
+        // const br3 = F.errorThen(Promise.resolve(testSupplyFunc(e)), a); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | { id: number; } | null>
     });
 
     it('with run', async () => {
@@ -901,8 +902,8 @@ describe('then', () => {
 
         const a = [1, 2, 3, 4, 5];
 
-        const ar0 = F.then(gfn0)(a); // $ExpectType IterableIterator<number>
-        const ar1 = F.then(gfn0, a); // $ExpectType IterableIterator<number>
+        // const ar0 = F.then(gfn0)(a).next().value; // $E/xpectType number
+        // const ar1 = F.then(gfn0, a).next().value; // $ExpectType number
 
         const br0 = F.then<number[], number[]>(iter => iter)(a); // $ExpectType number[]
         const br1 = F.then(iter => iter, a); // $ExpectType number[]

@@ -241,7 +241,7 @@ describe('getOrElse', () => {
 
         it('has property', () => {
             const ar0 = F.getOrElse<typeof a, number, 'get'>('get', 1)(a); // $ExpectType string | number
-            const ar1 = F.getOrElse('b', 0, a); // $ExpectType string | number
+            const ar1 = F.getOrElse('b', 0 + 0, a); // $ExpectType string | number
 
             const br0 = F.getOrElse<typeof b, number, 'b'>('b')(0, b); // $ExpectType string | number
             const br1 = F.getOrElse('get', 2 + 1, b); // $ExpectType number | (() => void)
@@ -249,7 +249,7 @@ describe('getOrElse', () => {
 
         it('has not property', () => {
             const r0 = F.getOrElse<typeof a, number, 'c'>('c', 1)(a); // $ExpectType number
-            const r1 = F.getOrElse('d', 2, b); // $ExpectType number
+            const r1 = F.getOrElse('d', 2 + 0, b); // $ExpectType number
         });
     });
 
@@ -258,11 +258,11 @@ describe('getOrElse', () => {
         const b = ['a', 'b', 'c', 'd', 'e', 'f'];
 
         it('index', () => {
-            const ar0 = F.getOrElse<typeof a, string, 0>(0, "a", a); // $ExpectType string | number | undefined
-            const ar1 = F.getOrElse(190, "a", a); // $ExpectType string | number | undefined
+            const ar0 = F.getOrElse<typeof a, string, 0>(0, "a" + "a", a); // $ExpectType string | number | undefined
+            const ar1 = F.getOrElse(190, "a" + "a", a); // $ExpectType string | number | undefined
 
-            const br0 = F.getOrElse<typeof b, number, 0>(0, 1, b); // $ExpectType string | number | undefined
-            const br1 = F.getOrElse(190, 0, b); // $ExpectType string | number | undefined
+            const br0 = F.getOrElse<typeof b, number, 0>(0, 1 + 0, b); // $ExpectType string | number | undefined
+            const br1 = F.getOrElse(190, 0 + 0, b); // $ExpectType string | number | undefined
         });
 
         it('has property', () => {
@@ -270,12 +270,12 @@ describe('getOrElse', () => {
             const ar1 = F.getOrElse('reverse', () => 3 + 0, a); // $ExpectType (() => number[]) | (() => number)
 
             const br0 = F.getOrElse<typeof b, number, 'length'>('length', 0, b); // $ExpectType number
-            const br1 = F.getOrElse('reverse', 3, b); // $ExpectType number | (() => string[])
+            const br1 = F.getOrElse('reverse', 3 + 0, b); // $ExpectType number | (() => string[])
         });
 
         it('has not property', () => {
             const r0 = F.getOrElse<typeof a, number, 'n'>('n', 3)(a); // $ExpectType number
-            const r1 = F.getOrElse('d', 3, b); // $ExpectType number
+            const r1 = F.getOrElse('d', 3 + 0, b); // $ExpectType number
         });
     });
 

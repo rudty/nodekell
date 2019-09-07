@@ -12,8 +12,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "npm run build && mocha -r ts-node/register test/**/*.js test/**/*.spec.ts && dtslint --localTs ./node_modules/typescript/lib",
-    "dtslint": "dtslint --localTs ./node_modules/typescript/lib",
+    "test": "npm run build && mocha -r ts-node/register test/**/*.js test/**/*.spec.ts && dtslint",
+    "dtslint": "dtslint",
     "build": "rollup -c ./rollup.config.js",
     "watch": "rollup -w -c ./rollup.config.js",
     "prepublishOnly": "npm run build"
@@ -53,10 +53,10 @@
   "devDependencies": {
     "dtslint": "^0.8.0",
     "mocha": "^6.2.0",
-    "rollup": "^1.18.0",
+    "rollup": "^1.20.3",
     "rollup-plugin-cleanup": "^3.1.1",
     "rollup-plugin-terser": "^5.1.1",
     "ts-node": "^8.3.0",
-    "typescript": "^3.5.2"
+    "typescript": "^3.6.2"
   }
 }

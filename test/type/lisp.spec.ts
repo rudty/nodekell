@@ -254,17 +254,24 @@ describe('juxtA', () => {
 
     it('string + number value', async () => {
         const add = (a: string | number, b: string | number) => a.toString() + b.toString();
+        const ret0 = (a: string | number, b: string | number) => 0 + 0;
         const arr = [1,
             Promise.resolve(2),
             'c',
             Promise.resolve(4),
             Promise.resolve(5)];
 
-        const r0 = F.juxtA([add])(arr); // $ExpectType Promise<(string | number)[]>
-        await r0; // $ExpectType (string | number)[]
+        const r0 = F.juxtA([add])(arr); // $ExpectType Promise<string[]>
+        await r0; // $ExpectType string[]
 
-        const r1 = F.juxtA([add], arr); // $ExpectType Promise<(string | number)[]>
-        await r1; // $ExpectType (string | number)[]
+        const r1 = F.juxtA([add], arr); // $ExpectType Promise<string[]>
+        await r1; // $ExpectType string[]
+
+        const r2 = F.juxtA([ret0], arr); // $ExpectType Promise<number[]>
+        await r2; // $ExpectType number[]
+
+        const r3 = F.juxtA([add, ret0], arr); // $ExpectType Promise<(string | number)[]>
+        await r3; // $ExpectType (string | number)[]
     });
 });
 
