@@ -46,7 +46,7 @@ describe('test juxtA', () => {
          assert.deepStrictEqual(a,[5,1,15]);
      });
 
-     it("t0", async () => {
+     it("string | number", async () => {
         const add = (a,b) => a.toString() + b.toString();
         const arr = [1,
             Promise.resolve(2),
@@ -54,8 +54,8 @@ describe('test juxtA', () => {
             Promise.resolve(4),
             Promise.resolve(5)];
 
-        const r0 = F.juxtA([add])(arr); // $ExpectType Promise<(string | number)[]>
-        console.log(await r0);
+        const r0 = F.juxtA([add])(arr); 
+        assert.deepStrictEqual(await r0,["12c45"]);
      });
 
 });
