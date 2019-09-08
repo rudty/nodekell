@@ -273,6 +273,22 @@ describe('juxtA', () => {
         const r3 = F.juxtA([add, ret0], arr); // $ExpectType Promise<(string | number)[]>
         await r3; // $ExpectType (string | number)[]
     });
+
+    it('number + string value', async () => {
+        const add = (a: number, b: number) => a + b;
+        const addstr = (a: number, b: number) => a.toString() + b.toString();
+        const arr = [1,
+            Promise.resolve(2),
+            3,
+            Promise.resolve(4),
+            Promise.resolve(5)];
+
+        const r0 = F.juxtA([add, addstr])(arr); // $ExpectType Promise<(string | number)[]>
+        await r0; // $ExpectType (string | number)[]
+
+        const r1 = F.juxtA([add, addstr], arr); // $ExpectType Promise<(string | number)[]>
+        await r1; // $ExpectType (string | number)[]
+    });
 });
 
 describe('juxtO', () => {
