@@ -108,6 +108,7 @@ export * from "./shuffle.js";
 export * from "./sleep.js";
 export * from "./some.js";
 export * from "./sort.js";
+export * from "./sort2.js";
 export * from "./sortBy.js";
 export * from "./split.js";
 export * from "./splitBy.js";
