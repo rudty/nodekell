@@ -15,9 +15,55 @@ const _insertionSort = async (fn, arr) => {
     return arr;
 };
 
+const _mergeSortInternal = (arr, buf, left, mid, right) => {
+    let i = left;
+    let j = mid + 1;
+    let k = left;
 
+    for (;i <= mid && j <= right; ++k) {
+        if (arr[i] <= arr[j]) {
+            buf[k] = arr[i];
+            ++i;
+        } else {
+            buf[k] = arr[j];
+            ++j; 
+        }
+    }
+
+    if (i > mid) {
+        for(;j <= right; ++j, ++k) {
+            buf[k] = arr[j];
+        }
+    } else {
+        for(;j <= mid; ++j, ++k) {
+            buf[k] = arr[j];
+        } 
+    }
+    console.log(arr.slice(left, right + 1), buf.slice(left, right + 1));
+    for (let l = left; l <= right; ++l) {
+        arr[l] = buf[l];
+    }
+    
+};
+
+const _mergeSort = (arr, buf, left, right) => {
+    if (left < right) {
+        const mid = Math.floor((left + right) / 2);
+        const d1 = _mergeSort(arr, buf, left, mid);
+        const d2 = _mergeSort(arr, buf, mid + 1, right);
+        const d3 = _mergeSortInternal(arr, buf, left, mid, right);
+
+        // await d1;
+        // await d2;
+        // await d3;
+    }
+    return arr;
+};
 const _sort = (fn, arr) => {
-    return _insertionSort(fn, arr);
+    console.log("before",arr)
+    const buf = [];
+    buf.length = arr.length;
+    return _mergeSort(arr, buf, 0, arr.length - 1);
 };
 
 export const sortBy2 = curry(async (fn, iter) => {

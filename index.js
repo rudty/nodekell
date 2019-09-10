@@ -2,6 +2,16 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
+const curry = (fn) => (...a) => {
+    if (fn.length <= a.length) {
+        return fn(...a);
+    } else {
+        return (...b) => curry(fn)(...a, ...b);
+    }
+};
+
+const add = curry((a, b) => a + b);
+
 const arrayListDefaultSize = 32;
 class _ArrayList {
     constructor(ArrayCtor) {
@@ -47,99 +57,6 @@ class _ArrayList {
         return this._data.slice(0, this._length);
     }
 }
-
-class _Queue {
-    constructor() {
-        this.head = this.tail = null;
-    }
-    add(v) {
-        const n = { value: v, next: null };
-        if (this.head) {
-            this.tail.next = n;
-        } else {
-            this.head = n;
-        }
-        this.tail = n;
-    }
-    _unsafePop() {
-        const f = this.head;
-        if (f !== this.tail) {
-            this.head = f.next;
-        } else {
-            this.head = this.tail = null;
-        }
-        f.next = null;
-        return f.value;
-    }
-    remove() {
-        if (this.head === null) {
-            throw new Error("no such element");
-        }
-        return this._unsafePop();
-    }
-    poll() {
-        if (this.head === null) {
-            return null;
-        }
-        return this._unsafePop();
-    }
-    element() {
-        const f = this.head;
-        if (f === null) {
-            throw new Error("no such element");
-        }
-        return f.value;
-    }
-    peek() {
-        const f = this.head;
-        if (f === null) {
-            return null;
-        }
-        return f.value;
-    }
-    isEmpty() {
-        return this.head === null;
-    }
-    clear() {
-        let it = this.head;
-        while (it) {
-            const n = it.next;
-            it.value = it.next = null;
-            it = n;
-        }
-        this.head = this.tail = null;
-    }
-    *[Symbol.iterator]() {
-        let it = this.head;
-        while (it) {
-            yield it.value;
-            it = it.next;
-        }
-    }
-    *removeIterator() {
-        let it = this.head;
-        while (it) {
-            const p = it;
-            yield p.value;
-            it = p.next;
-            p.value = null;
-            p.next = null;
-        }
-    }
-}
-
-const underBar = Object.freeze({});
-const _ = underBar;
-
-const curry = (fn) => (...a) => {
-    if (fn.length <= a.length) {
-        return fn(...a);
-    } else {
-        return (...b) => curry(fn)(...a, ...b);
-    }
-};
-
-const add = curry((a, b) => a + b);
 
 const asc = (a, b) => a > b ? 1 : a < b ? -1 : 0;
 
@@ -440,6 +357,9 @@ const _headTail = async (iter) => {
     return r;
 };
 
+const underBar = Object.freeze({});
+const _ = underBar;
+
 let _equals;
 const map_internal = (lhs, rhs) => {
     if (lhs.size !== rhs.size) {
@@ -608,6 +528,86 @@ const drop = curry(async function *(count, iter) {
     }
     yield* g;
 });
+
+class _Queue {
+    constructor() {
+        this.head = this.tail = null;
+    }
+    add(v) {
+        const n = { value: v, next: null };
+        if (this.head) {
+            this.tail.next = n;
+        } else {
+            this.head = n;
+        }
+        this.tail = n;
+    }
+    _unsafePop() {
+        const f = this.head;
+        if (f !== this.tail) {
+            this.head = f.next;
+        } else {
+            this.head = this.tail = null;
+        }
+        f.next = null;
+        return f.value;
+    }
+    remove() {
+        if (this.head === null) {
+            throw new Error("no such element");
+        }
+        return this._unsafePop();
+    }
+    poll() {
+        if (this.head === null) {
+            return null;
+        }
+        return this._unsafePop();
+    }
+    element() {
+        const f = this.head;
+        if (f === null) {
+            throw new Error("no such element");
+        }
+        return f.value;
+    }
+    peek() {
+        const f = this.head;
+        if (f === null) {
+            return null;
+        }
+        return f.value;
+    }
+    isEmpty() {
+        return this.head === null;
+    }
+    clear() {
+        let it = this.head;
+        while (it) {
+            const n = it.next;
+            it.value = it.next = null;
+            it = n;
+        }
+        this.head = this.tail = null;
+    }
+    *[Symbol.iterator]() {
+        let it = this.head;
+        while (it) {
+            yield it.value;
+            it = it.next;
+        }
+    }
+    *removeIterator() {
+        let it = this.head;
+        while (it) {
+            const p = it;
+            yield p.value;
+            it = p.next;
+            p.value = null;
+            p.next = null;
+        }
+    }
+}
 
 const addNext = async (q, g) => {
     const e = await g.next();
@@ -1455,19 +1455,47 @@ const orderBy = sortBy;
 const order = sortBy(identity);
 const sort = sortBy(identity);
 
-const _insertionSort = async (fn, arr) => {
-    for (let i = 1; i < arr.length; ++i) {
-        let elem = arr[i];
-        let j = i - 1;
-        for (;j >= 0 && (await fn(arr[j], elem) > 0); --j) {
-            arr[j + 1] = arr[j];
+const _mergeSortInternal = (arr, buf, left, mid, right) => {
+    let i = left;
+    let j = mid + 1;
+    let k = left;
+    for (;i <= mid && j <= right; ++k) {
+        if (arr[i] <= arr[j]) {
+            buf[k] = arr[i];
+            ++i;
+        } else {
+            buf[k] = arr[j];
+            ++j;
         }
-        arr[j + 1] = elem;
+    }
+    if (i > mid) {
+        for(;j <= right; ++j, ++k) {
+            buf[k] = arr[j];
+        }
+    } else {
+        for(;j <= mid; ++j, ++k) {
+            buf[k] = arr[j];
+        }
+    }
+    console.log(arr.slice(left, right + 1), buf.slice(left, right + 1));
+    for (let l = left; l <= right; ++l) {
+        arr[l] = buf[l];
+    }
+};
+const _mergeSort = (arr, buf, left, right) => {
+    if (left < right) {
+        const mid = Math.floor((left + right) / 2);
+        const d1 = _mergeSort(arr, buf, left, mid);
+        const d2 = _mergeSort(arr, buf, mid + 1, right);
+        const d3 = _mergeSortInternal(arr, buf, left, mid, right);
     }
     return arr;
 };
 const _sort = (fn, arr) => {
-    return _insertionSort(fn, arr);
+    console.log("before",arr);
+    const buf = [];
+    buf.length = arr.length;
+    return _mergeSort(arr, buf, 0, arr.length - 1);
 };
 const sortBy2 = curry(async (fn, iter) => {
     const arr = await _collectArray(iter);
