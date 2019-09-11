@@ -1488,8 +1488,8 @@ const _mergeSortInternal = async (fn, arr, buf, left, mid, right) => {
             buf[k] = arr[i];
         }
     }
-    for (let l = left; l <= right; ++l) {
-        arr[l] = buf[l];
+    for (k = left; k <= right; ++k) {
+        arr[k] = buf[k];
     }
 };
 const _mergeSort = async (fn, arr, buf, left, right) => {
