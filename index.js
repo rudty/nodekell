@@ -1455,12 +1455,12 @@ const orderBy = sortBy;
 const order = sortBy(identity);
 const sort = sortBy(identity);
 
-const _mergeSortInternal = (arr, buf, left, mid, right) => {
+const _mergeSortInternal = async (fn, arr, buf, left, mid, right) => {
     let i = left;
     let j = mid + 1;
     let k = left;
     for (;i <= mid && j <= right; ++k) {
-        if (arr[i] <= arr[j]) {
+        if ((await fn(arr[i], arr[j])) <= 0) {
             buf[k] = arr[i];
             ++i;
         } else {
@@ -1473,29 +1473,29 @@ const _mergeSortInternal = (arr, buf, left, mid, right) => {
             buf[k] = arr[j];
         }
     } else {
-        for(;j <= mid; ++j, ++k) {
-            buf[k] = arr[j];
+        for(;i <= mid; ++i, ++k) {
+            buf[k] = arr[i];
         }
     }
-    console.log(arr.slice(left, right + 1), buf.slice(left, right + 1));
     for (let l = left; l <= right; ++l) {
         arr[l] = buf[l];
     }
 };
-const _mergeSort = (arr, buf, left, right) => {
+const _mergeSort = async (fn, arr, buf, left, right) => {
     if (left < right) {
         const mid = Math.floor((left + right) / 2);
-        const d1 = _mergeSort(arr, buf, left, mid);
-        const d2 = _mergeSort(arr, buf, mid + 1, right);
-        const d3 = _mergeSortInternal(arr, buf, left, mid, right);
+        const d1 = _mergeSort(fn, arr, buf, left, mid);
+        const d2 = _mergeSort(fn, arr, buf, mid + 1, right);
+        await d1;
+        await d2;
+        await _mergeSortInternal(fn, arr, buf, left, mid, right);
     }
     return arr;
 };
 const _sort = (fn, arr) => {
-    console.log("before",arr);
     const buf = [];
     buf.length = arr.length;
-    return _mergeSort(arr, buf, 0, arr.length - 1);
+    return _mergeSort(fn, arr, buf, 0, arr.length - 1);
 };
 const sortBy2 = curry(async (fn, iter) => {
     const arr = await _collectArray(iter);

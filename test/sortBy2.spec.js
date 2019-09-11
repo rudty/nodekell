@@ -26,7 +26,7 @@ describe('test sort2', () => {
 
     it('random value sort', async () => {
         const a = await F.run(
-            F.repeat(3, () => F.random(9999)),
+            F.repeat(1000, () => F.random(9999)),
             F.collect);
 
         const r0 = Array.from(a).sort(asc);
