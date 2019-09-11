@@ -33,4 +33,12 @@ describe('test sort2', () => {
         const r1 = await F.sortBy2(asc, a);
         assert.deepStrictEqual(r0, r1);
     });
+
+    it('value sort', async () => {
+        const a = [5,3,10,9,1];
+
+        const r0 = Array.from(a).sort(asc);
+        const r1 = await F.sortBy2(asc, a);
+        assert.deepStrictEqual(r0, r1);
+    });
 });

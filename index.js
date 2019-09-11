@@ -1455,6 +1455,17 @@ const orderBy = sortBy;
 const order = sortBy(identity);
 const sort = sortBy(identity);
 
+const insertSortThresholdSize = 32;
+const _insertionSort = async (fn, arr, left, right) => {
+    for (let i = left + 1; i <= right; ++i) {
+        const elem = arr[i];
+        let j = i - 1;
+        for (;j >= left && (await fn(arr[j], elem) > 0); --j) {
+            arr[j + 1] = arr[j];
+        }
+        arr[j + 1] = elem;
+    }
+};
 const _mergeSortInternal = async (fn, arr, buf, left, mid, right) => {
     let i = left;
     let j = mid + 1;
@@ -1483,23 +1494,27 @@ const _mergeSortInternal = async (fn, arr, buf, left, mid, right) => {
 };
 const _mergeSort = async (fn, arr, buf, left, right) => {
     if (left < right) {
-        const mid = Math.floor((left + right) / 2);
-        const d1 = _mergeSort(fn, arr, buf, left, mid);
-        const d2 = _mergeSort(fn, arr, buf, mid + 1, right);
-        await d1;
-        await d2;
-        await _mergeSortInternal(fn, arr, buf, left, mid, right);
+        if (right - left < insertSortThresholdSize) {
+            await _insertionSort(fn, arr, left, right);
+        } else {
+            const mid = Math.floor((left + right) / 2);
+            const d1 = _mergeSort(fn, arr, buf, left, mid);
+            const d2 = _mergeSort(fn, arr, buf, mid + 1, right);
+            await d1;
+            await d2;
+            await _mergeSortInternal(fn, arr, buf, left, mid, right);
+        }
     }
-    return arr;
 };
-const _sort = (fn, arr) => {
+const _sort = async (fn, arr) => {
     const buf = [];
     buf.length = arr.length;
-    return _mergeSort(fn, arr, buf, 0, arr.length - 1);
+    await _mergeSort(fn, arr, buf, 0, arr.length - 1);
 };
 const sortBy2 = curry(async (fn, iter) => {
     const arr = await _collectArray(iter);
-    return _sort(fn, arr);
+    await _sort(fn, arr);
+    return arr;
 });
 
 const split = curry(async function *(fn, iter) {
