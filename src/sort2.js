@@ -3,6 +3,24 @@ import { _collectArray } from "./internal/collectArray";
 
 const insertSortThresholdSize = 32;
 
+export const _binarySearch = async (arr, elem, left, right) => {
+    if (right <= left) {
+        return (elem > arr[left]) ? (left + 1) : left;
+    }
+
+    const mid = Math.floor((left + right) / 2);
+
+    if (elem === arr[mid]) {
+        console.log(elem, "mid:"+mid);
+        return mid + 1;
+    }
+
+    if (elem > arr[mid]) {
+        return _binarySearch(arr, elem, mid + 1, right);
+    } else {
+        return _binarySearch(arr, elem, left, mid - 1);
+    }
+};
 const _insertionSort = async (fn, arr, left, right) => {
     for (let i = left + 1; i <= right; ++i) {
         const elem = arr[i];

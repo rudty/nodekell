@@ -41,4 +41,9 @@ describe('test sort2', () => {
         const r1 = await F.sortBy2(asc, a);
         assert.deepStrictEqual(r0, r1);
     });
+
+    it('binSearch', async () => {
+        const a = [9,10,11,12,13];
+        console.log(await F._binarySearch(a, 12, 0, 4));
+    });
 });
