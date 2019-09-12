@@ -44,6 +44,6 @@ describe('test sort2', () => {
 
     it('binSearch', async () => {
         const a = [9,10,11,12,13];
-        console.log(await F._binarySearch(a, 12, 0, 4));
+        console.log(await F._binarySearchIndex(a, 12, 0, 4));
     });
 });

@@ -1458,19 +1458,23 @@
     const sort = sortBy(identity);
 
     const insertSortThresholdSize = 32;
-    const _binarySearch = async (arr, elem, left, right) => {
-        if (right <= left) {
-            return (elem > arr[left]) ? (left + 1) : left;
-        }
-        const mid = Math.floor((left + right) / 2);
-        if (elem === arr[mid]) {
-            console.log(elem, "mid:"+mid);
-            return mid + 1;
-        }
-        if (elem > arr[mid]) {
-            return _binarySearch(arr, elem, mid + 1, right);
-        } else {
-            return _binarySearch(arr, elem, left, mid - 1);
+    const _binarySearchIndex = async (arr, elem, left, right) => {
+        for (; ;) {
+            if (right <= left) {
+                if (elem > arr[left]) {
+                    return left + 1;
+                }
+                return left;
+            }
+            const mid = Math.floor((left + right) / 2);
+            if (elem === arr[mid]) {
+                return mid;
+            }
+            if (elem > arr[mid]) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
         }
     };
     const _insertionSort = async (fn, arr, left, right) => {
@@ -1776,7 +1780,7 @@
     exports._ = _;
     exports._ArrayList = _ArrayList;
     exports._Queue = _Queue;
-    exports._binarySearch = _binarySearch;
+    exports._binarySearchIndex = _binarySearchIndex;
     exports.add = add;
     exports.asc = asc;
     exports.assign = assign;
