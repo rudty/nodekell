@@ -1457,20 +1457,20 @@
     const order = sortBy(identity);
     const sort = sortBy(identity);
 
-    const insertSortThresholdSize = 32;
-    const _binarySearchIndex = async (arr, elem, left, right) => {
+    const insertSortThresholdSize = 64;
+    const _binarySearchIndex = async (fn, arr, elem, left, right) => {
         for (; ;) {
             if (right <= left) {
-                if (elem > arr[left]) {
+                if (await fn(elem, arr[left]) > 0) {
                     return left + 1;
                 }
                 return left;
             }
             const mid = Math.floor((left + right) / 2);
-            if (elem === arr[mid]) {
+            const comp = await fn(elem, arr[mid]);
+            if (comp === 0) {
                 return mid;
-            }
-            if (elem > arr[mid]) {
+            } else if (comp > 0) {
                 left = mid + 1;
             } else {
                 right = mid - 1;
@@ -1480,11 +1480,11 @@
     const _insertionSort = async (fn, arr, left, right) => {
         for (let i = left + 1; i <= right; ++i) {
             const elem = arr[i];
-            let j = i - 1;
-            for (;j >= left && (await fn(arr[j], elem) > 0); --j) {
+            const insertIndex = await _binarySearchIndex(fn, arr, elem, left, i);
+            for (let j = i - 1; j >= insertIndex; --j) {
                 arr[j + 1] = arr[j];
             }
-            arr[j + 1] = elem;
+            arr[insertIndex] = elem;
         }
     };
     const _mergeSortInternal = async (fn, arr, buf, left, mid, right) => {
@@ -1781,6 +1781,7 @@
     exports._ArrayList = _ArrayList;
     exports._Queue = _Queue;
     exports._binarySearchIndex = _binarySearchIndex;
+    exports._insertionSort = _insertionSort;
     exports.add = add;
     exports.asc = asc;
     exports.assign = assign;

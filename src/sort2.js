@@ -1,39 +1,45 @@
 import { curry } from "./curry";
 import { _collectArray } from "./internal/collectArray";
 
-const insertSortThresholdSize = 32;
+const insertSortThresholdSize = 64;
 
-export const _binarySearchIndex = async (arr, elem, left, right) => {
+export const _binarySearchIndex = async (fn, arr, elem, left, right) => {
     for (; ;) {
         if (right <= left) {
-            if (elem > arr[left]) {
+            if (await fn(elem, arr[left]) > 0) {
                 return left + 1;
             }
             return left;
         }
 
         const mid = Math.floor((left + right) / 2);
+        const comp = await fn(elem, arr[mid]);
 
-        if (elem === arr[mid]) {
+        if (comp === 0) {
             return mid;
-        }
-
-        if (elem > arr[mid]) {
-            left = mid + 1;
-        } else {
+        } else if (comp > 0) {
+            left = mid + 1; 
+        } else { // if (comp < 0)
             right = mid - 1;
         }
     }
 };
 
-const _insertionSort = async (fn, arr, left, right) => {
+/**
+ * sort simple array (length < insertSortThresholdSize)
+ * @param {Function} fn compareator
+ * @param {ArrayLike} arr array
+ * @param {Number} left beginIndex (0)
+ * @param {Number} right endIndex (length - 1)
+ */
+export const _insertionSort = async (fn, arr, left, right) => {
     for (let i = left + 1; i <= right; ++i) {
         const elem = arr[i];
-        let j = i - 1;
-        for (;j >= left && (await fn(arr[j], elem) > 0); --j) {
-            arr[j + 1] = arr[j];
+        const insertIndex = await _binarySearchIndex(fn, arr, elem, left, i);
+        for (let j = i - 1; j >= insertIndex; --j) {
+            arr[j + 1] = arr[j]; 
         }
-        arr[j + 1] = elem;
+        arr[insertIndex] = elem;
     }
 };
 

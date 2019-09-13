@@ -34,8 +34,21 @@ describe('test sort2', () => {
         assert.deepStrictEqual(r0, r1);
     });
 
-    it('value sort', async () => {
-        const a = [5,3,10,9,1];
+    it('random value insert sort', async () => {
+        const a = await F.run(
+            F.repeat(1000, () => F.random(9999)),
+            F.collect);
+
+        const r0 = Array.from(a).sort(asc);
+        const r1 = await F.sortBy2(asc, a);
+        assert.deepStrictEqual(r0, r1);
+    });
+
+    it('reverse array sort', async () => {
+        const a = await F.run(
+            F.repeat(300, () => F.random(9999)),
+            F.reverse,
+            F.collect);
 
         const r0 = Array.from(a).sort(asc);
         const r1 = await F.sortBy2(asc, a);
@@ -43,7 +56,22 @@ describe('test sort2', () => {
     });
 
     it('binSearch', async () => {
-        const a = [9,10,11,12,13];
-        console.log(await F._binarySearchIndex(a, 12, 0, 4));
+        const a = [9,11,13,15,17];
+        const r0 = await F._binarySearchIndex(F.asc, a, 0, 0, 4);
+        assert.deepStrictEqual(r0, 0);
+        const r1 = await F._binarySearchIndex(F.asc, a, 8, 0, 4);
+        assert.deepStrictEqual(r1, 0);
+        const r2 = await F._binarySearchIndex(F.asc, a, 10, 0, 4);
+        assert.deepStrictEqual(r2, 1);
+        const r3 = await F._binarySearchIndex(F.asc, a, 12, 0, 4);
+        assert.deepStrictEqual(r3, 2);
+        const r4 = await F._binarySearchIndex(F.asc, a, 14, 0, 4);
+        assert.deepStrictEqual(r4, 3);
+        const r5 = await F._binarySearchIndex(F.asc, a, 16, 0, 4);
+        assert.deepStrictEqual(r5, 4);
+        const r6 = await F._binarySearchIndex(F.asc, a, 20, 0, 4);
+        assert.deepStrictEqual(r6, 5);
     });
+
+
 });
