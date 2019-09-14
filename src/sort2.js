@@ -90,14 +90,10 @@ const _mergeSort = async (fn, arr, buf, left, right) => {
     }
 };
 
-const _sort = async (fn, arr) => {
+export const sortBy2 = curry(async (fn, iter) => {
+    const arr = await _collectArray(iter);
     const buf = [];
     buf.length = arr.length;
     await _mergeSort(fn, arr, buf, 0, arr.length - 1);
-};
-
-export const sortBy2 = curry(async (fn, iter) => {
-    const arr = await _collectArray(iter);
-    await _sort(fn, arr);
     return arr;
 });
