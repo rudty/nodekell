@@ -2,16 +2,6 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const curry = (fn) => (...a) => {
-    if (fn.length <= a.length) {
-        return fn(...a);
-    } else {
-        return (...b) => curry(fn)(...a, ...b);
-    }
-};
-
-const add = curry((a, b) => a + b);
-
 const arrayListDefaultSize = 32;
 class _ArrayList {
     constructor(ArrayCtor) {
@@ -57,6 +47,99 @@ class _ArrayList {
         return this._data.slice(0, this._length);
     }
 }
+
+class _Queue {
+    constructor() {
+        this.head = this.tail = null;
+    }
+    add(v) {
+        const n = { value: v, next: null };
+        if (this.head) {
+            this.tail.next = n;
+        } else {
+            this.head = n;
+        }
+        this.tail = n;
+    }
+    _unsafePop() {
+        const f = this.head;
+        if (f !== this.tail) {
+            this.head = f.next;
+        } else {
+            this.head = this.tail = null;
+        }
+        f.next = null;
+        return f.value;
+    }
+    remove() {
+        if (this.head === null) {
+            throw new Error("no such element");
+        }
+        return this._unsafePop();
+    }
+    poll() {
+        if (this.head === null) {
+            return null;
+        }
+        return this._unsafePop();
+    }
+    element() {
+        const f = this.head;
+        if (f === null) {
+            throw new Error("no such element");
+        }
+        return f.value;
+    }
+    peek() {
+        const f = this.head;
+        if (f === null) {
+            return null;
+        }
+        return f.value;
+    }
+    isEmpty() {
+        return this.head === null;
+    }
+    clear() {
+        let it = this.head;
+        while (it) {
+            const n = it.next;
+            it.value = it.next = null;
+            it = n;
+        }
+        this.head = this.tail = null;
+    }
+    *[Symbol.iterator]() {
+        let it = this.head;
+        while (it) {
+            yield it.value;
+            it = it.next;
+        }
+    }
+    *removeIterator() {
+        let it = this.head;
+        while (it) {
+            const p = it;
+            yield p.value;
+            it = p.next;
+            p.value = null;
+            p.next = null;
+        }
+    }
+}
+
+const underBar = Object.freeze({});
+const _ = underBar;
+
+const curry = (fn) => (...a) => {
+    if (fn.length <= a.length) {
+        return fn(...a);
+    } else {
+        return (...b) => curry(fn)(...a, ...b);
+    }
+};
+
+const add = curry((a, b) => a + b);
 
 const asc = (a, b) => a > b ? 1 : a < b ? -1 : 0;
 
@@ -357,9 +440,6 @@ const _headTail = async (iter) => {
     return r;
 };
 
-const underBar = Object.freeze({});
-const _ = underBar;
-
 let _equals;
 const map_internal = (lhs, rhs) => {
     if (lhs.size !== rhs.size) {
@@ -528,86 +608,6 @@ const drop = curry(async function *(count, iter) {
     }
     yield* g;
 });
-
-class _Queue {
-    constructor() {
-        this.head = this.tail = null;
-    }
-    add(v) {
-        const n = { value: v, next: null };
-        if (this.head) {
-            this.tail.next = n;
-        } else {
-            this.head = n;
-        }
-        this.tail = n;
-    }
-    _unsafePop() {
-        const f = this.head;
-        if (f !== this.tail) {
-            this.head = f.next;
-        } else {
-            this.head = this.tail = null;
-        }
-        f.next = null;
-        return f.value;
-    }
-    remove() {
-        if (this.head === null) {
-            throw new Error("no such element");
-        }
-        return this._unsafePop();
-    }
-    poll() {
-        if (this.head === null) {
-            return null;
-        }
-        return this._unsafePop();
-    }
-    element() {
-        const f = this.head;
-        if (f === null) {
-            throw new Error("no such element");
-        }
-        return f.value;
-    }
-    peek() {
-        const f = this.head;
-        if (f === null) {
-            return null;
-        }
-        return f.value;
-    }
-    isEmpty() {
-        return this.head === null;
-    }
-    clear() {
-        let it = this.head;
-        while (it) {
-            const n = it.next;
-            it.value = it.next = null;
-            it = n;
-        }
-        this.head = this.tail = null;
-    }
-    *[Symbol.iterator]() {
-        let it = this.head;
-        while (it) {
-            yield it.value;
-            it = it.next;
-        }
-    }
-    *removeIterator() {
-        let it = this.head;
-        while (it) {
-            const p = it;
-            yield p.value;
-            it = p.next;
-            p.value = null;
-            p.next = null;
-        }
-    }
-}
 
 const addNext = async (q, g) => {
     const e = await g.next();
@@ -1533,6 +1533,8 @@ const sortBy2 = curry(async (fn, iter) => {
     return arr;
 });
 
+const sort2 = sortBy2(asc);
+
 const split = curry(async function *(fn, iter) {
     const g = seq(iter);
     let e;
@@ -1906,6 +1908,7 @@ exports.shuffle = shuffle;
 exports.sleep = sleep;
 exports.some = some;
 exports.sort = sort;
+exports.sort2 = sort2;
 exports.sortBy = sortBy;
 exports.sortBy2 = sortBy2;
 exports.split = split;
