@@ -159,9 +159,9 @@ console.log(v);//[3]
 *    [average](#average)
 *    [groupBy](#groupby)
 *    [orderBy](#orderby)
-*    [sortBy](#sortby)
+*    [sortBy](#sortby)      [**deprecated**] [**change**]
 *    [order](#order)
-*    [sort](#sort)
+*    [sort](#sort)          [**deprecated**] [**change**]
 *    [frequencies](#frequencies)
 *    [frequenciesBy](#frequenciesby)
 *    [associateBy](#associateby)
@@ -1847,6 +1847,11 @@ same as [sortBy](#sortby)
 
 
 ### sortBy
+**changed**
+
+**deprecated**
+
+This function will be replaced by another function.(sortBy2)
 ```javascript
 const a = [{ year: 1990 }, { year: 2005 }, { year: 1958 }];
 
@@ -1894,6 +1899,11 @@ same as [sort](#sort)
 
 
 ### sort
+**changed**
+
+**deprecated**
+
+This function will be replaced by another function.(sort)
 ```javascript
 const a = [3, 6, 2, 3, 7, 10, 23, 21, 22, 16, 13, 14, 17, 20];
 
