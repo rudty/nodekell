@@ -583,3 +583,19 @@ export function reFindAllSubmatch(re: RegExp): (str: string) => string[][];
  *          F.block);
  */
 export function block(...value: any[]): Promise<void>;
+
+/**
+ * Sort the values by the return value of the function.
+ * iterator or asyncIterator take all the values and sorts them.
+ *
+ * @example
+ *      const arr = [4, 3, 2, 5, 1];
+ *      const res = await F.sortBy2((a, b) => a - b, arr);
+ *      console.log(res); // print [1,2,3,4,5]
+ *
+ * @param comparator compareator function
+ * @param iter any iterable
+ * @returns new sorted array
+ */
+export function sortBy2<T>(comparator: (lhs: ExtractPromise<T>, rhs: ExtractPromise<T>) => number | Promise<number>, iter: Iter<T | Promise<T>>): Promise<ArrayLike<ExtractPromise<T>>>;
+export function sortBy2<T>(comparator: (lhs: T, rhs: T) => number | Promise<number>): (iter: Iter<T | Promise<T>>) => Promise<ArrayLike<ExtractPromise<T>>>;
