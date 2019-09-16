@@ -2,9 +2,12 @@ import { curry } from "./curry";
 import * as P from "./internal/parallel";
 import { _Queue } from "./Queue";
 import { _hasIterator } from "./internal/typeTraits";
+import { _fetchAndGetIterator } from "./internal/fetchIterator";
 
-const fetch_call_internal = (f, iter) =>
-    P.parallel_fetch_map_internal(iter, (e) => f.add(e()));
+const fetch_call_internal = (f, iter) => {
+    const fetchCount = P.parallel_get_fetch_count_internal() - 1;
+    return _fetchAndGetIterator(fetchCount, iter, (e) => f.add(e()));
+}
 
 const pcalls_internal = async function *(iter) {
 

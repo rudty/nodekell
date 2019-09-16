@@ -1098,6 +1098,7 @@ const parallel_set_fetch_count_internal = (count) => {
     }
     global_fetch_count = count || default_fetch_count;
 };
+const parallel_get_fetch_count_internal = () => global_fetch_count;
 const parallel_fetch_map_internal = async (iter, fn) => {
     const fetchCount = global_fetch_count - 1;
     return _fetchAndGetIterator(fetchCount, iter, fn);
@@ -1106,8 +1107,10 @@ const parallel_fetch_map_internal = async (iter, fn) => {
 const parallel_set_fetch_count = (count) =>
     parallel_set_fetch_count_internal(count);
 
-const fetch_call_internal = (f, iter) =>
-    parallel_fetch_map_internal(iter, (e) => f.add(e()));
+const fetch_call_internal = (f, iter) => {
+    const fetchCount = parallel_get_fetch_count_internal() - 1;
+    return _fetchAndGetIterator(fetchCount, iter, (e) => f.add(e()));
+};
 const pcalls_internal = async function *(iter) {
     const f = new _Queue();
     const g = await fetch_call_internal(f, iter);
