@@ -1166,8 +1166,10 @@
 
     const pipe = (f, ...fns) => (...args) => foldl((z, fn) => fn(z), f(...args), fns);
 
-    const fetch_map_internal = (f, fn, iter) =>
-        parallel_fetch_map_internal(iter, (e) => f.add(fn(e)));
+    const fetch_map_internal = (f, fn, iter) => {
+        const fetchCount = parallel_get_fetch_count_internal() - 1;
+        return _fetchAndGetIterator(fetchCount, iter, (e) => f.add(fn(e)));
+    };
     const pmap = curry(async function *(fn, iter) {
         const f = new _Queue();
         const g = await fetch_map_internal(f, fn, iter);
