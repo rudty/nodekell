@@ -1099,10 +1099,6 @@ const parallel_set_fetch_count_internal = (count) => {
     global_fetch_count = count || default_fetch_count;
 };
 const parallel_get_fetch_count_internal = () => global_fetch_count;
-const parallel_fetch_map_internal = async (iter, fn) => {
-    const fetchCount = global_fetch_count - 1;
-    return _fetchAndGetIterator(fetchCount, iter, fn);
-};
 
 const parallel_set_fetch_count = (count) =>
     parallel_set_fetch_count_internal(count);
@@ -1137,11 +1133,13 @@ const peek = curry(async function *(f, iter) {
     }
 });
 
-const fetch_filter_internal = (f, v, fn, iter) =>
-    parallel_fetch_map_internal(iter, (e) => {
+const fetch_filter_internal = (f, v, fn, iter) => {
+    const fetchCount = parallel_get_fetch_count_internal() - 1;
+    return _fetchAndGetIterator(fetchCount, iter, (e) => {
         f.add(fn(e));
         v.add(e);
     });
+};
 const pfilter = curry(async function *(fn, iter) {
     const f = new _Queue();
     const v = new _Queue();
