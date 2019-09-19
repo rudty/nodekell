@@ -12,9 +12,3 @@ export const parallel_set_fetch_count_internal = (count) => {
 };
 
 export const parallel_get_fetch_count_internal = () => global_fetch_count;
-
-export const parallel_fetch_map_internal = async (iter, fn) => {
-    // fetch (n - 1) here
-    const fetchCount = global_fetch_count - 1;
-    return _fetchAndGetIterator(fetchCount, iter, fn);
-};
