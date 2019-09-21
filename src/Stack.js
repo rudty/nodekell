@@ -22,4 +22,20 @@ export class _Stack {
         this.top = this.top.next;
         return v;
     }
+
+    isEmpty() {
+        return this.top === null;
+    }
+
+    *removeIterator() {
+        let it = this.top;
+        while (it) {
+            const p = it;
+            yield p.value;
+            it = p.next;
+
+            p.value = null;
+            p.next = null;
+        }
+    }
 };
