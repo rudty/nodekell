@@ -1076,6 +1076,36 @@
 
     const notNil = (a) => !isNil(a);
 
+    const orderBy = curry(async function *(f, order, iter) {
+        if (order.constructor === "".constructor) {
+            switch (order.trim().toLowerCase()) {
+                case "asc":
+                    order = asc;
+                    break;
+                case "desc":
+                    order = desc;
+                    break;
+                default:
+                    throw new Error("please set order parameter to ASC or DESC or compare function");
+            }
+        }
+        const t = [];
+        const m = new Map();
+        for await (const e of iter) {
+            t.push(e);
+            if (!m.has(e)) {
+                m.set(e, await f(e));
+            }
+        }
+        yield* t.sort((a, b) => {
+            const ma = m.get(a);
+            const mb = m.get(b);
+            return order(ma, mb);
+        });
+    });
+
+    const order = orderBy(identity);
+
     const otherwise = () => true;
 
     const default_fetch_count = 100;
@@ -1428,38 +1458,6 @@
         return false;
     });
 
-    const sortBy = curry(async function *(f, order, iter) {
-        if (order.constructor === "".constructor) {
-            switch (order.trim().toLowerCase()) {
-                case "asc":
-                    order = asc;
-                    break;
-                case "desc":
-                    order = desc;
-                    break;
-                default:
-                    throw new Error("please set order parameter to ASC or DESC or compare function");
-            }
-        }
-        const t = [];
-        const m = new Map();
-        for await (const e of iter) {
-            t.push(e);
-            if (!m.has(e)) {
-                m.set(e, await f(e));
-            }
-        }
-        yield* t.sort((a, b) => {
-            const ma = m.get(a);
-            const mb = m.get(b);
-            return order(ma, mb);
-        });
-    });
-    const orderBy = sortBy;
-
-    const order = sortBy(identity);
-    const sort = sortBy(identity);
-
     const insertSortThresholdSize = 64;
     const _binarySearchIndex = async (fn, arr, elem, left, right) => {
         for (; ;) {
@@ -1530,7 +1528,7 @@
             }
         }
     };
-    const sortBy2 = curry(async (fn, iter) => {
+    const sortBy = curry(async (fn, iter) => {
         const arr = await _collectArray(iter);
         const buf = [];
         buf.length = arr.length;
@@ -1538,7 +1536,7 @@
         return arr;
     });
 
-    const sort2 = sortBy2(asc);
+    const sort = sortBy(asc);
 
     const split = curry(async function *(fn, iter) {
         const g = seq(iter);
@@ -1913,9 +1911,7 @@
     exports.sleep = sleep;
     exports.some = some;
     exports.sort = sort;
-    exports.sort2 = sort2;
     exports.sortBy = sortBy;
-    exports.sortBy2 = sortBy2;
     exports.split = split;
     exports.splitBy = splitBy;
     exports.sub = sub;

@@ -78,7 +78,7 @@ describe('test getOrElse', () => {
 
     it('sort and get', async () => {
         const a = [{ value: 1 }, { value: 3 }, { value: 0 }, { hello: "world" }];
-        const r = await F.collect(F.sortBy(F.getOrElse("value", 2), F.asc, a));
+        const r = await F.collect(F.orderBy(F.getOrElse("value", 2), F.asc, a));
         assert.deepStrictEqual(r, [{ value: 0 }, { value: 1 }, { hello: "world" }, { value: 3 }]);
     });
 });

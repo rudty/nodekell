@@ -1,5 +1,10 @@
-import { identity } from "./identity";
 import { sortBy } from "./sortBy";
+import { asc } from "./asc";
 
-export const order = sortBy(identity);
-export const sort = sortBy(identity);
+/**
+ * Sort the values in ascending order.
+ * iterator or asyncIterator take all the values and sorts them.
+ * @param {Iterable | AsyncIterable} iter any iterable
+ * @returns {ArrayLike} new sorted array
+ */
+export const sort = sortBy(asc);

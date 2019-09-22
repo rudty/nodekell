@@ -1843,15 +1843,6 @@ console.log(r.get("phone"));
 
 
 ### orderBy
-same as [sortBy](#sortby)
-
-
-### sortBy
-**changed**
-
-**deprecated**
-
-This function will be replaced by another function.(sortBy2)
 ```javascript
 const a = [{ year: 1990 }, { year: 2005 }, { year: 1958 }];
 
@@ -1895,15 +1886,6 @@ await F.collect(sortedByDESC).then(e => [e.join('')]);
 
 
 ### order
-same as [sort](#sort)
-
-
-### sort
-**changed**
-
-**deprecated**
-
-This function will be replaced by another function.(sort)
 ```javascript
 const a = [3, 6, 2, 3, 7, 10, 23, 21, 22, 16, 13, 14, 17, 20];
 
@@ -1926,6 +1908,30 @@ await F.collect(sortedByASC).then(e => [e.join('')]);
 // ['  BCHaekklloorrrssuy']
 await F.collect(sortedByDESC).then(e => [e.join('')]);
 // ['yussrrroollkkeaHCB  ']
+```
+
+
+### sortBy
+sorts an array
+
+Returns a new sorted array.
+
+```javascript
+const arr = [4, 3, 2, 5, 1];
+const res = await F.sortBy((a, b) => a - b, arr);
+console.log(res); // print [1,2,3,4,5]
+```
+
+
+### sort
+sorts an array
+
+Returns a new sorted array.
+
+```javascript
+const arr = [4, 3, 2, 5, 1];
+const res = await F.sortBy(arr);
+console.log(res); // print [1,2,3,4,5]
 ```
 
 
