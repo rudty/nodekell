@@ -590,12 +590,12 @@ export function block(...value: any[]): Promise<void>;
  *
  * @example
  *      const arr = [4, 3, 2, 5, 1];
- *      const res = await F.sortBy2((a, b) => a - b, arr);
+ *      const res = await F.sortBy((a, b) => a - b, arr);
  *      console.log(res); // print [1,2,3,4,5]
  *
  * @param comparator compareator function
  * @param iter any iterable
  * @returns new sorted array
  */
-export function sortBy2<T>(comparator: (lhs: ExtractPromise<T>, rhs: ExtractPromise<T>) => number | Promise<number>, iter: Iter<T | Promise<T>>): Promise<ArrayLike<ExtractPromise<T>>>;
-export function sortBy2<T>(comparator: (lhs: T, rhs: T) => number | Promise<number>): (iter: Iter<T | Promise<T>>) => Promise<ArrayLike<ExtractPromise<T>>>;
+export function sortBy<T>(comparator: (lhs: ExtractPromise<T>, rhs: ExtractPromise<T>) => number | Promise<number>, iter: Iter<T | Promise<T>>): Promise<ArrayLike<ExtractPromise<T>>>;
+export function sortBy<T>(comparator: (lhs: T, rhs: T) => number | Promise<number>): (iter: Iter<T | Promise<T>>) => Promise<ArrayLike<ExtractPromise<T>>>;

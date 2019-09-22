@@ -1529,56 +1529,56 @@ describe('reFindAllSubmatch', () => {
     });
 });
 
-describe('sortBy2', () => {
+describe('sortBy', () => {
     it('from Normal Value', async () => {
         const a = [10, 5, 7, 1, 4, 3];
 
-        const r0 = await F.sortBy2<number>(F.asc)(a); // $ExpectType ArrayLike<number>
-        const r1 = await F.sortBy2(F.asc, a); // $ExpectType ArrayLike<number>
-        const r2 = await F.sortBy2<number>(F.desc)(a); // $ExpectType ArrayLike<number>
-        const r3 = await F.sortBy2(F.asc, a); // $ExpectType ArrayLike<number>
-        const r4 = await F.sortBy2((a: number, b: number) => a - b)(a); // $ExpectType ArrayLike<number>
+        const r0 = await F.sortBy<number>(F.asc)(a); // $ExpectType ArrayLike<number>
+        const r1 = await F.sortBy(F.asc, a); // $ExpectType ArrayLike<number>
+        const r2 = await F.sortBy<number>(F.desc)(a); // $ExpectType ArrayLike<number>
+        const r3 = await F.sortBy(F.asc, a); // $ExpectType ArrayLike<number>
+        const r4 = await F.sortBy((a: number, b: number) => a - b)(a); // $ExpectType ArrayLike<number>
     });
 
     it('from Promise Value', async () => {
         const a = [Promise.resolve(10), 5, 7, Promise.resolve(1), 4, 3];
 
-        const r0 = F.sortBy2<number>(F.asc)(a); // $ExpectType Promise<ArrayLike<number>>
-        const r1 = F.sortBy2(F.asc, a); // $ExpectType Promise<ArrayLike<number>>
-        const r2 = F.sortBy2<number>(F.desc)(a); // $ExpectType Promise<ArrayLike<number>>
-        const r3 = F.sortBy2(F.desc, a); // $ExpectType Promise<ArrayLike<number>>
+        const r0 = F.sortBy<number>(F.asc)(a); // $ExpectType Promise<ArrayLike<number>>
+        const r1 = F.sortBy(F.asc, a); // $ExpectType Promise<ArrayLike<number>>
+        const r2 = F.sortBy<number>(F.desc)(a); // $ExpectType Promise<ArrayLike<number>>
+        const r3 = F.sortBy(F.desc, a); // $ExpectType Promise<ArrayLike<number>>
     });
 
     it('from Object Array', async () => {
         const a = [{ releaseDate: 1990, language: 'haskell' }, { releaseDate: 2005, language: 'F#' }, { releaseDate: 1958, language: 'lisp' }];
-        const r0 = F.sortBy2<{ releaseDate: number; language: string; }>((a, b) => a.releaseDate - b.releaseDate)(a); // $ExpectType Promise<ArrayLike<{ releaseDate: number; language: string; }>>
-        const r1 = F.sortBy2<{ releaseDate: number; language: string; }>((a, b) => a.releaseDate - b.releaseDate)(a); // $ExpectType Promise<ArrayLike<{ releaseDate: number; language: string; }>>
-        const r2 = F.sortBy2<{ releaseDate: number; language: string; }>((a, b) => a.releaseDate - b.releaseDate)(a); // $ExpectType Promise<ArrayLike<{ releaseDate: number; language: string; }>>
-        const r3 = F.sortBy2((a, b) => a.releaseDate - b.releaseDate, a); // $ExpectType Promise<ArrayLike<{ releaseDate: number; language: string; }>>
+        const r0 = F.sortBy<{ releaseDate: number; language: string; }>((a, b) => a.releaseDate - b.releaseDate)(a); // $ExpectType Promise<ArrayLike<{ releaseDate: number; language: string; }>>
+        const r1 = F.sortBy<{ releaseDate: number; language: string; }>((a, b) => a.releaseDate - b.releaseDate)(a); // $ExpectType Promise<ArrayLike<{ releaseDate: number; language: string; }>>
+        const r2 = F.sortBy<{ releaseDate: number; language: string; }>((a, b) => a.releaseDate - b.releaseDate)(a); // $ExpectType Promise<ArrayLike<{ releaseDate: number; language: string; }>>
+        const r3 = F.sortBy((a, b) => a.releaseDate - b.releaseDate, a); // $ExpectType Promise<ArrayLike<{ releaseDate: number; language: string; }>>
     });
 
     it('from Promise Object Array', async () => {
         const a = [Promise.resolve({ releaseDate: 1990, language: 'haskell' }), { releaseDate: 2005, language: 'F#'}, { releaseDate: 1958, language: 'lisp'}];
 
-        const r0 = F.sortBy2<{ releaseDate: number; language: string; }>((a, b) => a.releaseDate - b.releaseDate)(a); // $ExpectType Promise<ArrayLike<{ releaseDate: number; language: string; }>>
-        const r1 = F.sortBy2<{ releaseDate: number; language: string; }>((a, b) => a.releaseDate - b.releaseDate)(a); // $ExpectType Promise<ArrayLike<{ releaseDate: number; language: string; }>>
-        const r2 = F.sortBy2<{ releaseDate: number; language: string; }>((a, b) => a.releaseDate - b.releaseDate)(a); // $ExpectType Promise<ArrayLike<{ releaseDate: number; language: string; }>>
-        const r3 = F.sortBy2((a, b) => a.releaseDate - b.releaseDate, a); // $ExpectType Promise<ArrayLike<{ releaseDate: number; language: string; }>>
+        const r0 = F.sortBy<{ releaseDate: number; language: string; }>((a, b) => a.releaseDate - b.releaseDate)(a); // $ExpectType Promise<ArrayLike<{ releaseDate: number; language: string; }>>
+        const r1 = F.sortBy<{ releaseDate: number; language: string; }>((a, b) => a.releaseDate - b.releaseDate)(a); // $ExpectType Promise<ArrayLike<{ releaseDate: number; language: string; }>>
+        const r2 = F.sortBy<{ releaseDate: number; language: string; }>((a, b) => a.releaseDate - b.releaseDate)(a); // $ExpectType Promise<ArrayLike<{ releaseDate: number; language: string; }>>
+        const r3 = F.sortBy((a, b) => a.releaseDate - b.releaseDate, a); // $ExpectType Promise<ArrayLike<{ releaseDate: number; language: string; }>>
     });
 
     it('from String', async () => {
         const a = 'The quick brown fox jumps over the lazy dog';
 
-        const r0 = F.sortBy2<string>(F.asc)(a); // $ExpectType Promise<ArrayLike<string>>
-        const r1 = F.sortBy2<string>(F.asc, a); // $ExpectType Promise<ArrayLike<string>>
-        const r2 = F.sortBy2<string>(F.desc)(a); // $ExpectType Promise<ArrayLike<string>>
-        const r3 = F.sortBy2(F.desc, a); // $ExpectType Promise<ArrayLike<string>>
+        const r0 = F.sortBy<string>(F.asc)(a); // $ExpectType Promise<ArrayLike<string>>
+        const r1 = F.sortBy<string>(F.asc, a); // $ExpectType Promise<ArrayLike<string>>
+        const r2 = F.sortBy<string>(F.desc)(a); // $ExpectType Promise<ArrayLike<string>>
+        const r3 = F.sortBy(F.desc, a); // $ExpectType Promise<ArrayLike<string>>
     });
 
     it('with run', async () => {
         const a = [Promise.resolve(10), 5, 7, Promise.resolve(1), 4, 3];
         const f = (a: number, b: number) => a > b ? 1 : a < b ? -1 : 0;
 
-        const r0 = await F.run(a, F.sortBy2(f)); // $ExpectType ArrayLike<number>
+        const r0 = await F.run(a, F.sortBy(f)); // $ExpectType ArrayLike<number>
     });
 });

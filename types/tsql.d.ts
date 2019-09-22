@@ -73,19 +73,6 @@ export function asc<T>(a: T, b: T): 1 | 0 | -1;
 export function desc<T>(a: T, b: T): 1 | 0 | -1;
 
 /**
- * https://github.com/rudty/nodekell#sortby
- *
- * @param f
- * @param order
- * @param iter
- */
-export function sortBy<T, S = T>(f: (e: T) => (S | Promise<S>), order: OrderType | CompareFn<S>, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
-
-export function sortBy<T, S = T>(f: (e: T) => (S | Promise<S>), order: OrderType | CompareFn<S>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
-
-export function sortBy<T, S = T>(f: (e: T) => (S | Promise<S>)): CurriedFunction2<OrderType | CompareFn<S>, Iter<T | Promise<T>>, AsyncIterableIterator<T>>;
-
-/**
  * https://github.com/rudty/nodekell#orderby
  *
  * @param f
@@ -97,22 +84,6 @@ export function orderBy<T, S = T>(f: (e: T) => (S | Promise<S>), order: OrderTyp
 export function orderBy<T, S = T>(f: (e: T) => (S | Promise<S>), order: OrderType | CompareFn<S>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
 
 export function orderBy<T, S = T>(f: (e: T) => (S | Promise<S>)): CurriedFunction2<OrderType | CompareFn<S>, Iter<T | Promise<T>>, AsyncIterableIterator<T>>;
-
-/**
- * https://github.com/rudty/nodekell#sort
- *
- * ```ts
- * F.sort(F.asc, iter);
- * // same as
- * F.sortBy(e => e, F.asc, iter);
- * ```
- *
- * @param order
- * @param iter
- */
-export function sort<T>(order: OrderType | CompareFn<EP<T>>, iter: Iter<T>): AsyncIterableIterator<EP<T>>;
-
-export function sort<T>(order: OrderType | CompareFn<EP<T>>): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
 
 /**
  * https://github.com/rudty/nodekell#order

@@ -167,7 +167,7 @@ describe('get', () => {
 
     it('get & sort array', async () => {
         const a = [{ value: 1 }, { value: 3 }, { value: 0 }];
-        const r0 = F.sortBy(F.get('value'), F.asc, a); // $ExpectType AsyncIterableIterator<{ value: number; }>
+        const r0 = F.orderBy(F.get('value'), F.asc, a); // $ExpectType AsyncIterableIterator<{ value: number; }>
     });
 });
 
@@ -204,7 +204,7 @@ describe('prop', () => {
     it('with sortBy', () => {
         const a = ['hello world', 'a', 'ab', 'abcde', 'abcd', 'abc'];
 
-        const r0 = F.sortBy(F.prop('length'), F.asc, a); // $ExpectType AsyncIterableIterator<string>
+        const r0 = F.orderBy(F.prop('length'), F.asc, a); // $ExpectType AsyncIterableIterator<string>
     });
 });
 
@@ -281,7 +281,7 @@ describe('getOrElse', () => {
 
     it('get & sort array', async () => {
         const a = [{ value: 1 }, { value: 3 }, { value: 0 }];
-        const r0 = F.sortBy(F.getOrElse('value', 0), F.asc, a); // $ExpectType AsyncIterableIterator<{ value: number; }>
+        const r0 = F.orderBy(F.getOrElse('value', 0), F.asc, a); // $ExpectType AsyncIterableIterator<{ value: number; }>
     });
 });
 
@@ -296,6 +296,6 @@ describe('propOrElse', () => {
     it('with sortBy', () => {
         const a = ['hello world', 'a', 'ab', 'abcde', 'abcd', 'abc'];
 
-        const r0 = F.sortBy(F.propOrElse('length', 0), F.asc, a); // $ExpectType AsyncIterableIterator<string>
+        const r0 = F.orderBy(F.propOrElse('length', 0), F.asc, a); // $ExpectType AsyncIterableIterator<string>
     });
 });
