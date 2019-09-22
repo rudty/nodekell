@@ -1078,19 +1078,6 @@
 
     const otherwise = () => true;
 
-    const _fetchAndGetIterator = async (fetchCount, iter, fn) => {
-        fetchCount = Math.max(fetchCount, 0);
-        const g = seq(iter);
-        for (let i = fetchCount; i > 0; --i) {
-            const e = await g.next();
-            if (e.done) {
-                break;
-            }
-            fn(e.value);
-        }
-        return g;
-    };
-
     const default_fetch_count = 100;
     let global_fetch_count = default_fetch_count;
     const parallel_set_fetch_count_internal = (count) => {
@@ -1104,6 +1091,19 @@
 
     const parallel_set_fetch_count = (count) =>
         parallel_set_fetch_count_internal(count);
+
+    const _fetchAndGetIterator = async (fetchCount, iter, fn) => {
+        fetchCount = Math.max(fetchCount, 0);
+        const g = seq(iter);
+        for (let i = fetchCount; i > 0; --i) {
+            const e = await g.next();
+            if (e.done) {
+                break;
+            }
+            fn(e.value);
+        }
+        return g;
+    };
 
     const fetch_call_internal = (f, iter) => {
         const fetchCount = parallel_get_fetch_count_internal() - 1;

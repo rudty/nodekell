@@ -1,5 +1,3 @@
-import { _fetchAndGetIterator } from "./fetchIterator";
-
 const default_fetch_count = 100;
 let global_fetch_count = default_fetch_count;
 
