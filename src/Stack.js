@@ -14,19 +14,61 @@ export class _Stack {
         this.top = { value: v, next: t };
     }
 
+    _unsafePop() {
+        const v = this.top.value;
+        this.top = this.top.next;
+        return v; 
+    }
+
+    /**
+     * remove top and return
+     * return top or throw Error if empty
+     */
     pop() {
         if (this.top === null) {
             throw new Error("no such element");
         }
-        const v = this.top.value;
-        this.top = this.top.next;
-        return v;
+        return this._unsafePop()
     }
 
+    /**
+     * not remove
+     * look top elements
+     */
+    peek() {
+        const f = this.top;
+        if (f === null) {
+            return null;
+        }
+        return f.value;
+    }
+
+    /**
+     * if stack is empty
+     */
     isEmpty() {
         return this.top === null;
     }
 
+    *[Symbol.iterator]() {
+        let it = this.top;
+        while (it) {
+            yield it.value;
+            it = it.next;
+        }
+    }
+
+    /**
+     * yields the value from head and then deletes the value
+     * After the iterator ends, the size of the Stack is zero
+     * 
+     * same as
+     * while (false === q.isEmpty()) {
+     *     yield q.pop();
+     * }
+     * yield value and assign next to null
+     * help gc
+     */
     *removeIterator() {
         let it = this.top;
         while (it) {
