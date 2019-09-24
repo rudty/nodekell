@@ -50,6 +50,22 @@ export class _Stack {
         return this.top === null;
     }
 
+    /**
+     * clear all elements
+     */
+    clear() {
+        // remove chain
+        // help gc
+        let it = this.top;
+        while (it) {
+            it.value = null;
+            const n = it.next;
+            it.next = null;
+            it = n;
+        }
+        this.top = null;
+    }
+
     *[Symbol.iterator]() {
         let it = this.top;
         while (it) {
