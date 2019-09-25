@@ -1,5 +1,7 @@
 import { curry } from "./curry";
 import { _collectArray } from "./internal/collectArray";
+import { _Stack } from "./Stack";
+import { _Queue } from "./Queue";
 
 const insertSortThresholdSize = 64;
 
@@ -74,19 +76,24 @@ const _mergeSortInternal = async (fn, arr, buf, left, mid, right) => {
 };
 
 const _mergeSort = async (fn, arr, buf, left, right) => {
-    if (left < right) {
-        if (right - left < insertSortThresholdSize) {
-            await _insertionSort(fn, arr, left, right);
-        } else { 
-            const mid = Math.floor((left + right) / 2);
-            const d1 = _mergeSort(fn, arr, buf, left, mid);
-            const d2 = _mergeSort(fn, arr, buf, mid + 1, right);
+    // if (left < right) {
+    //     if (right - left < insertSortThresholdSize) {
+    //         await _insertionSort(fn, arr, left, right);
+    //     } else { 
+
+    //         const mid = Math.floor((left + right) / 2);
+    //         const d1 = _mergeSort(fn, arr, buf, left, mid);
+    //         const d2 = _mergeSort(fn, arr, buf, mid + 1, right);
             
-            await d1;
-            await d2;
+    //         await d1;
+    //         await d2;
             
-            await _mergeSortInternal(fn, arr, buf, left, mid, right);
-        }
+    //         await _mergeSortInternal(fn, arr, buf, left, mid, right);
+    //     }
+    // }
+    const q = new _Queue();
+    for (let i = left; i <= arr.length; i += insertSortThresholdSize) {
+        q.add([i, Math.max(i, i + insertSortThresholdSize - 1)]);
     }
 };
 

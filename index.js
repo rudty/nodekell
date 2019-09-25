@@ -1544,44 +1544,10 @@ const _insertionSort = async (fn, arr, left, right) => {
         arr[insertIndex] = elem;
     }
 };
-const _mergeSortInternal = async (fn, arr, buf, left, mid, right) => {
-    let i = left;
-    let j = mid + 1;
-    let k = left;
-    for (;i <= mid && j <= right; ++k) {
-        if ((await fn(arr[i], arr[j])) <= 0) {
-            buf[k] = arr[i];
-            ++i;
-        } else {
-            buf[k] = arr[j];
-            ++j;
-        }
-    }
-    if (i > mid) {
-        for(;j <= right; ++j, ++k) {
-            buf[k] = arr[j];
-        }
-    } else {
-        for(;i <= mid; ++i, ++k) {
-            buf[k] = arr[i];
-        }
-    }
-    for (k = left; k <= right; ++k) {
-        arr[k] = buf[k];
-    }
-};
 const _mergeSort = async (fn, arr, buf, left, right) => {
-    if (left < right) {
-        if (right - left < insertSortThresholdSize) {
-            await _insertionSort(fn, arr, left, right);
-        } else {
-            const mid = Math.floor((left + right) / 2);
-            const d1 = _mergeSort(fn, arr, buf, left, mid);
-            const d2 = _mergeSort(fn, arr, buf, mid + 1, right);
-            await d1;
-            await d2;
-            await _mergeSortInternal(fn, arr, buf, left, mid, right);
-        }
+    const q = new _Queue();
+    for (let i = left; i <= arr.length; i += insertSortThresholdSize) {
+        q.add([i, Math.max(i, i + insertSortThresholdSize - 1)]);
     }
 };
 const sortBy = curry(async (fn, iter) => {
