@@ -128,6 +128,64 @@ class _Queue {
     }
 }
 
+class _Stack {
+    constructor() {
+        this.top = null;
+    }
+    push(v) {
+        const t = this.top;
+        this.top = { value: v, next: t };
+    }
+    _unsafePop() {
+        const v = this.top.value;
+        this.top = this.top.next;
+        return v;
+    }
+    pop() {
+        if (this.top === null) {
+            throw new Error("no such element");
+        }
+        return this._unsafePop()
+    }
+    peek() {
+        const f = this.top;
+        if (f === null) {
+            return null;
+        }
+        return f.value;
+    }
+    isEmpty() {
+        return this.top === null;
+    }
+    clear() {
+        let it = this.top;
+        while (it) {
+            it.value = null;
+            const n = it.next;
+            it.next = null;
+            it = n;
+        }
+        this.top = null;
+    }
+    *[Symbol.iterator]() {
+        let it = this.top;
+        while (it) {
+            yield it.value;
+            it = it.next;
+        }
+    }
+    *removeIterator() {
+        let it = this.top;
+        while (it) {
+            const p = it;
+            yield p.value;
+            it = p.next;
+            p.value = null;
+            p.next = null;
+        }
+    }
+}
+
 const underBar = Object.freeze({});
 const _ = underBar;
 
@@ -1778,6 +1836,7 @@ const zip3 = curry((iter1, iter2, iter3) => zipWith3((elem1, elem2, elem3) => [e
 exports._ = _;
 exports._ArrayList = _ArrayList;
 exports._Queue = _Queue;
+exports._Stack = _Stack;
 exports._binarySearchIndex = _binarySearchIndex;
 exports._insertionSort = _insertionSort;
 exports.add = add;
