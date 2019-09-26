@@ -91,10 +91,36 @@ const _mergeSort = async (fn, arr, buf, left, right) => {
     //         await _mergeSortInternal(fn, arr, buf, left, mid, right);
     //     }
     // }
-    const q = new _Queue();
-    for (let i = left; i <= arr.length; i += insertSortThresholdSize) {
-        q.add([i, Math.max(i, i + insertSortThresholdSize - 1)]);
+    if (left < right) {
+        if (right - left < insertSortThresholdSize) {
+            await _insertionSort(fn, arr, left, right);
+        } else { 
+
+            const mid = Math.floor((left + right) / 2);
+            const d1 = _mergeSort(fn, arr, buf, left, mid);
+            const d2 = _mergeSort(fn, arr, buf, mid + 1, right);
+            
+            await d1;
+            await d2;
+            
+            await _mergeSortInternal(fn, arr, buf, left, mid, right);
+        }
+    } 
+
+    const s = new _Stack();
+    s.push([left, right]);
+
+    while (!s.isEmpty()) {
+        const [l, r] = s.pop();
+        const mid = Math.floor((l + r) / 2);
+        if (r - l < insertSortThresholdSize) {
+            await _insertionSort(fn, arr, l, r);
+        } else {
+            s.push([l, mid]);
+            s.push([mid + 1, l]);
+        }
     }
+
 };
 
 /**
