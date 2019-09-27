@@ -5,6 +5,11 @@ const assert = require("assert");
 describe('test sort2', () => {
     const asc = (a, b) => a - b;
 
+    it('simple 54321', async () => {
+        const r0 = await F.sortBy(asc, [5,4,3,2,1]);
+        assert.deepStrictEqual(r0, [1,2,3,4,5]);
+    });
+
     it('number array', async () => {
         const a = [4, 3, 2, 5, 2, 7, 3, 4, 6, 8, 0, 1, 6, 4, 3, 7, 21, 12, 13, 19, 32, 39, 31, 17, 19, 18];
 
@@ -82,6 +87,5 @@ describe('test sort2', () => {
         const r6 = await F._binarySearchIndex(F.asc, a, 20, 0, 4);
         assert.deepStrictEqual(r6, 5);
     });
-
 
 });

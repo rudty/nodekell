@@ -32,6 +32,17 @@ export class _Stack {
     }
 
     /**
+    * remove top and return
+    * return top or return null if empty
+    */
+    poll() {
+        if (this.top === null) {
+            return null;
+        }
+        return this._unsafePop()
+    }
+
+    /**
      * not remove
      * look top elements
      */

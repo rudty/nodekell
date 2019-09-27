@@ -147,6 +147,12 @@ class _Stack {
         }
         return this._unsafePop()
     }
+    poll() {
+        if (this.top === null) {
+            return null;
+        }
+        return this._unsafePop()
+    }
     peek() {
         const f = this.top;
         if (f === null) {
@@ -1514,7 +1520,7 @@ const some = curry(async (f, iter) => {
     return false;
 });
 
-const insertSortThresholdSize = 64;
+const insertSortThresholdSize = 1;
 const _binarySearchIndex = async (fn, arr, elem, left, right) => {
     for (; ;) {
         if (right <= left) {
@@ -1581,18 +1587,6 @@ const _mergeSort = async (fn, arr, buf, left, right) => {
             await d1;
             await d2;
             await _mergeSortInternal(fn, arr, buf, left, mid, right);
-        }
-    }
-    const s = new _Stack();
-    s.push([left, right]);
-    while (!s.isEmpty()) {
-        const [l, r] = s.pop();
-        const mid = Math.floor((l + r) / 2);
-        if (r - l < insertSortThresholdSize) {
-            await _insertionSort(fn, arr, l, r);
-        } else {
-            s.push([l, mid]);
-            s.push([mid + 1, l]);
         }
     }
 };
