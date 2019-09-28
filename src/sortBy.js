@@ -1,7 +1,5 @@
 import { curry } from "./curry";
 import { _collectArray } from "./internal/collectArray";
-import { _Stack } from "./Stack";
-import { _Queue } from "./Queue";
 
 const insertSortThresholdSize = 1;
 
