@@ -5,32 +5,6 @@ type DoneFn = () => any;
 declare function describe(s: string, f: () => any): void;
 declare function it(s: string, f: (done: DoneFn) => any): void;
 
-describe('rangeOf', () => {
-    it('from Normal Value', async () => {
-        const a = [1, 2, 3, [4, 5, [6]]];
-
-        const r0 = F.rangeOf(...a); // $ExpectType AsyncIterableIterator<number | number[]>
-    });
-
-    it('from Promise Value', async () => {
-        const a = [1, 2, Promise.resolve(3), [4, Promise.resolve(5), [Promise.resolve(6)], [7]]];
-
-        const r0 = F.rangeOf(...a); // $ExpectType AsyncIterableIterator<number | number[] | Promise<number>[]>
-    });
-
-    it('from String', async () => {
-        const a = 'hello world';
-
-        const r0 = F.rangeOf(...a); // $ExpectType AsyncIterableIterator<string>
-    });
-
-    it('from Normal / Promise Union', async () => {
-        const a = [1, Promise.resolve(2), 'a', Promise.resolve('b'), [Promise.resolve(3)], [Promise.resolve('c')]];
-
-        const r0 = F.rangeOf(...a); // $ExpectType AsyncIterableIterator<string | number>
-    });
-});
-
 describe('firstOrGet', () => {
     it('from Normal Value And Supply Normal Value', async () => {
         const t = [1, 2, 3, 4, 5];
@@ -809,86 +783,6 @@ describe('splitBy', () => {
         const a = 'hello world';
 
         const r0 = await F.run(a, F.splitBy(e => e.split(' '))); // $ExpectType AsyncIterableIterator<string>
-    });
-});
-
-describe('errorThen', () => {
-    it('from Normal Value', async () => {
-        const testSupplyFunc = (i: string[]) => () => i;
-
-        const e = ['error'];
-        const a = [1, 2, 3, 4, 5];
-
-        const ar0 = F.errorThen<number, string>(e)(a); // $ExpectType AsyncIterableIterator<string | number>
-        const ar1 = F.errorThen<number, string>(testSupplyFunc(e))(a); // $ExpectType AsyncIterableIterator<string | number>
-
-        const br0 = F.errorThen(e, a); // $ExpectType AsyncIterableIterator<string | number>
-        const br1 = F.errorThen(testSupplyFunc(e), a); // $ExpectType AsyncIterableIterator<string | number>
-    });
-
-    it('from Promise Value', async () => {
-        const testSupplyFunc = (i: AsyncIterableIterator<string>) => async () => i;
-
-        const e = ['error'];
-        const a = [1, 2, Promise.resolve(3), 4, 5];
-
-        const ar0 = F.errorThen<number, string>(F.seq(e))(a); // $ExpectType AsyncIterableIterator<string | number>
-        const ar1 = F.errorThen<number, string>(testSupplyFunc(F.seq(e)))(a); // $ExpectType AsyncIterableIterator<string | number>
-
-        const br0 = F.errorThen(F.seq(e), a); // $ExpectType AsyncIterableIterator<string | number>
-        const br1 = F.errorThen(testSupplyFunc(F.seq(e)), a); // $ExpectType AsyncIterableIterator<string | number>
-    });
-
-    it('from Promise Wrapped Supply', async () => {
-        const testSupplyFunc = (i: string[]) => () => i;
-
-        const e = ['error'];
-        const a = [1, 2, 3, 4, 5];
-
-        const ar0 = F.errorThen<number, string>(Promise.resolve(e))(a);
-        const ar1 = F.errorThen<number, string>(Promise.resolve(testSupplyFunc(e)))(a);
-
-        const br0 = F.errorThen(Promise.resolve(e), a);
-        const br1 = F.errorThen(Promise.resolve(testSupplyFunc(e)), a);
-    });
-
-    it('to String', async () => {
-        const a = [1, 2, 3, 4, 5];
-
-        const r0 = F.errorThen<number, string>('error')(a); // $ExpectType AsyncIterableIterator<string | number>
-        const r1 = F.errorThen('error', a); // $ExpectType AsyncIterableIterator<string | number>
-    });
-
-    it('from Normal / Promise Union', async () => {
-        const testSupplyFunc = (i: (null | Promise<null> | { id: number; } | Promise<{ id: number; }>)[]) => () => i;
-
-        const a = [1, Promise.resolve(2), 'a', Promise.resolve('b')];
-        const e = [Promise.resolve(null), null, Promise.resolve({ id: 1}), { id: 2}];
-
-        const ar0 = F.errorThen<string | number, { id: number; } | null>(e)(a); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | null>
-        const ar1 = F.errorThen<string | number, { id: number; } | null>(Promise.resolve(e))(a); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | null>
-        const ar2 = F.errorThen<string | number, { id: number; } | null>(testSupplyFunc(e))(a); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | null>
-        const ar3 = F.errorThen<string | number, { id: number; } | null>(Promise.resolve(testSupplyFunc(e)))(a); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | null>
-
-        // const br0 = F.errorThen(e, a); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | { id: number; } | null>
-        // const br1 = F.errorThen(Promise.resolve(e), a); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | { id: number; } | null>
-        // const br2 = F.errorThen(testSupplyFunc(e), a); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | { id: number; } | null>
-        // const br3 = F.errorThen(Promise.resolve(testSupplyFunc(e)), a); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | { id: number; } | null>
-    });
-
-    it('with run', async () => {
-        const testSupplyFunc = (i: (null | Promise<null> | { id: number; } | Promise<{ id: number; }>)[]) => () => i;
-
-        const a = [1, Promise.resolve(2), 'a', Promise.resolve('b')];
-        const e = [Promise.resolve(null), null, Promise.resolve({ id: 1}), { id: 2}];
-
-        const ar0 = await F.run(a, F.errorThen<string | number, { id: number; } | null>(e)); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | null>
-        const ar1 = await F.run(a, F.errorThen<string | number, { id: number; } | null>(testSupplyFunc(e))); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | null>
-        const ar2 = await F.run(a, F.errorThen<string | number, { id: number; } | null>(Promise.resolve(testSupplyFunc(e)))); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | null>
-
-        const br0 = await F.run(a, F.errorThen(e)); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | { id: number; } | null>
-        const br1 = await F.run(a, F.errorThen(testSupplyFunc(e))); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | { id: number; } | null>
-        const br2 = await F.run(a, F.errorThen(Promise.resolve(testSupplyFunc(e)))); // $ExpectType AsyncIterableIterator<string | number | { id: number; } | { id: number; } | null>
     });
 });
 

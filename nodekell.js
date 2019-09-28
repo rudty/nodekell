@@ -732,20 +732,6 @@
         }
     };
 
-    const errorThen = curry(async function *(supply, iter){
-        try {
-            yield* iter;
-        } catch(e) {
-            supply = await supply;
-            if (supply instanceof Function) {
-                supply = await supply(e);
-            }
-            if(supply && _hasIterator(supply)) {
-                yield* supply;
-            }
-        }
-    });
-
     const every = curry(async (f, iter) => {
         for await (const e of iter) {
             if (!(await f(e))) {
@@ -1392,8 +1378,6 @@
         }
     };
 
-    const rangeOf = (...a) => fmap(identity, a);
-
     const reFindSubmatch = curry((re, str) => {
         if (re.constructor !== RegExp) {
             re = new RegExp(re);
@@ -1601,28 +1585,6 @@
     });
 
     const sort = sortBy(asc);
-
-    const split = curry(async function *(fn, iter) {
-        const g = seq(iter);
-        let e;
-        const lhs = async function *() {
-            while (true) {
-                e = await g.next();
-                if ((e.done) || await fn(e.value)) {
-                    break;
-                }
-                yield e.value;
-            }
-        };
-        yield lhs();
-        const rhs = async function *() {
-            if (!e.done) {
-                yield e.value;
-                yield* g;
-            }
-        };
-        yield rhs();
-    });
 
     const splitBy = curry(async function *(f, any) {
         yield* await f(any);
@@ -1887,7 +1849,6 @@
     exports.emptyThen = emptyThen;
     exports.enumerate = enumerate;
     exports.equals = equals;
-    exports.errorThen = errorThen;
     exports.every = every;
     exports.filter = filter;
     exports.filterIndexed = filterIndexed;
@@ -1956,7 +1917,6 @@
     exports.random = random;
     exports.range = range;
     exports.rangeInterval = rangeInterval;
-    exports.rangeOf = rangeOf;
     exports.reFind = reFind;
     exports.reFindAll = reFindAll;
     exports.reFindAllSubmatch = reFindAllSubmatch;
@@ -1977,7 +1937,6 @@
     exports.some = some;
     exports.sort = sort;
     exports.sortBy = sortBy;
-    exports.split = split;
     exports.splitBy = splitBy;
     exports.sub = sub;
     exports.sum = sum;

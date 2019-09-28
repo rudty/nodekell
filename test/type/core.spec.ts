@@ -84,10 +84,6 @@ describe('utils', () => {
         const isNil = F.isNil(false); // $ExpectType boolean
     });
 
-    it('notNil', () => {
-        const notNil = F.notNil(0); // $ExpectType boolean
-    });
-
     it('equals', () => {
         const equals0 = F.equals(2)(1); // $ExpectType boolean
         const equals1 = F.equals(1, 2); // $ExpectType boolean

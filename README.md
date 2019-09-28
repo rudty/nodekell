@@ -86,12 +86,10 @@ console.log(v);//[3]
 *    [dropLast](#dropLast)
 *    [dropWhile](#dropwhile)
 *    [emptyThen](#emptythen)
-*    [errorThen](#errorthen) [**deprecated**]
 *    [distinct](#distinct)
 *    [distinctBy](#distinctby)
 *    [distinctUntilChanged](#distinctuntilchanged)
 *    [distinctUntilChangedBy](#distinctuntilchangedby)
-*    [split](#split)        [**deprecated**]
 *    [splitBy](#splitby)
 *    [innerJoin](#innerjoin)
 *    [leftInnerJoin](#leftinnerjoin)
@@ -125,7 +123,6 @@ console.log(v);//[3]
 ## generator
 *    [range](#range)
 *    [seq](#seq)
-*    [rangeOf](#rangeof) [**deprecated**]
 *    [repeat](#repeat)
 *    [rangeInterval](#rangeinterval)
 *    [iterate](#iterate)
@@ -159,9 +156,9 @@ console.log(v);//[3]
 *    [average](#average)
 *    [groupBy](#groupby)
 *    [orderBy](#orderby)
-*    [sortBy](#sortby)      [**deprecated**] [**change**]
+*    [sortBy](#sortby)      [**change**]
 *    [order](#order)
-*    [sort](#sort)          [**deprecated**] [**change**]
+*    [sort](#sort)          [**change**]
 *    [frequencies](#frequencies)
 *    [frequenciesBy](#frequenciesby)
 *    [associateBy](#associateby)
@@ -175,7 +172,6 @@ console.log(v);//[3]
 *    [interval](#interval)
 *    [timeout](#timeout)
 *    [withTimeout](#withtimeout)
-*    [notNil](#notnil) [**deprecated**]
 *    [isNil](#isNil)
 *    [cond](#cond)
 *    [otherwise](#otherwise)
@@ -710,43 +706,6 @@ console.log(v); //2,3,4
 ```
 
 
-### errorThen
-**deprecated**
-catch error 
-```javascript
-const v = await F.run([1,2,3,4,5],
-    F.filter(e =>{
-        if (e > 2) {
-            throw new Error("hello")
-        }
-        return e;
-    }), // [1, 2 error! 
-    F.errorThen([9,8]),//catch and return 9,8
-    F.collect); // 
-console.log(v);
-//print 1,2,9,8
-```
-```javascript
-const v = await F.run([1,2,3,4,5],
-    F.filter(e =>{
-        if (e > 2) {
-            throw new Error("hello error");
-        }
-        return e;
-    }), // [1, 2 error! 
-    F.errorThen((reason) => {
-        console.log(reason); //hello error
-        return [9,8];
-    }),//catch and return 9,8
-    F.collect); // 
-console.log(v);
-//print 
-//hello error 
-//callstack... 
-//1,2,9,8
-```
-
-
 ### distinct
 ```javascript
 const a = [1,2,1,2,2,3];
@@ -819,27 +778,6 @@ for await (const e of r) {
 //3
 //4
 //5
-```
-
-
-### split
-**deprecated**
-deprecated.
-```javascript
-const s = F.split(F.equals(3), [1, 2, 3, 4, 5]);
-for await (const e of s) {
-    for await (const k of e) {
-        console.log(k);
-    }
-    console.log("--");
-}
-// print 
-// 1
-// 2
-// --
-// 3
-// 4
-// 5
 ```
 
 
@@ -1338,11 +1276,6 @@ for await(const e of F.seq(a)) {
     //[3,4]
 }
 ```
-
-
-### rangeOf
-**deprecated** 
-deprecated. use flat or dflat instead.
 
 
 ### repeat
@@ -2186,21 +2119,6 @@ try{
 //print 
 //timeout error
 //callstack....
-```
-
-
-### notNil
-**deprecated**
-use [isNil](#isNil) instead.
-return false null, undefined, NaN true otherwise
-```javascript
-console.log(F.notNil(NaN)); // false
-console.log(F.notNil(undefined)); //false
-console.log(F.notNil(null)); //false
-console.log(F.notNil("null")); // true
-console.log(F.notNil("NaN")); //true
-console.log(F.notNil(0)); // true
-console.log(F.notNil(false)); // true
 ```
 
 

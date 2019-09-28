@@ -117,17 +117,6 @@ export function second<T extends any[]>(a: T): T[1];
  */
 export function isNil(a: any): boolean;
 
-/**
- * https://github.com/rudty/nodekell#notnil
- *
- * ```ts
- * notNil(undefined) === false;
- * notNil(false) === true;
- * ```
- * @deprecated use isNil instead
- */
-export function notNil(a: any): boolean;
-
 export type Getter<T, K> =
     T extends Map<any, any> ?
         K extends ExtractMapKey<T> ?

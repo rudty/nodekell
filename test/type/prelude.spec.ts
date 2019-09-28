@@ -1238,35 +1238,6 @@ describe('zipWith3', () => {
     });
 });
 
-describe('split', () => {
-    it('normal value', async () => {
-        const a = [1, 2, 3, 4, 5];
-
-        const r0 = F.split<number>(() => true)(a); // $ExpectType AsyncIterableIterator<AsyncIterableIterator<number>>
-        const r1 = F.split(() => true, a); // $ExpectType AsyncIterableIterator<AsyncIterableIterator<number>>
-    });
-
-    it('promise value', async () => {
-        const a = [1, Promise.resolve(2), 3, 4, 5];
-
-        const r0 = F.split<number>(async () => true)(a); // $ExpectType AsyncIterableIterator<AsyncIterableIterator<number>>
-        const r1 = F.split(async () => true, a); // $ExpectType AsyncIterableIterator<AsyncIterableIterator<number>>
-    });
-
-    it('promise / normal union value', async () => {
-        const a = [1, Promise.resolve(2), 'a', Promise.resolve('b'), null, Promise.resolve(null)];
-
-        const r0 = F.split<string | number | null>(() => true, a); // $ExpectType AsyncIterableIterator<AsyncIterableIterator<string | number | null>>
-        const r1 = F.split(() => true, a); // $ExpectType AsyncIterableIterator<AsyncIterableIterator<string | number | null>>
-    });
-
-    it('with run', async () => {
-        const a = [1, Promise.resolve(2), 'a', Promise.resolve('b'), null, Promise.resolve(null)];
-
-        const r0 = await F.run(a, F.split(() => true)); // $ExpectType AsyncIterableIterator<AsyncIterableIterator<string | number | null>>
-    });
-});
-
 describe('run', () => {
     it('iter', async () => {
         const a = [1, 2, 3, Promise.resolve(4), 5, 6];
