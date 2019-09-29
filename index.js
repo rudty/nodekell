@@ -806,11 +806,7 @@ const flat = async function *(iter) {
 
 const fmap = curry(async function *(fn, iter) {
     for await (const e of iter) {
-        if (e && _hasIterator(e)) {
-            yield* await fn(e);
-        } else {
-            yield e;
-        }
+        yield* await fn(e);
     }
 });
 const flatMap = fmap;

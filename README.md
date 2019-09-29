@@ -71,8 +71,8 @@ console.log(v);//[3]
 *    [mapIndexed](#mapindexed)
 *    [take](#take)
 *    [takeWhile](#takewhile)
-*    [fmap](#fmap)          [**change**]
-*    [flatMap](#flatmap)    [**change**]
+*    [fmap](#fmap)
+*    [flatMap](#flatmap)
 *    [flat](#flat)
 *    [dflat](#dflat)
 *    [reverse](#reverse)
@@ -449,17 +449,7 @@ console.log(await F.collect(t)); // print 1, 2
 
 
 ### fmap
-**change** 
 
-support for an iterable with non-iterable elements is deprecated.
-
-example) F.fmap(e => e, [[1],[2],3,4,5])
-
-current: [1,2,3,4,5]
-
-after: throw Error
-
-use F.flat or F.map instead. 
 ```javascript
 const a = [[1],[2],[3],[4],[5]];
 const f = F.fmap(e => e, a);

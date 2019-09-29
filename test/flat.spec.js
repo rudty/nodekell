@@ -25,7 +25,7 @@ describe('test flat', () => {
 
     it('async func', async () => {
         const a = [[1],[2],3,4,5];
-        const r = F.fmap(async e => Promise.resolve(e), a);
+        const r = F.flat(a);
         const result = []
         for await (const e of r) {
            result.push(e); 
