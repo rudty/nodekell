@@ -633,7 +633,9 @@ export function random(begin: number, end?: number): number;
  * @param dArgs defaultArguments
  * @return function that calls fn
  */
-export function fnil<R>(fn: (...args: any) => R, ...dArgs: any): (...args: any) => R;
+export function fnil<P extends any[], R>(fn: (...args: P) => R, ...dArgs: P): ((...args: Partial<P>) => R);
+
+// export function fnil<R>(fn: (...args: any) => R, ...dArgs: any): (...args: any) => R;
 
 /**
  * curry with Object.assign

@@ -1411,7 +1411,7 @@ describe('random', () => {
 
 describe('fnil', () => {
     it('sayhello', async () => {
-        function sayHello(who: any) {
+        function sayHello(who: string) {
             return "hello " + who;
         }
 
@@ -1421,17 +1421,17 @@ describe('fnil', () => {
     });
 
     it('default argment', async () => {
-        const stringAddWithDefault = F.fnil((a, b) => {
+        const stringAddWithDefault = F.fnil((a: number, b: number) => {
             return `${a}${b}`;
         }, 1, 2);
-        const r0 = stringAddWithDefault("3", 4); // $ExpectType string
+        const r0 = stringAddWithDefault(3, 4); // $ExpectType string
         const r1 = stringAddWithDefault(); // $ExpectType string
 
-        const promiseStringAddWithDefault = F.fnil(async (a, b) => {
+        const promiseStringAddWithDefault = F.fnil(async (a: number, b: number) => {
             return `${a}${b}`;
         }, 1, 2);
 
-        const r2 = promiseStringAddWithDefault("3", 4); // $ExpectType Promise<string>
+        const r2 = promiseStringAddWithDefault(3, 4); // $ExpectType Promise<string>
         const r3 = promiseStringAddWithDefault(); // $ExpectType Promise<string>
     });
 });
