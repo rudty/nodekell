@@ -1478,10 +1478,36 @@ describe('assign', () => {
         const obj0 = { a: 1 };
         const obj1 = { b: 1 };
         const obj2 = { c: 1 };
-        const r0 = F.assign(obj0, obj1); // $ExpectType { a: number; } & { b: number; }
-        const r1 = F.assign(obj0, obj1, obj2); // $ExpectType { a: number; } & { b: number; } & { c: number; }
-        const r2 = F.assign(obj0, obj1, obj2, obj0); // $ExpectType { a: number; } & { b: number; } & { c: number; }
-        const r3 = F.assign(obj0, obj1, obj2, obj0, obj1); // $ExpectType any
+
+        const r0 = F.assign(obj0, obj1);
+        const _r0 = { ...r0 }; // $ExpectType { a: number; b: number; }
+
+        const r1 = F.assign(obj0, obj1, obj2);
+        const _r1 = { ...r1 }; // $ExpectType { a: number; b: number; c: number; }
+
+        const r2 = F.assign(obj0, obj1, obj2, obj0);
+        const _r2 = { ...r2 }; // $ExpectType { a: number; b: number; c: number; }
+
+        const r3 = F.assign(obj0, obj1, obj2, obj0, obj1);
+        const _r3 = { ...r3 }; // $ExpectType { a: number; b: number; c: number; }
+    });
+
+    it('same key, another type', async () => {
+        const obj0 = { a: 1, b: 'a' };
+        const obj1 = { b: 2, c: 'b' };
+        const obj2 = { c: 3, d: 'c' };
+
+        const r0 = F.assign(obj0, obj1);
+        const _r0 = { ...r0 }; // $ExpectType { a: number; b: number; c: string; }
+
+        const r1 = F.assign(obj0, obj1, obj2);
+        const _r1 = { ...r1 }; // $ExpectType { a: number; b: number; d: string; c: number; }
+
+        const r2 = F.assign(obj0, obj1, obj2, obj0);
+        const _r2 = { ...r2 }; // $ExpectType { a: number; b: string; d: string; c: number; }
+
+        const r3 = F.assign(obj0, obj1, obj2, obj0, obj1);
+        const _r3 = { ...r3 }; // $ExpectType { a: number; b: number; d: string; c: string; }
     });
 
     it('curry', async () => {
@@ -1489,9 +1515,14 @@ describe('assign', () => {
         const obj1 = { b: 1 };
         const obj2 = { c: 1 };
 
-        const r0 = F.assign(obj0)(obj1); // $ExpectType any
-        const r1 = F.assign(obj0)(obj1, obj0, obj2); // $ExpectType any
-        const r2 = F.assign(obj0); // $ExpectType (source1: any, ...sources: any[]) => any
+        const r0 = F.assign<typeof obj0, typeof obj1>(obj0)(obj1);
+        const _r0 = { ...r0 }; // $ExpectType { a: number; b: number; }
+
+        const r1 = F.assign<typeof obj0, typeof obj1, [typeof obj0, typeof obj2]>(obj0)(obj1, obj0, obj2);
+        const _r1 = { ...r1 }; // $ExpectType { a: number; b: number; c: number; }
+
+        const r2 = F.assign(obj0);
+        const _r2 = { ...r2({}) }; // $ExpectType { a: number; }
     });
 });
 
@@ -1501,10 +1532,36 @@ describe('assign3', () => {
         const obj1 = { b: 1 };
         const obj2 = { c: 1 };
         // const r0 = F.assign3(obj0, obj1); // $ExpectType { a: number; } & { b: number; }
-        const r1 = F.assign3(obj0, obj1, obj2); // $ExpectType { a: number; } & { b: number; } & { c: number; }
-        const r2 = F.assign3(obj0, obj1, obj2, obj0); // $ExpectType { a: number; } & { b: number; } & { c: number; }
-        const r3 = F.assign3(obj0, obj1, obj2, obj0, obj1); // $ExpectType { a: number; } & { b: number; } & { c: number; }
-        const r4 = F.assign3(obj0, obj1, obj2, obj0, obj1, obj2); // $ExpectType any
+
+        const r0 = F.assign(obj0, obj1);
+        const _r0 = { ...r0 }; // $ExpectType { a: number; b: number; }
+
+        const r1 = F.assign(obj0, obj1, obj2);
+        const _r1 = { ...r1 }; // $ExpectType { a: number; b: number; c: number; }
+
+        const r2 = F.assign(obj0, obj1, obj2, obj0);
+        const _r2 = { ...r2 }; // $ExpectType { a: number; b: number; c: number; }
+
+        const r3 = F.assign(obj0, obj1, obj2, obj0, obj1);
+        const _r3 = { ...r3 }; // $ExpectType { a: number; b: number; c: number; }
+
+        const r4 = F.assign3(obj0, obj1, obj2, obj0, obj1, obj2);
+        const _r4 = { ...r4 }; // $ExpectType { a: number; b: number; c: number; }
+    });
+
+    it('same key, another type', async () => {
+        const obj0 = { a: 1, b: 'a' };
+        const obj1 = { b: 2, c: 'b' };
+        const obj2 = { c: 3, d: 'c' };
+
+        const r0 = F.assign3(obj0, obj1, obj2);
+        const _r0 = { ...r0 }; // $ExpectType { a: number; b: number; d: string; c: number; }
+
+        const r1 = F.assign3(obj0, obj1, obj2, obj0);
+        const _r1 = { ...r1 }; // $ExpectType { a: number; b: string; d: string; c: number; }
+
+        const r2 = F.assign3(obj0, obj1, obj2, obj0, obj1);
+        const _r2 = { ...r2 }; // $ExpectType { a: number; b: number; d: string; c: string; }
     });
 
     it('curry', async () => {
@@ -1512,8 +1569,13 @@ describe('assign3', () => {
         const obj1 = { b: 1 };
         const obj2 = { c: 1 };
 
-        const r0 = F.assign3(obj0)(obj1, obj2); // $ExpectType any
-        const r1 = F.assign3(obj0)(obj1, obj0, obj2); // $ExpectType any
-        const r2 = F.assign3(obj0); // $ExpectType (source1: any, source2: any, ...sources: any[]) => any
+        const r0 = F.assign3<typeof obj0, typeof obj1, typeof obj2>(obj0)(obj1, obj2);
+        const _r0 = { ...r0 }; // $ExpectType { a: number; b: number; c: number; }
+
+        const r1 = F.assign3<typeof obj0, typeof obj1, typeof obj0, [typeof obj2]>(obj0)(obj1, obj0, obj2);
+        const _r1 = { ...r1 }; // $ExpectType { a: number; b: number; c: number; }
+
+        const r2 = F.assign3(obj0);
+        const _r2 = { ...r2(obj1, obj0, obj2, obj1, obj0) };
     });
 });

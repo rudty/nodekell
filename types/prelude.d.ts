@@ -9,6 +9,8 @@ import {
     CurriedFunction2,
     FlatForInternalFn,
     CurriedFunction3,
+    MergeObject,
+    InnerJoinObject,
 } from './utils';
 
 /**
@@ -641,26 +643,35 @@ export function fnil<P extends any[], R>(fn: (...args: P) => R, ...dArgs: P): ((
  * curry with Object.assign
  * Returns the target object.
  *
- * @param {any} target target object to copy to
- * @param {any} source source objects from which to copy properties
+ * @param {Object} target target object to copy to
+ * @param {Object} source source objects from which to copy properties
  */
-export function assign<T, U>(target: T, source1: U): T & U;
-export function assign<T, U, V>(target: T, source1: U, source2: V): T & U & V;
-export function assign<T, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W;
-export function assign(target: any, source1: any, source2: any, source3: any, source4: any, ...sources: any[]): any;
-export function assign(target: any): (source1: any, ...sources: any[]) => any;
+export function assign<T extends object, S1 extends object, S extends object[] = []>(target: T, source1: S1, ...sources: S): MergeObject<MergeObject<T, [S1]>, S>;
+
+// tslint:disable-next-line: no-unnecessary-generics
+export function assign<T extends object, S1 extends object, S extends object[] = []>(target: T): <_S1 extends object = S1, _S extends object[] = S>(source1: _S1, ...sources: _S) => MergeObject<MergeObject<T, [_S1]>, _S>;
+
+// export function assign<T extends object, S1 extends object, S extends object[]>(target: T): CurriedFunction2<S1, S, MergeObject<MergeObject<T, [S1]>, S>>;
 
 /**
  * curry with Object.assign
  * Returns the target object.
  * must have at least 3 arguments
  *
- * @param {any} target target object to copy to
- * @param {any} source source objects from which to copy properties
+ * @param {Object} target target object to copy to
+ * @param {Object} source source objects from which to copy properties
  */
-export function assign3<T, U, V>(target: T, source1: U, source2: V): T & U & V;
-export function assign3<T, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W;
-export function assign3<T, U, V, W, Y>(target: T, source1: U, source2: V, source3: W, source4: Y): T & U & V & W & Y;
-export function assign3(target: any, source1: any, source2: any, source3: any, source4: any, source5: any, ...sources: any[]): any;
-export function assign3(target: any): (source1: any, source2: any, ...sources: any[]) => any;
-export function assign3(target: any, source1: any): (source2: any, ...sources: any[]) => any;
+export function assign3<T extends object, S1 extends object, S2 extends object, S extends object[] = []>(target: T, source1: S1, source2: S2, ...sources: S): MergeObject<MergeObject<T, [S1, S2]>, S>;
+
+// tslint:disable-next-line: no-unnecessary-generics
+export function assign3<T extends object, S1 extends object, S2 extends object, S extends object[] = []>(target: T, source1: S1): <_S2 extends object = S2, _S extends object[] = S>(source2: _S2, ...sources: _S) => MergeObject<MergeObject<T, [S1, _S2]>, _S>;
+
+// tslint:disable-next-line: no-unnecessary-generics
+export function assign3<T extends object, S1 extends object, S2 extends object, S extends object[] = []>(target: T): <_S1 extends object = S1, _S2 extends object = S2, _S extends object[] = S>(source1: _S1, source2: _S2, ...sources: _S) => MergeObject<MergeObject<T, [_S1, _S2]>, _S>;
+
+// tslint:disable-next-line: no-unnecessary-generics
+export function assign3<T extends object, S1 extends object, S2 extends object, S extends object[] = []>(target: T): <_S1 extends object = S1>(source1: S1) => <_S2 extends object = S2, _S extends object[] = S>(source2: _S2, ...sources: _S) => MergeObject<MergeObject<T, [_S1, _S2]>, _S>;
+
+// export function assign3<T extends object, S1 extends object, S2 extends object, S extends object[]>(target: T, source1: S1): CurriedFunction2<S2, S, MergeObject<MergeObject<T, [S1, S2]>, S>>;
+
+// export function assign3<T extends object, S1 extends object, S2 extends object, S extends object[]>(target: T): CurriedFunction3<S1, S2, S, MergeObject<MergeObject<T, [S1, S2]>, S>>;
