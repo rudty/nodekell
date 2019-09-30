@@ -142,8 +142,12 @@ export function juxtA<T extends Iter<any>, F extends FlatAccumulator<T>>(fn: Ite
  * @param key get array
  * @param target get obj or map
  */
-export function juxtO<T, K extends keyof T>(key: K[], target: T): Getter<T, K>[];
-export function juxtO<T, K>(key: K[], target: T): Getter<T, K>[];
+export function juxtO<T, K extends keyof T>(key: K[], target: T): Promise<Getter<T, K>[]>;
+export function juxtO<T, K>(key: K[], target: T): Promise<Getter<T, K>[]>;
+
+export function juxtO<T, K extends keyof T>(key: K[]): (target: T) => Promise<Getter<T, K>[]>;
+export function juxtO<T, K>(key: K[]): (target: T) => Promise<Getter<T, K>[]>;
+
 export function juxtO(key: any[]): (target: any) => any[];
 
 /**

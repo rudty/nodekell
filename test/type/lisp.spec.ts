@@ -296,12 +296,12 @@ describe('juxtO', () => {
         const a = new Map([['a', 1]]);
         const b = new Map([[1, 'a']]);
 
-        it('has property or key', () => {
-            const ar0 = F.juxtO(['get'])(a); // $ExpectType any[]
-            const ar1 = F.juxtO(['size', 'has'], a); // $ExpectType (number | ((key: string) => boolean))[]
+        it('has property or key', async () => {
+            const ar0 = await F.juxtO<typeof a, 'get'>(['get'])(a); // $ExpectType (number | ((key: string) => number | undefined))[]
+            const ar1 = await F.juxtO(['size', 'has'], a); // $ExpectType (number | ((key: string) => boolean))[]
 
-            const br0 = F.juxtO(['set'])(b); // $ExpectType any[]
-            const br1 = F.juxtO(['size'], b); // $ExpectType number[]
+            const br0 = await F.juxtO<typeof b, 'set'>(['set'])(b); // $ExpectType ((key: number, value: string) => Map<number, string>)[]
+            const br1 = await F.juxtO(['size'], b); // $ExpectType number[]
         });
     });
 
@@ -309,14 +309,14 @@ describe('juxtO', () => {
         const a = { a: 1, b: 'a', get: 'get' };
         const b = { a: 1, b: 'a', get: () => {} };
 
-        it('has property', () => {
-            const ar0 = F.juxtO(['b', 'a'])(a); // $ExpectType any[]
-            const ar1 = F.juxtO(['b', 'a'], a); // $ExpectType (string | number)[]
+        it('has property', async () => {
+            const ar0 = await F.juxtO<typeof a, 'a' | 'b'>(['b', 'a'])(a); // $ExpectType (string | number)[]
+            const ar1 = await F.juxtO(['b', 'a'], a); // $ExpectType (string | number)[]
         });
 
-        it('has not property', () => {
-            const r0 = F.juxtO(['c', 'd'])(a); // $ExpectType any[]
-            const r1 = F.juxtO(['c', 'd'], b); // $ExpectType undefined[]
+        it('has not property', async () => {
+            const r0 = await F.juxtO<typeof a, 'c' | 'd'>(['c', 'd'])(a); // $ExpectType undefined[]
+            const r1 = await F.juxtO(['c', 'd'], b); // $ExpectType undefined[]
         });
     });
 
@@ -324,23 +324,23 @@ describe('juxtO', () => {
         const a = [1, 2, 3, 4, 5, 6];
         const b = ['a', 'b', 'c', 'd', 'e', 'f'];
 
-        it('index', () => {
-            const ar0 = F.juxtO([0], a); // $ExpectType (number | undefined)[]
-            const ar1 = F.juxtO([190], a); // $ExpectType (number | undefined)[]
+        it('index', async () => {
+            const ar0 = await F.juxtO([0], a); // $ExpectType (number | undefined)[]
+            const ar1 = await F.juxtO([190], a); // $ExpectType (number | undefined)[]
 
-            const br0 = F.juxtO([0], b); // $ExpectType (string | undefined)[]
-            const br1 = F.juxtO([190], b); // $ExpectType (string | undefined)[]
+            const br0 = await F.juxtO([0], b); // $ExpectType (string | undefined)[]
+            const br1 = await F.juxtO([190], b); // $ExpectType (string | undefined)[]
         });
 
-        it('has property', () => {
-            const ar0 = F.juxtO(['length'], a); // $ExpectType number[]
-            const ar1 = F.juxtO(['reverse'], a); // $ExpectType (() => number[])[]
+        it('has property', async () => {
+            const ar0 = await F.juxtO(['length'], a); // $ExpectType number[]
+            const ar1 = await F.juxtO(['reverse'], a); // $ExpectType (() => number[])[]
 
-            const br0 = F.juxtO(['length'], b); // $ExpectType number[]
-            const br1 = F.juxtO(['reverse'], b); // $ExpectType (() => string[])[]
+            const br0 = await F.juxtO(['length'], b); // $ExpectType number[]
+            const br1 = await F.juxtO(['reverse'], b); // $ExpectType (() => string[])[]
 
-            const cr0 = F.juxtO(['length', 'reverse'], a); // $ExpectType (number | (() => number[]))[]
-            const cr1 = F.juxtO(['length', 'reverse'], b); // $ExpectType (number | (() => string[]))[]
+            const cr0 = await F.juxtO(['length', 'reverse'], a); // $ExpectType (number | (() => number[]))[]
+            const cr1 = await F.juxtO(['length', 'reverse'], b); // $ExpectType (number | (() => string[]))[]
         });
     });
 });
