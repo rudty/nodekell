@@ -28,7 +28,7 @@ export class _Stack {
         if (this.top === null) {
             throw new Error("no such element");
         }
-        return this._unsafePop()
+        return this._unsafePop();
     }
 
     /**
@@ -39,7 +39,7 @@ export class _Stack {
         if (this.top === null) {
             return null;
         }
-        return this._unsafePop()
+        return this._unsafePop();
     }
 
     /**

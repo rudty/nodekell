@@ -105,7 +105,6 @@ console.log(v);//[3]
 *    [scanl1](#scanl1)
 *    [buffer](#buffer)
 *    [peek](#peek)
-*    [juxtA](#juxtA)
 
 ## functional / parallel
 *    [parallel_set_fetch_count](#parallel_set_fetch_count)
@@ -132,6 +131,7 @@ console.log(v);//[3]
 *    [foldl](#foldl)
 *    [foldl1](#foldl1)
 *    [reduce](#reduce)
+*    [juxtA](#juxtA)
 *    [foldr](#foldr)
 *    [foldr1](#foldr1)
 *    [collect](#collect)
@@ -156,9 +156,9 @@ console.log(v);//[3]
 *    [average](#average)
 *    [groupBy](#groupby)
 *    [orderBy](#orderby)
-*    [sortBy](#sortby)      [**change**]
+*    [sortBy](#sortby)      
 *    [order](#order)
-*    [sort](#sort)          [**change**]
+*    [sort](#sort)          
 *    [frequencies](#frequencies)
 *    [frequenciesBy](#frequenciesby)
 *    [associateBy](#associateby)
@@ -166,6 +166,7 @@ console.log(v);//[3]
 
 ## util / else
 *    [_](#_)
+*    [juxtO](#juxto)
 *    [sleep](#sleep)
 *    [head](#head)
 *    [tail](#tail)
@@ -999,19 +1000,6 @@ console.log(result); //not change
 ```
 
 
-### juxtA
-```javascript
-const a = await F.juxtA([Math.max, Math.min], [1,2,3,4,5]);
-console.log(a);
-//print [5,1]
-```
-```javascript
-const a = await F.juxtA([Math.max, Math.min], []);
-console.log(a);
-//print [undefined, undefined]
-```
-
-
 ### parallel_set_fetch_count
 Set the fetch count of the parallel functions. 
 
@@ -1419,6 +1407,19 @@ same as [foldl1](#foldl1)
 const a = [1,2,3,4,5];
 const sum = await F.reduce((acc, e) => acc + e, a); 
 console.log(sum); // print 15;
+```
+
+
+### juxtA
+```javascript
+const a = await F.juxtA([Math.max, Math.min], [1,2,3,4,5]);
+console.log(a);
+//print [5,1]
+```
+```javascript
+const a = await F.juxtA([Math.max, Math.min], []);
+console.log(a);
+//print [undefined, undefined]
 ```
 
 
@@ -1954,6 +1955,21 @@ F.match(value,
     F._, () => console.log("match F._")
 );
 //print match F._
+```
+
+
+### juxtO
+
+Similar `get`, get the value of an array element from an object or map.
+```javascript
+const r0 = await juxtO(["A","C"], {A:1,B:2,C:3});
+console.log(r0); // print [1, 3]
+
+const r1 = await juxtO(["A","C"], {});
+console.log(r1); // print [undefined, undefined] 
+
+const r2 = await juxtO(["A","C"],  new Map([["A", 1], ["B", 2], ["C", 3]]));
+console.log(r2); // print [1,2]
 ```
 
 
