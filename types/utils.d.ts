@@ -4,6 +4,10 @@ export type Nullable<T, U extends null | undefined = null> = T | U;
 
 export type Length<T extends any[]> = T["length"];
 
+export type Pos<I extends any[]> = Length<I>;
+
+export type Next<I extends any[]> = Prepend<any, I>;
+
 export type Cast<T, Y> = T extends Y ? T : Y;
 
 export type Head<T extends any[]> =
@@ -22,12 +26,25 @@ export type HasTail<T extends any[]> =
     T extends ([] | [any]) ?
         false : true;
 
+export type IsEmpty<T extends any[]> =
+    T extends [] ?
+        false : true;
+
 export type Last<T extends any[]> = {
     0: Last<Tail<T>>;
     1: Head<T>;
 }[
     HasTail<T> extends true ?
         0 : 1
+];
+
+export type Reverse<T extends any[], R extends any[] = [], I extends any[] = []> = {
+    0: Reverse<T, Prepend<T[Pos<I>], R>, Next<I>>;
+    1: R;
+}[
+    Pos<I> extends Length<T> ?
+        1 :
+        0
 ];
 
 export type Prepend<E, T extends any[]> =
@@ -218,3 +235,40 @@ export type FlatAccumulator<T> = (acc: FlatForInternalFn<T>, elem: FlatForIntern
 
 export type ArrayN<N extends number, T> = T extends any[] ? T[N] : T;
 export type AssociateMap<T> = Map<ArrayN<0, ExtractPromise<T>>, ArrayN<1, ExtractPromise<T>>>;
+
+export type InnerJoinObject<T1 extends object, T2 extends object> = { [P in keyof T1 | keyof T2]: P extends keyof T1 ? T1[P] : P extends keyof T2 ? T2[P] : unknown };
+export type InnerJoinMap<T1, T2> = Map<T1 extends Map<infer K1, infer V1> ? T2 extends Map<infer K2, infer V2> ? K1 | K2 : unknown : unknown, T1 extends Map<infer K1, infer V1> ? T2 extends Map<infer K2, infer V2> ? V1 | V2 : unknown : unknown>;
+// export type InnerJoinCustomIterable<T1 extends { set: (...arg: any[]) => any; } & Iter<any>, T2 extends { set: (...arg: any[]) => any; } & Iter<any>> = AsyncIterableIterator<T1 | T2>;
+
+// type InnerJoinObjectTest1 = InnerJoinObject<{ id: number; name: string; }, { id: number; length: number; }>;
+// type InnerJoinObjectTest2 = InnerJoinObject<{ id: number; length: number; }, { id: number; name: string; }>;
+
+// type InnerJoinMapTest1 = InnerJoinMap<Map<"string" | "number" | "object", (string | number | null)[]>, Map<"string" | "number", (string | number)[]>>;
+// type InnerJoinMapTest2 = InnerJoinMap<Map<"string" | "number", (string | number)[]>, Map<"string" | "number" | "object", (string | number | null)[]>>;
+
+export type OuterJoinObject<T1 extends object, T2 extends object> = { [P in keyof T1 | keyof T2]: P extends keyof T1 ? T1[P] : P extends keyof T2 ? T2[P] | undefined : unknown };
+/**
+ * K2, V2 is optional, but I can't implementation that type.
+ */
+export type OuterJoinMap<T1, T2> = Map<T1 extends Map<infer K1, infer V1> ? T2 extends Map<infer K2, infer V2> ? K1 | K2 : unknown : unknown, T1 extends Map<infer K1, infer V1> ? T2 extends Map<infer K2, infer V2> ? V1 | V2 : unknown : unknown>;
+
+// type OuterJoinObjectTest = OuterJoinObject<{ id: number; value: number; }, { id: number; name: string; }>;
+// type OuterJoinMapTest = OuterJoinMap<Map<string | number, string | number>, Map<string, number>>;
+
+/*
+ExpectType OuterJoinObjectTest
+{
+  id: number;
+  value: number;
+  name: string | undefined;
+}
+*/
+
+export type MergeObject<T extends object, P extends object[]> = {
+    0: MergeObject<InnerJoinObject<Head<P>, T>, Drop<1, P>>;
+    1: T;
+}[
+    IsEmpty<P> extends true ?
+        0 :
+        1
+];

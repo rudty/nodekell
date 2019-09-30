@@ -6,6 +6,10 @@ import {
     ExtractMap,
     CurriedFunction2,
     FlatForInternalFn,
+    OuterJoinMap,
+    InnerJoinObject,
+    OuterJoinObject,
+    InnerJoinMap,
 } from './utils';
 
 /**
@@ -101,16 +105,6 @@ export function order<T>(order: OrderType | CompareFn<EP<T>>, iter: Iter<T>): As
 
 export function order<T>(order: OrderType | CompareFn<EP<T>>): (iter: Iter<T>) => AsyncIterableIterator<EP<T>>;
 
-export type InnerJoinObject<T1 extends object, T2 extends object> = { [P in keyof T1 | keyof T2]: P extends keyof T1 ? T1[P] : P extends keyof T2 ? T2[P] : unknown };
-export type InnerJoinMap<T1, T2> = Map<T1 extends Map<infer K1, infer V1> ? T2 extends Map<infer K2, infer V2> ? K1 | K2 : unknown : unknown, T1 extends Map<infer K1, infer V1> ? T2 extends Map<infer K2, infer V2> ? V1 | V2 : unknown : unknown>;
-// export type InnerJoinCustomIterable<T1 extends { set: (...arg: any[]) => any; } & Iter<any>, T2 extends { set: (...arg: any[]) => any; } & Iter<any>> = AsyncIterableIterator<T1 | T2>;
-
-// type InnerJoinObjectTest1 = InnerJoinObject<{ id: number; name: string; }, { id: number; length: number; }>;
-// type InnerJoinObjectTest2 = InnerJoinObject<{ id: number; length: number; }, { id: number; name: string; }>;
-
-// type InnerJoinMapTest1 = InnerJoinMap<Map<"string" | "number" | "object", (string | number | null)[]>, Map<"string" | "number", (string | number)[]>>;
-// type InnerJoinMapTest2 = InnerJoinMap<Map<"string" | "number", (string | number)[]>, Map<"string" | "number" | "object", (string | number | null)[]>>;
-
 /**
  * https://github.com/rudty/nodekell#innerjoin
  *
@@ -169,24 +163,6 @@ export function rightInnerJoin<T1 extends object, T2 extends object>(f: (elem2: 
 export function rightInnerJoin<T1 extends object, T2 extends object>(f: (elem2: T2, elem1: T1) => (boolean | Promise<boolean>), iter1: Iter<T1 | Promise<T1>>): (iter2: Iter<T2 | Promise<T2>>) => AsyncIterableIterator<InnerJoinObject<T2, T1>>;
 
 export function rightInnerJoin<T1 extends object, T2 extends object>(f: (elem2: T2, elem1: T1) => (boolean | Promise<boolean>)): CurriedFunction2<Iter<T1 | Promise<T1>>, Iter<T2 | Promise<T2>>, AsyncIterableIterator<InnerJoinObject<T2, T1>>>;
-
-export type OuterJoinObject<T1 extends object, T2 extends object> = { [P in keyof T1 | keyof T2]: P extends keyof T1 ? T1[P] : P extends keyof T2 ? T2[P] | undefined : unknown };
-/**
- * K2, V2 is optional, but I can't implementation that type.
- */
-export type OuterJoinMap<T1, T2> = Map<T1 extends Map<infer K1, infer V1> ? T2 extends Map<infer K2, infer V2> ? K1 | K2 : unknown : unknown, T1 extends Map<infer K1, infer V1> ? T2 extends Map<infer K2, infer V2> ? V1 | V2 : unknown : unknown>;
-
-// type OuterJoinObjectTest = OuterJoinObject<{ id: number; value: number; }, { id: number; name: string; }>;
-// type OuterJoinMapTest = OuterJoinMap<Map<string | number, string | number>, Map<string, number>>;
-
-/*
-ExpectType OuterJoinObjectTest
-{
-  id: number;
-  value: number;
-  name: string | undefined;
-}
-*/
 
 /**
  * https://github.com/rudty/nodekell#outerjoin
