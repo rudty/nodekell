@@ -145,13 +145,13 @@ class _Stack {
         if (this.top === null) {
             throw new Error("no such element");
         }
-        return this._unsafePop()
+        return this._unsafePop();
     }
     poll() {
         if (this.top === null) {
             return null;
         }
-        return this._unsafePop()
+        return this._unsafePop();
     }
     peek() {
         const f = this.top;
@@ -294,19 +294,23 @@ const _toIterator = (a) => {
     }
 };
 
+const takeAllIterator = async (it) => {
+    if (!it) {
+        return;
+    }
+    for (; ;) {
+        const { value, done } = await it.next();
+        if (done) {
+            break;
+        }
+        await value;
+    }
+};
 const block = async (...values) => {
     values = await Promise.all(values);
     for (const iter of values) {
         const it = _toStrictIterator(iter);
-        if (it) {
-            for (; ;) {
-                const { value, done } = await it.next();
-                if (done) {
-                    break;
-                }
-                await value;
-            }
-        }
+        await takeAllIterator(it);
     }
 };
 
