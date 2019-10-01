@@ -1,5 +1,5 @@
 
-const objectIterator = function* (object) {
+const objectIterator = function *(object) {
     const keys = Object.keys(object);
     for (const k of keys) {
         yield [k, object[k]];

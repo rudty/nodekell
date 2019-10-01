@@ -7,7 +7,7 @@ import { _fetchAndGetIterator } from "./internal/fetchIterator";
 const fetch_call_internal = (f, iter) => {
     const fetchCount = P.parallel_get_fetch_count_internal() - 1;
     return _fetchAndGetIterator(fetchCount, iter, (e) => f.add(e()));
-}
+};
 
 const pcalls_internal = async function *(iter) {
 

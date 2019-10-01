@@ -107,4 +107,4 @@ export class _Stack {
             p.next = null;
         }
     }
-};
+}
