@@ -33,26 +33,6 @@ const _headTailInternal = (iter) => {
 
 /**
  * get head and tail
- * const [head, tail] = _headTailNoThrow(iterator);
- * 
- * head = value
- * tail = generator
- * not throw empty
- * return [undefined []] if iter is empty
- * 
- * @param {Array | Iterable | AsyncIterable} iter 
- * @returns {Array} [head, tail] value, iterable
- */
-// export const _headTailNoThrow = async (iter) => {
-//     const r = await _headTailInternal(iter);
-//     if (!r) {
-//         return emptyHeadTail;
-//     }
-//     return r;
-// };
-
-/**
- * get head and tail
  * const [head, tail] = _headTail(iterator);
  * 
  * head = value

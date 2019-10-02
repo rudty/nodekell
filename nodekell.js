@@ -268,7 +268,7 @@
         return sum / c;
     };
 
-    const objectIterator = function* (object) {
+    const objectIterator = function *(object) {
         const keys = Object.keys(object);
         for (const k of keys) {
             yield [k, object[k]];
@@ -715,18 +715,21 @@
         yield* g;
     });
 
+    const _takeValue = async (v) => {
+        v = await v;
+        if (v.constructor === Function) {
+            v = await v();
+        }
+        return v;
+    };
+
     const emptyThen = curry(async function *(supply, iter) {
         for await (const e of iter) {
             yield e;
             yield* iter;
             return;
         }
-        supply = await supply;
-        if (supply instanceof Function) {
-            yield* await supply();
-        } else {
-            yield* supply;
-        }
+        yield* await _takeValue(supply);
     });
 
     const enumerate = async function *(iter) {
@@ -793,11 +796,7 @@
         for await (const e of iter) {
             return e;
         }
-        supply = await supply;
-        if (supply instanceof Function) {
-            return await supply();
-        }
-        return supply;
+        return _takeValue(supply);
     });
 
     const flat = async function *(iter) {
@@ -1354,10 +1353,7 @@
     };
 
     const getDuration = async (duration) => {
-        duration = await duration;
-        if (duration instanceof Function) {
-            duration = await duration();
-        }
+        duration = await _takeValue(duration);
         if (duration <= 0) {
             throw new Error("duration > 0 required");
         }

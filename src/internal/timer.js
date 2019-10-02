@@ -1,10 +1,7 @@
+import { _takeValue } from "./runtime";
+
 export const getDuration = async (duration) => {
-    duration = await duration;
-
-    if (duration instanceof Function) {
-        duration = await duration();
-    }
-
+    duration = await _takeValue(duration);
     if (duration <= 0) {
         throw new Error("duration > 0 required");
     }
