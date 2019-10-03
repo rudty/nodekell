@@ -13,3 +13,24 @@ export const _takeValue = async (v) => {
 
     return v;
 };
+
+/**
+ * Remove all elements of iterator
+ * @param {IterableIterator | AsyncIterator} it 
+ */
+export const _removeAllIteratorElements = async (it) => {
+    if (!it) {
+        return;
+    }
+
+    for (; ;) {
+        //for await (const e of iter) {} is 
+        //May not work due to optimizations
+        const { value, done } = await it.next();
+        if (done) {
+            break;
+        }
+
+        await value;
+    }
+};

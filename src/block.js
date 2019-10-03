@@ -1,23 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { _toStrictIterator } from "./internal/toIterator";
-
-const takeAllIterator = async (it) => {
-    if (!it) {
-        return;
-    }
-
-    for (; ;) {
-        //for await (const e of iter) {} is 
-        //May not work due to optimizations
-        const { value, done } = await it.next();
-        if (done) {
-            break;
-        }
-
-        await value;
-    }
-};
-
+import { _removeAllIteratorElements } from "./internal/runtime";
 
 /**
  * 1. await promise
@@ -35,6 +18,6 @@ export const block = async (...values) => {
     values = await Promise.all(values);
     for (const iter of values) {
         const it = _toStrictIterator(iter);
-        await takeAllIterator(it);
+        await _removeAllIteratorElements(it);
     }
 };
