@@ -296,7 +296,14 @@
         }
     };
 
-    const takeAllIterator = async (it) => {
+    const _takeValue = async (v) => {
+        v = await v;
+        if (v.constructor === Function) {
+            v = await v();
+        }
+        return v;
+    };
+    const _removeAllIteratorElements = async (it) => {
         if (!it) {
             return;
         }
@@ -308,11 +315,12 @@
             await value;
         }
     };
+
     const block = async (...values) => {
         values = await Promise.all(values);
         for (const iter of values) {
             const it = _toStrictIterator(iter);
-            await takeAllIterator(it);
+            await _removeAllIteratorElements(it);
         }
     };
 
@@ -714,14 +722,6 @@
         }
         yield* g;
     });
-
-    const _takeValue = async (v) => {
-        v = await v;
-        if (v.constructor === Function) {
-            v = await v();
-        }
-        return v;
-    };
 
     const emptyThen = curry(async function *(supply, iter) {
         for await (const e of iter) {
