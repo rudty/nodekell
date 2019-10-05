@@ -1,3 +1,25 @@
+import { curry } from "./curry";
+
+/**
+ *  if (a) {
+ *      //less
+ *      return -1;
+ *  } else {
+ *      //equal
+ *      return 0;     
+ *  }
+ * @param {Boolean} a 
+ */
+const lessOrEqual = (a) => a ? -1 : 0;
+
+const _compareRhs = (fn, a, b) => {
+    const ab = fn(a, b);
+    if(ab instanceof Promise) {
+        return ab.then(lessOrEqual);
+    }
+    return lessOrEqual(ab);
+};
+
 /**
  * Can be used with sort function
  * @example
@@ -16,38 +38,12 @@ export const comparator = curry((fn, a, b) => {
         return ba.then(r0 => {
             if (r0) {
                 return 1;
-            } else {
-                const ab = fn();
-                if(ab instanceof Promise) {
-                    return ab.then(r1 => {
-                        if (r1) {
-                            return -1;
-                        } else {
-                            return 0;
-                        }
-                    });
-                }
-                if (ab) {
-                    return -1;
-                } else {
-                    return 0;
-                }
-            }
+            } 
+            return _compareRhs(fn, a, b)
         });
     }
-    const ab = fn();
-    if(ab instanceof Promise) {
-        return ab.then(r1 => {
-            if (r1) {
-                return -1;
-            } else {
-                return 0;
-            }
-        });
+    if (ba) {
+        return 1;
     }
-    if (ab) {
-        return -1;
-    } else {
-        return 0;
-    } 
+    return _compareRhs(fn, a, b);
 });

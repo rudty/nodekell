@@ -17,6 +17,7 @@ export * from "./collectMap.js";
 export * from "./collectNative.js";
 export * from "./collectObject.js";
 export * from "./collectSet.js";
+export * from "./comparator.js";
 export * from "./compose.js";
 export * from "./concat.js";
 export * from "./cond.js";

@@ -397,6 +397,30 @@ const collectObject = async (iter) => {
 
 const collectSet = async (iter) => new Set(await _collectArray(iter));
 
+const lessOrEqual = (a) => a ? -1 : 0;
+const _compareRhs = (fn, a, b) => {
+    const ab = fn(a, b);
+    if(ab instanceof Promise) {
+        return ab.then(lessOrEqual);
+    }
+    return lessOrEqual(ab);
+};
+const comparator = curry((fn, a, b) => {
+    const ba = fn(b, a);
+    if (ba instanceof Promise) {
+        return ba.then(r0 => {
+            if (r0) {
+                return 1;
+            }
+            return _compareRhs(fn, a, b)
+        });
+    }
+    if (ba) {
+        return 1;
+    }
+    return _compareRhs(fn, a, b);
+});
+
 const compose = (...fns) => async (...args) => {
     const len = fns.length;
     let z = await fns[len - 1](...args);
@@ -1825,6 +1849,7 @@ exports.collectUint16 = collectUint16;
 exports.collectUint32 = collectUint32;
 exports.collectUint8 = collectUint8;
 exports.collectUint8Clamped = collectUint8Clamped;
+exports.comparator = comparator;
 exports.compose = compose;
 exports.concat = concat;
 exports.cond = cond;
