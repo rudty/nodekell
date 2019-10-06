@@ -20,6 +20,13 @@ const _compareRhs = (fn, a, b) => {
     return lessOrEqual(ab);
 };
 
+const _compareLhsOrRhs = (fn, a, b) => (r) => {
+    if (r) {
+        return 1;
+    }
+    return _compareRhs(fn, a, b);
+};
+
 /**
  * Can be used with sort function
  * @example
@@ -28,22 +35,14 @@ const _compareRhs = (fn, a, b) => {
  * @see sort
  * @see sortBy
  *
- * @param fn compare function
+ * @param fn compare function (lhs: any, rhs: any): bool
  * @param a lhs
  * @param b rhs
  */
 export const comparator = curry((fn, a, b) => {
     const ba = fn(b, a);
     if (ba instanceof Promise) {
-        return ba.then(r0 => {
-            if (r0) {
-                return 1;
-            } 
-            return _compareRhs(fn, a, b)
-        });
+        return ba.then(_compareLhsOrRhs(fn, a, b));
     }
-    if (ba) {
-        return 1;
-    }
-    return _compareRhs(fn, a, b);
+    return _compareLhsOrRhs(fn, a, b)(ba);
 });

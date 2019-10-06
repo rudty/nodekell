@@ -407,20 +407,18 @@
         }
         return lessOrEqual(ab);
     };
-    const comparator = curry((fn, a, b) => {
-        const ba = fn(b, a);
-        if (ba instanceof Promise) {
-            return ba.then(r0 => {
-                if (r0) {
-                    return 1;
-                }
-                return _compareRhs(fn, a, b)
-            });
-        }
-        if (ba) {
+    const _compareLhsOrRhs = (fn, a, b) => (r) => {
+        if (r) {
             return 1;
         }
         return _compareRhs(fn, a, b);
+    };
+    const comparator = curry((fn, a, b) => {
+        const ba = fn(b, a);
+        if (ba instanceof Promise) {
+            return ba.then(_compareLhsOrRhs(fn, a, b));
+        }
+        return _compareLhsOrRhs(fn, a, b)(ba);
     });
 
     const compose = (...fns) => async (...args) => {
