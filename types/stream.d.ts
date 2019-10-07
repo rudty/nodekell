@@ -599,3 +599,19 @@ export function block(...value: any[]): Promise<void>;
  */
 export function sortBy<T>(comparator: (lhs: ExtractPromise<T>, rhs: ExtractPromise<T>) => number | Promise<number>, iter: Iter<T | Promise<T>>): Promise<ArrayLike<ExtractPromise<T>>>;
 export function sortBy<T>(comparator: (lhs: T, rhs: T) => number | Promise<number>): (iter: Iter<T | Promise<T>>) => Promise<ArrayLike<ExtractPromise<T>>>;
+
+/**
+ * Can be used with sort function
+ * @example
+ *      const cmp = F.comparator((a: number, b: number) => a < b);
+ *      console.log(cmp(1, 2)); // print -1
+ *
+ *      const cmp2 = F.comparator<number>((a, b) => a < b);
+ *      console.log(cmp2(1, 2)); // print -1
+ * @see sort
+ * @see sortBy
+ */
+export function comparator(fn: (lhs: any, rhs: any) => boolean): (lhs: any, rhs: any) => number;
+export function comparator(fn: (lhs: any, rhs: any) => Promise<boolean>): (lhs: any, rhs: any) => Promise<number>;
+export function comparator<T>(fn: (lhs: T, rhs: T) => boolean): (lhs: T, rhs: T) => number;
+export function comparator<T>(fn: (lhs: T, rhs: T) => Promise<boolean>): (lhs: T, rhs: T) => Promise<number>;

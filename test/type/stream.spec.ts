@@ -1476,3 +1476,55 @@ describe('sortBy', () => {
         const r0 = await F.run(a, F.sortBy(f)); // $ExpectType ArrayLike<number>
     });
 });
+
+describe('compareator', () => {
+    it('number', async () => {
+        const cmp = F.comparator((a: number, b: number) => a < b); // $ExpectType (lhs: number, rhs: number) => number
+        const r0 = cmp(3, 4); // $ExpectType number
+    });
+
+    it('number2', async () => {
+        const cmp = F.comparator<number>((a, b) => a < b); // $ExpectType (lhs: number, rhs: number) => number
+        const r0 = cmp(3, 4); // $ExpectType number
+    });
+
+    it('string', async () => {
+        const cmp = F.comparator((a: string, b: string) => a < b); // $ExpectType (lhs: string, rhs: string) => number
+        const r0 = cmp("3", "4"); // $ExpectType number
+    });
+
+    it('string2', async () => {
+        const cmp = F.comparator<string>((a, b) => a < b); // $ExpectType (lhs: string, rhs: string) => number
+        const r0 = cmp("3", "4"); // $ExpectType number
+    });
+
+    it('any', async () => {
+        const cmp = F.comparator((a, b) => a < b); // $ExpectType (lhs: any, rhs: any) => number
+        const r0 = cmp("3", "4"); // $ExpectType number
+    });
+
+    it('Promise<number>', async () => {
+        const cmp = F.comparator((a: number, b: number) => Promise.resolve(a < b)); // $ExpectType (lhs: number, rhs: number) => Promise<number>
+        const r0 = cmp(3, 4); // $ExpectType Promise<number>
+    });
+
+    it('number2', async () => {
+        const cmp = F.comparator<number>((a, b) => Promise.resolve(a < b)); // $ExpectType (lhs: number, rhs: number) => Promise<number>
+        const r0 = cmp(3, 4); // $ExpectType Promise<number>
+    });
+
+    it('string', async () => {
+        const cmp = F.comparator((a: string, b: string) => Promise.resolve(a < b)); // $ExpectType (lhs: string, rhs: string) => Promise<number>
+        const r0 = cmp("3", "4"); // $ExpectType Promise<number>
+    });
+
+    it('string2', async () => {
+        const cmp = F.comparator<string>((a, b) => Promise.resolve(a < b)); // $ExpectType (lhs: string, rhs: string) => Promise<number>
+        const r0 = cmp("3", "4"); // $ExpectType Promise<number>
+    });
+
+    it('any', async () => {
+        const cmp = F.comparator((a, b) => Promise.resolve(a < b)); // $ExpectType (lhs: any, rhs: any) => Promise<number>
+        const r0 = cmp("3", "4"); // $ExpectType Promise<number>
+    });
+});
