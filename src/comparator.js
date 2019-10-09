@@ -27,6 +27,18 @@ const _compareLhsOrRhs = (fn, a, b) => (r) => {
     return _compareRhs(fn, a, b);
 };
 
+const _comparator = (fn, a, b) => {
+    const ba = fn(b, a);
+    if (ba instanceof Promise) {
+        return ba.then(_compareLhsOrRhs(fn, a, b));
+    }
+    return _compareLhsOrRhs(fn, a, b)(ba);
+};
+
+const _comparatorAwait = async (fn, a, b) => {
+    return _comparator(fn, (await a), (await b));
+};
+
 /**
  * Can be used with sort function
  * @example
@@ -40,9 +52,8 @@ const _compareLhsOrRhs = (fn, a, b) => (r) => {
  * @param b rhs
  */
 export const comparator = curry((fn, a, b) => {
-    const ba = fn(b, a);
-    if (ba instanceof Promise) {
-        return ba.then(_compareLhsOrRhs(fn, a, b));
+    if (a instanceof Promise || b instanceof Promise) {
+        return _comparatorAwait(fn, a, b);
     }
-    return _compareLhsOrRhs(fn, a, b)(ba);
+    return _comparator(fn, a, b);
 });

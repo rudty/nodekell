@@ -1551,4 +1551,8 @@ describe('compareator', () => {
         const cmp = F.comparator((a, b) => Promise.resolve(a < b)); // $ExpectType (lhs: any, rhs: any) => Promise<number>
         const r0 = cmp("3", "4"); // $ExpectType Promise<number>
     });
+
+    it('Promise lhs', async () => {
+        
+    });
 });
