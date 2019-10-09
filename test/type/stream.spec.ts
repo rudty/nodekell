@@ -1581,4 +1581,14 @@ describe('comparator', () => {
             Promise.resolve("4"));
         r1; // $ExpectType Promise<number>
     });
+
+    it('with array.sort', async () => {
+        const arr = [1, 2, 3];
+        arr.sort(F.comparator((a, b) => a < b));
+    });
+
+    it('with F.sort', async () => {
+        const arr = [1, 2, 3];
+        const r0 = await F.sortBy(F.comparator((a, b) => a < b), arr);
+    });
 });

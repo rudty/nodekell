@@ -87,4 +87,28 @@ describe('test comparator', () => {
         assert.deepStrictEqual(r1, -1);
         assert.deepStrictEqual(r2, 0);
     });
+
+    it('with array.sort asc', async () => {
+        const arr = [1, 2, 3];
+        const r0 = arr.sort(F.comparator((a, b) => a < b));
+        assert.deepStrictEqual(r0, [1,2,3]);
+    });
+
+    it('with array.sort desc', async () => {
+        const arr = [1, 2, 3];
+        const r0 = arr.sort(F.comparator((a, b) => a > b));
+        assert.deepStrictEqual(r0, [3,2,1]);
+    });
+
+    it('with F.sort asc', async () => {
+        const arr = [1, 2, 3];
+        const r0 = await F.sortBy(F.comparator((a, b) => a < b), arr);
+        assert.deepStrictEqual(r0, [1,2,3]);
+    });
+
+    it('with F.sort desc', async () => {
+        const arr = [1, 2, 3];
+        const r0 = await F.sortBy(F.comparator((a, b) => a > b), arr);
+        assert.deepStrictEqual(r0, [3,2,1]);
+    });
 });
