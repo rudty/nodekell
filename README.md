@@ -196,6 +196,7 @@ console.log(v);//[3]
 *    [mergeMapRight](#mergemapright)
 *    [mergeObject](#mergeobject)
 *    [mergeObjectRight](#mergeobjectright)
+*    [comparator](#comparator)
 ---
 
 
@@ -2582,9 +2583,25 @@ const m1 = new Map([[1, 2], [3, 4]]);
 const o1 = { 5: 6, 7: 8 };
 const r1 = await F.mergeObjectRight(m1, o1);
 console.log(r1); // print { '1': 2, '3': 4, '5': 6, '7': 8 }
-
 ```
 
+
+### comparator
+Creates a function that can be used as a comparison using '<' on an existing '-'.
+```javascript
+const cmp = F.comparator((a, b) => a < b);
+console.log(cmp(1, 2)); // print -1
+ ```
+ ```javascript
+const arr = [5, 4, 1, 2, 3];
+arr.sort(F.comparator((a, b) => a < b));
+console.log(arr); // print [1, 2, 3, 4, 5];
+ ```
+ ```javascript
+const arr = [5, 4, 1, 2, 3];
+const r0 = await F.sortBy(F.comparator((a, b) => a > b), arr);
+console.log(r0); // print [5, 4, 3, 2, 1]
+ ```
 
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frudty%2Fnodekell.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Frudty%2Fnodekell?ref=badge_large)
