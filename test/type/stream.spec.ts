@@ -1477,9 +1477,9 @@ describe('sortBy', () => {
     });
 });
 
-describe('compareator', () => {
+describe('comparator', () => {
     it('number', async () => {
-        const cmp = F.comparator((a: number, b: number) => a < b); // $ExpectType (lhs: number | Promise<number>, rhs: number | Promise<number>) => number
+        const cmp = F.comparator((a: number, b: number) => a < b); // $ExpectType (lhs: number, rhs: number) => number
         const r0 = cmp(3, 4); // $ExpectType number
         const r1 = F.comparator((a, b) => {
             a; // $ExpectType number
@@ -1490,12 +1490,12 @@ describe('compareator', () => {
     });
 
     it('number2', async () => {
-        const cmp = F.comparator<number>((a, b) => a < b); // $ExpectType (lhs: number | Promise<number>, rhs: number | Promise<number>) => number
+        const cmp = F.comparator<number>((a, b) => a < b); // $ExpectType (lhs: number, rhs: number) => number
         const r0 = cmp(3, 4); // $ExpectType number
     });
 
     it('string', async () => {
-        const cmp = F.comparator((a: string, b: string) => a < b); // $ExpectType (lhs: string | Promise<string>, rhs: string | Promise<string>) => number
+        const cmp = F.comparator((a: string, b: string) => a < b); // $ExpectType (lhs: string, rhs: string) => number
         const r0 = cmp("3", "4"); // $ExpectType number
         const r1 = F.comparator((a, b) => {
             a; // $ExpectType string
@@ -1506,7 +1506,7 @@ describe('compareator', () => {
     });
 
     it('string2', async () => {
-        const cmp = F.comparator<string>((a, b) => a < b); // $ExpectType (lhs: string | Promise<string>, rhs: string | Promise<string>) => number
+        const cmp = F.comparator<string>((a, b) => a < b); // $ExpectType (lhs: string, rhs: string) => number
         const r0 = cmp("3", "4"); // $ExpectType number
     });
 
@@ -1559,6 +1559,26 @@ describe('compareator', () => {
             (a: string, b: string) => Promise.resolve(a < b),
             Promise.resolve("3"),
             "4");
+        r1; // $ExpectType Promise<number>
+    });
+
+    it('Promise rhs string', async () => {
+        const cmp = F.comparator((a: string, b: string) => Promise.resolve(a < b)); // $ExpectType (lhs: string | Promise<string>, rhs: string | Promise<string>) => Promise<number>
+        const r0 = cmp(Promise.resolve("3"), Promise.resolve("4")); // $ExpectType Promise<number>
+        const r1 = F.comparator(
+            (a: string, b: string) => Promise.resolve(a < b),
+            "3",
+            Promise.resolve("4"));
+        r1; // $ExpectType Promise<number>
+    });
+
+    it('Promise value and comp returns not promise', async () => {
+        const cmp = F.comparator((a: string, b: string) => Promise.resolve(a < b)); // $ExpectType (lhs: string | Promise<string>, rhs: string | Promise<string>) => Promise<number>
+        const r0 = cmp(Promise.resolve("3"), Promise.resolve("4")); // $ExpectType Promise<number>
+        const r1 = F.comparator(
+            (a: string, b: string) => a < b,
+            Promise.resolve("3"),
+            Promise.resolve("4"));
         r1; // $ExpectType Promise<number>
     });
 });
