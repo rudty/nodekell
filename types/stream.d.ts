@@ -613,7 +613,8 @@ export function sortBy<T>(comparator: (lhs: T, rhs: T) => number | Promise<numbe
  */
 export function comparator(fn: (lhs: any, rhs: any) => boolean): (lhs: any, rhs: any) => number;
 export function comparator(fn: (lhs: any, rhs: any) => Promise<boolean>): (lhs: any, rhs: any) => Promise<number>;
-export function comparator<L, R>(fn: (lhs: L, rhs: R) => boolean, lhs: L, rhs: R): number;
-export function comparator<T>(fn: (lhs: T, rhs: T) => boolean): (lhs: T, rhs: T) => number;
-export function comparator<T>(fn: (lhs: T, rhs: T) => Promise<boolean>): (lhs: T, rhs: T) => Promise<number>;
-export function comparator<T>(fn: (lhs: T, rhs: T) => Promise<boolean>, lhs: T, rhs: T): Promise<number>;
+export function comparator<L, R>(fn: (lhs: ExtractPromise<L>, rhs: ExtractPromise<R>) => boolean, lhs: L, rhs: R): Promise<number>;
+export function comparator<L, R>(fn: (lhs: L, rhs: R) => boolean, lhs: L | Promise<L>, rhs: R | Promise<R>): number;
+export function comparator<L, R>(fn: (lhs: L, rhs: R) => boolean): (lhs: L | Promise<L>, rhs: R | Promise<R>) => number;
+export function comparator<L, R>(fn: (lhs: L, rhs: R) => Promise<boolean>): (lhs: L | Promise<L>, rhs: R | Promise<R>) => Promise<number>;
+export function comparator<L, R>(fn: (lhs: L, rhs: R) => Promise<boolean>, lhs: L | Promise<L>, rhs: R | Promise<R>): Promise<number>;
