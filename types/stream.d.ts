@@ -585,6 +585,11 @@ export function reFindAllSubmatch(re: RegExp): (str: string) => string[][];
 export function block(...value: any[]): Promise<void>;
 
 /**
+ * Sort the values in ascending order.
+ */
+export function sort<T>(iter: Iter<T | Promise<T>>): Promise<ArrayLike<ExtractPromise<T>>>;
+
+/**
  * Sort the values by the return value of the function.
  * iterator or asyncIterator take all the values and sorts them.
  *
