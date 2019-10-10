@@ -35,7 +35,7 @@ const _comparator = (fn, a, b) => {
     return _compareLhsOrRhs(fn, a, b)(ba);
 };
 
-const _comparatorAwait = async (fn, a, b) => {
+const _comparatorAsync = async (fn, a, b) => {
     return _comparator(fn, (await a), (await b));
 };
 
@@ -53,7 +53,7 @@ const _comparatorAwait = async (fn, a, b) => {
  */
 export const comparator = curry((fn, a, b) => {
     if (a instanceof Promise || b instanceof Promise) {
-        return _comparatorAwait(fn, a, b);
+        return _comparatorAsync(fn, a, b);
     }
     return _comparator(fn, a, b);
 });
