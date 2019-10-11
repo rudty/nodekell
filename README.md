@@ -91,12 +91,12 @@ console.log(v);//[3]
 *    [distinctUntilChanged](#distinctuntilchanged)
 *    [distinctUntilChangedBy](#distinctuntilchangedby)
 *    [splitBy](#splitby)
-*    [innerJoin](#innerjoin)
-*    [leftInnerJoin](#leftinnerjoin)
-*    [rightInnerJoin](#rightinnerjoin)
-*    [outerJoin](#outerjoin)
-*    [leftOuterJoin](#leftouterjoin)
-*    [rightOuterJoin](#rightouterjoin)
+*    [innerJoin](#innerjoin)            [change]
+*    [leftInnerJoin](#leftinnerjoin)    [deprecated]
+*    [rightInnerJoin](#rightinnerjoin)  [deprecated]
+*    [outerJoin](#outerjoin)            [deprecated]
+*    [leftOuterJoin](#leftouterjoin)    [deprecated]
+*    [rightOuterJoin](#rightouterjoin)  [deprecated]
 *    [then](#then)
 *    [tap](#tap)
 *    [concat](#concat)
@@ -788,10 +788,14 @@ for await(const e of r) {
 
 
 ### innerJoin
+This function will be replaced by another feature
+
 same as [leftInnerJoin](#leftinnerjoin)
 
 
 ### leftInnerJoin
+deprecated
+
 support Map, Object({})
 ```javascript
 const a = [{id:1, name:"foo"}, {id: 2, name:"bar"}, {id: 3, name:"hoo"}];
@@ -806,6 +810,8 @@ console.log(r);
 
 
 ### rightInnerJoin
+deprecated
+
 support Map, object({})
 
 the result is the same as innerJoin, but the output order is right iterator
@@ -821,10 +827,14 @@ console.log(r);
 
 
 ### outerJoin 
+deprecated
+
 same as [leftOuterJoin](#leftOuterJoin)
 
 
 ### leftOuterJoin
+deprecated
+
 support Map, object({})
 ```javascript
 const a = [{id:1, name:"foo"}, {id: 2, name:"bar"}, {id: 3, name:"hoo"}];
@@ -840,6 +850,8 @@ console.log(r);
 
 
 ### rightOuterJoin
+deprecated
+
 support Map, object({})
 ```javascript
 const a = [{id:1, value:3}]; 
