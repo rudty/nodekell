@@ -1,6 +1,7 @@
 import { _collectArray } from "./internal/collectArray";
+import { curry } from "./curry";
 
-const innerJoin2 = curry(async (fn, iter1, iter2) => {
+export const innerJoin2 = curry(async (fn, iter1, iter2) => {
     iter1 = _collectArray(iter1);
     iter2 = _collectArray(iter2);
 
@@ -11,8 +12,10 @@ const innerJoin2 = curry(async (fn, iter1, iter2) => {
 
     for (let i = 0; i < iter1.length; ++i) {
         for (let j = 0; j < iter2.length; ++j) {
-            if (await fn(iter1[i], iter2[j])) {
-                //combine
+            const l = iter1[i];
+            const r = iter2[j];
+            if (await fn(l, r)) {
+                result.push([l, r]);
             }
         }
     }
