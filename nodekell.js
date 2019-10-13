@@ -980,22 +980,20 @@
 
     const inc = (a) => a + 1;
 
-    const innerJoin2 = curry(async (fn, iter1, iter2) => {
-        iter1 = _collectArray(iter1);
-        iter2 = _collectArray(iter2);
-        iter1 = await iter1;
-        iter2 = await iter2;
-        const result = [];
-        for (let i = 0; i < iter1.length; ++i) {
-            for (let j = 0; j < iter2.length; ++j) {
-                const l = iter1[i];
-                const r = iter2[j];
+    const innerJoin2 = curry(async function *(fn, xs, ys) {
+        xs = _collectArray(xs);
+        ys = _collectArray(ys);
+        xs = await xs;
+        ys = await ys;
+        for (let i = 0; i < xs.length; ++i) {
+            for (let j = 0; j < ys.length; ++j) {
+                const l = xs[i];
+                const r = ys[j];
                 if (await fn(l, r)) {
-                    result.push([l, r]);
+                    yield [l, r];
                 }
             }
         }
-        return result;
     });
 
     const sleep = (t) => new Promise((r) => {
