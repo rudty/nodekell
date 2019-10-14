@@ -1087,3 +1087,49 @@ describe('rightOuterJoin', () => {
         r1[0]; // $ExpectType Map<string, string | number>
     });
 });
+
+describe('innerJoin2', () => {
+    interface Order {
+        orderId: number;
+        customerId: number;
+        desc: string;
+    }
+
+    interface Customer {
+        customerId: number;
+        name: string;
+    }
+
+    const newOrder = (orderId: number, customerId: number, desc: string): Order => ({
+        orderId,
+        customerId,
+        desc,
+    });
+
+    const newCustomer = (customerId: number, name: string): Customer => ({
+        customerId,
+        name,
+    });
+
+    const orders = [
+        newOrder(1, 1, "t1"),
+        newOrder(2, 1, "t2"),
+        newOrder(3, 1, "t3"),
+        newOrder(4, 2, "t4"),
+        newOrder(5, 3, "t5"),
+        newOrder(6, 4, "t6"),
+    ];
+
+    const customers = [
+        newCustomer(1, "ana"),
+        newCustomer(2, "cdn"),
+        newCustomer(3, "krw"),
+    ];
+
+    const customerJoinOrder = (a: Customer, b: Order) => a.customerId === b.customerId;
+
+    it('from customer join order', async () => {
+        const r0 = await F.innerJoin2(customerJoinOrder, customers, orders);
+        const firstElem = await r0.next(); // $ExpectType IteratorResult<[Customer, Order], any>
+    });
+});
