@@ -1183,4 +1183,38 @@ describe('innerJoin2', () => {
         const r0 = await F.innerJoin2(promiseCustomerJoinOrder, promiseCustomers, promiseOrders);
         const firstElem = await r0.next(); // $ExpectType IteratorResult<[Customer, Order], any>
     });
+
+    it('innerJoin2(fn)(iter1)(iter2)', async () => {
+        const r0 = await F.innerJoin2(customerJoinOrder)(customers)(orders);
+        const firstElem0 = await r0.next(); // $ExpectType IteratorResult<[Customer, Order], any>
+
+        const r1 = await F.innerJoin2(promiseCustomerJoinOrder)(customers)(orders);
+        const firstElem1 = await r1.next(); // $ExpectType IteratorResult<[Customer, Order], any>
+
+        const r2 = await F.innerJoin2(promiseCustomerJoinOrder)(promiseCustomers)(orders);
+        const firstElem2 = await r2.next(); // $ExpectType IteratorResult<[Customer, Order], any>
+
+        const r3 = await F.innerJoin2(promiseCustomerJoinOrder)(customers)(promiseOrders);
+        const firstElem3 = await r3.next(); // $ExpectType IteratorResult<[Customer, Order], any>
+
+        const r4 = await F.innerJoin2(promiseCustomerJoinOrder)(promiseCustomers)(promiseOrders);
+        const firstElem4 = await r4.next(); // $ExpectType IteratorResult<[Customer, Order], any>
+    });
+
+    it('innerJoin2(fn, iter1)(iter2)', async () => {
+        const r0 = await F.innerJoin2(customerJoinOrder, customers)(orders);
+        const firstElem0 = await r0.next(); // $ExpectType IteratorResult<[Customer, Order], any>
+
+        const r1 = await F.innerJoin2(promiseCustomerJoinOrder, customers)(orders);
+        const firstElem1 = await r1.next(); // $ExpectType IteratorResult<[Customer, Order], any>
+
+        const r2 = await F.innerJoin2(promiseCustomerJoinOrder, promiseCustomers)(orders);
+        const firstElem2 = await r2.next(); // $ExpectType IteratorResult<[Customer, Order], any>
+
+        const r3 = await F.innerJoin2(promiseCustomerJoinOrder, customers)(promiseOrders);
+        const firstElem3 = await r3.next(); // $ExpectType IteratorResult<[Customer, Order], any>
+
+        const r4 = await F.innerJoin2(promiseCustomerJoinOrder, promiseCustomers)(promiseOrders);
+        const firstElem4 = await r4.next(); // $ExpectType IteratorResult<[Customer, Order], any>
+    });
 });

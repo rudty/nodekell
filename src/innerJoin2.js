@@ -26,7 +26,7 @@ import { curry } from "./curry";
  * insert into Customers values(2, 'cdn');
  * insert into Customers values(3, 'krw');
  * ---------------------
- * select * 
+ * select (*)
  * from Customers C
  * join Orders O
  * on C.customerID = O.customerID

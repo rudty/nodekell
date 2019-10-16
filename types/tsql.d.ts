@@ -224,4 +224,49 @@ export function rightOuterJoin<T1 extends object, T2 extends object>(f: (elem2: 
 
 export function rightOuterJoin<T1 extends object, T2 extends object>(f: (elem2: T2, elem1: T1) => (boolean | Promise<boolean>)): CurriedFunction2<Iter<T1 | Promise<T1>>, Iter<T2 | Promise<T2>>, AsyncIterableIterator<OuterJoinObject<T2, T1>>>;
 
+/**
+ * combine elements from two iterables based on the related elements between them.
+ * works like TSQL
+ * ---------------------
+ * create table Orders(
+ *   orderID int,
+ *   customerID int,
+ *   info varchar(30)
+ * );
+ *
+ * create table Customers(
+ *    customerID int,
+ *    customerName varchar(30)
+ * );
+ *
+ * insert into Orders values(1,1,'t1');
+ * insert into Orders values(2,1,'t2');
+ * insert into Orders values(3,1,'t3');
+ * insert into Orders values(4,2,'t4');
+ * insert into Orders values(5,3,'t5');
+ * insert into Orders values(6,4,'t6');
+ *
+ * insert into Customers values(1, 'ana');
+ * insert into Customers values(2, 'cdn');
+ * insert into Customers values(3, 'krw');
+ * ---------------------
+ * select (*)
+ * from Customers C
+ * join Orders O
+ * on C.customerID = O.customerID
+ * ---------------------
+ * customerID, customerName, orderID, customerID, info
+ * '1','ana','1','1','t1'
+ * '1','ana','2','1','t2'
+ * '1','ana','3','1','t3'
+ * '2','cdn','4','2','t4'
+ * '3','krw','5','3','t5'
+ * ---------------------
+ *
+ * @param {Function} fn (elem1, elem2): bool | Promise<bool>
+ * @param {Iterable | AsyncIterable} xs iterable
+ * @param {Iterable | AsyncIterable} ys iterable
+ */
 export function innerJoin2<T1, T2>(joinFunc: (l: T1, r: T2) => boolean | Promise<boolean>, left: Iter<T1 | Promise<T1>>, right: Iter<T2 | Promise<T2>>): Promise<AsyncIterableIterator<PairRepeat<2, T1, T2>>>;
+export function innerJoin2<T1, T2>(joinFunc: (l: T1, r: T2) => boolean | Promise<boolean>, left: Iter<T1 | Promise<T1>>): (right: Iter<T2 | Promise<T2>>) => Promise<AsyncIterableIterator<PairRepeat<2, T1, T2>>>;
+export function innerJoin2<T1, T2>(joinFunc: (l: T1, r: T2) => boolean | Promise<boolean>): (left: Iter<T1 | Promise<T1>>) => (right: Iter<T2 | Promise<T2>>) => Promise<AsyncIterableIterator<PairRepeat<2, T1, T2>>>;
