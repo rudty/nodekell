@@ -981,8 +981,7 @@
     const inc = (a) => a + 1;
 
     const innerJoin2 = curry(async function *(fn, xs, ys) {
-        ys = _collectArray(ys);
-        ys = await ys;
+        ys = await _collectArray(ys);
         for await (const l of xs) {
             for (let j = 0; j < ys.length; ++j) {
                 const r = ys[j];

@@ -44,8 +44,7 @@ import { curry } from "./curry";
  * @param {Iterable | AsyncIterable} ys iterable
  */
 export const innerJoin2 = curry(async function *(fn, xs, ys) {
-    ys = _collectArray(ys);
-    ys = await ys;
+    ys = await _collectArray(ys);
 
     for await (const l of xs) {
         for (let j = 0; j < ys.length; ++j) {
