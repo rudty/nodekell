@@ -224,4 +224,4 @@ export function rightOuterJoin<T1 extends object, T2 extends object>(f: (elem2: 
 
 export function rightOuterJoin<T1 extends object, T2 extends object>(f: (elem2: T2, elem1: T1) => (boolean | Promise<boolean>)): CurriedFunction2<Iter<T1 | Promise<T1>>, Iter<T2 | Promise<T2>>, AsyncIterableIterator<OuterJoinObject<T2, T1>>>;
 
-export function innerJoin2<T1, T2>(joinFunc: (l: T1, r: T2) => boolean | Promise<boolean>, left: Iter<T1>, right: Iter<T2>): Promise<AsyncIterableIterator<PairRepeat<2, T1, T2>>>;
+export function innerJoin2<T1, T2>(joinFunc: (l: T1, r: T2) => boolean | Promise<boolean>, left: Iter<T1 | Promise<T1>>, right: Iter<T2 | Promise<T2>>): Promise<AsyncIterableIterator<PairRepeat<2, T1, T2>>>;

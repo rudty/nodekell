@@ -1126,10 +1126,61 @@ describe('innerJoin2', () => {
         newCustomer(3, "krw"),
     ];
 
+    const promiseOrders = [
+        Promise.resolve(newOrder(1, 1, "t1")),
+        Promise.resolve(newOrder(2, 1, "t2")),
+        Promise.resolve(newOrder(3, 1, "t3")),
+        Promise.resolve(newOrder(4, 2, "t4")),
+        Promise.resolve(newOrder(5, 3, "t5")),
+        Promise.resolve(newOrder(6, 4, "t6")),
+    ];
+
+    const promiseCustomers = [
+        Promise.resolve(newCustomer(1, "ana")),
+        Promise.resolve(newCustomer(2, "cdn")),
+        Promise.resolve(newCustomer(3, "krw")),
+    ];
+
     const customerJoinOrder = (a: Customer, b: Order) => a.customerId === b.customerId;
+    const promiseCustomerJoinOrder = (a: Customer, b: Order) => Promise.resolve(a.customerId === b.customerId);
 
     it('from customer join order', async () => {
         const r0 = await F.innerJoin2(customerJoinOrder, customers, orders);
+        const firstElem = await r0.next(); // $ExpectType IteratorResult<[Customer, Order], any>
+    });
+
+    it('left promise from promise customer join order', async () => {
+        const r0 = await F.innerJoin2(customerJoinOrder, promiseCustomers, orders);
+        const firstElem = await r0.next(); // $ExpectType IteratorResult<[Customer, Order], any>
+    });
+
+    it('right promise from customer join promise order', async () => {
+        const r0 = await F.innerJoin2(customerJoinOrder, customers, promiseOrders);
+        const firstElem = await r0.next(); // $ExpectType IteratorResult<[Customer, Order], any>
+    });
+
+    it('left right promise from customer join order', async () => {
+        const r0 = await F.innerJoin2(customerJoinOrder, promiseCustomers, promiseOrders);
+        const firstElem = await r0.next(); // $ExpectType IteratorResult<[Customer, Order], any>
+    });
+
+    it('comp promise from customer join order', async () => {
+        const r0 = await F.innerJoin2(promiseCustomerJoinOrder, customers, orders);
+        const firstElem = await r0.next(); // $ExpectType IteratorResult<[Customer, Order], any>
+    });
+
+    it('comp promise left promise from promise customer join order', async () => {
+        const r0 = await F.innerJoin2(promiseCustomerJoinOrder, promiseCustomers, orders);
+        const firstElem = await r0.next(); // $ExpectType IteratorResult<[Customer, Order], any>
+    });
+
+    it('comp promise right promise from customer join promise order', async () => {
+        const r0 = await F.innerJoin2(promiseCustomerJoinOrder, customers, promiseOrders);
+        const firstElem = await r0.next(); // $ExpectType IteratorResult<[Customer, Order], any>
+    });
+
+    it('comp promise left right promise from customer join order', async () => {
+        const r0 = await F.innerJoin2(promiseCustomerJoinOrder, promiseCustomers, promiseOrders);
         const firstElem = await r0.next(); // $ExpectType IteratorResult<[Customer, Order], any>
     });
 });
