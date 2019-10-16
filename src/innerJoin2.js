@@ -44,15 +44,11 @@ import { curry } from "./curry";
  * @param {Iterable | AsyncIterable} ys iterable
  */
 export const innerJoin2 = curry(async function *(fn, xs, ys) {
-    xs = _collectArray(xs);
     ys = _collectArray(ys);
-
-    xs = await xs;
     ys = await ys;
 
-    for (let i = 0; i < xs.length; ++i) {
+    for await (const l of xs) {
         for (let j = 0; j < ys.length; ++j) {
-            const l = xs[i];
             const r = ys[j];
             if (await fn(l, r)) {
                 yield [l, r];

@@ -64,6 +64,23 @@ describe('test innerJoin2', () => {
         { customerId: 3, name: 'krw' } ] ]);
     });
 
+    it('default iterator', async () => {
+        const r0 =  await F.collect(
+            F.innerJoin2(joinByCustomerId, orders[Symbol.iterator](), customers[Symbol.iterator]())
+        );
+        assert.deepStrictEqual(r0, [ 
+      [ { orderId: 1, customerId: 1, desc: 't1' },
+        { customerId: 1, name: 'ana' } ],
+      [ { orderId: 2, customerId: 1, desc: 't2' },
+        { customerId: 1, name: 'ana' } ],
+      [ { orderId: 3, customerId: 1, desc: 't3' },
+        { customerId: 1, name: 'ana' } ],
+      [ { orderId: 4, customerId: 2, desc: 't4' },
+        { customerId: 2, name: 'cdn' } ],
+      [ { orderId: 5, customerId: 3, desc: 't5' },
+        { customerId: 3, name: 'krw' } ] ]);
+    });
+
     it('compare promise', async () => {
         const r0 =  await F.collect(
             F.innerJoin2(promiseJoinByCustomerId, orders, customers)
