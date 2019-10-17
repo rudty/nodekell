@@ -1,4 +1,3 @@
-import { _collectArray } from "./internal/collectArray";
 import { curry } from "./curry";
 import { seq } from "./seq";
 /**
