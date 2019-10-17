@@ -1,5 +1,6 @@
 import { _collectArray } from "./internal/collectArray";
 import { curry } from "./curry";
+import { seq } from "./seq";
 /**
  * combine elements from two iterables based on the related elements between them.
  * works like TSQL
@@ -44,11 +45,28 @@ import { curry } from "./curry";
  * @param {Iterable | AsyncIterable} ys iterable
  */
 export const innerJoin2 = curry(async function *(fn, xs, ys) {
-    ys = await _collectArray(ys);
+    xs = seq(xs);
+
+    const { value: fx, done: fxdone } = await xs.next();
+    
+    if(fxdone) {
+        return;
+    }
+
+    //1. take 1 xs
+    //2. take all ys and compare
+    //3. take all xs and compare
+    const ysa = [];
+    for await (const r of ys) {
+        if (await fn(fx, r)) {
+            yield [fx, r];
+        } 
+        ysa.push(r);
+    }
 
     for await (const l of xs) {
-        for (let j = 0; j < ys.length; ++j) {
-            const r = ys[j];
+        for (let j = 0; j < ysa.length; ++j) {
+            const r = ysa[j];
             if (await fn(l, r)) {
                 yield [l, r];
             }
