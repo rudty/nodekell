@@ -980,6 +980,29 @@
 
     const inc = (a) => a + 1;
 
+    const innerJoin2 = curry(async function *(fn, xs, ys) {
+        xs = seq(xs);
+        const { value: fx, done: fxdone } = await xs.next();
+        if(fxdone) {
+            return;
+        }
+        const ysa = [];
+        for await (const r of ys) {
+            if (await fn(fx, r)) {
+                yield [fx, r];
+            }
+            ysa.push(r);
+        }
+        for await (const l of xs) {
+            for (let j = 0; j < ysa.length; ++j) {
+                const r = ysa[j];
+                if (await fn(l, r)) {
+                    yield [l, r];
+                }
+            }
+        }
+    });
+
     const sleep = (t) => new Promise((r) => {
         setTimeout(r, t);
     });
@@ -1906,6 +1929,7 @@
     exports.identity = identity;
     exports.inc = inc;
     exports.innerJoin = innerJoin;
+    exports.innerJoin2 = innerJoin2;
     exports.interval = interval;
     exports.isNil = isNil;
     exports.iterate = iterate;
