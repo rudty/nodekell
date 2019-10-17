@@ -1175,8 +1175,6 @@ const minBy = curry(async (f, iter) => {
 
 const min = minBy(identity);
 
-const notNil = (a) => !isNil(a);
-
 const orderBy = curry(async function *(f, order, iter) {
     if (order.constructor === "".constructor) {
         switch (order.trim().toLowerCase()) {
@@ -1949,7 +1947,6 @@ exports.mergeObject = mergeObject;
 exports.mergeObjectRight = mergeObjectRight;
 exports.min = min;
 exports.minBy = minBy;
-exports.notNil = notNil;
 exports.order = order;
 exports.orderBy = orderBy;
 exports.otherwise = otherwise;

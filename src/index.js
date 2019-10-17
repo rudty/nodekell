@@ -81,7 +81,6 @@ export * from "./mergeObject.js";
 export * from "./mergeObjectRight.js";
 export * from "./min.js";
 export * from "./minBy.js";
-export * from "./notNil.js";
 export * from "./order.js";
 export * from "./orderBy.js";
 export * from "./otherwise.js";
