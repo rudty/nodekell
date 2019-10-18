@@ -8,6 +8,7 @@ import {
     ExtractPromise,
     AssociateMap,
 } from './utils';
+import { fnil } from './prelude';
 
 /**
  * https://github.com/rudty/nodekell#rangeof
@@ -622,3 +623,5 @@ export function comparator<L, R>(fn: (lhs: ExtractPromise<L>, rhs: ExtractPromis
 export function comparator<L, R = L>(fn: (lhs: L, rhs: R) => boolean): (lhs: L, rhs: R) => number;
 export function comparator<L, R = L>(fn: (lhs: L, rhs: R) => Promise<boolean>): (lhs: L | Promise<L>, rhs: R | Promise<R>) => Promise<number>;
 export function comparator<L, R = L>(fn: (lhs: L, rhs: R) => Promise<boolean>, lhs: L | Promise<L>, rhs: R | Promise<R>): Promise<number>;
+export function comparator<L, R = L>(fn: (lhs: ExtractPromise<L>, rhs: R) => boolean, lhs: L): (rhs: R) => L extends Promise<any> ? Promise<number>: number;
+export function comparator<L, R = L>(fn: (lhs: L, rhs: R) => Promise<boolean>, lhs: L | Promise<L>): (rhs: R | Promise<R>) => Promise<number>;

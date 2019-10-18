@@ -1582,6 +1582,17 @@ describe('comparator', () => {
         r1; // $ExpectType Promise<number>
     });
 
+    it('curry1', async () => {
+        const cmp0 = F.comparator((a: string, b: string) => a < b, "a");
+        const r0 = cmp0("b"); // $ExpectType number
+
+        const cmp1 = F.comparator((a: string, b: string) => a < b, Promise.resolve("a"));
+        const r1 = cmp1("b"); // $ExpectType Promise<number>
+
+        const cmp2 = F.comparator((a: string, b: string) => Promise.resolve(a < b), "a");
+        const r2 = cmp2("b"); // $ExpectType Promise<number>
+    });
+
     it('with array.sort', async () => {
         const arr = [1, 2, 3];
         arr.sort(F.comparator((a, b) => a < b));
