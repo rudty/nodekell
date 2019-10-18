@@ -173,4 +173,18 @@ describe('test innerJoin2', () => {
         ); 
         assert.deepStrictEqual(r0, [[[1, { "orderId": 1, "customerId": 1, "desc": "t1" }], [1, { "customerId": 1, "name": "ana" }]], [[2, { "orderId": 2, "customerId": 1, "desc": "t2" }], [1, { "customerId": 1, "name": "ana" }]], [[3, { "orderId": 3, "customerId": 1, "desc": "t3" }], [1, { "customerId": 1, "name": "ana" }]], [[4, { "orderId": 4, "customerId": 2, "desc": "t4" }], [2, { "customerId": 2, "name": "cdn" }]], [[5, { "orderId": 5, "customerId": 3, "desc": "t5" }], [3, { "customerId": 3, "name": "krw" }]]]);
     });
+
+    it('empty', async () => {
+        const r0 =  await F.collect(
+            F.innerJoin2(joinByCustomerId, [], [])
+        );
+        assert.deepStrictEqual(r0, []);
+    });
+
+    it('false cond', async () => {
+        const r0 =  await F.collect(
+            F.innerJoin2(() => false, ordersMap, customersMap)
+        ); 
+        assert.deepStrictEqual(r0, []);
+    });
 });
