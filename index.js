@@ -439,7 +439,11 @@ const compose = (...fns) => async (...args) => {
 
 const concat = curry(async function *(a, b) {
     yield* a;
-    yield* b;
+    if (b && _hasIterator(b)) {
+        yield* b;
+    } else {
+        yield b;
+    }
 });
 const union = concat;
 
