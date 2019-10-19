@@ -91,7 +91,7 @@ console.log(v);//[3]
 *    [distinctUntilChanged](#distinctuntilchanged)
 *    [distinctUntilChangedBy](#distinctuntilchangedby)
 *    [splitBy](#splitby)
-*    [innerJoin](#innerjoin)            [change]
+*    [innerJoin](#innerjoin)            [deprecated][change]
 *    [leftInnerJoin](#leftinnerjoin)    [deprecated]
 *    [rightInnerJoin](#rightinnerjoin)  [deprecated]
 *    [outerJoin](#outerjoin)            [deprecated]
@@ -788,6 +788,8 @@ for await(const e of r) {
 
 
 ### innerJoin
+deprecated
+
 This function will be replaced by another feature
 
 same as [leftInnerJoin](#leftinnerjoin)
