@@ -1,12 +1,8 @@
 import { curry } from "./curry";
-import { _hasIterator } from "./internal/typeTraits";
+import { flatOnce } from "./internal/flatOnce";
 
 export const concat = curry(async function *(a, b) {
     yield* a;
-    if (b && _hasIterator(b)) {
-        yield* b;
-    } else {
-        yield b;
-    }
+    yield* flatOnce(b);
 });
 export const union = concat;

@@ -437,13 +437,17 @@ const compose = (...fns) => async (...args) => {
     return z;
 };
 
+const yieldValue = async function *(a) {
+    if (a && _hasIterator(a)) {
+        yield* a;
+    } else {
+        yield a;
+    }
+};
+
 const concat = curry(async function *(a, b) {
     yield* a;
-    if (b && _hasIterator(b)) {
-        yield* b;
-    } else {
-        yield b;
-    }
+    yield* yieldValue(b);
 });
 const union = concat;
 
