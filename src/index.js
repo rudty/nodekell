@@ -62,6 +62,7 @@ export * from "./head.js";
 export * from "./identity.js";
 export * from "./inc.js";
 export * from "./innerJoin2.js";
+export * from "./insertAt.js";
 export * from "./interval.js";
 export * from "./isNil.js";
 export * from "./iterate.js";

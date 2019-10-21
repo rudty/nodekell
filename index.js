@@ -437,7 +437,7 @@ const compose = (...fns) => async (...args) => {
     return z;
 };
 
-const yieldValue = async function *(a) {
+const flatOnce = async function *(a) {
     if (a && _hasIterator(a)) {
         yield* a;
     } else {
@@ -446,8 +446,8 @@ const yieldValue = async function *(a) {
 };
 
 const concat = curry(async function *(a, b) {
-    yield* a;
-    yield* yieldValue(b);
+    yield* flatOnce(a);
+    yield* flatOnce(b);
 });
 const union = concat;
 
@@ -1008,6 +1008,19 @@ const innerJoin2 = curry(async function *(fn, xs, ys) {
         }
     }
 });
+
+const insertAt = async function *(value, index, iter) {
+    let i = 0;
+    for await(const e of iter) {
+        if (i++ === index) {
+            yield* flatOnce(value);
+        }
+        yield e;
+    }
+    if (i <= index) {
+        yield* flatOnce(value);
+    }
+};
 
 const sleep = (t) => new Promise((r) => {
     setTimeout(r, t);
@@ -1934,6 +1947,7 @@ exports.identity = identity;
 exports.inc = inc;
 exports.innerJoin = innerJoin;
 exports.innerJoin2 = innerJoin2;
+exports.insertAt = insertAt;
 exports.interval = interval;
 exports.isNil = isNil;
 exports.iterate = iterate;
