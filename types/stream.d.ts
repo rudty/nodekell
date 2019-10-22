@@ -625,3 +625,14 @@ export function comparator<L, R = L>(fn: (lhs: L, rhs: R) => Promise<boolean>): 
 export function comparator<L, R = L>(fn: (lhs: L, rhs: R) => Promise<boolean>, lhs: L | Promise<L>, rhs: R | Promise<R>): Promise<number>;
 export function comparator<L, R = L>(fn: (lhs: ExtractPromise<L>, rhs: R) => boolean, lhs: L): (rhs: R) => L extends Promise<any> ? Promise<number>: number;
 export function comparator<L, R = L>(fn: (lhs: L, rhs: R) => Promise<boolean>, lhs: L | Promise<L>): (rhs: R | Promise<R>) => Promise<number>;
+
+/**
+ * Add {iter} to the {index} position of {iter} received as an argument.
+ * If {index} is greater than the length of {iter}, it is added to the end of {iter}.
+ * @param value add value
+ * @param index add index
+ * @param iter any iterable
+ */
+export function insertAt<T>(value: T | Promise<T>, index: number, iter: Iter<T>): AsyncIterator<T>;
+export function insertAt<T>(value: T, index: number): (iter: Iter<ExtractPromise<T>>) => AsyncIterator<ExtractPromise<T>>;
+export function insertAt<T>(value: T): (index: number) => (iter: Iter<ExtractPromise<T>>) => AsyncIterator<ExtractPromise<T>>;
