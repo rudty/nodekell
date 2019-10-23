@@ -440,6 +440,7 @@
     };
 
     const flatOnce = async function *(a) {
+        a = await a;
         if (a && _hasIterator(a)) {
             yield* a;
         } else {
@@ -1011,7 +1012,7 @@
         }
     });
 
-    const insertAt = async function *(value, index, iter) {
+    const insertAt = curry(async function *(value, index, iter) {
         let i = 0;
         for await(const e of iter) {
             if (i++ === index) {
@@ -1022,7 +1023,7 @@
         if (i <= index) {
             yield* flatOnce(value);
         }
-    };
+    });
 
     const sleep = (t) => new Promise((r) => {
         setTimeout(r, t);

@@ -1,4 +1,5 @@
 import { flatOnce } from "./internal/flatOnce";
+import { curry } from "./curry";
 
 /**
  * Add {iter} to the {index} position of {iter} received as an argument. 
@@ -8,7 +9,7 @@ import { flatOnce } from "./internal/flatOnce";
  * @param {Iterable | AsyncIterable} iter any iterable
  * @returns {AsyncIterable}
  */
-export const insertAt = async function *(value, index, iter) {
+export const insertAt = curry(async function *(value, index, iter) {
     let i = 0;
     for await(const e of iter) {
         if (i++ === index) {
@@ -20,4 +21,4 @@ export const insertAt = async function *(value, index, iter) {
     if (i <= index) {
         yield* flatOnce(value); 
     }
-};
+});
