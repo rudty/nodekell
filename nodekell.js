@@ -439,9 +439,18 @@
         return z;
     };
 
+    const flatOnce = async function *(a) {
+        a = await a;
+        if (a && _hasIterator(a)) {
+            yield* a;
+        } else {
+            yield a;
+        }
+    };
+
     const concat = curry(async function *(a, b) {
-        yield* a;
-        yield* b;
+        yield* flatOnce(a);
+        yield* flatOnce(b);
     });
     const union = concat;
 
@@ -1000,6 +1009,19 @@
                     yield [l, r];
                 }
             }
+        }
+    });
+
+    const insertAt = curry(async function *(value, index, iter) {
+        let i = 0;
+        for await(const e of iter) {
+            if (i++ === index) {
+                yield* flatOnce(value);
+            }
+            yield e;
+        }
+        if (i <= index) {
+            yield* flatOnce(value);
         }
     });
 
@@ -1928,6 +1950,7 @@
     exports.inc = inc;
     exports.innerJoin = innerJoin;
     exports.innerJoin2 = innerJoin2;
+    exports.insertAt = insertAt;
     exports.interval = interval;
     exports.isNil = isNil;
     exports.iterate = iterate;

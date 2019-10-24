@@ -1603,3 +1603,59 @@ describe('comparator', () => {
         const r0 = await F.sortBy(F.comparator((a, b) => a < b), arr);
     });
 });
+
+describe('insertAt', () => {
+    it('number', async () => {
+        const arr = [1, 2, 3];
+        const r0 = F.insertAt(3, 0, arr);
+        r0.next(); // $ExpectType Promise<IteratorResult<number, any>>
+    });
+
+    it('string', async () => {
+        const arr = ["a", "b", "c"];
+        const r0 = F.insertAt("d", 0, arr);
+        r0.next(); // $ExpectType Promise<IteratorResult<string, any>>
+    });
+
+    it('Promise<number>', async () => {
+        const arr = [1, 2, 3];
+        const r0 = F.insertAt(Promise.resolve(3), 0, arr);
+        r0.next(); // $ExpectType Promise<IteratorResult<number, any>>
+    });
+
+    it('c1 number', async () => {
+        const arr = [1, 2, 3];
+        const r0 = F.insertAt(3)(0)(arr);
+        r0.next(); // $ExpectType Promise<IteratorResult<number, any>>
+    });
+
+    it('c1 string', async () => {
+        const arr = ["a", "b", "c"];
+        const r0 = F.insertAt("d")(0)(arr);
+        r0.next(); // $ExpectType Promise<IteratorResult<string, any>>
+    });
+
+    it('c2 Promise<number>', async () => {
+        const arr = [1, 2, 3];
+        const r0 = F.insertAt(Promise.resolve(3))(0)(arr);
+        r0.next(); // $ExpectType Promise<IteratorResult<number, any>>
+    });
+
+    it('c2 number', async () => {
+        const arr = [1, 2, 3];
+        const r0 = F.insertAt(3, 0)(arr);
+        r0.next(); // $ExpectType Promise<IteratorResult<number, any>>
+    });
+
+    it('c2 string', async () => {
+        const arr = ["a", "b", "c"];
+        const r0 = F.insertAt("d", 0)(arr);
+        r0.next(); // $ExpectType Promise<IteratorResult<string, any>>
+    });
+
+    it('c2 Promise<number>', async () => {
+        const arr = [1, 2, 3];
+        const r0 = F.insertAt(Promise.resolve(3), 0)(arr);
+        r0.next(); // $ExpectType Promise<IteratorResult<number, any>>
+    });
+});

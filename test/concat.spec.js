@@ -23,4 +23,9 @@ describe('test concat', () => {
             F.collect);
         assert.deepStrictEqual(v, [0,1,2,0,1,2]);
     });
+    
+    it('value', async () => {
+        const v = await F.collect(F.concat([1,2], 3));
+        assert.deepStrictEqual(v, [1,2,3]);
+    });
 });
