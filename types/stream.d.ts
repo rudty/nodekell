@@ -8,15 +8,6 @@ import {
     ExtractPromise,
     AssociateMap,
 } from './utils';
-import { fnil } from './prelude';
-
-/**
- * https://github.com/rudty/nodekell#rangeof
- *
- * @deprecated use `flat` or `dflat` instead
- * @param a
- */
-export function rangeOf<T>(...a: T[]): AsyncIterableIterator<PFlat<T>>;
 
 /**
  * No Document
@@ -280,35 +271,6 @@ export function splitBy<T, R>(f: (t: T) => (Iter<R> | Promise<Iter<R>>), any: T)
 // export function splitBy<T, R extends Iter<any>>(f: (t: T) => (R | Promise<R>)): (any: T) => AsyncIterableIterator<FlatForInternalFn<R>>;
 
 export function splitBy<T, R>(f: (t: T) => (Iter<R> | Promise<Iter<R>>)): (any: T) => AsyncIterableIterator<R>;
-
-/**
- * [**deprecated**]
- * https://github.com/rudty/nodekell#errorthen
- *
- * @param supply
- * @param iter
- */
-export function errorThen<T, Y>(supply: (error: any) => (Iter<Y | Promise<Y>> | Promise<Iter<Y | Promise<Y>>>), iter: Iter<T | Promise<T>>): AsyncIterableIterator<T | Y>;
-export function errorThen<T, Y>(supply: (error: any) => (Iter<Y> | Promise<Iter<Y>>), iter: Iter<T>): AsyncIterableIterator<EP<T> | EP<Y>>;
-
-export function errorThen<T, Y>(supply: Promise<(error: any) => (Iter<Y | Promise<Y>> | Promise<Iter<Y | Promise<Y>>>)>, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T | Y>;
-export function errorThen<T, Y>(supply: Promise<(error: any) => (Iter<Y> | Promise<Iter<Y>>)>, iter: Iter<T>): AsyncIterableIterator<EP<T> | EP<Y>>;
-
-export function errorThen<T, Y>(supply: Iter<Y | Promise<Y>> | Promise<Iter<Y | Promise<Y>>>, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T | Y>;
-export function errorThen<T, Y>(supply: Iter<Y> | Promise<Iter<Y>>, iter: Iter<T>): AsyncIterableIterator<EP<T> | EP<Y>>;
-
-export function errorThen<T extends Iter<any>, Y extends Iter<any>>(supply: () => (Y | Promise<Y>)): (iter: T) => AsyncIterableIterator<FlatForInternalFn<T> | FlatForInternalFn<Y>>;
-export function errorThen<T extends Iter<any>, Y extends Iter<any>>(supply: Promise<() => (Y | Promise<Y>)>): (iter: T) => AsyncIterableIterator<FlatForInternalFn<T> | FlatForInternalFn<Y>>;
-export function errorThen<T extends Iter<any>, Y extends Iter<any>>(supply: Y): (iter: T) => AsyncIterableIterator<FlatForInternalFn<T> | FlatForInternalFn<Y>>;
-
-export function errorThen<T, Y>(supply: (error: any) => (Iter<Y | Promise<Y>> | Promise<Iter<Y | Promise<Y>>>)): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T | Y>;
-export function errorThen<T, Y>(supply: (error: any) => (Iter<Y> | Promise<Iter<Y>>)): (iter: Iter<T>) => AsyncIterableIterator<EP<T> | EP<Y>>;
-
-export function errorThen<T, Y>(supply: Promise<(error: any) => (Iter<Y | Promise<Y>> | Promise<Iter<Y | Promise<Y>>>)>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T | Y>;
-export function errorThen<T, Y>(supply: Promise<(error: any) => (Iter<Y> | Promise<Iter<Y>>)>): (iter: Iter<T>) => AsyncIterableIterator<EP<T> | EP<Y>>;
-
-export function errorThen<T, Y>(supply: Iter<Y | Promise<Y>> | Promise<Iter<Y | Promise<Y>>>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T | Y>;
-export function errorThen<T, Y>(supply: Iter<Y> | Promise<Iter<Y>>): (iter: Iter<T>) => AsyncIterableIterator<EP<T> | EP<Y>>;
 
 /**
  * https://github.com/rudty/nodekell#then
