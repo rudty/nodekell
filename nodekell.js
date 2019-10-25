@@ -439,7 +439,7 @@
         return z;
     };
 
-    const flatOnce = async function *(a) {
+    const _flatOnce = async function *(a) {
         a = await a;
         if (a && _hasIterator(a)) {
             yield* a;
@@ -449,8 +449,8 @@
     };
 
     const concat = curry(async function *(a, b) {
-        yield* flatOnce(a);
-        yield* flatOnce(b);
+        yield* _flatOnce(a);
+        yield* _flatOnce(b);
     });
     const union = concat;
 
@@ -769,7 +769,7 @@
             yield* iter;
             return;
         }
-        yield* flatOnce(_takeValue(supply));
+        yield* _flatOnce(_takeValue(supply));
     });
 
     const enumerate = async function *(iter) {
@@ -841,7 +841,7 @@
 
     const flat = async function *(iter) {
         for await (const e of iter) {
-            yield* flatOnce(e);
+            yield* _flatOnce(e);
         }
     };
 
@@ -1012,12 +1012,12 @@
         let i = 0;
         for await(const e of iter) {
             if (i++ === index) {
-                yield* flatOnce(value);
+                yield* _flatOnce(value);
             }
             yield e;
         }
         if (i <= index) {
-            yield* flatOnce(value);
+            yield* _flatOnce(value);
         }
     });
 

@@ -1,4 +1,4 @@
-import { flatOnce } from "./internal/flatOnce";
+import { _flatOnce } from "./internal/flatOnce";
 import { curry } from "./curry";
 
 /**
@@ -13,12 +13,12 @@ export const insertAt = curry(async function *(value, index, iter) {
     let i = 0;
     for await(const e of iter) {
         if (i++ === index) {
-            yield* flatOnce(value);
+            yield* _flatOnce(value);
         }
         yield e;
     }
 
     if (i <= index) {
-        yield* flatOnce(value); 
+        yield* _flatOnce(value); 
     }
 });

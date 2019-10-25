@@ -437,7 +437,7 @@ const compose = (...fns) => async (...args) => {
     return z;
 };
 
-const flatOnce = async function *(a) {
+const _flatOnce = async function *(a) {
     a = await a;
     if (a && _hasIterator(a)) {
         yield* a;
@@ -447,8 +447,8 @@ const flatOnce = async function *(a) {
 };
 
 const concat = curry(async function *(a, b) {
-    yield* flatOnce(a);
-    yield* flatOnce(b);
+    yield* _flatOnce(a);
+    yield* _flatOnce(b);
 });
 const union = concat;
 
@@ -767,7 +767,7 @@ const emptyThen = curry(async function *(supply, iter) {
         yield* iter;
         return;
     }
-    yield* flatOnce(_takeValue(supply));
+    yield* _flatOnce(_takeValue(supply));
 });
 
 const enumerate = async function *(iter) {
@@ -839,7 +839,7 @@ const firstOrGet = curry(async (supply, iter) => {
 
 const flat = async function *(iter) {
     for await (const e of iter) {
-        yield* flatOnce(e);
+        yield* _flatOnce(e);
     }
 };
 
@@ -1010,12 +1010,12 @@ const insertAt = curry(async function *(value, index, iter) {
     let i = 0;
     for await(const e of iter) {
         if (i++ === index) {
-            yield* flatOnce(value);
+            yield* _flatOnce(value);
         }
         yield e;
     }
     if (i <= index) {
-        yield* flatOnce(value);
+        yield* _flatOnce(value);
     }
 });
 
