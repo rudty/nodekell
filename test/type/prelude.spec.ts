@@ -726,19 +726,30 @@ describe('foldl', () => {
     it('from Normal Value', async () => {
         const a = [1, 2, 3, 4, 5];
 
-        const r0 = await F.foldl<number>((acc, e) => acc + e)(0)(a); // $ExpectType number
-        const r1 = await F.foldl<number>((acc, e) => acc + e)(0, a); // $ExpectType number
-        const r2 = await F.foldl<number>((acc, e) => acc + e, 0)(a); // $ExpectType number
+        const r0 = await F.foldl<number, number>((acc, e) => acc + e)(0)(a); // $ExpectType number
+        const r1 = await F.foldl<number, number>((acc, e) => acc + e)(0, a); // $ExpectType number
+        const r2 = await F.foldl<number, number>((acc, e) => acc + e, 0)(a); // $ExpectType number
         const r3 = await F.foldl((acc, e) => acc + e, 0, a); // $ExpectType number
     });
 
     it('from Promise Value', async () => {
         const a = [1, 2, Promise.resolve(3), 4, 5];
 
-        const r0 = await F.foldl<number>(async (acc, e) => acc + e)(Promise.resolve(0))(a); // $ExpectType number
-        const r1 = await F.foldl<number>(async (acc, e) => acc + e)(Promise.resolve(0), a); // $ExpectType number
-        const r2 = await F.foldl<number>(async (acc, e) => acc + e, Promise.resolve(0))(a); // $ExpectType number
+        const r0 = await F.foldl<number, number>(async (acc, e) => acc + e)(Promise.resolve(0))(a); // $ExpectType number
+        const r1 = await F.foldl<number, number>(async (acc, e) => acc + e)(Promise.resolve(0), a); // $ExpectType number
+        const r2 = await F.foldl<number, number>(async (acc, e) => acc + e, Promise.resolve(0))(a); // $ExpectType number
         const r3 = await F.foldl(async (acc, e) => acc + e, Promise.resolve(0), a); // $ExpectType number
+
+        // const rrrr = await F.foldl<number>((acc, e) => acc + e)(Promise.resolve(0))(a);
+    });
+
+    it('from Number to String', async () => {
+        const a = [1, 2, Promise.resolve(3), 4, 5];
+
+        const r0 = await F.foldl<number, string>(async (acc, e) => `${acc}${e}`)('')(a); // $ExpectType string
+        const r1 = await F.foldl<number, string>(async (acc, e) => `${acc}${e}`)('', a); // $ExpectType string
+        const r2 = await F.foldl<number, string>(async (acc, e) => `${acc}${e}`, '')(a); // $ExpectType string
+        const r3 = await F.foldl(async (acc, e) => `${acc}${e}`, '', a); // $ExpectType string
 
         // const rrrr = await F.foldl<number>((acc, e) => acc + e)(Promise.resolve(0))(a);
     });
@@ -746,26 +757,26 @@ describe('foldl', () => {
     it('from String', async () => {
         const a = 'hello world';
 
-        const r0 = await F.foldl<string>((acc, e) => acc + e)('')(a); // $ExpectType string
-        const r1 = await F.foldl<string>((acc, e) => acc + e)('', a); // $ExpectType string
-        const r2 = await F.foldl<string>((acc, e) => acc + e, '')(a); // $ExpectType string
+        const r0 = await F.foldl<string, string>((acc, e) => acc + e)('')(a); // $ExpectType string
+        const r1 = await F.foldl<string, string>((acc, e) => acc + e)('', a); // $ExpectType string
+        const r2 = await F.foldl<string, string>((acc, e) => acc + e, '')(a); // $ExpectType string
         const r3 = await F.foldl((acc, e) => acc + e, '', a); // $ExpectType string
     });
 
     it('from Normal / Promise Union', async () => {
         const a = [Promise.resolve(1), 2, 'a', Promise.resolve('b')];
 
-        const r0 = await F.foldl<string | number>((acc, e) => acc === 'a' ? acc : e)(0)(a); // $ExpectType string | number
-        const r1 = await F.foldl<string | number>((acc, e) => acc === 'a' ? acc : e)(0, a); // $ExpectType string | number
-        const r2 = await F.foldl<string | number>((acc, e) => acc === 'a' ? acc : e, 0)(a); // $ExpectType string | number
-        const r3 = await F.foldl((acc, e) => acc === 'a' ? acc : e, 0, a); // $ExpectType string | number
+        const r0 = await F.foldl<string | number, string | number>((acc, e) => acc === 'a' ? acc : e)(0)(a); // $ExpectType string | number
+        const r1 = await F.foldl<string | number, string | number>((acc, e) => acc === 'a' ? acc : e)(0, a); // $ExpectType string | number
+        const r2 = await F.foldl<string | number, string | number>((acc, e) => acc === 'a' ? acc : e, 0)(a); // $ExpectType string | number
+        const r3 = await F.foldl((acc, e) => acc === 'a' ? acc : e, 0 as string | number, a); // $ExpectType string | number
     });
 
     it('with run', async () => {
         const a = [Promise.resolve(1), 2, 'a', Promise.resolve('b'), null];
 
-        const r0 = await F.run(a, F.foldl<string | number | null>((acc, e) => acc === 'a' ? acc : e, 0)); // $ExpectType string | number | null
-        const r1 = await F.run(a, F.foldl((acc, e) => acc === 'a' ? acc : e, 0)); // $ExpectType string | number | null
+        const r0 = await F.run(a, F.foldl<string | number | null, string | number | null>((acc, e) => acc === 'a' ? acc : e, 0)); // $ExpectType string | number | null
+        const r1 = await F.run(a, F.foldl((acc, e) => acc === 'a' ? acc : e, 0 as string | number | null)); // $ExpectType string | number | null
     });
 });
 
@@ -961,44 +972,53 @@ describe('foldr', () => {
     it('from Normal Value', async () => {
         const a = [1, 2, 3, 4, 5];
 
-        const r0 = await F.foldr<number>((acc, e) => acc + e)(0)(a); // $ExpectType number
-        const r1 = await F.foldr<number>((acc, e) => acc + e)(0, a); // $ExpectType number
-        const r2 = await F.foldr<number>((acc, e) => acc + e, 0)(a); // $ExpectType number
+        const r0 = await F.foldr<number, number>((acc, e) => acc + e)(0)(a); // $ExpectType number
+        const r1 = await F.foldr<number, number>((acc, e) => acc + e)(0, a); // $ExpectType number
+        const r2 = await F.foldr<number, number>((acc, e) => acc + e, 0)(a); // $ExpectType number
         const r3 = await F.foldr((acc, e) => acc + e, 0, a); // $ExpectType number
     });
 
     it('from Promise Value', async () => {
         const a = [1, 2, Promise.resolve(3), 4, 5];
 
-        const r0 = await F.foldr<number>(async (acc, e) => acc + e)(Promise.resolve(0))(a); // $ExpectType number
-        const r1 = await F.foldr<number>(async (acc, e) => acc + e)(Promise.resolve(0), a); // $ExpectType number
-        const r2 = await F.foldr<number>(async (acc, e) => acc + e, Promise.resolve(0))(a); // $ExpectType number
+        const r0 = await F.foldr<number, number>(async (acc, e) => acc + e)(Promise.resolve(0))(a); // $ExpectType number
+        const r1 = await F.foldr<number, number>(async (acc, e) => acc + e)(Promise.resolve(0), a); // $ExpectType number
+        const r2 = await F.foldr<number, number>(async (acc, e) => acc + e, Promise.resolve(0))(a); // $ExpectType number
         const r3 = await F.foldr(async (acc, e) => acc + e, Promise.resolve(0), a); // $ExpectType number
+    });
+
+    it('from Number to String', async () => {
+        const a = [1, 2, Promise.resolve(3), 4, 5];
+
+        const r0 = await F.foldr<number, string>(async (acc, e) => `${acc}${e}`)('')(a); // $ExpectType string
+        const r1 = await F.foldr<number, string>(async (acc, e) => `${acc}${e}`)('', a); // $ExpectType string
+        const r2 = await F.foldr<number, string>(async (acc, e) => `${acc}${e}`, '')(a); // $ExpectType string
+        const r3 = await F.foldr(async (acc, e) => `${acc}${e}`, '', a); // $ExpectType string
     });
 
     it('from String', async () => {
         const a = 'hello world';
 
-        const r0 = await F.foldr<string>((acc, e) => acc + e)('')(a); // $ExpectType string
-        const r1 = await F.foldr<string>((acc, e) => acc + e)('', a); // $ExpectType string
-        const r2 = await F.foldr<string>((acc, e) => acc + e, '')(a); // $ExpectType string
+        const r0 = await F.foldr<string, string>((acc, e) => acc + e)('')(a); // $ExpectType string
+        const r1 = await F.foldr<string, string>((acc, e) => acc + e)('', a); // $ExpectType string
+        const r2 = await F.foldr<string, string>((acc, e) => acc + e, '')(a); // $ExpectType string
         const r3 = await F.foldr((acc, e) => acc + e, '', a); // $ExpectType string
     });
 
     it('from Normal / Promise Union', async () => {
         const a = [Promise.resolve(1), 2, 'a', Promise.resolve('b')];
 
-        const r0 = await F.foldr<string | number>((acc, e) => acc === 'a' ? acc : e)(0)(a); // $ExpectType string | number
-        const r1 = await F.foldr<string | number>((acc, e) => acc === 'a' ? acc : e)(0, a); // $ExpectType string | number
-        const r2 = await F.foldr<string | number>((acc, e) => acc === 'a' ? acc : e, 0)(a); // $ExpectType string | number
-        const r3 = await F.foldr((acc, e) => acc === 'a' ? acc : e, 0, a); // $ExpectType string | number
+        const r0 = await F.foldr<string | number, string | number>((acc, e) => acc === 'a' ? acc : e)(0)(a); // $ExpectType string | number
+        const r1 = await F.foldr<string | number, string | number>((acc, e) => acc === 'a' ? acc : e)(0, a); // $ExpectType string | number
+        const r2 = await F.foldr<string | number, string | number>((acc, e) => acc === 'a' ? acc : e, 0)(a); // $ExpectType string | number
+        const r3 = await F.foldr((acc, e) => acc === 'a' ? acc : e, 0 as string | number, a); // $ExpectType string | number
     });
 
     it('with run', async () => {
         const a = [Promise.resolve(1), 2, 'a', Promise.resolve('b'), null];
 
-        const r0 = await F.run(a, F.foldr<string | number | null>((acc, e) => acc === 'a' ? acc : e, 0)); // $ExpectType string | number | null
-        const r1 = await F.run(a, F.foldr((acc, e) => acc === 'a' ? acc : e, 0)); // $ExpectType string | number | null
+        const r0 = await F.run(a, F.foldr<string | number | null, string | number | null>((acc, e) => acc === 'a' ? acc : e, 0)); // $ExpectType string | number | null
+        const r1 = await F.run(a, F.foldr((acc, e) => acc === 'a' ? acc : e, 0 as string | number | null)); // $ExpectType string | number | null
     });
 });
 

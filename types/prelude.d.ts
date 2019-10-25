@@ -239,17 +239,17 @@ export function takeWhile<T>(f: (elem: T) => (boolean | Promise<boolean>)): (ite
 // export function foldl<T>(f: (acc: T, elem: T) => (T | Promise<T>)): (init: T | Promise<T>) => (iter: Iter<T | Promise<T>>) => Promise<T>;
 
 // export function foldl<T>(f: (acc: T, elem: T) => (T | Promise<T>)): (init: T | Promise<T>, iter: Iter<T | Promise<T>>) => Promise<T>;
-export function foldl<T>(f: (acc: T, elem: T) => (T | Promise<T>), init: T | Promise<T>, iter: Iter<T | Promise<T>>): Promise<T>;
+export function foldl<T, U>(f: (acc: U, elem: T) => (U | Promise<U>), init: U | Promise<U>, iter: Iter<T | Promise<T>>): Promise<U>;
 // export function foldl<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>), init: T, iter: Iter<T>): Promise<EP<T>>;
 
-export function foldl<T extends Iter<any>>(f: (acc: FlatForInternalFn<T>, elem: FlatForInternalFn<T>) => (FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>), init: FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>, iter: T): Promise<FlatForInternalFn<T>>;
-export function foldl<T extends Iter<any>>(f: (acc: FlatForInternalFn<T>, elem: FlatForInternalFn<T>) => (FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>), init: FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>): (iter: T) => Promise<FlatForInternalFn<T>>;
-export function foldl<T extends Iter<any>>(f: (acc: FlatForInternalFn<T>, elem: FlatForInternalFn<T>) => (FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>)): CurriedFunction2<FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>, T, Promise<FlatForInternalFn<T>>>;
+export function foldl<T extends Iter<any>, U>(f: (acc: U, elem: FlatForInternalFn<T>) => (U | Promise<U>), init: U | Promise<U>, iter: T): Promise<U>;
+export function foldl<T extends Iter<any>, U>(f: (acc: U, elem: FlatForInternalFn<T>) => (U | Promise<U>), init: U | Promise<U>): (iter: T) => Promise<U>;
+export function foldl<T extends Iter<any>, U>(f: (acc: U, elem: FlatForInternalFn<T>) => (U | Promise<U>)): CurriedFunction2<U | Promise<U>, T, Promise<U>>;
 
-export function foldl<T>(f: (acc: T, elem: T) => (T | Promise<T>), init: T | Promise<T>): (iter: Iter<T | Promise<T>>) => Promise<T>;
+export function foldl<T, U>(f: (acc: U, elem: T) => (U | Promise<U>), init: U | Promise<U>): (iter: Iter<T | Promise<T>>) => Promise<U>;
 // export function foldl<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>), init: T): (iter: Iter<T>) => Promise<EP<T>>;
 
-export function foldl<T>(f: (acc: T, elem: T) => (T | Promise<T>)): CurriedFunction2<T | Promise<T>, Iter<T | Promise<T>>, Promise<T>>;
+export function foldl<T, U>(f: (acc: U, elem: T) => (U | Promise<U>)): CurriedFunction2<U | Promise<U>, Iter<T | Promise<T>>, Promise<U>>;
 // export function foldl<T>(f: (acc: EP<T>, elem: EP<T>) => (EP<T> | Promise<EP<T>>)): CurriedFunction2<T, Iter<T>, Promise<EP<T>>>;
 
 /**
@@ -342,17 +342,17 @@ export function reverse<T>(iter: Iter<T>): AsyncIterableIterator<EP<T>>;
 
 // export function foldr<T>(f: (acc: T, elem: T) => (T | Promise<T>)): (init: T | Promise<T>, iter: Iter<T | Promise<T>>) => Promise<T>;
 
-export function foldr<T>(f: (elem: T, acc: T) => (T | Promise<T>), init: T | Promise<T>, iter: Iter<T | Promise<T>>): Promise<T>;
+export function foldr<T, U>(f: (elem: T, acc: U) => (U | Promise<U>), init: U | Promise<U>, iter: Iter<T | Promise<T>>): Promise<U>;
 // export function foldr<T>(f: (elem: EP<T>, acc: EP<T>) => (EP<T> | Promise<EP<T>>), init: T, iter: Iter<T>): Promise<EP<T>>;
 
-export function foldr<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>, acc: FlatForInternalFn<T>) => (FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>), init: FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>, iter: T): Promise<FlatForInternalFn<T>>;
-export function foldr<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>, acc: FlatForInternalFn<T>) => (FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>), init: FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>): (iter: T) => Promise<FlatForInternalFn<T>>;
-export function foldr<T extends Iter<any>>(f: (elem: FlatForInternalFn<T>, acc: FlatForInternalFn<T>) => (FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>)): CurriedFunction2<FlatForInternalFn<T> | Promise<FlatForInternalFn<T>>, T, Promise<FlatForInternalFn<T>>>;
+export function foldr<T extends Iter<any>, U>(f: (elem: FlatForInternalFn<T>, acc: U) => (U | Promise<U>), init: U | Promise<U>, iter: T): Promise<U>;
+export function foldr<T extends Iter<any>, U>(f: (elem: FlatForInternalFn<T>, acc: U) => (U | Promise<U>), init: U | Promise<U>): (iter: T) => Promise<U>;
+export function foldr<T extends Iter<any>, U>(f: (elem: FlatForInternalFn<T>, acc: U) => (U | Promise<U>)): CurriedFunction2<U | Promise<U>, T, Promise<U>>;
 
-export function foldr<T>(f: (elem: T, acc: T) => (T | Promise<T>), init: T | Promise<T>): (iter: Iter<T | Promise<T>>) => Promise<T>;
+export function foldr<T, U>(f: (elem: T, acc: U) => (U | Promise<U>), init: U | Promise<U>): (iter: Iter<T | Promise<T>>) => Promise<U>;
 // export function foldr<T>(f: (elem: EP<T>, acc: EP<T>) => (EP<T> | Promise<EP<T>>), init: T): (iter: Iter<T>) => Promise<EP<T>>;
 
-export function foldr<T>(f: (elem: T, acc: T) => (T | Promise<T>)): CurriedFunction2<T | Promise<T>, Iter<T | Promise<T>>, Promise<T>>;
+export function foldr<T, U>(f: (elem: T, acc: U) => (U | Promise<U>)): CurriedFunction2<U | Promise<U>, Iter<T | Promise<T>>, Promise<U>>;
 // export function foldr<T>(f: (elem: EP<T>, acc: EP<T>) => (EP<T> | Promise<EP<T>>)): CurriedFunction2<T, Iter<T>, Promise<EP<T>>>;
 
 /**
