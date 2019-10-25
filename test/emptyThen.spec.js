@@ -41,4 +41,11 @@ describe('test emptyThen', () => {
         // const r = F.emptyThen(3, [1,2,3]);
     
     });
+
+    it('empty value', async () => {
+        const v = await F.collect(
+             F.emptyThen(1, [])
+        );
+        assert.deepStrictEqual(v, [1]);
+    });
 });

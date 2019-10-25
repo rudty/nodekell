@@ -769,7 +769,7 @@
             yield* iter;
             return;
         }
-        yield* await _takeValue(supply);
+        yield* flatOnce(_takeValue(supply));
     });
 
     const enumerate = async function *(iter) {

@@ -6,7 +6,7 @@ import { _hasIterator } from "./typeTraits";
  * @param {*} a 
  * @returns {AsyncIterator}
  */
-export const flatOnce = async function *(a) {
+export const _flatOnce = async function *(a) {
     a = await a;
     if (a && _hasIterator(a)) {
         yield* a;
