@@ -197,6 +197,7 @@ console.log(v);//[3]
 *    [mergeObject](#mergeobject)
 *    [mergeObjectRight](#mergeobjectright)
 *    [comparator](#comparator)
+*    [insertAt](#insertat)
 ---
 
 
@@ -2616,6 +2617,25 @@ const arr = [5, 4, 1, 2, 3];
 const r0 = await F.sortBy(F.comparator((a, b) => a > b), arr);
 console.log(r0); // print [5, 4, 3, 2, 1]
  ```
+
+
+### insertAt
+Add iterator to the index position of iterator received as an argument. 
+
+If index is greater than the length of iterator, it is added to the end of iterator.
+```javascript
+const arr = [1,2,3,4,5];
+const ins = F.insertAt(6, 0, arr); // insert 6 in 0 index
+const r = await F.collect(ins); //generator to array
+console.log(r); // print [6, 1, 2, 3, 4, 5]
+```
+```javascript
+const arr = [1,2,3,4,5];
+const ins = F.insertAt(6, Infinity, arr); // insert 6 in last index
+const r = await F.collect(ins); //generator to array
+console.log(r); // print [1, 2, 3, 4, 5, 6]
+```
+
 
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frudty%2Fnodekell.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Frudty%2Fnodekell?ref=badge_large)
