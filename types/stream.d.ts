@@ -595,6 +595,6 @@ export function comparator<L, R = L>(fn: (lhs: L, rhs: R) => Promise<boolean>, l
  * @param index add index
  * @param iter any iterable
  */
-export function insertAt<T>(value: T | Promise<T>, index: number, iter: Iter<T>): AsyncIterator<T>;
-export function insertAt<T>(value: T, index: number): (iter: Iter<ExtractPromise<T>>) => AsyncIterator<ExtractPromise<T>>;
-export function insertAt<T>(value: T): (index: number) => (iter: Iter<ExtractPromise<T>>) => AsyncIterator<ExtractPromise<T>>;
+export function insertAt<T>(value: T | Promise<T>, index: number, iter: Iter<T>): AsyncIterableIterator<T>;
+export function insertAt<T>(value: T, index: number): (iter: Iter<ExtractPromise<T>>) => AsyncIterableIterator<ExtractPromise<T>>;
+export function insertAt<T>(value: T): (index: number) => (iter: Iter<ExtractPromise<T>>) => AsyncIterableIterator<ExtractPromise<T>>;

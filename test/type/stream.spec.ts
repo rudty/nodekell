@@ -1,4 +1,5 @@
 import * as F from '../../';
+import { collect } from 'types/stream';
 
 type DoneFn = () => any;
 
@@ -865,7 +866,7 @@ describe('tap', () => {
     it('from Promise / Normal Union Array', async () => {
         const a = [Promise.resolve(1), 2, Promise.resolve('a'), 'b'];
 
-        const r0 = await F.tap<(string | number | Promise<string> | Promise<number>)[]>(F.fnothing)(a); // $ExpectType (string | number | Promise<number> | Promise<string>)[]
+        const r0 = await F.tap<(string | number | Promise<number> | Promise<string>)[]>(F.fnothing)(a); // $ExpectType (string | number | Promise<number> | Promise<string>)[]
         const r1 = await F.tap(F.fnothing, a); // $ExpectType (string | number | Promise<number> | Promise<string>)[]
     });
 
@@ -1608,54 +1609,54 @@ describe('insertAt', () => {
     it('number', async () => {
         const arr = [1, 2, 3];
         const r0 = F.insertAt(3, 0, arr);
-        r0.next(); // $ExpectType Promise<IteratorResult<number, any>>
+        const t = collect(r0); // $ExpectType Promise<number[]>
     });
 
     it('string', async () => {
         const arr = ["a", "b", "c"];
         const r0 = F.insertAt("d", 0, arr);
-        r0.next(); // $ExpectType Promise<IteratorResult<string, any>>
+        const t = collect(r0); // $ExpectType Promise<string[]>
     });
 
     it('Promise<number>', async () => {
         const arr = [1, 2, 3];
         const r0 = F.insertAt(Promise.resolve(3), 0, arr);
-        r0.next(); // $ExpectType Promise<IteratorResult<number, any>>
+        const t = collect(r0); // $ExpectType Promise<number[]>
     });
 
     it('c1 number', async () => {
         const arr = [1, 2, 3];
         const r0 = F.insertAt(3)(0)(arr);
-        r0.next(); // $ExpectType Promise<IteratorResult<number, any>>
+        const t = collect(r0); // $ExpectType Promise<number[]>
     });
 
     it('c1 string', async () => {
         const arr = ["a", "b", "c"];
         const r0 = F.insertAt("d")(0)(arr);
-        r0.next(); // $ExpectType Promise<IteratorResult<string, any>>
+        const t = collect(r0); // $ExpectType Promise<string[]>
     });
 
     it('c2 Promise<number>', async () => {
         const arr = [1, 2, 3];
         const r0 = F.insertAt(Promise.resolve(3))(0)(arr);
-        r0.next(); // $ExpectType Promise<IteratorResult<number, any>>
+        const t = collect(r0); // $ExpectType Promise<number[]>
     });
 
     it('c2 number', async () => {
         const arr = [1, 2, 3];
         const r0 = F.insertAt(3, 0)(arr);
-        r0.next(); // $ExpectType Promise<IteratorResult<number, any>>
+        const t = collect(r0); // $ExpectType Promise<number[]>
     });
 
     it('c2 string', async () => {
         const arr = ["a", "b", "c"];
         const r0 = F.insertAt("d", 0)(arr);
-        r0.next(); // $ExpectType Promise<IteratorResult<string, any>>
+        const t = collect(r0); // $ExpectType Promise<string[]>
     });
 
     it('c2 Promise<number>', async () => {
         const arr = [1, 2, 3];
         const r0 = F.insertAt(Promise.resolve(3), 0)(arr);
-        r0.next(); // $ExpectType Promise<IteratorResult<number, any>>
+        const t = collect(r0); // $ExpectType Promise<number[]>
     });
 });
