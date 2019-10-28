@@ -1271,13 +1271,23 @@ describe('distinctUntilChanged', () => {
 });
 
 describe('associateBy', () => {
+    const getFirstKey = <K>(m: Map<K, any>): K => {
+        return (Array.from(m.keys()))[0];
+    };
+
+    const getFirstValue = <V>(m: Map<any, V>): V => {
+        return (Array.from(m.values()))[0];
+    };
+
     it('number', async () => {
         const a = [1, 1, 1, 2, 3];
 
         const r0 = F.associateBy(n => {
             return n * n;
         }, a);
-        r0; // $ExpectType Promise<Map<number, number>>
+        const m = await r0;
+        const k0 = getFirstKey(m); // $ExpectType number
+        const v0 = getFirstValue(m); // $ExpectType number
     });
 
     it('string', async () => {
@@ -1286,7 +1296,9 @@ describe('associateBy', () => {
         const r0 = F.associateBy(n => {
             return n + "a";
         }, a);
-        r0; // $ExpectType Promise<Map<string, string>>
+        const m = await r0;
+        const k0 = getFirstKey(m); // $ExpectType string
+        const v0 = getFirstValue(m); // $ExpectType string
     });
 
     it('string[]', async () => {
@@ -1295,7 +1307,9 @@ describe('associateBy', () => {
         const r0 = F.associateBy(n => {
             return [n, n];
         }, a);
-        r0; // $ExpectType Promise<Map<string, string>>
+        const m = await r0;
+        const k0 = getFirstKey(m); // $ExpectType string
+        const v0 = getFirstValue(m); // $ExpectType string
     });
 
     it('(number, string)[]', async () => {
@@ -1304,12 +1318,16 @@ describe('associateBy', () => {
         const r0 = F.associateBy(n => {
             return [0, n];
         }, a);
-        r0; // $ExpectType Promise<Map<string | number, string | number>>
+        const m0 = await r0;
+        const k0 = getFirstKey(m0); // $ExpectType string | number
+        const v0 = getFirstValue(m0); // $ExpectType string | number
 
         const r1 = F.associateBy(n => {
             return [0, n] as [number, string];
         }, a);
-        r1; // $ExpectType Promise<Map<number, string>>
+        const m1 = await r1;
+        const k1 = getFirstKey(m1); // $ExpectType number
+        const v1 = getFirstValue(m1); // $ExpectType string
     });
 
     it('Promise<number>', async () => {
@@ -1318,7 +1336,9 @@ describe('associateBy', () => {
         const r0 = F.associateBy(async n => {
             return n * n;
         }, a);
-        r0; // $ExpectType Promise<Map<number, number>>
+        const m0 = await r0;
+        const k0 = getFirstKey(m0); // $ExpectType number
+        const v0 = getFirstValue(m0); // $ExpectType number
     });
 
     it('Promise<(number, string)[]>', async () => {
@@ -1327,35 +1347,50 @@ describe('associateBy', () => {
         const r0 = F.associateBy(async n => {
             return [0, n];
         }, a);
-        r0; // $ExpectType Promise<Map<string | number, string | number>>
+        const m0 = await r0;
+        const k0 = getFirstKey(m0); // $ExpectType string | number
+        const v0 = getFirstValue(m0); // $ExpectType string | number
 
         const r1 = F.associateBy(async n => {
             return [0, n] as [number, string];
         }, a);
-        r1; // $ExpectType Promise<Map<number, string>>
+        const m1 = await r1;
+        const k1 = getFirstKey(m1); // $ExpectType number
+        const v1 = getFirstValue(m1); // $ExpectType string
 
         const arr1 = [1, Promise.resolve(2), 'a', Promise.resolve('b'), null];
-        const r2 = await F.associateBy(e => e, arr1); // $ExpectType Map<string | number | null, string | number | null>
+        const r2 = F.associateBy(e => e, arr1);
+        const m2 = await r2;
+        const k2 = getFirstKey(m2); // $ExpectType string | number | null
+        const v2 = getFirstValue(m2); // $ExpectType string | number | null
     });
 
     it('comment example', async () => {
         const arr0 = [1, 2, 3];
         const m0 = await F.associateBy(e => [e, e * 2], arr0);
-        m0; // $ExpectType Map<number, number>
+        const k0 = getFirstKey(m0); // $ExpectType number
+        const v0 = getFirstValue(m0); // $ExpectType number
 
         const arr1 = [1, 2, 3];
         const m1 = await F.associateBy(e => e + 1, arr1);
-        m1; // $ExpectType Map<number, number>
+        const k1 = getFirstKey(m1); // $ExpectType number
+        const v1 = getFirstValue(m1); // $ExpectType number
     });
 
     it('with run', async () => {
         const arr0 = [1, 2, 3];
-        const r0 = await F.run(arr0, F.associateBy(e => e)); // $ExpectType Map<number, number>
+        const m0 = await F.run(arr0, F.associateBy(e => e));
+        const k0 = getFirstKey(m0); // $ExpectType number
+        const v0 = getFirstValue(m0); // $ExpectType number
 
         const arr1 = [1, Promise.resolve(2), 'a', Promise.resolve('b'), null];
-        const r1 = await F.run(arr1, F.associateBy(e => e)); // $ExpectType Map<string | number | null, string | number | null>
+        const m1 = await F.run(arr1, F.associateBy(e => e));
+        const k1 = getFirstKey(m1); // $ExpectType string | number | null
+        const v1 = getFirstValue(m1); // $ExpectType string | number | null
 
-        const r2 = await F.run(arr1, F.associateBy(e => ["a", e] as [string, typeof e])); // $ExpectType Map<string, string | number | null>
+        const m2 = await F.run(arr1, F.associateBy(e => ["a", e] as [string, typeof e]));
+        const k2 = getFirstKey(m2); // $ExpectType string
+        const v2 = getFirstValue(m2); // $ExpectType string | number | null
     });
 });
 
