@@ -1,5 +1,4 @@
 import * as F from '../../';
-import { collect } from 'types/stream';
 
 type DoneFn = () => any;
 
@@ -1609,54 +1608,54 @@ describe('insertAt', () => {
     it('number', async () => {
         const arr = [1, 2, 3];
         const r0 = F.insertAt(3, 0, arr);
-        const t = collect(r0); // $ExpectType Promise<number[]>
+        const t = F.collect(r0); // $ExpectType Promise<number[]>
     });
 
     it('string', async () => {
         const arr = ["a", "b", "c"];
         const r0 = F.insertAt("d", 0, arr);
-        const t = collect(r0); // $ExpectType Promise<string[]>
+        const t = F.collect(r0); // $ExpectType Promise<string[]>
     });
 
     it('Promise<number>', async () => {
         const arr = [1, 2, 3];
         const r0 = F.insertAt(Promise.resolve(3), 0, arr);
-        const t = collect(r0); // $ExpectType Promise<number[]>
+        const t = F.collect(r0); // $ExpectType Promise<number[]>
     });
 
     it('c1 number', async () => {
         const arr = [1, 2, 3];
         const r0 = F.insertAt(3)(0)(arr);
-        const t = collect(r0); // $ExpectType Promise<number[]>
+        const t = F.collect(r0); // $ExpectType Promise<number[]>
     });
 
     it('c1 string', async () => {
         const arr = ["a", "b", "c"];
         const r0 = F.insertAt("d")(0)(arr);
-        const t = collect(r0); // $ExpectType Promise<string[]>
+        const t = F.collect(r0); // $ExpectType Promise<string[]>
     });
 
     it('c2 Promise<number>', async () => {
         const arr = [1, 2, 3];
         const r0 = F.insertAt(Promise.resolve(3))(0)(arr);
-        const t = collect(r0); // $ExpectType Promise<number[]>
+        const t = F.collect(r0); // $ExpectType Promise<number[]>
     });
 
     it('c2 number', async () => {
         const arr = [1, 2, 3];
         const r0 = F.insertAt(3, 0)(arr);
-        const t = collect(r0); // $ExpectType Promise<number[]>
+        const t = F.collect(r0); // $ExpectType Promise<number[]>
     });
 
     it('c2 string', async () => {
         const arr = ["a", "b", "c"];
         const r0 = F.insertAt("d", 0)(arr);
-        const t = collect(r0); // $ExpectType Promise<string[]>
+        const t = F.collect(r0); // $ExpectType Promise<string[]>
     });
 
     it('c2 Promise<number>', async () => {
         const arr = [1, 2, 3];
         const r0 = F.insertAt(Promise.resolve(3), 0)(arr);
-        const t = collect(r0); // $ExpectType Promise<number[]>
+        const t = F.collect(r0); // $ExpectType Promise<number[]>
     });
 });
