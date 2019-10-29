@@ -13,6 +13,10 @@ const getFirstValue = <V>(m: Map<any, V>): V => {
     return (Array.from(m.values()))[0];
 };
 
+const getFirstKeyValue = <K, V>(m: Map<K, V>): [K, V] => {
+    return [getFirstKey(m), getFirstValue(m)];
+};
+
 describe('groupBy', () => {
     it('from Object Array', async () => {
         const a = [{ type: 'human', name: 'syrflover' }, { type: 'kinggod', name: 'gyungdal' }, { type: 'human', name: 'cenox' }];
@@ -384,23 +388,19 @@ describe('innerJoin', () => {
 
         const rr0 = await F.collect(r0);
         const m0 = rr0[0];
-        const k0 = getFirstKey(m0); // $ExpectType string
-        const v0 = getFirstValue(m0); // $ExpectType string | number
+        const kv0 = getFirstKeyValue(m0); // $ExpectType [string, string | number]
 
         const rr1 = await F.collect(r1);
         const m1 = rr1[0];
-        const k1 = getFirstKey(m1); // $ExpectType string
-        const v1 = getFirstValue(m1); // $ExpectType string | number
+        const kv1 = getFirstKeyValue(m1); // $ExpectType [string, string | number]
 
         const rr2 = await F.collect(r2);
         const m2 = rr2[0];
-        const k2 = getFirstKey(m2); // $ExpectType string
-        const v2 = getFirstValue(m2); // $ExpectType string | number
+        const kv2 = getFirstKeyValue(m2); // $ExpectType [string, string | number]
 
         const rr3 = await F.collect(r3);
         const m3 = rr3[0];
-        const k3 = getFirstKey(m3); // $ExpectType string
-        const v3 = getFirstValue(m3); // $ExpectType string | number
+        const kv3 = getFirstKeyValue(m1); // $ExpectType [string, string | number]
     });
 
     it('from Object Array', async () => {
@@ -486,8 +486,7 @@ describe('innerJoin', () => {
 
         const r1 = await F.run(b1, F.innerJoin((a, b) => true, a1), F.collect);
 
-        const k1 = getFirstKey(r1[0]); // $ExpectType string
-        const v1 = getFirstValue(r1[0]); // $ExpectType string | number
+        const kv1 = getFirstKeyValue(r1[0]); // $ExpectType [string, string | number]
     });
 });
 
@@ -510,20 +509,16 @@ describe('leftInnerJoin', () => {
         const r3 = F.leftInnerJoin((a, b) => true, a, b);
 
         const rr0 = await F.collect(r0);
-        const k0 = getFirstKey(rr0[0]); // $ExpectType string
-        const v0 = getFirstValue(rr0[0]); // $ExpectType string | number
+        const kv0 = getFirstKeyValue(rr0[0]); // $ExpectType [string, string | number]
 
         const rr1 = await F.collect(r1);
-        const k1 = getFirstKey(rr1[0]); // $ExpectType string
-        const v1 = getFirstValue(rr1[0]); // $ExpectType string | number
+        const kv1 = getFirstKeyValue(rr1[0]); // $ExpectType [string, string | number]
 
         const rr2 = await F.collect(r2);
-        const k2 = getFirstKey(rr2[0]); // $ExpectType string
-        const v2 = getFirstValue(rr2[0]); // $ExpectType string | number
+        const kv2 = getFirstKeyValue(rr2[0]); // $ExpectType [string, string | number]
 
         const rr3 = await F.collect(r3);
-        const k3 = getFirstKey(rr3[0]); // $ExpectType string
-        const v3 = getFirstValue(rr3[0]); // $ExpectType string | number
+        const kv3 = getFirstKeyValue(rr3[0]); // $ExpectType [string, string | number]
     });
 
     it('from Object Array', async () => {
@@ -610,8 +605,7 @@ describe('leftInnerJoin', () => {
         const r1 = await F.run(b1, F.leftInnerJoin((a, b) => true, a1), F.collect);
 
         const m1 = r1[0];
-        const k1 = getFirstKey(m1); // $ExpectType string
-        const v1 = getFirstValue(m1); // $ExpectType string | number
+        const kv1 = getFirstKeyValue(m1); // $ExpectType [string, string | number]
     });
 });
 
@@ -635,23 +629,19 @@ describe('rightInnerJoin', () => {
 
         const rr0 = await F.collect(r0);
         const m0 = rr0[0];
-        const k0 = getFirstKey(m0); // $ExpectType string
-        const v0 = getFirstValue(m0); // $ExpectType string | number
+        const kv0 = getFirstKeyValue(m0); // $ExpectType [string, string | number]
 
         const rr1 = await F.collect(r1);
         const m1 = rr1[0];
-        const k1 = getFirstKey(m1); // $ExpectType string
-        const v1 = getFirstValue(m1); // $ExpectType string | number
+        const kv1 = getFirstKeyValue(m1); // $ExpectType [string, string | number]
 
         const rr2 = await F.collect(r2);
         const m2 = rr2[0];
-        const k2 = getFirstKey(m2); // $ExpectType string
-        const v2 = getFirstValue(m2); // $ExpectType string | number
+        const kv2 = getFirstKeyValue(m2); // $ExpectType [string, string | number]
 
         const rr3 = await F.collect(r3);
         const m3 = rr3[0];
-        const k3 = getFirstKey(m3); // $ExpectType string
-        const v3 = getFirstValue(m3); // $ExpectType string | number
+        const kv3 = getFirstKeyValue(m3); // $ExpectType [string, string | number]
     });
 
     it('from Object Array', async () => {
@@ -738,8 +728,7 @@ describe('rightInnerJoin', () => {
         const r1 = await F.run(b1, F.rightInnerJoin((a, b) => true, a1), F.collect);
 
         const m1 = r1[0];
-        const k1 = getFirstKey(m1); // $ExpectType string
-        const v1 = getFirstValue(m1); // $ExpectType string | number
+        const kv1 = getFirstKeyValue(m1); // $ExpectType [string, string | number]
     });
 });
 
@@ -762,16 +751,16 @@ describe('outerJoin', () => {
         const r3 = F.outerJoin((a, b) => true, a, b);
 
         const rr0 = await F.collect(r0);
-        rr0[0]; // $ExpectType Map<string, string | number>
+        const kv0 = getFirstKeyValue(rr0[0]); // $ExpectType [string, string | number]
 
         const rr1 = await F.collect(r1);
-        rr1[0]; // $ExpectType Map<string, string | number>
+        const kv1 = getFirstKeyValue(rr1[0]); // $ExpectType [string, string | number]
 
         const rr2 = await F.collect(r2);
-        rr2[0]; // $ExpectType Map<string, string | number>
+        const kv2 = getFirstKeyValue(rr2[0]); // $ExpectType [string, string | number]
 
         const rr3 = await F.collect(r3);
-        rr3[0]; // $ExpectType Map<string, string | number>
+        const kv3 = getFirstKeyValue(rr3[0]); // $ExpectType [string, string | number]
     });
 
     it('from Object Array', async () => {
@@ -865,7 +854,7 @@ describe('outerJoin', () => {
 
         const r1 = await F.run(b1, F.outerJoin((a, b) => true, a1), F.collect);
 
-        r1[0]; // $ExpectType Map<string, string | number>
+        const kv1 = getFirstKeyValue(r1[0]); // $ExpectType [string, string | number]
     });
 });
 
@@ -888,16 +877,16 @@ describe('leftOuterJoin', () => {
         const r3 = F.leftOuterJoin((a, b) => true, a, b);
 
         const rr0 = await F.collect(r0);
-        rr0[0]; // $ExpectType Map<string, string | number>
+        const kv0 = getFirstKeyValue(rr0[0]); // $ExpectType [string, string | number]
 
         const rr1 = await F.collect(r1);
-        rr1[0]; // $ExpectType Map<string, string | number>
+        const kv1 = getFirstKeyValue(rr1[0]); // $ExpectType [string, string | number]
 
         const rr2 = await F.collect(r2);
-        rr2[0]; // $ExpectType Map<string, string | number>
+        const kv2 = getFirstKeyValue(rr2[0]); // $ExpectType [string, string | number]
 
         const rr3 = await F.collect(r3);
-        rr3[0]; // $ExpectType Map<string, string | number>
+        const kv3 = getFirstKeyValue(rr3[0]); // $ExpectType [string, string | number]
     });
 
     it('from Object Array', async () => {
@@ -991,7 +980,7 @@ describe('leftOuterJoin', () => {
 
         const r1 = await F.run(b1, F.leftOuterJoin((a, b) => true, a1), F.collect);
 
-        r1[0]; // $ExpectType Map<string, string | number>
+        const kv1 = getFirstKeyValue(r1[0]); // $ExpectType [string, string | number]
     });
 });
 
@@ -1014,16 +1003,16 @@ describe('rightOuterJoin', () => {
         const r3 = F.rightOuterJoin((a, b) => true, a, b);
 
         const rr0 = await F.collect(r0);
-        rr0[0]; // $ExpectType Map<string, string | number>
+        const kv0 = getFirstKeyValue(rr0[0]); // $ExpectType [string, string | number]
 
         const rr1 = await F.collect(r1);
-        rr1[0]; // $ExpectType Map<string, string | number>
+        const kv1 = getFirstKeyValue(rr1[0]); // $ExpectType [string, string | number]
 
         const rr2 = await F.collect(r2);
-        rr2[0]; // $ExpectType Map<string, string | number>
+        const kv2 = getFirstKeyValue(rr2[0]); // $ExpectType [string, string | number]
 
         const rr3 = await F.collect(r3);
-        rr3[0]; // $ExpectType Map<string, string | number>
+        const kv3 = getFirstKeyValue(rr3[0]); // $ExpectType [string, string | number]
     });
 
     it('from Object Array', async () => {
@@ -1117,7 +1106,7 @@ describe('rightOuterJoin', () => {
 
         const r1 = await F.run(b1, F.rightOuterJoin((a, b) => true, a1), F.collect);
 
-        r1[0]; // $ExpectType Map<string, string | number>
+        const kv1 = getFirstKeyValue(r1[0]); // $ExpectType [string, string | number]
     });
 });
 
