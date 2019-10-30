@@ -480,7 +480,7 @@ const a = [
         [Promise.resolve(1)],
         Promise.resolve([2]),
         [3],
-        4,
+        [4],
         5];
 const f = F.flat(a);
 console.log(await F.collect(f)); // print [1,2,3,4,5]
