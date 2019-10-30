@@ -1,4 +1,5 @@
 import * as F from '../../';
+import { run } from 'types/prelude';
 
 type DoneFn = () => any;
 
@@ -1636,6 +1637,13 @@ describe('comparator', () => {
     it('with F.sort', async () => {
         const arr = [1, 2, 3];
         const r0 = await F.sortBy(F.comparator((a, b) => a < b), arr);
+        r0; // $ExpectType ArrayLike<number>
+    });
+
+    it('with run', async () => {
+        const arr = [1, 2, 3];
+        const r0 = await F.run(arr, F.sortBy(F.comparator((a: number, b: number) => a < b)));
+        r0; // $ExpectType ArrayLike<number>
     });
 });
 
@@ -1691,6 +1699,12 @@ describe('insertAt', () => {
     it('c2 Promise<number>', async () => {
         const arr = [1, 2, 3];
         const r0 = F.insertAt(Promise.resolve(3), 0)(arr);
+        const t = F.collect(r0); // $ExpectType Promise<number[]>
+    });
+
+    it('with run', async () => {
+        const arr = [1, 2, 3];
+        const r0 = await F.run(arr, F.insertAt(Promise.resolve(3), 0));
         const t = F.collect(r0); // $ExpectType Promise<number[]>
     });
 });
