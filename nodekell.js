@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
     typeof define === 'function' && define.amd ? define(['exports'], factory) :
     (global = global || self, factory(global.F = {}));
-}(this, function (exports) { 'use strict';
+}(this, (function (exports) { 'use strict';
 
     const arrayListDefaultSize = 32;
     class _ArrayList {
@@ -1850,20 +1850,15 @@
     const zip = curry((iter1, iter2) => zipWith((elem1, elem2) => [elem1, elem2], iter1, iter2));
 
     const zipWith3 = curry(async function *(f, a, b, c) {
-        a = seq(a);
-        b = seq(b);
-        c = seq(c);
+        const z = [seq(a), seq(b), seq(c)];
         while (true) {
-            const ap = a.next();
-            const bp = b.next();
-            const cp = c.next();
-            const ae = await ap;
-            const be = await bp;
-            const ce = await cp;
-            if (ae.done || be.done || ce.done) {
-                break;
+            const elems = await Promise.all(z.map(e => e.next()));
+            for (let i = 0; i < elems.length; ++i) {
+                if (elems[i].done) {
+                    return;
+                }
             }
-            yield f(ae.value, be.value, ce.value);
+            yield f(...(elems.map(e => e.value)));
         }
     });
 
@@ -2025,4 +2020,4 @@
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
