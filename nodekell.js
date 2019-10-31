@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
     typeof define === 'function' && define.amd ? define(['exports'], factory) :
     (global = global || self, factory(global.F = {}));
-}(this, (function (exports) { 'use strict';
+}(this, function (exports) { 'use strict';
 
     const arrayListDefaultSize = 32;
     class _ArrayList {
@@ -2025,4 +2025,4 @@
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-})));
+}));

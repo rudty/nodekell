@@ -1,7 +1,8 @@
 import { seq } from "../seq";
 
 /**
- * fetch and 
+ * fetch {fetchCount} elements and returns iterator
+ *
  * @param {Number} fetchCount 
  * @param {Iterable | AsyncIterable} iter iterable
  * @param {Function} fn callback 
