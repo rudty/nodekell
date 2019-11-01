@@ -34,3 +34,22 @@ export const _removeAllIteratorElements = async (it) => {
         await value;
     }
 };
+/**
+ * zip elements
+ *  arr = [[1,2,3],[4,5,6]]
+ *  result => [[1,4],[2,5],[3,6]]
+ *
+ * @param {Function} f zipFunction
+ * @param {Array} arr zipArray
+ */
+export const _zipWith = async function *(f, arr) {
+    while (true) {
+        const elems = await Promise.all(arr.map(e => e.next()));
+        for (let i = 0; i < elems.length; ++i) {
+            if (elems[i].done) {
+                return;
+            }
+        }
+        yield f.apply(null, elems.map(e => e.value));
+    }
+};

@@ -313,6 +313,17 @@ const _removeAllIteratorElements = async (it) => {
         await value;
     }
 };
+const _zipWith = async function *(f, arr) {
+    while (true) {
+        const elems = await Promise.all(arr.map(e => e.next()));
+        for (let i = 0; i < elems.length; ++i) {
+            if (elems[i].done) {
+                return;
+            }
+        }
+        yield f.apply(null, elems.map(e => e.value));
+    }
+};
 
 const block = async (...values) => {
     values = await Promise.all(values);
@@ -1831,33 +1842,13 @@ const withTimeout = curry(async function *(duration, iter) {
 });
 
 const zipWith = curry(async function *(f, a, b) {
-    a = seq(a);
-    b = seq(b);
-    while (true) {
-        const ap = a.next();
-        const bp = b.next();
-        const ae = await ap;
-        const be = await bp;
-        if (ae.done || be.done) {
-            break;
-        }
-        yield f(ae.value, be.value);
-    }
+    yield* _zipWith(f, [seq(a), seq(b)]);
 });
 
 const zip = curry((iter1, iter2) => zipWith((elem1, elem2) => [elem1, elem2], iter1, iter2));
 
 const zipWith3 = curry(async function *(f, a, b, c) {
-    const z = [seq(a), seq(b), seq(c)];
-    while (true) {
-        const elems = await Promise.all(z.map(e => e.next()));
-        for (let i = 0; i < elems.length; ++i) {
-            if (elems[i].done) {
-                return;
-            }
-        }
-        yield f(...(elems.map(e => e.value)));
-    }
+    yield* _zipWith(f, [seq(a), seq(b), seq(c)]);
 });
 
 const zip3 = curry((iter1, iter2, iter3) => zipWith3((elem1, elem2, elem3) => [elem1, elem2, elem3], iter1, iter2, iter3));
