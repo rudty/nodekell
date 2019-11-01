@@ -1,5 +1,4 @@
 import * as F from '../../';
-import { run } from 'types/prelude';
 
 type DoneFn = () => any;
 

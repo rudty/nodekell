@@ -315,13 +315,13 @@ const _removeAllIteratorElements = async (it) => {
 };
 const _zipWith = async function *(f, arr) {
     while (true) {
-        const elems = await Promise.all(arr.map(e => e.next()));
+        const elems = await Promise.all(arr.map((e) => e.next()));
         for (let i = 0; i < elems.length; ++i) {
             if (elems[i].done) {
                 return;
             }
         }
-        yield f.apply(null, elems.map(e => e.value));
+        yield f.apply(null, elems.map((e) => e.value));
     }
 };
 
