@@ -10,10 +10,10 @@ Functional library for nodejs
 
 
 - almost all functions support [currying](#curry)
-- supports [parallel functions](#pfilter)
-- supports async generator
-- supports lazy evaluation
-- support typescript (ver 3.4 or higher)
+- [parallel functions](#pfilter)
+- generator
+- lazy evaluation
+- typescript (ver 3.4 or higher)
  
 
 
@@ -26,13 +26,9 @@ Functional library for nodejs
 nodejs
 
 ```javascript
+// const F = require("nodekell");
 import * as F from "nodekell"
 ```
-or
-```javascript
-const F = require("nodekell");
-```
-
 browser
 
 download or link to a CDN such as [jsDelivr](https://www.jsdelivr.com/package/npm/nodekell) nodekell.min.js
