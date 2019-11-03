@@ -1426,8 +1426,14 @@ const range = function *(...k) {
         n = k[2];
         break;
     }
-    for (let i = begin; i !== end; i += n) {
-        yield i;
+    if (begin > end) {
+        for (let i = begin; i > end; i += n) {
+            yield i;
+        }
+    } else {
+        for (let i = begin; i < end; i += n) {
+            yield i;
+        }
     }
 };
 

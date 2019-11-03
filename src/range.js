@@ -19,7 +19,13 @@ export const range = function *(...k) {
         break;
     }
 
-    for (let i = begin; i !== end; i += n) {
-        yield i;
+    if (begin > end) {
+        for (let i = begin; i > end; i += n) {
+            yield i; 
+        }
+    } else {
+        for (let i = begin; i < end; i += n) {
+            yield i; 
+        }
     }
 };
