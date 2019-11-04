@@ -49,7 +49,7 @@ export const _isObjectArray = (a) => {
 
 export const _isString = (a) => a.constructor === String;
 
-const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray(a) || _isObjectArray(a));
+export const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray(a) || _isObjectArray(a));
 
 /**
  * is array like object

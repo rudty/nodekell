@@ -1096,6 +1096,20 @@ const juxtO = curry(async (ap, obj) => {
     return r;
 });
 
+const keys = async function *(iter) {
+    if (iter instanceof Map ||
+        iter instanceof Set) {
+        yield* iter.keys();
+    }
+    for await (const e of iter) {
+        if (_isArrayLike(e)) {
+            yield e[0];
+        } else {
+            yield e;
+        }
+    }
+};
+
 const map = curry(async function *(fn, iter) {
     for await (const e of iter) {
         yield fn(e);
@@ -1942,6 +1956,7 @@ exports.isNil = isNil;
 exports.iterate = iterate;
 exports.juxtA = juxtA;
 exports.juxtO = juxtO;
+exports.keys = keys;
 exports.leftInnerJoin = leftInnerJoin;
 exports.leftOuterJoin = leftOuterJoin;
 exports.map = map;
