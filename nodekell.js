@@ -1099,15 +1099,12 @@
     });
 
     const keys = async function *(iter) {
-        if (iter instanceof Map ||
-            iter instanceof Set) {
-            yield* iter.keys();
-        }
+        iter = _toIterator(iter);
         for await (const e of iter) {
             if (_isArrayLike(e)) {
                 yield e[0];
             } else {
-                yield e;
+                throw new Error(`keys / ${e} is not array`);
             }
         }
     };

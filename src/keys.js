@@ -1,4 +1,5 @@
 import { _isArrayLike } from "./internal/typeTraits";
+import { _toIterator } from "./internal/toIterator";
 
 
 /**
@@ -6,17 +7,14 @@ import { _isArrayLike } from "./internal/typeTraits";
  * keys
  */
 export const keys = async function *(iter) {
-    if (iter instanceof Map ||
-        iter instanceof Set) {
-        yield* iter.keys();
-    }
-
     // any object
+    iter = _toIterator(iter);
     for await (const e of iter) {
         if (_isArrayLike(e)) {
             yield e[0];
         } else {
-            yield e;
+            // yield e;
+            throw new Error(`keys / ${e} is not array`);
         }
     }
 };
