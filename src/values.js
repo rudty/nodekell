@@ -3,16 +3,16 @@ import { _toIterator } from "./internal/toIterator";
 
 /**
  * Map or object
- * keys
+ * values
  */
-export const keys = async function *(iter) {
+export const values = async function *(iter) {
     iter = _toIterator(iter);
     for await (const e of iter) {
         if (_isArrayLike(e)) {
-            yield e[0];
+            yield e[1];
         } else {
             // yield e;
-            throw new Error(`keys / ${e} is not array`);
+            throw new Error(`values / ${e} is not array`);
         }
     }
 };

@@ -1845,6 +1845,17 @@
         return e;
     });
 
+    const values = async function *(iter) {
+        iter = _toIterator(iter);
+        for await (const e of iter) {
+            if (_isArrayLike(e)) {
+                yield e[1];
+            } else {
+                throw new Error(`values / ${e} is not array`);
+            }
+        }
+    };
+
     const withTimeout = curry(async function *(duration, iter) {
         duration = await getDuration(duration);
         const g = seq(iter);
@@ -2021,6 +2032,7 @@
     exports.timeout = timeout;
     exports.underBar = underBar;
     exports.union = union;
+    exports.values = values;
     exports.withTimeout = withTimeout;
     exports.zip = zip;
     exports.zip3 = zip3;
