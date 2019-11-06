@@ -42,4 +42,13 @@ describe('keys', () => {
         const r = await F.collect(F.keys(obj));
         assert.deepStrictEqual(r, ["a", "b"]);
     });
+
+    it('with zip', async () => {
+        const odd = [1,3,5,7,9];
+        const even = [2,4,6,8,10];
+        const r = await F.collect(
+            F.keys(F.zip(odd, even))
+        );
+        assert.deepStrictEqual(r, [1,3,5,7,9]); 
+    });
 });

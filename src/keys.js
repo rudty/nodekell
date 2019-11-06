@@ -7,7 +7,6 @@ import { _toIterator } from "./internal/toIterator";
  * keys
  */
 export const keys = async function *(iter) {
-    // any object
     iter = _toIterator(iter);
     for await (const e of iter) {
         if (_isArrayLike(e)) {
