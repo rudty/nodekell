@@ -269,3 +269,7 @@ export function mergeObject(source1: Iter<[any, any]> | object): (source2: Iter<
  */
 export function mergeObjectRight(source1: Iter<[any, any]> | object, source2: Iter<[any, any]> | object, ...sources: (Iter<[any, any]> | object)[]): Promise<any>;
 export function mergeObjectRight(source1: Iter<[any, any]> | object): (source2: Iter<[any, any]> | object, ...sources: (Iter<[any, any]> | object)[]) => Promise<any>;
+
+export function keys<K>(iter: Iter<[K, any]>): AsyncIterable<ExtractPromise<K>>;
+export function keys(o: object): AsyncIterable<string>;
+export function values<V>(iter: Iter<[any, V]>): AsyncIterable<ExtractPromise<V>>;
