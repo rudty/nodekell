@@ -722,6 +722,15 @@ describe('keys', () => {
 
         const r0 = await F.collect(F.keys(m1)); // // $ExpectType string[]
     });
+
+    it('Set<number>', async () => {
+        const m1 = new Set([1, 2, 3]);
+
+        for await (const e of F.keys(m1)) {
+            const p = e + e; // $ExpectType number
+        }
+
+    });
 });
 
 describe('keys', () => {

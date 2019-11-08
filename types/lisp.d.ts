@@ -270,7 +270,11 @@ export function mergeObject(source1: Iter<[any, any]> | object): (source2: Iter<
 export function mergeObjectRight(source1: Iter<[any, any]> | object, source2: Iter<[any, any]> | object, ...sources: (Iter<[any, any]> | object)[]): Promise<any>;
 export function mergeObjectRight(source1: Iter<[any, any]> | object): (source2: Iter<[any, any]> | object, ...sources: (Iter<[any, any]> | object)[]) => Promise<any>;
 
+export type PairIterable<T> = T extends Iter<infer K> ? K extends [any, any] ? T : unknown : unknown;
+export type PairIterableKeyType<T> = T extends Iter<infer K> ? K extends [any, any] ? K[0] : unknown : unknown;
+
 export function keys<K>(iter: Iter<[K, any]>): AsyncIterable<ExtractPromise<K>>;
+export function keys<T>(o: PairIterable<T>): AsyncIterable<PairIterableKeyType<T>>;
 export function keys<T>(o: T): AsyncIterable<keyof T>;
 export function values<V>(iter: Iter<[any, V]>): AsyncIterable<ExtractPromise<V>>;
 export function values<T>(o: T): AsyncIterable<T[keyof T]>;
