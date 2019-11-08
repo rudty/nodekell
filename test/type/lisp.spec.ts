@@ -687,7 +687,7 @@ describe('keys', () => {
         const m1 = new Map([["a", 1]]);
 
         for await (const e of F.keys(m1)) {
-            e; // $ExpectType string
+            const p = e + e; // $ExpectType string
         }
 
         const r0 = await F.collect(F.keys(m1)); // // $ExpectType string[]
@@ -697,7 +697,7 @@ describe('keys', () => {
         const m1 = new Map([[Promise.resolve("a"), 1]]);
 
         for await (const e of F.keys(m1)) {
-            e; // $ExpectType string
+            const p = e + e; // $ExpectType string
         }
 
         const r0 = await F.collect(F.keys(m1)); // // $ExpectType string[]
@@ -707,7 +707,7 @@ describe('keys', () => {
         const m1 = new Map([[Promise.resolve(3), Promise.resolve(1)]]);
 
         for await (const e of F.keys(m1)) {
-            e; // $ExpectType number
+            const p = e + e; // $ExpectType number
         }
 
         const r0 = await F.collect(F.keys(m1)); // // $ExpectType number[]
@@ -717,7 +717,7 @@ describe('keys', () => {
         const m1 = { a: 1 };
 
         for await (const e of F.keys(m1)) {
-            e; // $ExpectType string
+            const p = e + e; // $ExpectType string
         }
 
         const r0 = await F.collect(F.keys(m1)); // // $ExpectType string[]
