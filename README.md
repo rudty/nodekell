@@ -101,6 +101,8 @@ console.log(v);//[3]
 *    [scanl1](#scanl1)
 *    [buffer](#buffer)
 *    [peek](#peek)
+*    [keys](#keys)
+*    [values](#values)
 
 ## functional / parallel
 *    [parallel_set_fetch_count](#parallel_set_fetch_count)
@@ -1009,6 +1011,53 @@ const p = F.peek(e=> e + 1, a)
 const result = await F.collect(p);
 console.log(result); //not change 
 //print [1,2,3,4,5]
+```
+
+
+### keys
+Gets only the Key value from the Collection object.
+
+When an Iterable object traverses into an Array, returns an asynciterator thataverses only the first element.
+```javascript
+const m = new Map([["a", 1], ["b", 2]]);
+for await(const k of F.keys(m)) {
+    console.log(k);
+}
+// print "a", "b"
+const a = async function *() {
+    yield [1, 2];
+    yield [3, 4];
+    yield [5, 6];
+};
+for await (const e of F.keys(a())) {
+    console.log(e);
+}
+// print [1, 3, 5]s
+```
+
+
+### values
+Gets only the Value from the Collection object.
+When an Iterable object traverses into an Array, returns an asynciterator that averses only the second element.
+```javascript
+const m = new Map([["a", 1], ["b", 2]]);
+for await(const k of F.values(m)) {
+    console.log(k);
+}
+// print
+// 1
+// 2
+const a = async function *() {
+    yield [1, 2];
+    yield [3, 4];
+    yield [5, 6];
+};
+for await (const e of F.values(a())) {
+    console.log(e);
+}
+// print
+// 2
+// 4
 ```
 
 
