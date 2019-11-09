@@ -11,7 +11,6 @@ Functional library for nodejs
 
 - almost all functions support [currying](#curry)
 - [parallel functions](#pfilter)
-- generator
 - lazy evaluation
 - typescript (ver 3.4 or higher)
  
