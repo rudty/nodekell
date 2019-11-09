@@ -51,4 +51,25 @@ describe('keys', () => {
         );
         assert.deepStrictEqual(r, [1,3,5,7,9]); 
     });
+
+    it('custom iterator', async () => {
+        const a = async function *() {
+            yield [1, 2];
+            yield [3, 4];
+            yield [5, 6];
+        };
+
+        const r = await F.collect(F.keys(a()));
+        assert.deepStrictEqual(r, [1,3,5]); 
+    });
+
+    it('any', async () => {
+        const r = await F.collect(F.keys(1));
+        const kk = F.keys({1:2});
+        for await (const a of kk ){
+            console.log(a);
+            console.log(typeof a);
+        }
+        assert.deepStrictEqual(r, []); 
+    });
 });

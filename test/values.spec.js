@@ -51,4 +51,15 @@ describe('values', () => {
         );
         assert.deepStrictEqual(r, [2,4,6,8,10]); 
     });
+
+    it('custom iterator', async () => {
+        const a = async function *() {
+            yield [1, 2];
+            yield [3, 4];
+            yield [5, 6];
+        };
+
+        const r = await F.collect(F.values(a()));
+        assert.deepStrictEqual(r, [2,4,6]); 
+    });
 });

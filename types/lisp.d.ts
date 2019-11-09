@@ -297,7 +297,7 @@ export type PairIterableValueType<T> = T extends Iter<infer K> ? K extends any[]
  */
 export function keys<K>(iter: Iter<[K, any]>): AsyncIterable<ExtractPromise<K>>;
 export function keys<T extends Iter<any>>(o: T): AsyncIterable<PairIterableKeyType<T>>;
-export function keys<T>(o: T): AsyncIterable<keyof T>;
+export function keys(o: object): AsyncIterable<string>;
 
 /**
  * Gets only the Value from the Collection object.
@@ -327,4 +327,4 @@ export function keys<T>(o: T): AsyncIterable<keyof T>;
  */
 export function values<V>(iter: Iter<[any, V]>): AsyncIterable<ExtractPromise<V>>;
 export function values<T extends Iter<any>>(o: T): AsyncIterable<PairIterableValueType<T>>;
-export function values<T>(o: T): AsyncIterable<T[keyof T]>;
+export function values<T extends object>(o: T): AsyncIterable<T[keyof T]>;
