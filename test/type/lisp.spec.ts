@@ -725,15 +725,55 @@ describe('keys', () => {
 
     it('Set<number>', async () => {
         const m1 = new Set([1, 2, 3]);
+        try {
+            for await (const e of F.keys(m1)) {
+                e; // $ExpectType unknown
+            }
+        } catch (_) {
+        }
+    });
+
+    it('Set<number[]>', async () => {
+        const m1 = new Set([[1, 1], [2, 2], [3, 3]]);
 
         for await (const e of F.keys(m1)) {
             const p = e + e; // $ExpectType number
         }
+        const r0 = await F.collect(F.keys(m1)); // // $ExpectType number[]
+    });
 
+    it('Set<string | number[]>', async () => {
+        const m1 = new Set([["1", 1], ["2", 2], ["3", 3]]);
+
+        for await (const e of F.keys(m1)) {
+            e; // $ExpectType string | number
+        }
+        const r0 = await F.collect(F.keys(m1)); // // $ExpectType (string | number)[]
+    });
+
+    it('Set<Promise<string> | number[]>', async () => {
+        const m1 = new Set([[Promise.resolve("1"), 1], [Promise.resolve("2"), 2], [Promise.resolve("3"), 3]]);
+
+        for await (const e of F.keys(m1)) {
+            e; // $ExpectType string | number
+        }
+        const r0 = await F.collect(F.keys(m1)); // // $ExpectType (string | number)[]
+    });
+
+    it('custom iterator', async () => {
+        const a = async function *() {
+            yield [1, 2];
+            yield [3, 4];
+            yield [5, 6];
+        };
+
+        for await (const e of F.keys(a())) {
+            e; // $ExpectType number
+        }
     });
 });
 
-describe('keys', () => {
+describe('values', () => {
     it('Map<string, number>', async () => {
         const m1 = new Map([["a", 1]]);
 
@@ -772,5 +812,54 @@ describe('keys', () => {
         }
 
         const r0 = await F.collect(F.values(m1)); // // $ExpectType number[]
+    });
+
+    it('Set<number>', async () => {
+        const m1 = new Set([1, 2, 3]);
+        try {
+            for await (const e of F.values(m1)) {
+                e; // $ExpectType unknown
+            }
+        } catch (_) {
+        }
+    });
+
+    it('Set<number[]>', async () => {
+        const m1 = new Set([[1, 1], [2, 2], [3, 3]]);
+
+        for await (const e of F.values(m1)) {
+            const p = e + e; // $ExpectType number
+        }
+        const r0 = await F.collect(F.values(m1)); // // $ExpectType number[]
+    });
+
+    it('Set<string | number[]>', async () => {
+        const m1 = new Set([["1", 1], ["2", 2], ["3", 3]]);
+
+        for await (const e of F.values(m1)) {
+            e; // $ExpectType string | number
+        }
+        const r0 = await F.collect(F.values(m1)); // // $ExpectType (string | number)[]
+    });
+
+    it('Set<string | Promise<number>[]>', async () => {
+        const m1 = new Set([["1", Promise.resolve(1)], ["2", Promise.resolve(2)], ["3", Promise.resolve(3)]]);
+
+        for await (const e of F.values(m1)) {
+            e; // $ExpectType string | number
+        }
+        const r0 = await F.collect(F.values(m1)); // // $ExpectType (string | number)[]
+    });
+
+    it('custom iterator', async () => {
+        const a = async function *() {
+            yield [1, 2];
+            yield [3, 4];
+            yield [5, 6];
+        };
+
+        for await (const e of F.keys(a())) {
+            e; // $ExpectType number
+        }
     });
 });

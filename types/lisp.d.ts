@@ -271,10 +271,60 @@ export function mergeObjectRight(source1: Iter<[any, any]> | object, source2: It
 export function mergeObjectRight(source1: Iter<[any, any]> | object): (source2: Iter<[any, any]> | object, ...sources: (Iter<[any, any]> | object)[]) => Promise<any>;
 
 export type PairIterable<T> = T extends Iter<infer K> ? K extends [any, any] ? T : unknown : unknown;
-export type PairIterableKeyType<T> = T extends Iter<infer K> ? K extends [any, any] ? K[0] : unknown : unknown;
+export type PairIterableKeyType<T> = T extends Iter<infer K> ? K extends any[] ? ExtractPromise<K[0]> : unknown : unknown;
+export type PairIterableValueType<T> = T extends Iter<infer K> ? K extends any[] ? ExtractPromise<K[1]> : unknown : unknown;
 
+/**
+ * Gets only the Key value from the Collection object.
+ * When an Iterable object traverses into an Array, returns an asynciterator that traverses only the first element.
+ * @example
+ *      const m = new Map([["a", 1], ["b", 2]]);
+ *      for await(const k of F.keys(m)) {
+ *          console.log(k);
+ *      }
+ *      // print "a", "b"
+ *
+ *      const a = async function *() {
+ *          yield [1, 2];
+ *          yield [3, 4];
+ *          yield [5, 6];
+ *      };
+ *
+ *      for await (const e of F.keys(a())) {
+ *          console.log(e);
+ *      }
+ *      // print [1, 3, 5]s
+ */
 export function keys<K>(iter: Iter<[K, any]>): AsyncIterable<ExtractPromise<K>>;
-export function keys<T>(o: PairIterable<T>): AsyncIterable<PairIterableKeyType<T>>;
+export function keys<T extends Iter<any>>(o: T): AsyncIterable<PairIterableKeyType<T>>;
 export function keys<T>(o: T): AsyncIterable<keyof T>;
+
+/**
+ * Gets only the Value from the Collection object.
+ * When an Iterable object traverses into an Array, returns an asynciterator that traverses only the second element.
+ * @example
+ *      const m = new Map([["a", 1], ["b", 2]]);
+ *      for await(const k of F.values(m)) {
+ *          console.log(k);
+ *      }
+ *      // print
+ *      // 1
+ *      // 2
+ *
+ *      const a = async function *() {
+ *          yield [1, 2];
+ *          yield [3, 4];
+ *          yield [5, 6];
+ *      };
+ *
+ *      for await (const e of F.values(a())) {
+ *          console.log(e);
+ *      }
+ *      // print
+ *      // 2
+ *      // 4
+ *      // 6
+ */
 export function values<V>(iter: Iter<[any, V]>): AsyncIterable<ExtractPromise<V>>;
+export function values<T extends Iter<any>>(o: T): AsyncIterable<PairIterableValueType<T>>;
 export function values<T>(o: T): AsyncIterable<T[keyof T]>;
