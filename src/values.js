@@ -1,5 +1,4 @@
-import { _isArrayLike } from "./internal/typeTraits";
-import { _toIterator } from "./internal/toIterator";
+import { _arrayElementIterator } from "./internal/_arrayElementIterator";
 
 /**
  * Gets only the Value from the Collection object.
@@ -27,14 +26,4 @@ import { _toIterator } from "./internal/toIterator";
  *      // 4 
  *      // 6
  */
-export const values = async function *(iter) {
-    iter = _toIterator(iter);
-    for await (const e of iter) {
-        if (_isArrayLike(e)) {
-            yield e[1];
-        } else {
-            // yield e;
-            throw new Error(`values / ${e} is not array`);
-        }
-    }
-};
+export const values = _arrayElementIterator(1, (e) => { throw new Error(`values / ${e} is not array`) });
