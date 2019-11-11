@@ -21,4 +21,4 @@ import { _arrayElementIterator } from "./internal/_arrayElementIterator";
  *      }
  *      // print [1, 3, 5]s
  */
-export const keys = _arrayElementIterator(0, (e) => { throw new Error(`keys / ${e} is not array`) });
+export const keys = _arrayElementIterator(0, (e) => { throw new Error(`keys / ${e} is not array`); });

@@ -26,4 +26,4 @@ import { _arrayElementIterator } from "./internal/_arrayElementIterator";
  *      // 4 
  *      // 6
  */
-export const values = _arrayElementIterator(1, (e) => { throw new Error(`values / ${e} is not array`) });
+export const values = _arrayElementIterator(1, (e) => { throw new Error(`values / ${e} is not array`); });
