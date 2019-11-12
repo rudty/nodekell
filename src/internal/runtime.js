@@ -53,3 +53,9 @@ export const _zipWith = async function *(f, arr) {
         yield f.apply(null, elems.map((e) => e.value));
     }
 };
+
+export const _mustNotEmptyIterableResult = (a) => {
+    if (!a || (a.done !== false)) {
+        throw new Error("empty iter");
+    }
+};
