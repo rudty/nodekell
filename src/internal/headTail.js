@@ -1,8 +1,5 @@
 import { seq } from "../seq";
 import { _isTypedArray, _isString } from "./typeTraits";
-// import { undefinedValue } from "./undefinedValue";
-
-// const emptyHeadTail = Object.freeze([undefinedValue, Object.freeze([])]);
 
 const _throwEmpty = () => {
     throw new Error("empty iter");
