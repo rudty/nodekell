@@ -1,6 +1,6 @@
 import { seq } from "../seq";
 import { _isTypedArray, _isString } from "./typeTraits";
-import { _mustNotEmptyIterableResult } from "./runtime";
+import { _mustNotEmptyIteratorResult } from "./runtime";
 
 const _headTailArray = async (arr) => {
     if (arr.length !== 0) {
@@ -34,6 +34,6 @@ const _headTailInternal = (iter) => {
  */
 export const _headTail = async (iter) => {
     const r = await _headTailInternal(iter);
-    _mustNotEmptyIterableResult(r[0]);
+    _mustNotEmptyIteratorResult(r[0]);
     return r;
 };

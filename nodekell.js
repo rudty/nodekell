@@ -149,6 +149,8 @@
         }
     };
 
+    const undefinedValue = ((v) => v)();
+
     const _takeValue = async (v) => {
         v = await v;
         if (v.constructor === Function) {
@@ -177,6 +179,11 @@
                 }
             }
             yield f.apply(null, elems.map((e) => e.value));
+        }
+    };
+    const _mustNotEmptyIteratorResult = (a) => {
+        if (a === undefinedValue || (a.done === true)) {
+            throw new Error("empty iter");
         }
     };
 
@@ -393,9 +400,6 @@
         return _seq(iter);
     };
 
-    const _throwEmpty = () => {
-        throw new Error("empty iter");
-    };
     const _headTailArray = async (arr) => {
         if (arr.length !== 0) {
             return [await arr[0], arr.slice(1)];
@@ -404,9 +408,7 @@
     const _headTailIterator = async (iter) => {
         const g = seq(iter);
         const head = await g.next();
-        if (!head.done) {
-            return [head.value, g];
-        }
+        return [head.value, g];
     };
     const _headTailInternal = (iter) => {
         if (Array.isArray(iter) || _isTypedArray(iter) || _isString(iter)) {
@@ -416,9 +418,7 @@
     };
     const _headTail = async (iter) => {
         const r = await _headTailInternal(iter);
-        if (!r) {
-            _throwEmpty();
-        }
+        _mustNotEmptyIteratorResult(r[0]);
         return r;
     };
 
@@ -870,8 +870,6 @@
 
     const frequencies = frequenciesBy(identity);
 
-    const undefinedValue = ((v) => v)();
-
     const prop = curry((key, a) => {
         if (a === undefinedValue || a === null) {
             return undefinedValue;
@@ -924,9 +922,7 @@
     const head = async (iter) => {
         const g = seq(iter);
         const e = await g.next();
-        if (e.done) {
-            throw new Error("empty iter");
-        }
+        _mustNotEmptyIteratorResult(e);
         return e.value;
     };
 
@@ -1045,7 +1041,7 @@
         }
     };
 
-    const keys = _arrayElementIterator(0, (e) => { throw new Error(`keys / ${e} is not array`) });
+    const keys = _arrayElementIterator(0, (e) => { throw new Error(`keys / ${e} is not array`); });
 
     const map = curry(async function *(fn, iter) {
         for await (const e of iter) {
@@ -1791,10 +1787,8 @@
 
     const tail = async function *(iter) {
         const g = seq(iter);
-        const { done } = await g.next();
-        if (done) {
-            throw new Error("empty iter");
-        }
+        const f = await g.next();
+        _mustNotEmptyIteratorResult(f);
         yield* g;
     };
 
@@ -1847,7 +1841,7 @@
         return e;
     });
 
-    const values = _arrayElementIterator(1, (e) => { throw new Error(`values / ${e} is not array`) });
+    const values = _arrayElementIterator(1, (e) => { throw new Error(`values / ${e} is not array`); });
 
     const withTimeout = curry(async function *(duration, iter) {
         duration = await getDuration(duration);

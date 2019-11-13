@@ -1,8 +1,8 @@
 import { seq } from "./seq";
-import { _mustNotEmptyIterableResult } from "./internal/runtime";
+import { _mustNotEmptyIteratorResult } from "./internal/runtime";
 export const head = async (iter) => {
     const g = seq(iter);
     const e = await g.next();
-    _mustNotEmptyIterableResult(e);
+    _mustNotEmptyIteratorResult(e);
     return e.value;
 };
