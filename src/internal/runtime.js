@@ -69,12 +69,16 @@ export const _zipWith = async function *(f, arr) {
  *  => pass
  *
  * 4. undefined
- *  => throw
+ *  => pass
  *
  * @param {any} a 
  */
 export const _mustNotEmptyIteratorResult = (a) => {
-    if (a === undefinedValue || (a.done === true)) {
+    if (!a) {
+        return;
+    }
+
+    if (a.done === true) {
         throw new Error("empty iter");
     }
 };

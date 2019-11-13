@@ -180,7 +180,10 @@ const _zipWith = async function *(f, arr) {
     }
 };
 const _mustNotEmptyIteratorResult = (a) => {
-    if (a === undefinedValue || (a.done === true)) {
+    if (!a) {
+        return;
+    }
+    if (a.done === true) {
         throw new Error("empty iter");
     }
 };
