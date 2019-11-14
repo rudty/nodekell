@@ -1045,7 +1045,7 @@
         }
     };
 
-    const keys = _arrayElementIterator(0, (e) => { throw new Error(`keys / ${e} is not array`) });
+    const keys = _arrayElementIterator(0, (e) => { throw new Error(`keys / ${e} is not array`); });
 
     const map = curry(async function *(fn, iter) {
         for await (const e of iter) {
@@ -1847,7 +1847,7 @@
         return e;
     });
 
-    const values = _arrayElementIterator(1, (e) => { throw new Error(`values / ${e} is not array`) });
+    const values = _arrayElementIterator(1, (e) => { throw new Error(`values / ${e} is not array`); });
 
     const withTimeout = curry(async function *(duration, iter) {
         duration = await getDuration(duration);
