@@ -13,20 +13,13 @@ import { curry } from "./curry";
  * like kotlin Any.apply
  */
 
- const _dotoCallFunctions = (x, fns) => {
-
- };
-
 export const doto = curry(async (x, fn1, ...fns) => {
 
-    const r0 = fn1.call(x, x);
-    
-    if (r0 instanceof Promise) {
-        r0.then(() => _dotoCallFunctions(x, fns));
+    await fn1.call(x, x);
+
+    for await (const f of fns) {
+        await f.call(x, x);
     }
-    // for await (const f of fns) {
-    //     await f.call(x, x);
-    // }
 
     return x;
 });

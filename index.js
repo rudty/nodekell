@@ -581,12 +581,10 @@ const distinctUntilChangedBy = curry(async function *(f, iter) {
 
 const distinctUntilChanged = distinctUntilChangedBy(identity);
 
-const _dotoCallFunctions = (x, fns) => {
- };
 const doto = curry(async (x, fn1, ...fns) => {
-    const r0 = fn1.call(x, x);
-    if (r0 instanceof Promise) {
-        r0.then(() => _dotoCallFunctions());
+    await fn1.call(x, x);
+    for await (const f of fns) {
+        await f.call(x, x);
     }
     return x;
 });
