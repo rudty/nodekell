@@ -583,6 +583,16 @@
 
     const distinctUntilChanged = distinctUntilChangedBy(identity);
 
+    const _dotoCallFunctions = (x, fns) => {
+     };
+    const doto = curry(async (x, fn1, ...fns) => {
+        const r0 = fn1.call(x, x);
+        if (r0 instanceof Promise) {
+            r0.then(() => _dotoCallFunctions());
+        }
+        return x;
+    });
+
     const drop = curry(async function *(count, iter) {
         const g = seq(iter);
         for (let i = 0; i < count; i++) {
@@ -1917,6 +1927,7 @@
     exports.distinctBy = distinctBy;
     exports.distinctUntilChanged = distinctUntilChanged;
     exports.distinctUntilChangedBy = distinctUntilChangedBy;
+    exports.doto = doto;
     exports.drop = drop;
     exports.dropLast = dropLast;
     exports.dropWhile = dropWhile;
