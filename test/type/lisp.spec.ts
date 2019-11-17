@@ -875,21 +875,21 @@ describe('doto', () => {
 
     it('object arg', async () => {
         const r = F.doto({ a: 1 }, (v) => {
-            v; // $ExpectType { a: number; }
+            const p = v; // $ExpectType { a: number; }
         });
         r; // $ExpectType Promise<{ a: number; }>
     });
 
     it('number', async () => {
         const r = F.doto(1, (v) => {
-            v; // $ExpectType number
+            const p = v; // $ExpectType number
         });
         r; // $ExpectType Promise<number>
     });
 
     it('string', async () => {
         const r = F.doto("hello", (v) => {
-            v; // $ExpectType string
+            const p = v; // $ExpectType string
         });
         r; // $ExpectType Promise<string>
     });
@@ -917,18 +917,18 @@ describe('doto', () => {
 
     it('number2', async () => {
         const r = F.doto(1, (v) => {
-            v; // $ExpectType number
+            const p = v; // $ExpectType number
         }, (v) => {
-            v; // $ExpectType number
+            const p = v; // $ExpectType number
         });
         r; // $ExpectType Promise<number>
     });
 
     it('string2', async () => {
         const r = F.doto("hello", (v) => {
-            v; // $ExpectType string
+            const p = v; // $ExpectType string
         }, (v) => {
-            v; // $ExpectType string
+            const p = v; // $ExpectType string
         });
         r; // $ExpectType Promise<string>
     });
