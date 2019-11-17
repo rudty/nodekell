@@ -6,13 +6,14 @@ const _headTailArray = async (arr) => {
     if (arr.length !== 0) {
         return [await arr[0], arr.slice(1)];
     }
-    // return undefined;
+    throw new Error("empty array");
 };
 
 const _headTailIterator = async (iter) => {
     const g = seq(iter);
     const head = await g.next();
-    return [head.value, g];    
+    _mustNotEmptyIteratorResult(head);
+    return [head.value, g];
 };
 
 const _headTailInternal = (iter) => {
@@ -34,6 +35,5 @@ const _headTailInternal = (iter) => {
  */
 export const _headTail = async (iter) => {
     const r = await _headTailInternal(iter);
-    _mustNotEmptyIteratorResult(r[0]);
     return r;
 };
