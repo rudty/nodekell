@@ -907,7 +907,7 @@ describe('doto', () => {
 
     it('object arg2', async () => {
         const r = F.doto({ a: 1 }, (v) => {
-            v; // $ExpectType { a: number; }
+            const p = v; // $ExpectType { a: number; }
         }, function() {
             const self = this; // $ExpectType { a: number; }
             self.a = 1;
