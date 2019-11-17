@@ -195,6 +195,7 @@ console.log(v);//[3]
 *    [mergeObjectRight](#mergeobjectright)
 *    [comparator](#comparator)
 *    [insertAt](#insertat)
+*    [doto](#doto)
 ---
 
 
@@ -2680,6 +2681,25 @@ const r = await F.collect(ins); //generator to array
 console.log(r); // print [1, 2, 3, 4, 5, 6]
 ```
 
+
+### doto
+It takes a value and a function and calls the function by value. 
+Pass the value to the first argument when calling the function.
+
+```javascript
+const r = await F.doto({a: 1}, (v) => {
+    v.a = 3;
+});
+console.log(r); // print { a: 3 };
+```
+```javascript
+const r = await F.doto({a: 1}, (v) => {
+    v.a = 3;
+}, (v) => {
+    v.b = 2;
+});
+console.log(r); // print { a: 3, b: 2 };
+```
 
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frudty%2Fnodekell.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Frudty%2Fnodekell?ref=badge_large)
