@@ -1,9 +1,6 @@
 import { seq } from "../seq";
 import { _isTypedArray, _isString } from "./typeTraits";
-
-const _throwEmpty = () => {
-    throw new Error("empty iter");
-};
+import { _mustNotEmptyIteratorResult } from "./runtime";
 
 const _headTailArray = async (arr) => {
     if (arr.length !== 0) {
@@ -15,10 +12,7 @@ const _headTailArray = async (arr) => {
 const _headTailIterator = async (iter) => {
     const g = seq(iter);
     const head = await g.next();
-    if (!head.done) {
-        return [head.value, g];    
-    }
-    // return undefined;
+    return [head.value, g];    
 };
 
 const _headTailInternal = (iter) => {
@@ -40,8 +34,6 @@ const _headTailInternal = (iter) => {
  */
 export const _headTail = async (iter) => {
     const r = await _headTailInternal(iter);
-    if (!r) {
-        _throwEmpty();
-    }
+    _mustNotEmptyIteratorResult(r[0]);
     return r;
 };

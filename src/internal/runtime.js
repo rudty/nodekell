@@ -1,3 +1,5 @@
+import { undefinedValue } from "./undefinedValue";
+
 /**
  * Get the value.
  * If it's a Promise, it gets its value from Promise
@@ -51,5 +53,32 @@ export const _zipWith = async function *(f, arr) {
             }
         }
         yield f.apply(null, elems.map((e) => e.value));
+    }
+};
+
+/**
+ * throw if value is empty IteratorResult
+ *
+ * 1. { done: true } 
+ *  => throw
+ *
+ * 2. 1 
+ *  => pass
+ *
+ * 3. { value: undefined, done: false } 
+ *  => pass
+ *
+ * 4. undefined
+ *  => pass
+ *
+ * @param {any} a 
+ */
+export const _mustNotEmptyIteratorResult = (a) => {
+    if (!a) {
+        return;
+    }
+
+    if (a.done === true) {
+        throw new Error("empty iter");
     }
 };
