@@ -328,3 +328,20 @@ export function keys(o: object): AsyncIterable<string>;
 export function values<V>(iter: Iter<[any, V]>): AsyncIterable<ExtractPromise<V>>;
 export function values<T extends Iter<any>>(o: T): AsyncIterable<PairIterableValueType<T>>;
 export function values<T extends object>(o: T): AsyncIterable<T[keyof T]>;
+
+/**
+ * It takes a value and a function and calls the function by value.
+ * Pass the value to the first argument when calling the function.
+ *
+ * @example
+ *      const r = doto({a: 1}, function () {
+ *          this.a = 3;
+ *      });
+ *
+ *      console.log(r); // print { a: 3 };
+ *
+ * @param {any} x value
+ * @param {Function} fn1 function (this: T, x: T) => void
+ */
+export function doto<T>(v: T, fn1: (this: T, v: T) => void): Promise<T>;
+export function doto<T>(v: T, fn1: (this: T, v: T) => void, ...fns: ((this: T, v: T) => void)[]): Promise<T>;

@@ -1,18 +1,19 @@
 import { curry } from "./curry";
 
 /**
- * const r = doto({a: 1}, function () {
- *      this.a = 3;
- * }, function () {
- *      this.b = 2;
- * });
+ * It takes a value and a function and calls the function by value. 
+ * Pass the value to the first argument when calling the function.
+ *
+ * @example
+ *      const r = doto({a: 1}, function () {
+ *          this.a = 3;
+ *      });
  * 
- * console.log(r); => { a: 1, b: 2 };
- * 
- * like clojure doto,
- * like kotlin Any.apply
+ *      console.log(r); // print { a: 3 };
+ *
+ * @param {any} x value
+ * @param {Function} fn1 function (this: T, x: T) => void
  */
-
 export const doto = curry(async (x, fn1, ...fns) => {
 
     await fn1.call(x, x);

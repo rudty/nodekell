@@ -863,3 +863,73 @@ describe('values', () => {
         }
     });
 });
+
+describe('doto', () => {
+    it('object this', async () => {
+        const r = F.doto({ a: 1 }, function() {
+            const self = this; // $ExpectType { a: number; }
+            this.a = 3;
+        });
+        r; // $ExpectType Promise<{ a: number; }>
+    });
+
+    it('object arg', async () => {
+        const r = F.doto({ a: 1 }, (v) => {
+            v; // $ExpectType { a: number; }
+        });
+        r; // $ExpectType Promise<{ a: number; }>
+    });
+
+    it('number', async () => {
+        const r = F.doto(1, (v) => {
+            v; // $ExpectType number
+        });
+        r; // $ExpectType Promise<number>
+    });
+
+    it('string', async () => {
+        const r = F.doto("hello", (v) => {
+            v; // $ExpectType string
+        });
+        r; // $ExpectType Promise<string>
+    });
+
+    it('object this2', async () => {
+        const r = F.doto({ a: 1 }, function() {
+            const self = this; // $ExpectType { a: number; }
+            this.a = 3;
+        }, function() {
+            const self = this; // $ExpectType { a: number; }
+            self.a = 1;
+        });
+        r; // $ExpectType Promise<{ a: number; }>
+    });
+
+    it('object arg2', async () => {
+        const r = F.doto({ a: 1 }, (v) => {
+            v; // $ExpectType { a: number; }
+        }, function() {
+            const self = this; // $ExpectType { a: number; }
+            self.a = 1;
+        });
+        r; // $ExpectType Promise<{ a: number; }>
+    });
+
+    it('number2', async () => {
+        const r = F.doto(1, (v) => {
+            v; // $ExpectType number
+        }, (v) => {
+            v; // $ExpectType number
+        });
+        r; // $ExpectType Promise<number>
+    });
+
+    it('string2', async () => {
+        const r = F.doto("hello", (v) => {
+            v; // $ExpectType string
+        }, (v) => {
+            v; // $ExpectType string
+        });
+        r; // $ExpectType Promise<string>
+    });
+});
