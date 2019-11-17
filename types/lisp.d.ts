@@ -334,7 +334,7 @@ export function values<T extends object>(o: T): AsyncIterable<T[keyof T]>;
  * Pass the value to the first argument when calling the function.
  *
  * @example
- *      const r = doto({a: 1}, function () {
+ *      const r = await F.doto({a: 1}, function () {
  *          this.a = 3;
  *      });
  *
