@@ -1,6 +1,6 @@
 import { curry } from "./curry";
 import { prop } from "./prop";
-import { undefinedValue } from "./internal/undefinedValue";
+import { undefinedValue } from "./internal/runtime";
 
 /**
  * get the properties of that object. 

@@ -148,7 +148,6 @@ const _toIterator = (a) => {
 };
 
 const undefinedValue = ((v) => v)();
-
 const _takeValue = async (v) => {
     v = await v;
     if (v.constructor === Function) {

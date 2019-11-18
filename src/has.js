@@ -1,5 +1,5 @@
 import { curry } from "./curry";
-import { undefinedValue } from "./internal/undefinedValue";
+import { undefinedValue } from "./internal/runtime";
 import { _isFunction } from "./internal/typeTraits";
 
 export const has = curry((key, a) => {

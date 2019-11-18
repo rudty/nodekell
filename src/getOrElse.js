@@ -1,6 +1,6 @@
 import { curry } from "./curry";
 import { get } from "./get";
-import { undefinedValue } from "./internal/undefinedValue";
+import { undefinedValue } from "./internal/runtime";
 
 /**
  * if object have a get function, 

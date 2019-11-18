@@ -1,4 +1,4 @@
-import { undefinedValue } from "./internal/undefinedValue";
+import { undefinedValue } from "./internal/runtime";
 
 export const isNil = (v) => {
     if (v) {

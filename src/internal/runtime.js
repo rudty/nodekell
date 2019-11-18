@@ -1,4 +1,8 @@
-import { undefinedValue } from "./undefinedValue";
+/**
+ * real undefined
+ * undefined = 1; // not error!
+ */
+export const undefinedValue = ((v) => v)();
 
 /**
  * Get the value.
