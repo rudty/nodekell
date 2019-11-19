@@ -146,6 +146,24 @@ const _toIterator = (a) => {
         return objectIterator(a);
     }
 };
+const _arrayElementIterator = (index, onNotArrayError) => async function *(iter) {
+    iter = _toIterator(iter);
+    for await (const e of iter) {
+        if (_isArrayLike(e)) {
+            yield e[index];
+        } else {
+            onNotArrayError(e);
+        }
+    }
+};
+const _flatOnce = async function *(a) {
+    a = await a;
+    if (a && _hasIterator(a)) {
+        yield* a;
+    } else {
+        yield a;
+    }
+};
 
 const undefinedValue = ((v) => v)();
 const _takeValue = async (v) => {
@@ -308,15 +326,6 @@ const compose = (...fns) => async (...args) => {
         z = await fns[i](z);
     }
     return z;
-};
-
-const _flatOnce = async function *(a) {
-    a = await a;
-    if (a && _hasIterator(a)) {
-        yield* a;
-    } else {
-        yield a;
-    }
 };
 
 const concat = curry(async function *(a, b) {
@@ -1038,17 +1047,6 @@ const juxtO = curry(async (ap, obj) => {
     }
     return r;
 });
-
-const _arrayElementIterator = (index, onNotArrayError) => async function *(iter) {
-    iter = _toIterator(iter);
-    for await (const e of iter) {
-        if (_isArrayLike(e)) {
-            yield e[index];
-        } else {
-            onNotArrayError(e);
-        }
-    }
-};
 
 const keys = _arrayElementIterator(0, (e) => { throw new Error(`keys / ${e} is not array`); });
 

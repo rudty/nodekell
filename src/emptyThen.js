@@ -1,6 +1,6 @@
 import { curry } from "./curry";
 import { _takeValue } from "./internal/runtime";
-import { _flatOnce } from "./internal/flatOnce";
+import { _flatOnce } from "./internal/iterable";
 
 export const emptyThen = curry(async function *(supply, iter) {
     for await (const e of iter) {

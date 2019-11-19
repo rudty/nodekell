@@ -1,4 +1,4 @@
-import { _flatOnce } from "./internal/flatOnce";
+import { _flatOnce } from "./internal/iterable";
 import { curry } from "./curry";
 
 /**

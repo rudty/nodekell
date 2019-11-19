@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { _toStrictIterator } from "./internal/toIterator";
+import { _toStrictIterator } from "./internal/iterable";
 import { _removeAllIteratorElements } from "./internal/runtime";
 
 /**

@@ -1,4 +1,4 @@
-import { _arrayElementIterator } from "./internal/_arrayElementIterator";
+import { _arrayElementIterator } from "./internal/iterable";
 
 /**
  * Gets only the Key value from the Collection object.

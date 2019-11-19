@@ -1,6 +1,6 @@
 import { curry } from "./curry";
 import { run } from "./run";
-import { _toIterator } from "./internal/toIterator";
+import { _toIterator } from "./internal/iterable";
 import { map } from "./map";
 import { flat } from "./flat";
 import { collectMap } from "./collectMap";
