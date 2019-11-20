@@ -165,6 +165,16 @@ const _flatOnce = async function *(a) {
     }
 };
 
+const parallel_default_fetch_count = 100;
+let parallel_global_fetch_count = parallel_default_fetch_count;
+const parallel_set_fetch_count_internal = (count) => {
+    count = Number(count);
+    if (count <= 0) {
+        throw new Error("parallel_fetch_count > 0 required");
+    }
+    parallel_global_fetch_count = count || parallel_default_fetch_count;
+};
+const parallel_get_fetch_count_internal = () => parallel_global_fetch_count;
 const undefinedValue = ((v) => v)();
 const _takeValue = async (v) => {
     v = await v;
@@ -1189,17 +1199,6 @@ const orderBy = curry(async function *(f, order, iter) {
 const order = orderBy(identity);
 
 const otherwise = () => true;
-
-const default_fetch_count = 100;
-let global_fetch_count = default_fetch_count;
-const parallel_set_fetch_count_internal = (count) => {
-    count = Number(count);
-    if (count <= 0) {
-        throw new Error("count > 0 required");
-    }
-    global_fetch_count = count || default_fetch_count;
-};
-const parallel_get_fetch_count_internal = () => global_fetch_count;
 
 const parallel_set_fetch_count = (count) =>
     parallel_set_fetch_count_internal(count);

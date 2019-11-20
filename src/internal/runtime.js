@@ -1,3 +1,26 @@
+const parallel_default_fetch_count = 100;
+let parallel_global_fetch_count = parallel_default_fetch_count;
+
+/**
+ * Iterator and AsyncIterator don't calculate until the value is fetched
+ * take it {count} the effect of calculating in parallel.
+ *
+ * not parallel functions: Promise -> execute -> Promise -> execute
+ * 
+ * parallel functions: Promise -> Promise -> Promise... (execute all)
+ *
+ * @param {Number} count take count
+ */
+export const parallel_set_fetch_count_internal = (count) => {
+    count = Number(count);
+    if (count <= 0) {
+        throw new Error("parallel_fetch_count > 0 required");
+    }
+    parallel_global_fetch_count = count || parallel_default_fetch_count;
+};
+
+export const parallel_get_fetch_count_internal = () => parallel_global_fetch_count;
+
 /**
  * real undefined
  * undefined = 1; // not error!

@@ -1,5 +1,5 @@
 import { curry } from "./curry";
-import * as P from "./internal/parallel";
+import * as P from "./internal/runtime";
 import { _Queue } from "./Queue";
 import { _fetchAndGetIterator } from "./internal/fetchIterator";
 
