@@ -1,7 +1,7 @@
 import { curry } from "./curry";
 import * as P from "./internal/runtime";
 import { _Queue } from "./Queue";
-import { _fetchAndGetIterator } from "./internal/fetchIterator";
+import { _fetchAndGetIterator } from "./internal/iterable";
 
 const fetch_filter_internal = (f, v, fn, iter) => {
     const fetchCount = P.parallel_get_fetch_count_internal() - 1;

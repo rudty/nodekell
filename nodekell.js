@@ -121,6 +121,19 @@
         return sum / c;
     };
 
+    const _seq = async function *(iter) {
+        for await (const e of iter) {
+            yield e;
+        }
+    };
+    const seq = (iter) => {
+        const it = iter[Symbol.asyncIterator];
+        if (it) {
+            return it.call(iter);
+        }
+        return _seq(iter);
+    };
+
     const objectIterator = function *(object) {
         const keys = Object.keys(object);
         for (const k of keys) {
@@ -165,6 +178,18 @@
         } else {
             yield a;
         }
+    };
+    const _fetchAndGetIterator = async (fetchCount, iter, fn) => {
+        fetchCount = Math.max(fetchCount, 0);
+        const g = seq(iter);
+        for (let i = fetchCount; i > 0; --i) {
+            const e = await g.next();
+            if (e.done) {
+                break;
+            }
+            fn(e.value);
+        }
+        return g;
     };
 
     const parallel_default_fetch_count = 100;
@@ -407,19 +432,6 @@
     const identity = (e) => e;
 
     const distinct = (iter) => distinctBy(identity, iter);
-
-    const _seq = async function *(iter) {
-        for await (const e of iter) {
-            yield e;
-        }
-    };
-    const seq = (iter) => {
-        const it = iter[Symbol.asyncIterator];
-        if (it) {
-            return it.call(iter);
-        }
-        return _seq(iter);
-    };
 
     const _headTailArray = async (arr) => {
         if (arr.length !== 0) {
@@ -1204,19 +1216,6 @@
 
     const parallel_set_fetch_count = (count) =>
         parallel_set_fetch_count_internal(count);
-
-    const _fetchAndGetIterator = async (fetchCount, iter, fn) => {
-        fetchCount = Math.max(fetchCount, 0);
-        const g = seq(iter);
-        for (let i = fetchCount; i > 0; --i) {
-            const e = await g.next();
-            if (e.done) {
-                break;
-            }
-            fn(e.value);
-        }
-        return g;
-    };
 
     const fetch_call_internal = (f, iter) => {
         const fetchCount = parallel_get_fetch_count_internal() - 1;

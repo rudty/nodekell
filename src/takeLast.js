@@ -1,6 +1,6 @@
 import { curry } from "./curry";
 import { _Queue } from "./Queue";
-import { _fetchAndGetIterator } from "./internal/fetchIterator";
+import { _fetchAndGetIterator } from "./internal/iterable";
 
 /**
  * take last n element
