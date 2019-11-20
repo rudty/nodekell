@@ -274,7 +274,23 @@ const collect = async (iter) => {
     return res;
 };
 
-const collectMap = async (iter) => new Map(await collect(iter));
+const _collectArray = (iter) => {
+    if (Array.isArray(iter)) {
+        return Promise.all(iter);
+    }
+    if (_isTypedArray(iter)){
+        return iter;
+    }
+    if(_isString(iter)) {
+        return Array.from(iter);
+    }
+    if (_isObjectArray(iter)) {
+        return Promise.all(Array.from(iter));
+    }
+    return collect(iter);
+};
+
+const collectMap = async (iter) => new Map(await _collectArray(iter));
 
 const _collectNativeArray = (ctor) => async (iter) => {
     const arr = new _ArrayList(ctor);
@@ -292,22 +308,6 @@ const collectUint32 = _collectNativeArray(Uint32Array);
 const collectUint8Clamped = _collectNativeArray(Uint8ClampedArray);
 const collectFloat32 = _collectNativeArray(Float32Array);
 const collectFloat64 = _collectNativeArray(Float64Array);
-
-const _collectArray = (iter) => {
-    if (Array.isArray(iter)) {
-        return Promise.all(iter);
-    }
-    if (_isTypedArray(iter)){
-        return iter;
-    }
-    if(_isString(iter)) {
-        return Array.from(iter);
-    }
-    if (_isObjectArray(iter)) {
-        return Promise.all(Array.from(iter));
-    }
-    return collect(iter);
-};
 
 const collectObject = async (iter) => {
     const c = await _collectArray(iter);
