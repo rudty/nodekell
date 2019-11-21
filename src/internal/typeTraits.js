@@ -1,3 +1,5 @@
+import { undefinedValue } from "./runtime";
+
 /**
  * check 
  * 
@@ -85,4 +87,20 @@ export const mustEvenArguments = (arr) => {
     if ((arr.length) & 1) {
         throw new Error("requires an even arguments");
     }
+};
+
+/**
+ * string, number, bigint, boolean, null, undefined, and symbol.
+ * @param {*} a 
+ */
+export const _isPrimitive  = (a) => {
+    if (!a) {
+        return a === null || a === undefinedValue;
+    } 
+    const ctor = a.constructor;
+    return (ctor === Number ||
+       ctor == BigInt ||
+       ctor == Boolean ||
+       ctor == Symbol ||
+       _isString(a));
 };

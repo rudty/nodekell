@@ -74,6 +74,56 @@
         return Object.assign.call(null, [target, source, ...sources].reverse());
     });
 
+    const parallel_default_fetch_count = 100;
+    let parallel_global_fetch_count = parallel_default_fetch_count;
+    const parallel_set_fetch_count_internal = (count) => {
+        count = Number(count);
+        if (count <= 0) {
+            throw new Error("parallel_fetch_count > 0 required");
+        }
+        parallel_global_fetch_count = count || parallel_default_fetch_count;
+    };
+    const parallel_get_fetch_count_internal = () => parallel_global_fetch_count;
+    const undefinedValue = ((v) => v)();
+    const _takeValue = async (v) => {
+        v = await v;
+        if (v.constructor === Function) {
+            v = await v();
+        }
+        return v;
+    };
+    const _removeAllIteratorElements = async (it) => {
+        if (!it) {
+            return;
+        }
+        for (; ;) {
+            const { value, done } = await it.next();
+            if (done) {
+                break;
+            }
+            await value;
+        }
+    };
+    const _zipWith = async function *(f, arr) {
+        while (true) {
+            const elems = await Promise.all(arr.map((e) => e.next()));
+            for (let i = 0; i < elems.length; ++i) {
+                if (elems[i].done) {
+                    return;
+                }
+            }
+            yield f.apply(null, elems.map((e) => e.value));
+        }
+    };
+    const _mustNotEmptyIteratorResult = (a) => {
+        if (!a) {
+            throw new Error("error iter result");
+        }
+        if (a.done) {
+            throw new Error("empty iter");
+        }
+    };
+
     const _isTypedArray = (a) => ArrayBuffer.isView(a) && !(a instanceof DataView);
     const _isObjectArrayCheckProps = (a) => {
         if (a.length === 0) {
@@ -190,56 +240,6 @@
             fn(e.value);
         }
         return g;
-    };
-
-    const parallel_default_fetch_count = 100;
-    let parallel_global_fetch_count = parallel_default_fetch_count;
-    const parallel_set_fetch_count_internal = (count) => {
-        count = Number(count);
-        if (count <= 0) {
-            throw new Error("parallel_fetch_count > 0 required");
-        }
-        parallel_global_fetch_count = count || parallel_default_fetch_count;
-    };
-    const parallel_get_fetch_count_internal = () => parallel_global_fetch_count;
-    const undefinedValue = ((v) => v)();
-    const _takeValue = async (v) => {
-        v = await v;
-        if (v.constructor === Function) {
-            v = await v();
-        }
-        return v;
-    };
-    const _removeAllIteratorElements = async (it) => {
-        if (!it) {
-            return;
-        }
-        for (; ;) {
-            const { value, done } = await it.next();
-            if (done) {
-                break;
-            }
-            await value;
-        }
-    };
-    const _zipWith = async function *(f, arr) {
-        while (true) {
-            const elems = await Promise.all(arr.map((e) => e.next()));
-            for (let i = 0; i < elems.length; ++i) {
-                if (elems[i].done) {
-                    return;
-                }
-            }
-            yield f.apply(null, elems.map((e) => e.value));
-        }
-    };
-    const _mustNotEmptyIteratorResult = (a) => {
-        if (!a) {
-            throw new Error("error iter result");
-        }
-        if (a.done) {
-            throw new Error("empty iter");
-        }
     };
 
     const block = async (...values) => {
