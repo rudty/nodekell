@@ -228,3 +228,26 @@ export function propOrElse<T, D, K extends keyof T>(key: K): (defaultValue: D, t
 export function equals<T>(a: T, b: T): boolean;
 
 export function equals<T>(a: T): (b: T) => boolean;
+
+/**
+ * check string, number, bigint, boolean, null, undefined, and symbol.
+ * @example
+ *      F.isPrimitive(1) // true
+ *      F.isPrimitive(null) // true
+ *      F.isPrimitive(0) // true
+ *      F.isPrimitive(Symbol("HELLO")); // true
+ *      F.isPrimitive("HELLO") // true
+ *      F.isPrimitive(new String("HELLO")) // false
+ *      F.isPrimitive(new Number(123)) // false
+ *      F.isPrimitive({}) // false
+ *      F.isPrimitive([]) // false
+ *      F.isPrimitive(()=>{}) // false
+ */
+export function isPrimitive(a: string): true;
+export function isPrimitive(a: number): true;
+// export function isPrimitive(a: bigint): true; // typescript error
+export function isPrimitive(a: boolean): true;
+export function isPrimitive(a: null): true;
+export function isPrimitive(a: undefined): true;
+export function isPrimitive(a: symbol): true;
+export function isPrimitive(a: any): false;

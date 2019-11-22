@@ -295,3 +295,51 @@ describe('propOrElse', () => {
         const r0 = F.orderBy(F.propOrElse('length', 0), F.asc, a); // $ExpectType AsyncIterableIterator<string>
     });
 });
+
+describe('isPrimitive', () => {
+    // const toNumberWrapper = (a: number): Number => { return Number; };
+    // const toStringWrapper = (a: string): String => { return a; };
+    // const toBooleanWrapper = (a: boolean): Boolean => { return a; };    
+    it('string', () => {
+        const r0 = F.isPrimitive("hello world"); // $ExpectType true
+        // const r1 = F.isPrimitive(toStringWrapper("hello world")); // $ExpectType false
+    });
+
+    it('number', () => {
+        const r0 = F.isPrimitive(1); // $ExpectType true
+        // const r1 = F.isPrimitive(toNumberWrapper(1)); // $ExpectType false
+    });
+
+    // it('bigint', () => {
+    //     const r0 = F.isPrimitive(1018n); // $ExpectType true
+    //     const r1 = F.isPrimitive(new BigInt(1)); // $ExpectType false
+    // });
+
+    it('boolean', () => {
+        const r0 = F.isPrimitive(true); // $ExpectType true
+        // const r1 = F.isPrimitive(toBooleanWrapper(true)); // $ExpectType false
+    });
+
+    it('null', () => {
+        const r0 = F.isPrimitive(null); // $ExpectType true
+    });
+
+    it('undefined', () => {
+        const undefinedValue = ((v) => v)();
+        const r0 = F.isPrimitive(undefinedValue); // $ExpectType true
+    });
+
+    it('Symbol', () => {
+        const r0 = F.isPrimitive(Symbol("cafe")); // $ExpectType true
+    });
+
+    it('Array', () => {
+        const r0 = F.isPrimitive([]); // $ExpectType false
+        const r1 = F.isPrimitive(new Array(10)); // $ExpectType false
+    });
+
+    it('object', () => {
+        const r0 = F.isPrimitive({}); // $ExpectType false
+        const r1 = F.isPrimitive(new Object(1)); // $ExpectType false
+    });
+});
