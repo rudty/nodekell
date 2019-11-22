@@ -94,13 +94,26 @@ export const mustEvenArguments = (arr) => {
  * @param {*} a 
  */
 export const _isPrimitive  = (a) => {
-    if (!a) {
-        return a === null || a === undefinedValue;
-    } 
+    if (a === null || a === undefinedValue) {
+        return true;
+    }
+    
+    return Object(a) !== a;
+};
+
+/**
+ * string, number, bigint, boolean, null, undefined, and symbol.
+ * and wrapper objects
+ * @param {*} a 
+ */
+export const _isPrimitiveLike  = (a) => {
+    if (_isPrimitive(a)) {
+        return true;
+    }
     const ctor = a.constructor;
     return (ctor === Number ||
-       ctor == BigInt ||
-       ctor == Boolean ||
-       ctor == Symbol ||
-       _isString(a));
+        ctor == BigInt ||
+        ctor == Boolean ||
+        ctor == Symbol ||
+        _isString(a));
 };
