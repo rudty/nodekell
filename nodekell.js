@@ -153,6 +153,18 @@
         }
         return Object(a) !== a;
     };
+    const _isPrimitiveWrapper  = (a) => {
+        const ctor = a.constructor;
+        switch (ctor) {
+            case Number:
+            case BigInt:
+            case Boolean:
+            case Symbol:
+            case String:
+               return true;
+        }
+        return false;
+    };
 
     const associateBy = curry(async (fn, iter) => {
         const m = new Map();
@@ -541,7 +553,7 @@
         if (kvl.length !== Object.keys(rhs).length) {
             return false;
         }
-        for (const [k, v] of kvl) {
+        for (const [k, v] of kvl) {console.log(k, v);
             if (!rhs.hasOwnProperty(k)) {
                 return false;
             }
@@ -563,14 +575,11 @@
             if (lhs.constructor !== rhs.constructor) {
                 return false;
             }
-            if (lhs instanceof String ||
-                _isString(lhs) ||
-                lhs instanceof Number ||
-                lhs.constructor === Number ||
-                lhs instanceof Boolean ||
-                lhs.constructor === Boolean ||
-                lhs instanceof Date) {
+            if (_isPrimitiveWrapper(lhs) || lhs instanceof Date) {
                 return lhs.valueOf() === rhs.valueOf();
+            }
+            if (lhs.valueOf() === rhs.valueOf()) {
+                return true;
             }
             if (lhs instanceof Array) {
                 return array_internal(lhs, rhs);
@@ -596,9 +605,7 @@
             if (toString_internal(lhs) !== toString_internal(rhs)) {
                 return false;
             }
-            if (lhs instanceof Object) {
-                return object_internal(lhs, rhs);
-            }
+            return object_internal(lhs, rhs);
         } else {
             if (Number.isNaN(lhs) && Number.isNaN(rhs)) {
                 return true;

@@ -99,7 +99,7 @@ const object_internal = (lhs, rhs) => {
         return false;
     }
 
-    for (const [k, v] of kvl) {
+    for (const [k, v] of kvl) {console.log(k, v);
         if (!rhs.hasOwnProperty(k)) {
             return false;
         }
@@ -133,12 +133,12 @@ _equals = curry((lhs, rhs) => {
             return false;
         }
 
-        if (_isPrimitiveWrapper(lhs)) {
+        if (_isPrimitiveWrapper(lhs) || lhs instanceof Date) {
             return lhs.valueOf() === rhs.valueOf();
         }
 
         if (lhs.valueOf() === rhs.valueOf()) {
-            // Date, DateLike, extends PrimitiveWrapper
+            // extends PrimitiveWrapper
             return true;
         }
         
