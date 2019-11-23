@@ -299,7 +299,7 @@ describe('propOrElse', () => {
 describe('isPrimitive', () => {
     // const toNumberWrapper = (a: number): Number => { return Number; };
     // const toStringWrapper = (a: string): String => { return a; };
-    // const toBooleanWrapper = (a: boolean): Boolean => { return a; };    
+    // const toBooleanWrapper = (a: boolean): Boolean => { return a; };
     it('string', () => {
         const r0 = F.isPrimitive("hello world"); // $ExpectType true
         // const r1 = F.isPrimitive(toStringWrapper("hello world")); // $ExpectType false

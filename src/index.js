@@ -63,6 +63,7 @@ export * from "./innerJoin2.js";
 export * from "./insertAt.js";
 export * from "./interval.js";
 export * from "./isNil.js";
+export * from "./isPrimitive.js";
 export * from "./iterate.js";
 export * from "./juxtA.js";
 export * from "./juxtO.js";

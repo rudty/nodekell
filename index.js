@@ -145,6 +145,12 @@ const mustEvenArguments = (arr) => {
         throw new Error("requires an even arguments");
     }
 };
+const _isPrimitive  = (a) => {
+    if (a === null || a === undefinedValue) {
+        return true;
+    }
+    return Object(a) !== a;
+};
 
 const associateBy = curry(async (fn, iter) => {
     const m = new Map();
@@ -1038,6 +1044,8 @@ const isNil = (v) => {
         default: return Number.isNaN(v);
     }
 };
+
+const isPrimitive = _isPrimitive;
 
 const iterate = curry(async function *(fn, v) {
     v = await v;
@@ -1956,6 +1964,7 @@ exports.innerJoin2 = innerJoin2;
 exports.insertAt = insertAt;
 exports.interval = interval;
 exports.isNil = isNil;
+exports.isPrimitive = isPrimitive;
 exports.iterate = iterate;
 exports.juxtA = juxtA;
 exports.juxtO = juxtO;
