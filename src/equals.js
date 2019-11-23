@@ -1,5 +1,5 @@
 import { curry } from "./curry";
-import { _isObjectArray, _isTypedArray, _isString } from "./internal/typeTraits";
+import { _isObjectArray, _isTypedArray, _isString, _isPrimitiveWrapper } from "./internal/typeTraits";
 import { underBar } from "./_";
 
 let _equals;
@@ -119,6 +119,7 @@ _equals = curry((lhs, rhs) => {
         // undefined === undefined => true
         // null === null => true
         // 0 === 0 => true
+        // Primitive types
         return true;
     }
 
@@ -132,16 +133,15 @@ _equals = curry((lhs, rhs) => {
             return false;
         }
 
-        if (lhs instanceof String || 
-            _isString(lhs) || 
-            lhs instanceof Number || 
-            lhs.constructor === Number ||
-            lhs instanceof Boolean ||
-            lhs.constructor === Boolean ||
-            lhs instanceof Date) {
+        if (_isPrimitiveWrapper(lhs)) {
             return lhs.valueOf() === rhs.valueOf();
         }
 
+        if (lhs.valueOf() === rhs.valueOf()) {
+            // Date, DateLike, extends PrimitiveWrapper
+            return true;
+        }
+        
         if (lhs instanceof Array) {
             return array_internal(lhs, rhs);
         }
@@ -175,9 +175,7 @@ _equals = curry((lhs, rhs) => {
             return false;
         }
 
-        if (lhs instanceof Object) {
-            return object_internal(lhs, rhs);
-        }
+        return object_internal(lhs, rhs);
     } else {
         //NaN === NaN => false
         if (Number.isNaN(lhs) && Number.isNaN(rhs)) {

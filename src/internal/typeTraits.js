@@ -102,15 +102,11 @@ export const _isPrimitive  = (a) => {
 };
 
 /**
- * string, number, bigint, boolean, null, undefined, and symbol.
+ * String, Number, BigInt, Boolean, and Symbol.
  * and wrapper objects
  * @param {*} a 
  */
-export const _isPrimitiveLike  = (a) => {
-    if (_isPrimitive(a)) {
-        return true;
-    }
-
+export const _isPrimitiveWrapper  = (a) => {
     const ctor = a.constructor;
     switch (ctor) {
         case Number:
