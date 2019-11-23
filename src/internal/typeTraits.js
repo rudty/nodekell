@@ -110,10 +110,15 @@ export const _isPrimitiveLike  = (a) => {
     if (_isPrimitive(a)) {
         return true;
     }
+
     const ctor = a.constructor;
-    return (ctor === Number ||
-        ctor == BigInt ||
-        ctor == Boolean ||
-        ctor == Symbol ||
-        _isString(a));
+    switch (ctor) {
+        case Number:
+        case BigInt:
+        case Boolean:
+        case Symbol:
+        case String:
+           return true; 
+    }
+    return false;
 };
