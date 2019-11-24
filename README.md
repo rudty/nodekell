@@ -2704,8 +2704,11 @@ console.log(r); // print { a: 3, b: 2 };
 
 ### isPrimitive
 check string, number, bigint, boolean, null, undefined, and symbol.
+
 **notice**
+
 bigint is also a primitive type,
+
 but due to typescript compatibility issues the correct type may not be displayed.
 ```javascript
 F.isPrimitive(1) // true
