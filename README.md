@@ -2701,5 +2701,25 @@ const r = await F.doto({a: 1}, (v) => {
 console.log(r); // print { a: 3, b: 2 };
 ```
 
+
+### isPrimitive
+check string, number, bigint, boolean, null, undefined, and symbol.
+**notice**
+bigint is also a primitive type,
+but due to typescript compatibility issues the correct type may not be displayed.
+```javascript
+F.isPrimitive(1) // true
+F.isPrimitive(null) // true
+F.isPrimitive(0) // true
+F.isPrimitive(Symbol("HELLO")); // true
+F.isPrimitive("HELLO") // true
+F.isPrimitive(new String("HELLO")) // false
+F.isPrimitive(new Number(123)) // false
+F.isPrimitive({}) // false
+F.isPrimitive([]) // false
+F.isPrimitive(()=>{}) // false
+```
+
+
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frudty%2Fnodekell.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Frudty%2Fnodekell?ref=badge_large)
