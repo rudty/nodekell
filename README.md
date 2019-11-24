@@ -196,6 +196,7 @@ console.log(v);//[3]
 *    [comparator](#comparator)
 *    [insertAt](#insertat)
 *    [doto](#doto)
+*    [isPrimitive](#isprimitive)
 ---
 
 
