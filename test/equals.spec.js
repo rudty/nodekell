@@ -387,4 +387,16 @@ describe('test equals', () => {
         };
         assert.ok(false === F.equals(obj1, obj2));
     });
+
+    it('Symbol eq', () => {
+        const obj1 = Symbol("HELLO_WORLD");
+        const obj2 = obj1;
+        assert.ok(F.equals(obj1, obj2));
+    });
+
+    it('Symbol neq', () => {
+        const obj1 = Symbol("HELLO_WORLD");
+        const obj2 = Symbol("HELLO_WORLD");
+        assert.ok(false === F.equals(obj1, obj2));
+    });
 });

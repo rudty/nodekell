@@ -1,6 +1,7 @@
 import { curry } from "./curry";
 import { _isObjectArray, _isTypedArray, _isString, _isPrimitiveWrapper } from "./internal/typeTraits";
 import { underBar } from "./_";
+import { undefinedValue } from "./internal/runtime";
 
 let _equals;
 
@@ -99,7 +100,7 @@ const object_internal = (lhs, rhs) => {
         return false;
     }
 
-    for (const [k, v] of kvl) {console.log(k, v);
+    for (const [k, v] of kvl) {
         if (!rhs.hasOwnProperty(k)) {
             return false;
         }
@@ -110,6 +111,31 @@ const object_internal = (lhs, rhs) => {
     }
 
     return true;
+};
+
+const toPrimitive_call_internal = (a, toPrimitiveFunc, hint) => {
+    try {
+        const n = toPrimitiveFunc.call(a, hint);
+        if (n !== null && n !== undefinedValue) {
+            return n;
+        }
+    } catch (_) { } 
+    // return undefined
+};
+
+const toPrimitiveHints = ["number", "string", "default"];
+
+const toPrimitive_internal = (a) => {
+    const c = a[Symbol.toPrimitive];
+    if (c) {
+        for (const hint of toPrimitiveHints) {
+            const e = toPrimitive_call_internal(a, c, hint);
+            if (e !== undefinedValue) {
+                return e;
+            }
+        }
+    }
+    // return undefined;
 };
 
 const toString_internal = (a) => Object.prototype.toString(a);
@@ -133,8 +159,13 @@ _equals = curry((lhs, rhs) => {
             return false;
         }
 
-        if (_isPrimitiveWrapper(lhs) || lhs instanceof Date) {
+        if (_isPrimitiveWrapper(lhs)) {
             return lhs.valueOf() === rhs.valueOf();
+        }
+        
+        const lp = toPrimitive_internal(lhs);
+        if (lp) {
+            return lp === toPrimitive_internal(rhs);
         }
 
         if (lhs.valueOf() === rhs.valueOf()) {
