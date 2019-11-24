@@ -1,5 +1,5 @@
 import { curry } from "./curry";
-import { _isObjectArray, _isTypedArray, _isString, _isPrimitiveWrapper } from "./internal/typeTraits";
+import { _isObjectArray, _isTypedArray, _isPrimitiveWrapper } from "./internal/typeTraits";
 import { underBar } from "./_";
 import { undefinedValue } from "./internal/runtime";
 
