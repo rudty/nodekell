@@ -250,4 +250,4 @@ export function isPrimitive(a: boolean): true;
 export function isPrimitive(a: null): true;
 export function isPrimitive(a: undefined): true;
 export function isPrimitive(a: symbol): true;
-export function isPrimitive(a: any): false;
+export function isPrimitive(a: any): boolean;

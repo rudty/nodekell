@@ -334,12 +334,12 @@ describe('isPrimitive', () => {
     });
 
     it('Array', () => {
-        const r0 = F.isPrimitive([]); // $ExpectType false
-        const r1 = F.isPrimitive(new Array(10)); // $ExpectType false
+        const r0 = F.isPrimitive([]); // $ExpectType boolean
+        const r1 = F.isPrimitive(new Array(10)); // $ExpectType boolean
     });
 
     it('object', () => {
-        const r0 = F.isPrimitive({}); // $ExpectType false
-        const r1 = F.isPrimitive(new Object(1)); // $ExpectType false
+        const r0 = F.isPrimitive({}); // $ExpectType boolean
+        const r1 = F.isPrimitive(new Object(1)); // $ExpectType boolean
     });
 });
