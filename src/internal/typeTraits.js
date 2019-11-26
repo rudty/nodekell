@@ -93,7 +93,7 @@ export const mustEvenArguments = (arr) => {
  * string, number, bigint, boolean, null, undefined, and symbol.
  * @param {*} a 
  */
-export const _isPrimitive  = (a) => {
+export const _isPrimitive = (a) => {
     if (a === null || a === undefinedValue) {
         return true;
     }
@@ -101,12 +101,16 @@ export const _isPrimitive  = (a) => {
     return Object(a) !== a;
 };
 
+if (typeof BigInt === "undefined") {
+    var BigInt = {};
+}
+
 /**
  * String, Number, BigInt, Boolean, and Symbol.
  * and wrapper objects
  * @param {*} a 
  */
-export const _isPrimitiveWrapper  = (a) => {
+export const _isPrimitiveWrapper = (a) => {
     const ctor = a.constructor;
     switch (ctor) {
         case Number:

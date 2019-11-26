@@ -2,16 +2,6 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const curry = (fn) => (...a) => {
-    if (fn.length <= a.length) {
-        return fn(...a);
-    } else {
-        return (...b) => curry(fn)(...a, ...b);
-    }
-};
-
-const add = curry((a, b) => a + b);
-
 const arrayListDefaultSize = 32;
 class _ArrayList {
     constructor(ArrayCtor) {
@@ -57,6 +47,163 @@ class _ArrayList {
         return this._data.slice(0, this._length);
     }
 }
+
+class _Queue {
+    constructor() {
+        this.head = this.tail = null;
+    }
+    add(v) {
+        const n = { value: v, next: null };
+        if (this.head) {
+            this.tail.next = n;
+        } else {
+            this.head = n;
+        }
+        this.tail = n;
+    }
+    _unsafePop() {
+        const f = this.head;
+        if (f !== this.tail) {
+            this.head = f.next;
+        } else {
+            this.head = this.tail = null;
+        }
+        f.next = null;
+        return f.value;
+    }
+    remove() {
+        if (this.head === null) {
+            throw new Error("no such element");
+        }
+        return this._unsafePop();
+    }
+    poll() {
+        if (this.head === null) {
+            return null;
+        }
+        return this._unsafePop();
+    }
+    element() {
+        const f = this.head;
+        if (f === null) {
+            throw new Error("no such element");
+        }
+        return f.value;
+    }
+    peek() {
+        const f = this.head;
+        if (f === null) {
+            return null;
+        }
+        return f.value;
+    }
+    isEmpty() {
+        return this.head === null;
+    }
+    clear() {
+        let it = this.head;
+        while (it) {
+            const n = it.next;
+            it.value = it.next = null;
+            it = n;
+        }
+        this.head = this.tail = null;
+    }
+    *[Symbol.iterator]() {
+        let it = this.head;
+        while (it) {
+            yield it.value;
+            it = it.next;
+        }
+    }
+    *removeIterator() {
+        let it = this.head;
+        while (it) {
+            const p = it;
+            yield p.value;
+            it = p.next;
+            p.value = null;
+            p.next = null;
+        }
+    }
+}
+
+class _Stack {
+    constructor() {
+        this.top = null;
+    }
+    push(v) {
+        const t = this.top;
+        this.top = { value: v, next: t };
+    }
+    _unsafePop() {
+        const v = this.top.value;
+        this.top = this.top.next;
+        return v;
+    }
+    pop() {
+        if (this.top === null) {
+            throw new Error("no such element");
+        }
+        return this._unsafePop();
+    }
+    poll() {
+        if (this.top === null) {
+            return null;
+        }
+        return this._unsafePop();
+    }
+    peek() {
+        const f = this.top;
+        if (f === null) {
+            return null;
+        }
+        return f.value;
+    }
+    isEmpty() {
+        return this.top === null;
+    }
+    clear() {
+        let it = this.top;
+        while (it) {
+            it.value = null;
+            const n = it.next;
+            it.next = null;
+            it = n;
+        }
+        this.top = null;
+    }
+    *[Symbol.iterator]() {
+        let it = this.top;
+        while (it) {
+            yield it.value;
+            it = it.next;
+        }
+    }
+    *removeIterator() {
+        let it = this.top;
+        while (it) {
+            const p = it;
+            yield p.value;
+            it = p.next;
+            p.value = null;
+            p.next = null;
+        }
+    }
+}
+
+const underBar = Object.freeze({});
+const _ = underBar;
+
+const curry = (fn) => (...a) => {
+    if (fn.length <= a.length) {
+        return fn(...a);
+    } else {
+        return (...b) => curry(fn)(...a, ...b);
+    }
+};
+
+const add = curry((a, b) => a + b);
 
 const asc = (a, b) => a > b ? 1 : a < b ? -1 : 0;
 
@@ -145,13 +292,16 @@ const mustEvenArguments = (arr) => {
         throw new Error("requires an even arguments");
     }
 };
-const _isPrimitive  = (a) => {
+const _isPrimitive = (a) => {
     if (a === null || a === undefinedValue) {
         return true;
     }
     return Object(a) !== a;
 };
-const _isPrimitiveWrapper  = (a) => {
+if (typeof BigInt === "undefined") {
+    var BigInt = {};
+}
+const _isPrimitiveWrapper = (a) => {
     const ctor = a.constructor;
     switch (ctor) {
         case Number:
@@ -472,9 +622,6 @@ const _headTail = async (iter) => {
     return r;
 };
 
-const underBar = Object.freeze({});
-const _ = underBar;
-
 let _equals;
 const map_internal = (lhs, rhs) => {
     if (lhs.size !== rhs.size) {
@@ -670,86 +817,6 @@ const drop = curry(async function *(count, iter) {
     }
     yield* g;
 });
-
-class _Queue {
-    constructor() {
-        this.head = this.tail = null;
-    }
-    add(v) {
-        const n = { value: v, next: null };
-        if (this.head) {
-            this.tail.next = n;
-        } else {
-            this.head = n;
-        }
-        this.tail = n;
-    }
-    _unsafePop() {
-        const f = this.head;
-        if (f !== this.tail) {
-            this.head = f.next;
-        } else {
-            this.head = this.tail = null;
-        }
-        f.next = null;
-        return f.value;
-    }
-    remove() {
-        if (this.head === null) {
-            throw new Error("no such element");
-        }
-        return this._unsafePop();
-    }
-    poll() {
-        if (this.head === null) {
-            return null;
-        }
-        return this._unsafePop();
-    }
-    element() {
-        const f = this.head;
-        if (f === null) {
-            throw new Error("no such element");
-        }
-        return f.value;
-    }
-    peek() {
-        const f = this.head;
-        if (f === null) {
-            return null;
-        }
-        return f.value;
-    }
-    isEmpty() {
-        return this.head === null;
-    }
-    clear() {
-        let it = this.head;
-        while (it) {
-            const n = it.next;
-            it.value = it.next = null;
-            it = n;
-        }
-        this.head = this.tail = null;
-    }
-    *[Symbol.iterator]() {
-        let it = this.head;
-        while (it) {
-            yield it.value;
-            it = it.next;
-        }
-    }
-    *removeIterator() {
-        let it = this.head;
-        while (it) {
-            const p = it;
-            yield p.value;
-            it = p.next;
-            p.value = null;
-            p.next = null;
-        }
-    }
-}
 
 const addNext = async (q, g) => {
     const e = await g.next();
@@ -1760,70 +1827,6 @@ const rightInnerJoin = curry((f, a, b) => _innerJoin(f, b, a));
 const leftOuterJoin = curry(_outerJoin);
 const outerJoin = curry(_outerJoin);
 const rightOuterJoin = curry((f, a, b) => _outerJoin(f, b, a));
-
-class _Stack {
-    constructor() {
-        this.top = null;
-    }
-    push(v) {
-        const t = this.top;
-        this.top = { value: v, next: t };
-    }
-    _unsafePop() {
-        const v = this.top.value;
-        this.top = this.top.next;
-        return v;
-    }
-    pop() {
-        if (this.top === null) {
-            throw new Error("no such element");
-        }
-        return this._unsafePop();
-    }
-    poll() {
-        if (this.top === null) {
-            return null;
-        }
-        return this._unsafePop();
-    }
-    peek() {
-        const f = this.top;
-        if (f === null) {
-            return null;
-        }
-        return f.value;
-    }
-    isEmpty() {
-        return this.top === null;
-    }
-    clear() {
-        let it = this.top;
-        while (it) {
-            it.value = null;
-            const n = it.next;
-            it.next = null;
-            it = n;
-        }
-        this.top = null;
-    }
-    *[Symbol.iterator]() {
-        let it = this.top;
-        while (it) {
-            yield it.value;
-            it = it.next;
-        }
-    }
-    *removeIterator() {
-        let it = this.top;
-        while (it) {
-            const p = it;
-            yield p.value;
-            it = p.next;
-            p.value = null;
-            p.next = null;
-        }
-    }
-}
 
 const sub = curry((a, b) => a - b);
 
