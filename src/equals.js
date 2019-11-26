@@ -119,7 +119,9 @@ const toPrimitive_call_internal = (a, toPrimitiveFunc, hint) => {
         if (n !== null && n !== undefinedValue) {
             return n;
         }
-    } catch (_) { } 
+    } catch (_) { 
+        // ignore
+    } 
     // return undefined
 };
 
