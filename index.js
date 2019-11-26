@@ -230,6 +230,7 @@ const parallel_set_fetch_count_internal = (count) => {
 };
 const parallel_get_fetch_count_internal = () => parallel_global_fetch_count;
 const undefinedValue = ((v) => v)();
+const NodekellBigInt = (typeof BigInt === "undefined") ? {} : BigInt;
 const _takeValue = async (v) => {
     v = await v;
     if (v.constructor === Function) {
@@ -298,14 +299,11 @@ const _isPrimitive = (a) => {
     }
     return Object(a) !== a;
 };
-if (typeof BigInt === "undefined") {
-    var BigInt = {};
-}
 const _isPrimitiveWrapper = (a) => {
     const ctor = a.constructor;
     switch (ctor) {
         case Number:
-        case BigInt:
+        case NodekellBigInt:
         case Boolean:
         case Symbol:
         case String:

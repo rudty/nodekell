@@ -1,4 +1,4 @@
-import { undefinedValue } from "./runtime";
+import { undefinedValue, NodekellBigInt } from "./runtime";
 
 /**
  * check 
@@ -101,10 +101,6 @@ export const _isPrimitive = (a) => {
     return Object(a) !== a;
 };
 
-if (typeof BigInt === "undefined") {
-    var BigInt = {};
-}
-
 /**
  * String, Number, BigInt, Boolean, and Symbol.
  * and wrapper objects
@@ -114,7 +110,7 @@ export const _isPrimitiveWrapper = (a) => {
     const ctor = a.constructor;
     switch (ctor) {
         case Number:
-        case BigInt:
+        case NodekellBigInt:
         case Boolean:
         case Symbol:
         case String:
