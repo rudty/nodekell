@@ -1,11 +1,11 @@
 import { random } from "./random";
 import { _isReadableArrayLike } from "./internal/typeTraits";
-import { collect } from "./collect";
+import { _collectArray } from "./internal/collectArray";
 
 const _sampleArray = (arr) => arr[random(arr.length)];
 
 const _sampleNotArray = async (iter) => {
-    const r = await collect(iter);
+    const r = await _collectArray(iter);
     return _sampleArray(r);
 };
 
