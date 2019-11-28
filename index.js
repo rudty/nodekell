@@ -230,7 +230,7 @@ const parallel_set_fetch_count_internal = (count) => {
 };
 const parallel_get_fetch_count_internal = () => parallel_global_fetch_count;
 const undefinedValue = ((v) => v)();
-const NodekellBigInt = (typeof BigInt === "undefined") ? {} : BigInt;
+const NodekellBigInt = (typeof BigInt !== "undefined") ? BigInt : {};
 const _takeValue = async (v) => {
     v = await v;
     if (v.constructor === Function) {
@@ -273,7 +273,7 @@ const _mustNotEmptyIteratorResult = (a) => {
 const _isTypedArray = (a) => ArrayBuffer.isView(a) && !(a instanceof DataView);
 const _isObjectArrayCheckProps = (a) => {
     if (a.length === 0) {
-        return Object.keys(a).length === 1;
+        return true;
     }
     return Object.prototype.hasOwnProperty.call(a, (a.length - 1));
 };
@@ -712,7 +712,8 @@ const toPrimitive_call_internal = (a, toPrimitiveFunc, hint) => {
         if (n !== null && n !== undefinedValue) {
             return n;
         }
-    } catch (_) { }
+    } catch (_) {
+    }
 };
 const toPrimitiveHints = ["number", "string", "default"];
 const toPrimitive_internal = (a) => {
@@ -1583,7 +1584,7 @@ const repeat = async function *(a, ...b) {
 
 const _sampleArray = (arr) => arr[random(arr.length)];
 const _sampleNotArray = async (iter) => {
-    const r = await collect(iter);
+    const r = await _collectArray(iter);
     return _sampleArray(r);
 };
 const sample = (iter) => {

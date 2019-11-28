@@ -25,7 +25,7 @@ export const _isTypedArray = (a) => ArrayBuffer.isView(a) && !(a instanceof Data
  */
 const _isObjectArrayCheckProps = (a) => {
     if (a.length === 0) {
-        return Object.keys(a).length === 1; 
+        return true;
     }
     return Object.prototype.hasOwnProperty.call(a, (a.length - 1)); 
 };
