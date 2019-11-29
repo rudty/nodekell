@@ -611,15 +611,11 @@
         _mustNotEmptyIteratorResult(head);
         return [head.value, g];
     };
-    const _headTailInternal = (iter) => {
+    const _headTail = (iter) => {
         if (Array.isArray(iter) || _isTypedArray(iter) || _isString(iter)) {
             return _headTailArray(iter);
         }
         return _headTailIterator(iter);
-    };
-    const _headTail = async (iter) => {
-        const r = await _headTailInternal(iter);
-        return r;
     };
 
     let _equals;

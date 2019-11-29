@@ -16,13 +16,6 @@ const _headTailIterator = async (iter) => {
     return [head.value, g];
 };
 
-const _headTailInternal = (iter) => {
-    if (Array.isArray(iter) || _isTypedArray(iter) || _isString(iter)) {
-        return _headTailArray(iter);
-    }
-    return _headTailIterator(iter);
-};
-
 /**
  * get head and tail
  * const [head, tail] = _headTail(iterator);
@@ -33,7 +26,9 @@ const _headTailInternal = (iter) => {
  * @param {Array | Iterable | AsyncIterable} iter 
  * @returns {Array} [head, tail] value, iterable
  */
-export const _headTail = async (iter) => {
-    const r = await _headTailInternal(iter);
-    return r;
+export const _headTail = (iter) => {
+    if (Array.isArray(iter) || _isTypedArray(iter) || _isString(iter)) {
+        return _headTailArray(iter);
+    }
+    return _headTailIterator(iter);
 };
