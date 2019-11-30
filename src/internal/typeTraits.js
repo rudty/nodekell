@@ -1,6 +1,12 @@
 import { undefinedValue, NodekellBigInt } from "./runtime";
 
 /**
+ * function is 
+ * () => {...}
+ */
+export const _isFunction = (a) => a && a.constructor === Function;
+
+/**
  * check 
  * 
  * Int8Array
@@ -43,7 +49,7 @@ const _isObjectArrayCheckProps = (a) => {
  * @param {Object} a 
  */
 export const _isObjectArray = (a) => {
-    if (Number.isSafeInteger(a.length)) {
+    if ((!_isFunction(a)) && Number.isSafeInteger(a.length)) {
         return _isObjectArrayCheckProps(a);
     }
     return false;
@@ -76,12 +82,6 @@ export const _isWritableArrayLike = (a) =>
     _isArrayLike(a);
 
 export const _hasIterator = (a) => a[Symbol.iterator] || a[Symbol.asyncIterator];
-
-/**
- * function is 
- * () => {...}
- */
-export const _isFunction = (a) => a && a.constructor === Function;
 
 export const mustEvenArguments = (arr) => {
     if ((arr.length) & 1) {
