@@ -399,4 +399,15 @@ describe('test equals', () => {
         const obj2 = Symbol("HELLO_WORLD");
         assert.ok(false === F.equals(obj1, obj2));
     });
+
+    it('function not equal', async () => {
+        const f1 = () => {};
+        const f2 = () => {};
+        assert.ok(false === F.equals(f1, f2));
+    });
+
+    it('function equal', async () => {
+        const f1 = () => {};
+        assert.ok(F.equals(f1, f1));
+    });
 });

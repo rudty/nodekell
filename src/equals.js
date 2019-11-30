@@ -1,5 +1,5 @@
 import { curry } from "./curry";
-import { _isObjectArray, _isTypedArray, _isPrimitiveWrapper } from "./internal/typeTraits";
+import { _isObjectArray, _isTypedArray, _isPrimitiveWrapper, _isFunction } from "./internal/typeTraits";
 import { underBar } from "./_";
 import { undefinedValue } from "./internal/runtime";
 
@@ -199,7 +199,8 @@ _equals = curry((lhs, rhs) => {
             return regExp_internal(lhs, rhs);
         }
 
-        if (lhs instanceof Promise) {
+        if (lhs instanceof Promise ||
+            _isFunction(lhs)) {
             // :(
             return false;
         }

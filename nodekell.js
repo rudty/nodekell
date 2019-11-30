@@ -272,6 +272,7 @@
         }
     };
 
+    const _isFunction = (a) => a && a.constructor === Function;
     const _isTypedArray = (a) => ArrayBuffer.isView(a) && !(a instanceof DataView);
     const _isObjectArrayCheckProps = (a) => {
         if (a.length === 0) {
@@ -280,7 +281,7 @@
         return Object.prototype.hasOwnProperty.call(a, (a.length - 1));
     };
     const _isObjectArray = (a) => {
-        if (Number.isSafeInteger(a.length)) {
+        if ((!_isFunction(a)) && Number.isSafeInteger(a.length)) {
             return _isObjectArrayCheckProps(a);
         }
         return false;
@@ -289,7 +290,6 @@
     const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray(a) || _isObjectArray(a));
     const _isReadableArrayLike = (a) => a && (_isString(a) || _isArrayLike(a));
     const _hasIterator = (a) => a[Symbol.iterator] || a[Symbol.asyncIterator];
-    const _isFunction = (a) => a && a.constructor === Function;
     const mustEvenArguments = (arr) => {
         if ((arr.length) & 1) {
             throw new Error("requires an even arguments");
@@ -765,7 +765,8 @@
             if (lhs instanceof RegExp) {
                 return regExp_internal(lhs, rhs);
             }
-            if (lhs instanceof Promise) {
+            if (lhs instanceof Promise ||
+                _isFunction(lhs)) {
                 return false;
             }
             if (toString_internal(lhs) !== toString_internal(rhs)) {
