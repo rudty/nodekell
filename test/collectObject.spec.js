@@ -24,6 +24,12 @@ describe('test collectObject', () => {
         assert.deepStrictEqual(m, {"b":2,"c":3});
     });
 
+    it('string', async () => {
+        const a = ["ab","cd"];
+        const m = await F.collectObject(a);
+        assert.deepStrictEqual(m, {a:"b",c:"d"});
+    });
+
     it('fail1', async () => {
         try{
             await F.collectObject([1,2]);
@@ -38,7 +44,7 @@ describe('test collectObject', () => {
 
     it('fail2', async () => {
         try{
-            await F.collectObject(["ab","cd"]);
+            await F.collectObject(["abc","cdc"]);
             assert.fail("fail object");
         }
         catch(e){

@@ -65,6 +65,8 @@ export const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray(a) || _isO
  */
 export const _isReadableArrayLike = (a) => a && (_isString(a) || _isArrayLike(a));
 
+export const _isPairLike = (a) => _isReadableArrayLike(a) && a.length === 2;
+
 /**
  * is array like object and writable
  * 

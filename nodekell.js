@@ -289,6 +289,7 @@
     const _isString = (a) => a.constructor === String;
     const _isArrayLike = (a) => (Array.isArray(a) || _isTypedArray(a) || _isObjectArray(a));
     const _isReadableArrayLike = (a) => a && (_isString(a) || _isArrayLike(a));
+    const _isPairLike = (a) => _isReadableArrayLike(a) && a.length === 2;
     const _hasIterator = (a) => a[Symbol.iterator] || a[Symbol.asyncIterator];
     const mustEvenArguments = (arr) => {
         if ((arr.length) & 1) {
@@ -481,8 +482,8 @@
         const c = await _collectArray(iter);
         const o = {};
         for (const e of c) {
-            if (!Array.isArray(e)) {
-                throw new TypeError("collectObject value is not array require [k,v] ");
+            if (!_isPairLike(e)) {
+                throw new TypeError("collectObject value is not pair require [k,v] ");
             }
             o[e[0]] = e[1];
         }
