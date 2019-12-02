@@ -480,8 +480,8 @@ export function associateBy<T extends Iter<any>, R>(fn: (arg: FlatForInternalFn<
  * @param str find String
  * @returns first matching string
  */
-export function reFind(re: RegExp | String, str: string): string;
-export function reFind(re: RegExp | String): (str: string) => string;
+export function reFind(re: RegExp | string, str: string): string;
+export function reFind(re: RegExp | string): (str: string) => string;
 
 /**
  * Use regular expression
@@ -497,8 +497,8 @@ export function reFind(re: RegExp | String): (str: string) => string;
  * @param str find String
  * @returns Array<String> matching strings and groups
  */
-export function reFindSubmatch(re: RegExp | String, str: string): string[];
-export function reFindSubmatch(re: RegExp | String): (str: string) => string[];
+export function reFindSubmatch(re: RegExp | string, str: string): string[];
+export function reFindSubmatch(re: RegExp | string): (str: string) => string[];
 
 /**
  * Use regular expression
@@ -512,8 +512,8 @@ export function reFindSubmatch(re: RegExp | String): (str: string) => string[];
  * @param str find String
  * @returns matching strings
  */
-export function reFindAll(re: RegExp | String, str: string): string[];
-export function reFindAll(re: RegExp | String): (str: string) => string[];
+export function reFindAll(re: RegExp | string, str: string): string[];
+export function reFindAll(re: RegExp | string): (str: string) => string[];
 
 /**
  * Use regular expression
@@ -531,8 +531,8 @@ export function reFindAll(re: RegExp | String): (str: string) => string[];
  * @param str find String
  * @returns Array<Array<String>> matching strings and groups
  */
-export function reFindAllSubmatch(re: RegExp | String, str: string): string[][];
-export function reFindAllSubmatch(re: RegExp | String): (str: string) => string[][];
+export function reFindAllSubmatch(re: RegExp | string, str: string): string[][];
+export function reFindAllSubmatch(re: RegExp | string): (str: string) => string[][];
 
 /**
  * 1. await promise
