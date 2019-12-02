@@ -1395,53 +1395,81 @@ describe('associateBy', () => {
 });
 
 describe('reFind', () => {
-    it('1', async () => {
+    it('regex 1', async () => {
         const r0 = F.reFind(/a/, "HelloWorld"); // $ExpectType string
         const r1 = F.reFind(/a/g, "HelloWorld"); // $ExpectType string
         const r2 = F.reFind(/a/u, "HelloWorld"); // $ExpectType string
     });
 
-    it('2', async () => {
+    it('regex 2', async () => {
         const r0 = F.reFind(/a/)("HelloWorld"); // $ExpectType string
         const r1 = F.reFind(/a/)("HelloWorld"); // $ExpectType string
         const r2 = F.reFind(/a/)("HelloWorld"); // $ExpectType string
     });
+
+    it('string 1', async () => {
+        const r0 = F.reFind("a", "HelloWorld"); // $ExpectType string
+    });
+
+    it('string 2', async () => {
+        const r0 = F.reFind("a")("HelloWorld"); // $ExpectType string
+    });
 });
 
 describe('reFindSubmatch', () => {
-    it('1', async () => {
+    it('regex 1', async () => {
         const r0 = F.reFindSubmatch(/a/, "HelloWorld"); // $ExpectType string[]
         r0[0]; // $ExpectType string
         const r1 = F.reFindSubmatch(/a/g, "HelloWorld"); // $ExpectType string[]
         const r2 = F.reFindSubmatch(/a/u, "HelloWorld"); // $ExpectType string[]
     });
 
-    it('2', async () => {
+    it('regex 2', async () => {
         const r0 = F.reFindSubmatch(/a/)("HelloWorld"); // $ExpectType string[]
         r0[0]; // $ExpectType string
         const r1 = F.reFindSubmatch(/a/)("HelloWorld"); // $ExpectType string[]
         const r2 = F.reFindSubmatch(/a/)("HelloWorld"); // $ExpectType string[]
     });
+
+    it('string 1', async () => {
+        const r0 = F.reFindSubmatch("a", "HelloWorld"); // $ExpectType string[]
+        r0[0]; // $ExpectType string
+    });
+
+    it('string 2', async () => {
+        const r0 = F.reFindSubmatch("a")("HelloWorld"); // $ExpectType string[]
+        r0[0]; // $ExpectType string
+    });
 });
 
 describe('reFindAll', () => {
-    it('1', async () => {
+    it('regex 1', async () => {
         const r0 = F.reFindAll(/a/, "HelloWorld"); // $ExpectType string[]
         r0[0]; // $ExpectType string
         const r1 = F.reFindAll(/a/g, "HelloWorld"); // $ExpectType string[]
         const r2 = F.reFindAll(/a/u, "HelloWorld"); // $ExpectType string[]
     });
 
-    it('2', async () => {
+    it('regex 2', async () => {
         const r0 = F.reFindAll(/a/)("HelloWorld"); // $ExpectType string[]
         r0[0]; // $ExpectType string
         const r1 = F.reFindAll(/a/)("HelloWorld"); // $ExpectType string[]
         const r2 = F.reFindAll(/a/)("HelloWorld"); // $ExpectType string[]
     });
+
+    it('string 1', async () => {
+        const r0 = F.reFindAll("a", "HelloWorld"); // $ExpectType string[]
+        r0[0]; // $ExpectType string
+    });
+
+    it('string 2', async () => {
+        const r0 = F.reFindAll("a")("HelloWorld"); // $ExpectType string[]
+        r0[0]; // $ExpectType string
+    });
 });
 
 describe('reFindAllSubmatch', () => {
-    it('1', async () => {
+    it('regex 1', async () => {
         const r0 = F.reFindAllSubmatch(/e/, "HelloWorld"); // $ExpectType string[][]
         r0[0]; // $ExpectType string[]
         r0[0][0]; // $ExpectType string
@@ -1449,12 +1477,24 @@ describe('reFindAllSubmatch', () => {
         const r2 = F.reFindAllSubmatch(/e/u, "HelloWorld"); // $ExpectType string[][]
     });
 
-    it('2', async () => {
+    it('regex 2', async () => {
         const r0 = F.reFindAllSubmatch(/e/)("HelloWorld"); // $ExpectType string[][]
         r0[0]; // $ExpectType string[]
         r0[0][0]; // $ExpectType string
         const r1 = F.reFindAllSubmatch(/e/)("HelloWorld"); // $ExpectType string[][]
         const r2 = F.reFindAllSubmatch(/e/)("HelloWorld"); // $ExpectType string[][]
+    });
+
+    it('string 1', async () => {
+        const r0 = F.reFindAllSubmatch("e", "HelloWorld"); // $ExpectType string[][]
+        r0[0]; // $ExpectType string[]
+        r0[0][0]; // $ExpectType string
+    });
+
+    it('string 2', async () => {
+        const r0 = F.reFindAllSubmatch("e")("HelloWorld"); // $ExpectType string[][]
+        r0[0]; // $ExpectType string[]
+        r0[0][0]; // $ExpectType string
     });
 });
 
