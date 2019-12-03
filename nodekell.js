@@ -826,13 +826,8 @@
         return true;
     };
     const dropLast = curry(async function *(count, iter) {
-        const g = seq(iter);
         const q = new _Queue();
-        for (let i = 0; i < count; i++) {
-            if(!(await addNext(q, g))) {
-                return;
-            }
-        }
+        const g = await _fetchAndGetIterator(count, iter, q.add.bind(q));
         while ((await addNext(q, g))) {
             yield q.poll();
         }
