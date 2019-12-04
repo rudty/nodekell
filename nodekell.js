@@ -817,18 +817,15 @@
         yield* g;
     });
 
-    const addNext = async (q, g) => {
-        const e = await g.next();
-        if (e.done) {
-            return false;
-        }
-        q.add(e.value);
-        return true;
-    };
     const dropLast = curry(async function *(count, iter) {
         const q = new _Queue();
         const g = await _fetchAndGetIterator(count, iter, q.add.bind(q));
-        while ((await addNext(q, g))) {
+        while (true) {
+            const e = await g.next();
+            if (e.done) {
+                break;
+            }
+            q.add(e.value);
             yield q.poll();
         }
     });

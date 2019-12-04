@@ -1,16 +1,6 @@
-import { seq } from "./seq";
 import { curry } from "./curry";
 import { _Queue } from "./Queue";
 import { _fetchAndGetIterator } from "./internal/iterable";
-
-const addNext = async (q, g) => {
-    const e = await g.next();
-    if (e.done) {
-        return false;
-    }
-    q.add(e.value);
-    return true;
-};
 
 /**
  * drop last element
@@ -30,13 +20,12 @@ export const dropLast = curry(async function *(count, iter) {
     const q = new _Queue();
     const g = await _fetchAndGetIterator(count, iter, q.add.bind(q));
     
-    // for (let i = 0; i < count; i++) {
-    //     if(!(await addNext(q, g))) {
-    //         return;
-    //     }
-    // }
-    
-    while ((await addNext(q, g))) {
+    while (true) {
+        const e = await g.next();
+        if (e.done) {
+            break;
+        }
+        q.add(e.value);
         yield q.poll();
     }
 });
