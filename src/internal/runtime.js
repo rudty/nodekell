@@ -49,24 +49,25 @@ export const _takeValue = async (v) => {
 };
 
 /**
- * Remove all elements of iterator
- * @param {IterableIterator | AsyncIterator} it 
+ * Remove N elements of iterator
+ * 
+ * @param {IterableIterator | AsyncIterator} iter any iterator
+ * @param {Number} count removeCount
  */
-export const _removeAllIteratorElements = async (it) => {
-    if (!it) {
+export const _removeIteratorElements = async (iter, count = Infinity) => {
+    if (!iter) {
         return;
     }
-
-    for (; ;) {
-        //for await (const e of iter) {} is 
-        //May not work due to optimizations
-        const { value, done } = await it.next();
+    const awaiter = [];
+    for (let i = 0; i < count; ++i) {
+        const { value, done } = await iter.next();
         if (done) {
             break;
         }
-
-        await value;
+        awaiter.push(value);
     }
+
+    return Promise.all(awaiter);
 };
 /**
  * zip elements
