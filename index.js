@@ -238,17 +238,19 @@ const _takeValue = async (v) => {
     }
     return v;
 };
-const _removeAllIteratorElements = async (it) => {
-    if (!it) {
+const _removeIteratorElements = async (iter, count = Infinity) => {
+    if (!iter) {
         return;
     }
-    for (; ;) {
-        const { value, done } = await it.next();
+    const awaiter = [];
+    for (let i = 0; i < count; ++i) {
+        const { value, done } = await iter.next();
         if (done) {
             break;
         }
-        await value;
+        awaiter.push(await value);
     }
+    return Promise.all(awaiter);
 };
 const _zipWith = async function *(f, arr) {
     while (true) {
@@ -411,7 +413,7 @@ const block = async (...values) => {
     values = await Promise.all(values);
     for (const iter of values) {
         const it = _toStrictIterator(iter);
-        await _removeAllIteratorElements(it);
+        await _removeIteratorElements(it);
     }
 };
 
