@@ -250,7 +250,7 @@
             if (e.done) {
                 break;
             }
-            awaiter.push(await e.value);
+            awaiter.push(e.value);
         }
         return Promise.all(awaiter);
     };
