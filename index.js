@@ -808,12 +808,7 @@ const doto = curry(async (x, fn1, ...fns) => {
 
 const drop = curry(async function *(count, iter) {
     const g = seq(iter);
-    for (let i = 0; i < count; i++) {
-        const e = await g.next();
-        if (e.done) {
-            break;
-        }
-    }
+    await _removeIteratorElements(g, count);
     yield* g;
 });
 
