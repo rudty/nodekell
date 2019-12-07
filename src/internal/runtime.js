@@ -60,11 +60,11 @@ export const _removeIteratorElements = async (iter, count = Infinity) => {
     }
     const awaiter = [];
     for (let i = 0; i < count; ++i) {
-        const { value, done } = await iter.next();
-        if (done) {
+        const e = await iter.next();
+        if (e.done) {
             break;
         }
-        awaiter.push(await value);
+        awaiter.push(await e.value);
     }
     return Promise.all(awaiter);
 };
