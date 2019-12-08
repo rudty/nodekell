@@ -235,7 +235,7 @@
     const NodekellBigInt = (typeof BigInt !== "undefined") ? BigInt : {};
     const _takeValue = async (v) => {
         v = await v;
-        if (v.constructor === Function) {
+        if (_isFunction(v)) {
             v = await v();
         }
         return v;

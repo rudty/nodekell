@@ -1,3 +1,5 @@
+import { _isFunction } from "./typeTraits";
+
 const parallel_default_fetch_count = 100;
 let parallel_global_fetch_count = parallel_default_fetch_count;
 
@@ -41,7 +43,7 @@ export const NodekellBigInt = (typeof BigInt !== "undefined") ? BigInt : {};
 export const _takeValue = async (v) => {
     v = await v;
 
-    if (v.constructor === Function) {
+    if (_isFunction(v)) {
         v = await v();
     }
 
