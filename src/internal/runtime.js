@@ -24,17 +24,6 @@ export const parallel_set_fetch_count_internal = (count) => {
 export const parallel_get_fetch_count_internal = () => parallel_global_fetch_count;
 
 /**
- * real undefined
- * undefined = 1; // not error!
- */
-export const undefinedValue = ((v) => v)();
-
-/**
- * for not support web browser
- */
-export const NodekellBigInt = (typeof BigInt !== "undefined") ? BigInt : {};
-
-/**
  * Get the value.
  * If it's a Promise, it gets its value from Promise
  * Then call the function if the value is a function.

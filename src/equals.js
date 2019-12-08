@@ -1,7 +1,7 @@
 import { curry } from "./curry";
 import { _isObjectArray, _isTypedArray, _isPrimitiveWrapper, _isFunction } from "./internal/typeTraits";
 import { underBar } from "./_";
-import { undefinedValue } from "./internal/runtime";
+import { undefinedValue } from "./internal/typeTraits";
 
 let _equals;
 

@@ -1,4 +1,14 @@
-import { undefinedValue, NodekellBigInt } from "./runtime";
+/**
+ * real undefined
+ * undefined = 1; // not error!
+ */
+export const undefinedValue = ((v) => v)();
+
+/**
+ * for not support web browser
+ */
+export const NodekellBigInt = (typeof BigInt !== "undefined") ? BigInt : {};
+
 
 /**
  * function is 

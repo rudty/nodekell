@@ -1,4 +1,4 @@
-import { undefinedValue } from "./internal/runtime";
+import { undefinedValue } from "./internal/typeTraits";
 
 export const isNil = (v) => {
     if (v) {

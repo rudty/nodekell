@@ -1,5 +1,5 @@
 import { curry } from "./curry";
-import { undefinedValue } from "./internal/runtime";
+import { undefinedValue } from "./internal/typeTraits";
 
 /**
  * get the properties of that object. 
