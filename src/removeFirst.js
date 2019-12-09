@@ -7,12 +7,12 @@ export const removeFirst = async function *(elem, iter) {
     const g = seq(iter);
     const eq = equals(elem);
     while(true) {
-        const e = g.next();
+        const e = await g.next();
         if (e.done) {
             break;
         }
 
-        if (eq(elem)) {
+        if (eq(e.value)) {
             yield* g;
             return;
         } else {
