@@ -103,6 +103,7 @@ export * from "./reFind.js";
 export * from "./reFindAll.js";
 export * from "./reFindAllSubmatch.js";
 export * from "./reFindSubmatch.js";
+export * from "./removeFirst.js";
 export * from "./repeat.js";
 export * from "./reverse.js";
 export * from "./run.js";

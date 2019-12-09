@@ -1549,6 +1549,21 @@ const reFindAllSubmatch = curry((re, str) => {
     return r;
 });
 
+const removeFirst = async function *(elem, iter) {
+    elem = await _takeValue(elem);
+    const g = seq(iter);
+    const eq = equals(elem);
+    while(true) {
+        const e = g.next();
+        if (e.done) {
+            break;
+        }
+        if (eq(elem)) ; else {
+            yield e.value;
+        }
+    }
+};
+
 const repeatFetchArgument = async (a, b) => {
     a = await a;
     if (b.length > 0) {
@@ -2027,6 +2042,7 @@ exports.reFindAll = reFindAll;
 exports.reFindAllSubmatch = reFindAllSubmatch;
 exports.reFindSubmatch = reFindSubmatch;
 exports.reduce = reduce;
+exports.removeFirst = removeFirst;
 exports.repeat = repeat;
 exports.reverse = reverse;
 exports.rightInnerJoin = rightInnerJoin;
