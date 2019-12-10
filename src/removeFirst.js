@@ -25,7 +25,7 @@ const _removeFirstFunction = async function *(comp, iter) {
  *      // 2
  *      // 3
  *      // 4
- *      
+ *
  *      const r = F.removeFirst((e) => e % 2 === 0, [1,2,3,4]);
  *      for await (const e of r) {
  *          console.log(e);
@@ -34,6 +34,7 @@ const _removeFirstFunction = async function *(comp, iter) {
  *      // 1
  *      // 3
  *      // 4
+ *
  * @param {*} x remove value or find function
  * @param {Iterable | AsyncIterable} iter any iterable
  */
@@ -43,7 +44,7 @@ export const removeFirst = async (x, iter) => {
     if (_isFunction(x)) {
         return _removeFirstFunction(x, iter);
     }
-    
+
     const compareFunction = equals(x);
     return _removeFirstFunction(compareFunction, iter);
 };
