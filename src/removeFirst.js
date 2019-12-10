@@ -42,8 +42,8 @@ export const removeFirst = async (x, iter) => {
 
     if (_isFunction(x)) {
         return _removeFirstFunction(x, iter);
-    } else {
-        const compareFunction = equals(x);
-        return _removeFirstFunction(compareFunction, iter);
     }
+    
+    const compareFunction = equals(x);
+    return _removeFirstFunction(compareFunction, iter);
 };
