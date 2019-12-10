@@ -1549,21 +1549,23 @@ const reFindAllSubmatch = curry((re, str) => {
     return r;
 });
 
-const removeFirst = async function *(elem, iter) {
-    elem = await _takeValue(elem);
+const _removeFirstFunction = async function *(comp, iter) {
     const g = seq(iter);
-    const eq = equals(elem);
-    while(true) {
-        const e = await g.next();
-        if (e.done) {
-            break;
-        }
-        if (eq(e.value)) {
+    for await (const e of g) {
+        if (comp(e)) {
             yield* g;
-            return;
         } else {
-            yield e.value;
+            yield e;
         }
+    }
+};
+const removeFirst = async (x, iter) => {
+    x = await x;
+    if (_isFunction(x)) {
+        return _removeFirstFunction(x, iter);
+    } else {
+        const compareFunction = equals(x);
+        return _removeFirstFunction(compareFunction, iter);
     }
 };
 
