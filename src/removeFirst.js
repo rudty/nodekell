@@ -29,7 +29,7 @@ const _removeFirstFunction = async function *(comp, iter) {
  *      const r = F.removeFirst((e) => e % 2 === 0, [1,2,3,4]);
  *      for await (const e of r) {
  *          console.log(e);
- *      } 
+ *      }
  *      // print
  *      // 1
  *      // 3
