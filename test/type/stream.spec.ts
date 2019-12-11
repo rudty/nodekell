@@ -1747,3 +1747,25 @@ describe('insertAt', () => {
         const t = F.collect(r0); // $ExpectType Promise<number[]>
     });
 });
+
+describe('removeFirst', () => {
+    it('value', async () => {
+        const arr = [1, 2, 3];
+        const r = F.removeFirst(1, arr);
+        const r0 = F.collect(r); // $ExpectType Promise<number[]>
+    });
+
+    it('with run', async () => {
+        const r0 = F.run([1, 2, 3],
+            F.removeFirst(3),
+            F.collect);
+
+        r0; // $ExpectType Promise<number[]>
+
+        const r1 = F.run([1, 2, 3],
+            F.removeFirst(e => e === 3),
+            F.collect);
+
+        r1; // $ExpectType Promise<number[]>
+    });
+});

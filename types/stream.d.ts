@@ -598,3 +598,32 @@ export function comparator<L, R = L>(fn: (lhs: L, rhs: R) => Promise<boolean>, l
 export function insertAt<T>(value: T | Promise<T>, index: number, iter: Iter<T>): AsyncIterableIterator<T>;
 export function insertAt<T>(value: T, index: number): (iter: Iter<ExtractPromise<T>>) => AsyncIterableIterator<ExtractPromise<T>>;
 export function insertAt<T>(value: T): (index: number) => (iter: Iter<ExtractPromise<T>>) => AsyncIterableIterator<ExtractPromise<T>>;
+
+/**
+ * Iterates through A and removes the first element that satisfies the condition.
+ *
+ * @example
+ *      for await (const e of F.removeFirst(1, [1,2,3,4])) {
+ *          console.log(e);
+ *      }
+ *      // print
+ *      // 2
+ *      // 3
+ *      // 4
+ *
+ *      const r = F.removeFirst((e) => e % 2 === 0, [1,2,3,4]);
+ *      for await (const e of r) {
+ *          console.log(e);
+ *      }
+ *      // print
+ *      // 1
+ *      // 3
+ *      // 4
+ *
+ * @param {*} x remove value or find function
+ * @param {Iterable | AsyncIterable} iter any iterable
+ */
+export function removeFirst<T>(value: T | Promise<T>, iter: Iter<T>): AsyncIterableIterator<T>;
+export function removeFirst<T>(value: T | Promise<T>): (iter: Iter<T>) => AsyncIterableIterator<T>;
+export function removeFirst<T>(predicate: (value: T) => boolean, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+export function removeFirst<T>(predicate: (value: T) => boolean): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
