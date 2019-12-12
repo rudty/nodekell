@@ -623,7 +623,7 @@ export function insertAt<T>(value: T): (index: number) => (iter: Iter<ExtractPro
  * @param {*} x remove value or find function
  * @param {Iterable | AsyncIterable} iter any iterable
  */
-export function removeFirst<T>(value: T | Promise<T>, iter: Iter<T>): AsyncIterableIterator<T>;
-export function removeFirst<T>(value: T | Promise<T>): (iter: Iter<T>) => AsyncIterableIterator<T>;
 export function removeFirst<T>(predicate: (value: T) => boolean, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
 export function removeFirst<T>(predicate: (value: T) => boolean): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+export function removeFirst<T>(value: T | Promise<T>, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+export function removeFirst<T>(value: T | Promise<T>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
