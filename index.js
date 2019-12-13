@@ -1559,14 +1559,14 @@ const _removeFirstFunction = async function *(comp, iter) {
         }
     }
 };
-const removeFirst = async (x, iter) => {
+const removeFirst = curry(async (x, iter) => {
     x = await x;
     if (_isFunction(x)) {
         return _removeFirstFunction(x, iter);
     }
     const compareFunction = equals(x);
     return _removeFirstFunction(compareFunction, iter);
-};
+});
 
 const repeatFetchArgument = async (a, b) => {
     a = await a;

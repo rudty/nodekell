@@ -1,4 +1,5 @@
 import { equals } from "./equals";
+import { curry } from "./curry";
 import { seq } from "./seq";
 import { _takeValue } from "./internal/runtime";
 import { _isFunction } from "./internal/typeTraits";
@@ -38,7 +39,7 @@ const _removeFirstFunction = async function *(comp, iter) {
  * @param {*} x remove value or find function
  * @param {Iterable | AsyncIterable} iter any iterable
  */
-export const removeFirst = async (x, iter) => {
+export const removeFirst = curry(async (x, iter) => {
     x = await x;
 
     if (_isFunction(x)) {
@@ -47,4 +48,4 @@ export const removeFirst = async (x, iter) => {
 
     const compareFunction = equals(x);
     return _removeFirstFunction(compareFunction, iter);
-};
+});

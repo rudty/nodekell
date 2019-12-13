@@ -52,6 +52,13 @@ describe('test removeFirst', () => {
         assert.deepStrictEqual(r, [1,2,3]);
     });
 
+    it('currying', async () => {
+        const r = await F.run([1,2,3],
+            F.removeFirst((e) => e === 99),
+            F.collect);
+        assert.deepStrictEqual(r, [1,2,3]);
+    });
+
     it('function match at least 2', async () => {
         const r = await F.run(
             F.removeFirst((e) => e === 1, [1,1,1,1]),
