@@ -1554,7 +1554,7 @@
     const _removeFirstFunction = async function *(comp, iter) {
         const g = seq(iter);
         for await (const e of g) {
-            if (comp(e)) {
+            if (await comp(e)) {
                 yield* g;
                 return;
             } else {

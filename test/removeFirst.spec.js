@@ -79,4 +79,19 @@ describe('test removeFirst', () => {
         const r0 = await F.collect(r);
         assert.deepStrictEqual(r0, [2, 3]);
     });
+
+    it('promise function promise true', async () => {
+        const arr = [1, 2, 3];
+        const r = F.removeFirst(Promise.resolve(() => Promise.resolve(true)))(arr);
+        const r0 = await F.collect(r);
+        assert.deepStrictEqual(r0, [2, 3]);
+    });
+
+
+    it('promise function promise false', async () => {
+        const arr = [1, 2, 3];
+        const r = F.removeFirst(Promise.resolve(() => Promise.resolve(false)))(arr);
+        const r0 = await F.collect(r);
+        assert.deepStrictEqual(r0, [1, 2, 3]);
+    });
 });
