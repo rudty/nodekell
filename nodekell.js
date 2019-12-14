@@ -1551,6 +1551,27 @@
         return r;
     });
 
+    const _removeFirstFunction = async function *(comp, iter) {
+        const g = seq(iter);
+        for await (const e of g) {
+            if (comp(e)) {
+                yield* g;
+                return;
+            } else {
+                yield e;
+            }
+        }
+    };
+    const removeFirst = curry(async function *(x, iter) {
+        x = await x;
+        if (_isFunction(x)) {
+            yield* _removeFirstFunction(x, iter);
+        } else {
+            const compareFunction = equals(x);
+            yield* _removeFirstFunction(compareFunction, iter);
+        }
+    });
+
     const repeatFetchArgument = async (a, b) => {
         a = await a;
         if (b.length > 0) {
@@ -2029,6 +2050,7 @@
     exports.reFindAllSubmatch = reFindAllSubmatch;
     exports.reFindSubmatch = reFindSubmatch;
     exports.reduce = reduce;
+    exports.removeFirst = removeFirst;
     exports.repeat = repeat;
     exports.reverse = reverse;
     exports.rightInnerJoin = rightInnerJoin;

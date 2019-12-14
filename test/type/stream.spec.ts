@@ -1747,3 +1747,91 @@ describe('insertAt', () => {
         const t = F.collect(r0); // $ExpectType Promise<number[]>
     });
 });
+
+describe('removeFirst', () => {
+    it('number', async () => {
+        const arr = [1, 2, 3];
+        const r = F.removeFirst(1, arr);
+        const r0 = F.collect(r); // $ExpectType Promise<number[]>
+    });
+
+    it('number2', async () => {
+        const arr = [1, 2, 3];
+        const r = F.removeFirst(1)(arr);
+        const r0 = F.collect(r); // $ExpectType Promise<number[]>
+    });
+
+    it('Promise<number>', async () => {
+        const arr = [Promise.resolve(1), 2, 3];
+        const r = F.removeFirst(1, arr);
+        const r0 = F.collect(r); // $ExpectType Promise<number[]>
+    });
+
+    it('Promise<number>2', async () => {
+        const arr = [1, 2, Promise.resolve(3)];
+        const r = F.removeFirst(1)(arr);
+        const r0 = F.collect(r); // $ExpectType Promise<number[]>
+    });
+
+    it('string', async () => {
+        const arr = ["a", "b", "c"];
+        const r = F.removeFirst("a", arr);
+        const r0 = F.collect(r); // $ExpectType Promise<string[]>
+    });
+
+    it('string2', async () => {
+        const arr = ["a", "b", "c"];
+        const r = F.removeFirst("a")(arr);
+        const r0 = F.collect(r); // $ExpectType Promise<string[]>
+    });
+
+    it('array', async () => {
+        const arr = [[1], [2], [3]];
+        const r = F.removeFirst([2], arr);
+        const r0 = F.collect(r); // $ExpectType Promise<number[][]>
+    });
+
+    it('array2', async () => {
+        const arr = [[1], [2], [3]];
+        const r = F.removeFirst([2])(arr);
+        const r0 = F.collect(r); // $ExpectType Promise<number[][]>
+    });
+
+    it('function number ', async () => {
+        const arr = [1, 2, 3];
+        const r = F.removeFirst((a) => true, arr);
+        const r0 = F.collect(r); // $ExpectType Promise<number[]>
+    });
+
+    it('function number 2', async () => {
+        const arr = [1, 2, 3];
+        const r = F.removeFirst((a: number) => true)(arr);
+        const r0 = F.collect(r); // $ExpectType Promise<number[]>
+    });
+
+    it('function string', async () => {
+        const arr = ["1", "2", "3"];
+        const r = F.removeFirst((a) => true, arr);
+        const r0 = F.collect(r); // $ExpectType Promise<string[]>
+    });
+
+    it('function string2', async () => {
+        const arr = ["1", "2", "3"];
+        const r = F.removeFirst((a: string) => true)(arr);
+        const r0 = F.collect(r); // $ExpectType Promise<string[]>
+    });
+
+    it('with run', async () => {
+        const r0 = F.run([1, 2, 3],
+            F.removeFirst(3),
+            F.collect);
+
+        r0; // $ExpectType Promise<number[]>
+
+        const r1 = F.run([1, 2, 3],
+            F.removeFirst(e => e === 3),
+            F.collect);
+
+        r1; // $ExpectType Promise<number[]>
+    });
+});
