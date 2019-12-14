@@ -1554,18 +1554,20 @@ const _removeFirstFunction = async function *(comp, iter) {
     for await (const e of g) {
         if (comp(e)) {
             yield* g;
+            return;
         } else {
             yield e;
         }
     }
 };
-const removeFirst = curry(async (x, iter) => {
+const removeFirst = curry(async function *(x, iter) {
     x = await x;
     if (_isFunction(x)) {
-        return _removeFirstFunction(x, iter);
+        yield* _removeFirstFunction(x, iter);
+    } else {
+        const compareFunction = equals(x);
+        yield* _removeFirstFunction(compareFunction, iter);
     }
-    const compareFunction = equals(x);
-    return _removeFirstFunction(compareFunction, iter);
 });
 
 const repeatFetchArgument = async (a, b) => {
