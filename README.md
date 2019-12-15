@@ -9,28 +9,18 @@ Functional library for nodejs
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/594190c07d124e2494ff857d872f372b)](https://app.codacy.com/app/rudty/nodekell?utm_source=github.com&utm_medium=referral&utm_content=rudty/nodekell&utm_campaign=Badge_Grade_Dashboard)
 
 
-- almost all functions support [currying](#curry)
+- [currying](#curry)
 - [parallel functions](#pfilter)
 - lazy evaluation
 - typescript (ver 3.4 or higher)
- 
-
-
-### Installation
-```npm install nodekell```
-
 
 
 ### Import Module 
-nodejs
 
 ```javascript
 // const F = require("nodekell");
 import * as F from "nodekell"
 ```
-browser
-
-download or link to a CDN such as [jsDelivr](https://www.jsdelivr.com/package/npm/nodekell) nodekell.min.js
 
 ### Quick Example
 ```javascript
@@ -102,6 +92,7 @@ console.log(v);//[3]
 *    [peek](#peek)
 *    [keys](#keys)
 *    [values](#values)
+*    [removeFirst](#removeFirst)
 
 ## functional / parallel
 *    [parallel_set_fetch_count](#parallel_set_fetch_count)
@@ -1058,6 +1049,31 @@ for await (const e of F.values(a())) {
 }
 // print
 // 2
+// 4
+```
+
+
+### removeFirst
+Iterates through A and removes the first element that satisfies the condition.
+```javascript
+const arr = [1, 2, 3, 4];
+for await (const e of F.removeFirst(1, arr)) {
+    console.log(e);
+}
+// print
+// 2
+// 3
+// 4
+```
+```javascript
+const arr = [1, 2, 3, 4];
+const r = F.removeFirst((e) => e % 2 === 0, arr);
+for await (const e of r) {
+    console.log(e);
+}
+// print
+// 1
+// 3
 // 4
 ```
 
