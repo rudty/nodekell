@@ -1809,6 +1809,18 @@ describe('removeFirst', () => {
         const r0 = F.collect(r); // $ExpectType Promise<number[]>
     });
 
+    it('function number return promise', async () => {
+        const arr = [1, 2, 3];
+        const r = F.removeFirst((a) => Promise.resolve(true), arr);
+        const r0 = F.collect(r); // $ExpectType Promise<number[]>
+    });
+
+    it('function number 2 return promise', async () => {
+        const arr = [1, 2, 3];
+        const r = F.removeFirst((a: number) => Promise.resolve(true))(arr);
+        const r0 = F.collect(r); // $ExpectType Promise<number[]>
+    });
+
     it('function string', async () => {
         const arr = ["1", "2", "3"];
         const r = F.removeFirst((a) => true, arr);
@@ -1818,6 +1830,42 @@ describe('removeFirst', () => {
     it('function string2', async () => {
         const arr = ["1", "2", "3"];
         const r = F.removeFirst((a: string) => true)(arr);
+        const r0 = F.collect(r); // $ExpectType Promise<string[]>
+    });
+
+    it('function string return promise', async () => {
+        const arr = ["1", "2", "3"];
+        const r = F.removeFirst((a) => Promise.resolve(true), arr);
+        const r0 = F.collect(r); // $ExpectType Promise<string[]>
+    });
+
+    it('function string2 return promise', async () => {
+        const arr = ["1", "2", "3"];
+        const r = F.removeFirst((a: string) => Promise.resolve(true))(arr);
+        const r0 = F.collect(r); // $ExpectType Promise<string[]>
+    });
+
+    it('promise function number return promise', async () => {
+        const arr = [1, 2, 3];
+        const r = F.removeFirst(Promise.resolve((a: number) => Promise.resolve(true)), arr);
+        const r0 = F.collect(r); // $ExpectType Promise<number[]>
+    });
+
+    it('promise function number 2 return promise', async () => {
+        const arr = [1, 2, 3];
+        const r = F.removeFirst(Promise.resolve((a: number) => Promise.resolve(true)))(arr);
+        const r0 = F.collect(r); // $ExpectType Promise<number[]>
+    });
+
+    it('promise function string return promise', async () => {
+        const arr = ["1", "2", "3"];
+        const r = F.removeFirst(Promise.resolve((a: string) => Promise.resolve(true)), arr);
+        const r0 = F.collect(r); // $ExpectType Promise<string[]>
+    });
+
+    it('promise function string2 return promise', async () => {
+        const arr = ["1", "2", "3"];
+        const r = F.removeFirst(Promise.resolve((a: string) => Promise.resolve(true)))(arr);
         const r0 = F.collect(r); // $ExpectType Promise<string[]>
     });
 
