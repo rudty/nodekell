@@ -863,10 +863,10 @@ describe('tap', () => {
     });
 
     it('from Promise / Normal Union Array', async () => {
-        const a = [Promise.resolve(1), 2, Promise.resolve('a'), 'b'];
+        const a = [Promise.resolve('a'), 'b', Promise.resolve(1), 2];
 
-        const r0 = await F.tap<(string | number | Promise<number> | Promise<string>)[]>(F.fnothing)(a); // $ExpectType (string | number | Promise<number> | Promise<string>)[]
-        const r1 = await F.tap(F.fnothing, a); // $ExpectType (string | number | Promise<number> | Promise<string>)[]
+        const r0 = await F.tap<(string | number | Promise<string> | Promise<number>)[]>(F.fnothing)(a); // $ExpectType (string | number | Promise<number> | Promise<string>)[]
+        const r1 = await F.tap(F.fnothing, a); // $ExpectType (string | number | Promise<string> | Promise<number>)[]
     });
 
     it('with run', async () => {
