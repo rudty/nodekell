@@ -863,10 +863,10 @@ describe('tap', () => {
     });
 
     it('from Promise / Normal Union Array', async () => {
-        const a = [Promise.resolve('a'), 'b', Promise.resolve(1), 2];
+        const a = [Promise.resolve(1), 2, Promise.resolve('a'), 'b'];
 
-        const r0 = await F.tap<(string | number | Promise<string> | Promise<number>)[]>(F.fnothing)(a); // $ExpectType (string | number | Promise<number> | Promise<string>)[]
-        const r1 = await F.tap(F.fnothing, a); // $ExpectType (string | number | Promise<string> | Promise<number>)[]
+        const r0 = await F.tap<(string | number | Promise<number> | Promise<string>)[]>(F.fnothing)(a); // $ExpectType (string | number | Promise<number> | Promise<string>)[]
+        const r1 = await F.tap(F.fnothing, a); // $ExpectType (string | number | Promise<number> | Promise<string>)[]
     });
 
     it('with run', async () => {
@@ -1847,25 +1847,25 @@ describe('removeFirst', () => {
 
     it('promise function number return promise', async () => {
         const arr = [1, 2, 3];
-        const r = F.removeFirst(Promise.resolve((a: number) => Promise.resolve(true)), arr);
+        const r = F.removeFirst(Promise.resolve((a: number): Promise<boolean> => Promise.resolve(true)), arr);
         const r0 = F.collect(r); // $ExpectType Promise<number[]>
     });
 
     it('promise function number 2 return promise', async () => {
         const arr = [1, 2, 3];
-        const r = F.removeFirst(Promise.resolve((a: number) => Promise.resolve(true)))(arr);
+        const r = F.removeFirst(Promise.resolve((a: number): Promise<boolean>  => Promise.resolve(true)))(arr);
         const r0 = F.collect(r); // $ExpectType Promise<number[]>
     });
 
     it('promise function string return promise', async () => {
         const arr = ["1", "2", "3"];
-        const r = F.removeFirst(Promise.resolve((a: string) => Promise.resolve(true)), arr);
+        const r = F.removeFirst(Promise.resolve((a: string): Promise<boolean>  => Promise.resolve(true)), arr);
         const r0 = F.collect(r); // $ExpectType Promise<string[]>
     });
 
     it('promise function string2 return promise', async () => {
         const arr = ["1", "2", "3"];
-        const r = F.removeFirst(Promise.resolve((a: string) => Promise.resolve(true)))(arr);
+        const r = F.removeFirst(Promise.resolve((a: string): Promise<boolean>  => Promise.resolve(true)))(arr);
         const r0 = F.collect(r); // $ExpectType Promise<string[]>
     });
 
