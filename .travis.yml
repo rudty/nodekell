@@ -4,5 +4,8 @@ node_js:
   - '11'
   - '12'
   - '13'
+before_install:
+  - npm install -g typescript@3.4.3
 before_script:
   - npm run local_dtslint
+  - npm run dtslint
