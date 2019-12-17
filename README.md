@@ -13,7 +13,7 @@ Functional library for nodejs
 - [parallel functions](#pfilter)
 - lazy evaluation
 - typescript (ver 3.4 or higher)
-- node, web browser(index.js, nodekell.min.js)
+- nodejs, web browser(index.js, nodekell.min.js)
 
 ### Import Module 
 
