@@ -1554,8 +1554,8 @@ describe('sortBy', () => {
     it('with run2', async () => {
         const a = [Promise.resolve(10), 5, 7, Promise.resolve(1), 4, 3];
 
-        const r0 = await F.run(a, F.sortBy<number>(F.asc)); // $ExpectType ArrayLike<number>
-        const r1 = await F.run(a, F.sortBy<number>(F.desc)); // $ExpectType ArrayLike<number>
+        const r0 = await F.run(a, F.sortBy(F.asc)); // $ExpectType ArrayLike<number>
+        const r1 = await F.run(a, F.sortBy(F.desc)); // $ExpectType ArrayLike<number>
     });
 });
 
