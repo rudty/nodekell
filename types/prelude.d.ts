@@ -467,19 +467,6 @@ export function zipWith3<T, Y, Z, R>(f: (elem1: T, elem2: Y, elem3: Z) => (R | P
 export function zipWith3<T, Y, Z, R>(f: (elem1: T, elem2: Y, elem3: Z) => (R | Promise<R>)): CurriedFunction3<Iter<T | Promise<T>>, Iter<Y | Promise<Y>>, Iter<Z | Promise<Z>>, AsyncIterableIterator<R>>;
 
 /**
- *
- *
- * @param f
- * @param iter
- */
-export function split<T>(f: (elem: T) => (boolean | Promise<boolean>), iter: Iter<T | Promise<T>>): AsyncIterableIterator<AsyncIterableIterator<T>>;
-
-export function split<T extends Iter<any>>(f: (elem: T) => (boolean | Promise<boolean>), iter: T): AsyncIterableIterator<AsyncIterableIterator<FlatForInternalFn<T>>>;
-export function split<T extends Iter<any>>(f: (elem: T) => (boolean | Promise<boolean>)): (iter: T) => AsyncIterableIterator<AsyncIterableIterator<FlatForInternalFn<T>>>;
-
-export function split<T>(f: (elem: T) => (boolean | Promise<boolean>)): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<AsyncIterableIterator<T>>;
-
-/**
  * https://github.com/rudty/nodekell#run
  *
  * **Note**
