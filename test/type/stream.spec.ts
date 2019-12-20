@@ -1550,6 +1550,34 @@ describe('sortBy', () => {
 
         const r0 = await F.run(a, F.sortBy(f)); // $ExpectType ArrayLike<number>
     });
+
+    it('with run2', async () => {
+        const a = [Promise.resolve(10), 5, 7, Promise.resolve(1), 4, 3];
+
+        const r0 = await F.run(a, F.sortBy(F.asc)); // $ExpectType ArrayLike<number>
+        const r1 = await F.run(a, F.sortBy(F.desc)); // $ExpectType ArrayLike<number>
+    });
+
+    it('with run3', async () => {
+        const a = [Promise.resolve(10), 5, 7, Promise.resolve(1), 4, 3];
+
+        const r0 = await F.run(a,
+            F.map(e => e + 1),
+            F.sortBy(F.asc));
+        r0; // $ExpectType ArrayLike<number>
+
+        const r1 = await F.run(a,
+            F.map(e => e + 1),
+            F.map(e => e + ""),
+            F.sortBy(F.asc));
+        r1; // $ExpectType ArrayLike<string>
+
+        const r2 = await F.run(a,
+            F.map(e => e + 1),
+            F.map(e => ({ e })),
+            F.sortBy((a: { e: number; }, b: { e: number; }) => a.e - b.e));
+        r2; // $ExpectType ArrayLike<{ e: number; }>
+    });
 });
 
 describe('comparator', () => {

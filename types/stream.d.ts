@@ -566,7 +566,7 @@ export function sort<T>(iter: Iter<T | Promise<T>>): Promise<ArrayLike<ExtractPr
  * @returns new sorted array
  */
 export function sortBy<T>(comparator: (lhs: ExtractPromise<T>, rhs: ExtractPromise<T>) => number | Promise<number>, iter: Iter<T | Promise<T>>): Promise<ArrayLike<ExtractPromise<T>>>;
-export function sortBy<T>(comparator: (lhs: T, rhs: T) => number | Promise<number>): (iter: Iter<T | Promise<T>>) => Promise<ArrayLike<ExtractPromise<T>>>;
+export function sortBy<T>(comparator: (lhs: T, rhs: T) => number | Promise<number>): (iter: Iter<T | Promise<T>>) => Promise<ArrayLike<T>>;
 
 /**
  * Can be used with sort function
