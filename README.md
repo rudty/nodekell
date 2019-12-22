@@ -4,6 +4,7 @@ Functional library for nodejs
 [![NPM Version](https://img.shields.io/npm/v/nodekell.svg?style=flat-square)](https://www.npmjs.com/package/nodekell)
 [![NPM Downloads](https://img.shields.io/npm/dt/nodekell.svg)](https://www.npmjs.com/package/nodekell)
 [![Build Status](https://travis-ci.org/rudty/nodekell.svg?branch=master)](https://travis-ci.org/rudty/nodekell)
+[![dependencies](https://david-dm.org/rudty/nodekell.svg)](https://david-dm.org/rudty/nodekell)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frudty%2Fnodekell.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Frudty%2Fnodekell?ref=badge_shield)
 [![DeepScan grade](https://deepscan.io/api/teams/3359/projects/5005/branches/38973/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=3359&pid=5005&bid=38973)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/594190c07d124e2494ff857d872f372b)](https://app.codacy.com/app/rudty/nodekell?utm_source=github.com&utm_medium=referral&utm_content=rudty/nodekell&utm_campaign=Badge_Grade_Dashboard)
