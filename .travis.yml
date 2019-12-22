@@ -5,4 +5,5 @@ node_js:
   - '12'
   - '13'
 before_script:
+  - mkdir -p ~/.dts/perf
   - npm run local_dtslint
