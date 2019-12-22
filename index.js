@@ -1895,6 +1895,12 @@ const timeout = curry(async (duration, a) => {
     return e;
 });
 
+const updateAt = curry(async (value, index, iter) => {
+    const a = await _collectArray(iter);
+    a[index] = value;
+    return a;
+});
+
 const values = _arrayElementIterator(1, (e) => { throw new Error(`values / ${e} is not array`); });
 
 const withTimeout = curry(async function *(duration, iter) {
@@ -2076,6 +2082,7 @@ exports.then = then;
 exports.timeout = timeout;
 exports.underBar = underBar;
 exports.union = union;
+exports.updateAt = updateAt;
 exports.values = values;
 exports.withTimeout = withTimeout;
 exports.zip = zip;
