@@ -19,9 +19,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: npm install, build, and test
       run: |
+        mkdir -p ~/.dts/perf
         npm ci
         npm run build --if-present
-        npm run dtslint
+        npm run local_dtslint
         npm test
       env:
         CI: true
