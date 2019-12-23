@@ -1897,10 +1897,15 @@
         return e;
     });
 
-    const updateAt = curry(async (value, index, iter) => {
-        const a = await _collectArray(iter);
-        a[index] = value;
-        return a;
+    const updateAt = curry(async function *(value, index, iter) {
+        let i = 0;
+        for await (const e of iter) {
+            if (i++ === index) {
+                yield value;
+            } else {
+                yield e;
+            }
+        }
     });
 
     const values = _arrayElementIterator(1, (e) => { throw new Error(`values / ${e} is not array`); });

@@ -30,4 +30,14 @@ describe('upateAt', () => {
         const r = await F.updateAt(99, 4, gen());
         assert.deepStrictEqual(r, [1,2,3,4,99]);
     });
+
+    it('infinity generator', async () => {
+        const gen = async function*() {
+            for(let i = 1;; ++i) yield i;
+        };
+        const r = await F.collect(
+        F.take(5, 
+            F.updateAt(99, 4, gen())));
+        assert.deepStrictEqual(r, [1,2,3,4,99]);
+    });
 });
