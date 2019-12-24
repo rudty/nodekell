@@ -5,13 +5,13 @@ const assert = require("assert");
 describe('upateAt', () => {
     it('array first index', async () => {
         const arr = [1,2,3,4,5];
-        const r = await F.updateAt(99, 0, arr);
+        const r = await F.collect(F.updateAt(99, 0, arr));
         assert.deepStrictEqual(r, [99,2,3,4,5]);
     });
 
     it('array last index', async () => {
         const arr = [1,2,3,4,5];
-        const r = await F.updateAt(99, 4, arr);
+        const r = await F.collect(F.updateAt(99, 4, arr));
         assert.deepStrictEqual(r, [1,2,3,4,99]);
     });
 
@@ -19,7 +19,7 @@ describe('upateAt', () => {
         const gen = async function*() {
             for(let i = 1; i <= 5; ++i) yield i;
         };
-        const r = await F.updateAt(99, 0, gen());
+        const r = await F.collect(F.updateAt(99, 0, gen()));
         assert.deepStrictEqual(r, [99,2,3,4,5]);
     });
 
@@ -27,7 +27,7 @@ describe('upateAt', () => {
         const gen = async function*() {
             for(let i = 1; i <= 5; ++i) yield i;
         };
-        const r = await F.updateAt(99, 4, gen());
+        const r = await F.collect(F.updateAt(99, 4, gen()));
         assert.deepStrictEqual(r, [1,2,3,4,99]);
     });
 
