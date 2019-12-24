@@ -1,5 +1,6 @@
 import { curry } from "./curry";
 import { _collectArray } from "./internal/collectArray";
+import { seq } from "./seq";
 
 /**
  * Update {iter} to the {index} position of {iter} received as an argument. 
@@ -11,9 +12,12 @@ import { _collectArray } from "./internal/collectArray";
  */
 export const updateAt = curry(async function *(value, index, iter) {
     let i = 0;
-    for await (const e of iter) {
+    const g = seq(iter);
+    for await (const e of g) {
         if (i++ === index) {
             yield value;
+            yield* g;
+            return;
         } else {
             yield e;
         }

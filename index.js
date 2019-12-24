@@ -1897,9 +1897,12 @@ const timeout = curry(async (duration, a) => {
 
 const updateAt = curry(async function *(value, index, iter) {
     let i = 0;
-    for await (const e of iter) {
+    const g = seq(iter);
+    for await (const e of g) {
         if (i++ === index) {
             yield value;
+            yield* g;
+            return;
         } else {
             yield e;
         }
