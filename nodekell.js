@@ -1902,7 +1902,7 @@
         const g = seq(iter);
         for await (const e of g) {
             if (i++ === index) {
-                yield _takeValue(value);
+                yield value;
                 yield* g;
                 return;
             } else {

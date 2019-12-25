@@ -1900,7 +1900,7 @@ const updateAt = curry(async function *(value, index, iter) {
     const g = seq(iter);
     for await (const e of g) {
         if (i++ === index) {
-            yield _takeValue(value);
+            yield value;
             yield* g;
             return;
         } else {
