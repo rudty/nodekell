@@ -9,7 +9,7 @@ import { _takeValue } from "./internal/runtime";
  * @param {any} value add value
  * @param {Number} index add index
  * @param {Iterable | AsyncIterable} iter any iterable
- * @returns {AsyncIterable}
+ * @returns {AsyncIterable} new AsyncIterator
  */
 export const updateAt = curry(async function *(value, index, iter) {
     let i = 0;
