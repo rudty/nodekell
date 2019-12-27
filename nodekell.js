@@ -1897,6 +1897,20 @@
         return e;
     });
 
+    const updateAt = curry(async function *(value, index, iter) {
+        let i = 0;
+        const g = seq(iter);
+        for await (const e of g) {
+            if (i++ === index) {
+                yield value;
+                yield* g;
+                return;
+            } else {
+                yield e;
+            }
+        }
+    });
+
     const values = _arrayElementIterator(1, (e) => { throw new Error(`values / ${e} is not array`); });
 
     const withTimeout = curry(async function *(duration, iter) {
@@ -2078,6 +2092,7 @@
     exports.timeout = timeout;
     exports.underBar = underBar;
     exports.union = union;
+    exports.updateAt = updateAt;
     exports.values = values;
     exports.withTimeout = withTimeout;
     exports.zip = zip;

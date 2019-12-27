@@ -1911,3 +1911,65 @@ describe('removeFirst', () => {
         r1; // $ExpectType Promise<number[]>
     });
 });
+
+describe('updateAt', () => {
+    it('number', async () => {
+        const arr = [1, 2, 3];
+        const r0 = F.updateAt(3, 0, arr);
+        const t = F.collect(r0); // $ExpectType Promise<number[]>
+    });
+
+    it('string', async () => {
+        const arr = ["a", "b", "c"];
+        const r0 = F.updateAt("d", 0, arr);
+        const t = F.collect(r0); // $ExpectType Promise<string[]>
+    });
+
+    it('Promise<number>', async () => {
+        const arr = [1, 2, 3];
+        const r0 = F.updateAt(Promise.resolve(3), 0, arr);
+        const t = F.collect(r0); // $ExpectType Promise<number[]>
+    });
+
+    it('c1 number', async () => {
+        const arr = [1, 2, 3];
+        const r0 = F.updateAt(3)(0)(arr);
+        const t = F.collect(r0); // $ExpectType Promise<number[]>
+    });
+
+    it('c1 string', async () => {
+        const arr = ["a", "b", "c"];
+        const r0 = F.updateAt("d")(0)(arr);
+        const t = F.collect(r0); // $ExpectType Promise<string[]>
+    });
+
+    it('c2 Promise<number>', async () => {
+        const arr = [1, 2, 3];
+        const r0 = F.updateAt(Promise.resolve(3))(0)(arr);
+        const t = F.collect(r0); // $ExpectType Promise<number[]>
+    });
+
+    it('c2 number', async () => {
+        const arr = [1, 2, 3];
+        const r0 = F.updateAt(3, 0)(arr);
+        const t = F.collect(r0); // $ExpectType Promise<number[]>
+    });
+
+    it('c2 string', async () => {
+        const arr = ["a", "b", "c"];
+        const r0 = F.updateAt("d", 0)(arr);
+        const t = F.collect(r0); // $ExpectType Promise<string[]>
+    });
+
+    it('c2 Promise<number>', async () => {
+        const arr = [1, 2, 3];
+        const r0 = F.updateAt(Promise.resolve(3), 0)(arr);
+        const t = F.collect(r0); // $ExpectType Promise<number[]>
+    });
+
+    it('with run', async () => {
+        const arr = [1, 2, 3];
+        const r0 = await F.run(arr, F.updateAt(Promise.resolve(3), 0));
+        const t = F.collect(r0); // $ExpectType Promise<number[]>
+    });
+});

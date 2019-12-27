@@ -629,3 +629,15 @@ export function removeFirst<T>(predicate: Promise<(value: T) => boolean | Promis
 export function removeFirst<T>(predicate: Promise<(value: T) => boolean | Promise<boolean>>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
 export function removeFirst<T>(value: T | Promise<T>, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
 export function removeFirst<T>(value: T | Promise<T>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+
+/**
+ * Update {iter} to the {index} position of {iter} received as an argument.
+ *
+ * @param {any} value add value
+ * @param {Number} index add index
+ * @param {Iterable | AsyncIterable} iter any iterable
+ * @returns new AsyncIterator
+ */
+export function updateAt<T>(value: T | Promise<T>, index: number, iter: Iter<T>): AsyncIterableIterator<T>;
+export function updateAt<T>(value: T, index: number): (iter: Iter<ExtractPromise<T>>) => AsyncIterableIterator<ExtractPromise<T>>;
+export function updateAt<T>(value: T): (index: number) => (iter: Iter<ExtractPromise<T>>) => AsyncIterableIterator<ExtractPromise<T>>;
