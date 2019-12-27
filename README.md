@@ -94,6 +94,7 @@ console.log(v);//[3]
 *    [keys](#keys)
 *    [values](#values)
 *    [removeFirst](#removeFirst)
+*    [updateAt](#updateAt)
 
 ## functional / parallel
 *    [parallel_set_fetch_count](#parallel_set_fetch_count)
@@ -1076,6 +1077,27 @@ for await (const e of r) {
 // 1
 // 3
 // 4
+```
+
+
+### updateAt
+Update itererator to the index position 
+```javascript
+const arr = [1,2,3,4,5];
+const u = F.updateAt(
+    99, // update value
+    0,  // index
+    arr // iterator
+);
+for await (const e of u) {
+    console.log(e);
+}
+//print
+//99
+//2
+//3
+//4
+//5
 ```
 
 
