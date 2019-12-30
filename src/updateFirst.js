@@ -1,5 +1,7 @@
 import { _isFunction } from "./internal/typeTraits";
 import { equals } from "./equals";
+import { seq } from "./seq";
+import { curry } from "./curry";
 
 const _updateFirstFunction = async function *(value, comp, iter) {
     const g = seq(iter);

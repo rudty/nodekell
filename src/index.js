@@ -128,6 +128,7 @@ export * from "./tap.js";
 export * from "./then.js";
 export * from "./timeout.js";
 export * from "./updateAt.js";
+export * from "./updateFirst.js";
 export * from "./values.js";
 export * from "./withTimeout.js";
 export * from "./zip.js";

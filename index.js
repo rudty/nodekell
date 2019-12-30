@@ -1909,6 +1909,28 @@ const updateAt = curry(async function *(value, index, iter) {
     }
 });
 
+const _updateFirstFunction = async function *(value, comp, iter) {
+    const g = seq(iter);
+    for await (const e of g) {
+        if (await comp(e)) {
+            yield value;
+            yield* g;
+            return;
+        } else {
+            yield e;
+        }
+    }
+};
+const updateFirst = curry(async function *(value, x, iter) {
+    x = await x;
+    if (_isFunction(x)) {
+        yield* _updateFirstFunction(value, x, iter);
+    } else {
+        const compareFunction = equals(x);
+        yield* _updateFirstFunction(value, compareFunction, iter);
+    }
+});
+
 const values = _arrayElementIterator(1, (e) => { throw new Error(`values / ${e} is not array`); });
 
 const withTimeout = curry(async function *(duration, iter) {
@@ -2091,6 +2113,7 @@ exports.timeout = timeout;
 exports.underBar = underBar;
 exports.union = union;
 exports.updateAt = updateAt;
+exports.updateFirst = updateFirst;
 exports.values = values;
 exports.withTimeout = withTimeout;
 exports.zip = zip;
