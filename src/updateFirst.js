@@ -17,7 +17,23 @@ const _updateFirstFunction = async function *(value, comp, iter) {
 };
 
 /**
- * @param {*} x predicate. update value or find function
+ * In {iter}, update the first value that matches {x} to {value}.
+ * @example
+ *      const arr = [1, 2, 3];
+ *      const r = F.updateFirst(
+ *          99, // update value
+ *          1,  // find value
+ *          arr);
+ *      for await (const e of r) {
+ *          console.log(e);
+ *      }
+ *      // print
+ *      // 99
+ *      // 2
+ *      // 3
+ *
+ * @param {*} value update value
+ * @param {Object | Function} x predicate. update value or find function
  * @param {Iterable | AsyncIterable} iter any iterable
  */
 export const updateFirst = curry(async function *(value, x, iter) {
