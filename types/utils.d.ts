@@ -272,3 +272,5 @@ export type MergeObject<T extends object, P extends object[]> = {
         0 :
         1
 ];
+
+export type LiteralWrapper<T> = T extends number ? number : T extends string ? string : T;
