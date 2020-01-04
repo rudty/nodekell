@@ -1993,6 +1993,12 @@ describe('updateFirst', () => {
         const r1 = F.collect(s); // $ExpectType Promise<number[]>
     });
 
+    it('number3', async () => {
+        const arr = [1, 2, 3];
+        const r = F.updateFirst(99)(1)(arr);
+        const r0 = F.collect(r); // $ExpectType Promise<number[]>
+    });
+
     it('Promise<number>', async () => {
         const arr = [Promise.resolve(1), 2, 3];
         const r = F.updateFirst(99, 1, arr);
@@ -2027,6 +2033,12 @@ describe('updateFirst', () => {
 
         const s = F.updateFirst(Promise.resolve("99"), "a")(arr);
         const r1 = F.collect(s); // $ExpectType Promise<string[]>
+    });
+
+    it('string3', async () => {
+        const arr = ["a", "b", "c"];
+        const r = F.updateFirst("99")("a")(arr);
+        const r0 = F.collect(r); // $ExpectType Promise<string[]>
     });
 
     it('array', async () => {
@@ -2065,6 +2077,12 @@ describe('updateFirst', () => {
         const r1 = F.collect(s); // $ExpectType Promise<number[]>
     });
 
+    it('function number 3', async () => {
+        const arr = [1, 2, 3];
+        const r = F.updateFirst(99)((a: number) => true)(arr);
+        const r0 = F.collect(r); // $ExpectType Promise<number[]>
+    });
+
     it('function number return promise', async () => {
         const arr = [1, 2, 3];
         const r = F.updateFirst(99, (a) => Promise.resolve(true), arr);
@@ -2101,6 +2119,12 @@ describe('updateFirst', () => {
         const r1 = F.collect(s); // $ExpectType Promise<string[]>
     });
 
+    it('function string3', async () => {
+        const arr = ["1", "2", "3"];
+        const r = F.updateFirst("99")((a: string) => true)(arr);
+        const r0 = F.collect(r); // $ExpectType Promise<string[]>
+    });
+
     it('function string return promise', async () => {
         const arr = ["1", "2", "3"];
         const r = F.updateFirst("99", (a) => Promise.resolve(true), arr);
@@ -2117,6 +2141,12 @@ describe('updateFirst', () => {
 
         const s = F.updateFirst(Promise.resolve("99"), (a: string) => Promise.resolve(true))(arr);
         const r1 = F.collect(s); // $ExpectType Promise<string[]>
+    });
+
+    it('function string3 return promise', async () => {
+        const arr = ["1", "2", "3"];
+        const r = F.updateFirst("99")((a: string) => Promise.resolve(true))(arr);
+        const r0 = F.collect(r); // $ExpectType Promise<string[]>
     });
 
     it('promise function number return promise', async () => {
@@ -2137,6 +2167,12 @@ describe('updateFirst', () => {
         const r1 = F.collect(s); // $ExpectType Promise<number[]>
     });
 
+    it('promise function number 3 return promise', async () => {
+        const arr = [1, 2, 3];
+        const r = F.updateFirst(99)(Promise.resolve((a: number): Promise<boolean>  => Promise.resolve(true)))(arr);
+        const r0 = F.collect(r); // $ExpectType Promise<number[]>
+    });
+
     it('promise function string return promise', async () => {
         const arr = ["1", "2", "3"];
         const r = F.updateFirst("99", Promise.resolve((a: string): Promise<boolean>  => Promise.resolve(true)), arr);
@@ -2153,6 +2189,12 @@ describe('updateFirst', () => {
 
         const s = F.updateFirst(Promise.resolve("99"), Promise.resolve((a: string): Promise<boolean>  => Promise.resolve(true)))(arr);
         const r1 = F.collect(s); // $ExpectType Promise<string[]>
+    });
+
+    it('promise function string3 return promise', async () => {
+        const arr = ["1", "2", "3"];
+        const r = F.updateFirst("99")(Promise.resolve((a: string): Promise<boolean>  => Promise.resolve(true)))(arr);
+        const r0 = F.collect(r); // $ExpectType Promise<string[]>
     });
 
     it('with run', async () => {

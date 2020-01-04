@@ -684,3 +684,4 @@ export function updateFirst<T>(value: LiteralWrapper<T> | Promise<LiteralWrapper
 export function updateFirst<T>(value: LiteralWrapper<T> | Promise<LiteralWrapper<T>>, predicate: Promise<(value: T) => boolean | Promise<boolean>>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
 export function updateFirst<T>(value: LiteralWrapper<T> | Promise<LiteralWrapper<T>>, predicate: T | Promise<T>, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
 export function updateFirst<T>(value: LiteralWrapper<T> | Promise<LiteralWrapper<T>>, predicate: T | Promise<T>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+export function updateFirst<T>(value: LiteralWrapper<T>): (predicate: ((value: T) => boolean | Promise<boolean>) | Promise<(value: T) => boolean | Promise<boolean>> | T | Promise<T>) => (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
