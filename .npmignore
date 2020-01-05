@@ -74,3 +74,5 @@ rollup.config.js
 build.js
 .eslintrc.js
 .eslintignore
+
+.github
