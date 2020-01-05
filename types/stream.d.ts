@@ -6,6 +6,7 @@ import {
     FlatForInternalFn,
     ExtractPromise,
     AssociateMap,
+    LiteralWrapper,
 } from './utils';
 
 /**
@@ -656,3 +657,31 @@ export function removeFirst<T>(value: T | Promise<T>): (iter: Iter<T | Promise<T
 export function updateAt<T>(value: T | Promise<T>, index: number, iter: Iter<T>): AsyncIterableIterator<T>;
 export function updateAt<T>(value: T, index: number): (iter: Iter<ExtractPromise<T>>) => AsyncIterableIterator<ExtractPromise<T>>;
 export function updateAt<T>(value: T): (index: number) => (iter: Iter<ExtractPromise<T>>) => AsyncIterableIterator<ExtractPromise<T>>;
+
+/**
+ * In {iter}, update the first value that matches {x} to {value}.
+ * @example
+ *      const arr = [1, 2, 3];
+ *      const r = F.updateFirst(
+ *          99, // update value
+ *          1,  // find value
+ *          arr);
+ *      for await (const e of r) {
+ *          console.log(e);
+ *      }
+ *      // print
+ *      // 99
+ *      // 2
+ *      // 3
+ *
+ * @param value update value
+ * @param predicate update value or find function
+ * @param iter any iterable
+ */
+export function updateFirst<T>(value: LiteralWrapper<T> | Promise<LiteralWrapper<T>>, predicate: (value: T) => boolean | Promise<boolean>, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+export function updateFirst<T>(value: LiteralWrapper<T> | Promise<LiteralWrapper<T>>, predicate: (value: T) => boolean | Promise<boolean>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+export function updateFirst<T>(value: LiteralWrapper<T> | Promise<LiteralWrapper<T>>, predicate: Promise<(value: T) => boolean | Promise<boolean>>, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+export function updateFirst<T>(value: LiteralWrapper<T> | Promise<LiteralWrapper<T>>, predicate: Promise<(value: T) => boolean | Promise<boolean>>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+export function updateFirst<T>(value: LiteralWrapper<T> | Promise<LiteralWrapper<T>>, predicate: T | Promise<T>, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+export function updateFirst<T>(value: LiteralWrapper<T> | Promise<LiteralWrapper<T>>, predicate: T | Promise<T>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+export function updateFirst<T>(value: LiteralWrapper<T>): (predicate: ((value: T) => boolean | Promise<boolean>) | Promise<(value: T) => boolean | Promise<boolean>> | T | Promise<T>) => (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
