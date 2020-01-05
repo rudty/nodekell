@@ -93,8 +93,9 @@ console.log(v);//[3]
 *    [peek](#peek)
 *    [keys](#keys)
 *    [values](#values)
-*    [removeFirst](#removeFirst)
-*    [updateAt](#updateAt)
+*    [removeFirst](#removefirst)
+*    [updateAt](#updateat)
+*    [updateFirst](#updatefirst)
 
 ## functional / parallel
 *    [parallel_set_fetch_count](#parallel_set_fetch_count)
@@ -1098,6 +1099,24 @@ for await (const e of u) {
 //3
 //4
 //5
+```
+
+
+### updateFirst
+In itererator, update the first value that matches 2nd argument to 3rd argument.
+```javascript
+const arr = [1, 2, 3];
+const r = F.updateFirst(
+    99, // update value
+    1,  // find value
+    arr);
+for await (const e of r) {
+    console.log(e);
+}
+// print
+// 99
+// 2
+// 3
 ```
 
 
