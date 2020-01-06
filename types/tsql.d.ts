@@ -263,9 +263,9 @@ export function rightOuterJoin<T1 extends object, T2 extends object>(f: (elem2: 
  * '3','krw','5','3','t5'
  * ---------------------
  *
- * @param {Function} fn (elem1, elem2): bool | Promise<bool>
- * @param {Iterable | AsyncIterable} xs iterable
- * @param {Iterable | AsyncIterable} ys iterable
+ * @param fn (elem1, elem2): bool | Promise<bool>
+ * @param xs iterable
+ * @param ys iterable
  */
 export function innerJoin2<T1, T2>(joinFunc: (l: T1, r: T2) => boolean | Promise<boolean>, left: Iter<T1 | Promise<T1>>, right: Iter<T2 | Promise<T2>>): Promise<AsyncIterableIterator<PairRepeat<2, T1, T2>>>;
 export function innerJoin2<T1, T2>(joinFunc: (l: T1, r: T2) => boolean | Promise<boolean>, left: Iter<T1 | Promise<T1>>): (right: Iter<T2 | Promise<T2>>) => Promise<AsyncIterableIterator<PairRepeat<2, T1, T2>>>;

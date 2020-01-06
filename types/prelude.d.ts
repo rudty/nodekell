@@ -630,8 +630,8 @@ export function fnil<P extends any[], R>(fn: (...args: P) => R, ...dArgs: P): ((
  * curry with Object.assign
  * Returns the target object.
  *
- * @param {Object} target target object to copy to
- * @param {Object} source source objects from which to copy properties
+ * @param target target object to copy to
+ * @param source source objects from which to copy properties
  */
 export function assign<T extends object, S1 extends object, S extends object[] = []>(target: T, source1: S1, ...sources: S): MergeObject<MergeObject<T, [S1]>, S>;
 
@@ -645,8 +645,8 @@ export function assign<T extends object, S1 extends object, S extends object[] =
  * Returns the target object.
  * must have at least 3 arguments
  *
- * @param {Object} target target object to copy to
- * @param {Object} source source objects from which to copy properties
+ * @param target target object to copy to
+ * @param source source objects from which to copy properties
  */
 export function assign3<T extends object, S1 extends object, S2 extends object, S extends object[] = []>(target: T, source1: S1, source2: S2, ...sources: S): MergeObject<MergeObject<T, [S1, S2]>, S>;
 

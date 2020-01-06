@@ -154,15 +154,15 @@ export function juxtO(key: any[]): (target: any) => any[];
  * return a random permutation of iterator
  * https://github.com/rudty/nodekell#shuffle
  *
- * @param {Iterable | AsyncIterable} iter any iterable
- * @return {Promise<Array>} new shuffle Array
+ * @param iter any iterable
+ * @return new shuffle Array
  */
 export function shuffle<T>(arr: ArrayLike<T>): T[];
 export function shuffle<T>(iter: Iter<T>): Promise<T[]>;
 
 /**
  * return a random element
- * @param {Iterable | AsyncIterable} iter any iterable
+ * @param iter any iterable
  */
 export function sample<T>(arr: ArrayLike<T>): T;
 export function sample<T>(iter: Iter<T>): Promise<T>;
@@ -340,8 +340,8 @@ export function values<T extends object>(o: T): AsyncIterable<T[keyof T]>;
  *
  *      console.log(r); // print { a: 3 };
  *
- * @param {any} x value
- * @param {Function} fn1 function (this: T, x: T) => void
+ * @param x value
+ * @param fn1 function (this: T, x: T) => void
  */
 export function doto<T>(v: T, fn1: (this: T, v: T) => void): Promise<T>;
 export function doto<T>(v: T, fn1: (this: T, v: T) => void, ...fns: ((this: T, v: T) => void)[]): Promise<T>;
