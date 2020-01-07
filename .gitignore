@@ -67,3 +67,6 @@ typings/
 .idea/
 .eslintrc.js
 .eslintignore
+
+# tsc build
+dist
