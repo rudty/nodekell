@@ -1,9 +1,10 @@
 {
 	"compilerOptions": {
 		"module": "commonjs",
-		"target": "es6",
+        "target": "es2015",
+        "outDir": "./dist",
 		"lib": [
-            "es6",
+            "es2015",
             "es2015.iterable",
             "es2015.generator",
 			"esnext.asynciterable"
@@ -12,15 +13,12 @@
 		"noImplicitThis": true,
 		"strictNullChecks": true,
 		"strictFunctionTypes": true,
-		"noEmit": true,
 		"baseUrl": "./",
 		"typeRoots": ["./"],
 		"types": [],
-		"forceConsistentCasingInFileNames": true
+        "forceConsistentCasingInFileNames": true
     },
     "include": [
-        "types/**/*.d.ts",
-        "test/type/**.spec.ts",
-        "test/type/**.error.ts"
+        "src/**.ts"
     ]
 }
