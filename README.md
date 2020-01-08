@@ -1357,7 +1357,7 @@ for (const e of F.range(10, 0, -1)) {
 
 
 ### seq 
-make iterable(array, set, map, iteratorObject) to asyncIterator 
+make iterable(array, set, map, any iteratorable object) to asyncIterator 
 ```javascript
 const a = [1,2,3,4,5];
 for await(const e of F.seq(a)) {
