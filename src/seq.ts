@@ -16,9 +16,8 @@ const _seq = async function *(iter: Iter<any>) {
  * @params iter any iterator
  * @returns async iterator
  */
-export function seq<T>(iter: Iter<T>): AsyncIterableIterator<ExtractPromise<T>>;
-export function seq<T>(iter: any): AsyncIterableIterator<ExtractPromise<T>> {
-    const it = iter[Symbol.asyncIterator];
+export const seq = <T>(iter: Iter<T>): AsyncIterableIterator<ExtractPromise<T>> => {
+    const it = (<any>iter)[Symbol.asyncIterator];
     if (it) {
         return it.call(iter);
     }
