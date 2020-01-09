@@ -46,5 +46,5 @@ export type Run = {
  * @param iter any iterator
  * @param f combination functions
  */
-export const run = (iter: Iter<any>, ...f: any): Run => 
+export const run: Run = (iter: Iter<any>, ...f: any) => 
     <any>foldl((z: any, fn: any) => fn(z), iter, f);
