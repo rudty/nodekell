@@ -12,7 +12,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "npm run build && mocha -r ts-node/register test/**/*.js test/**/*.spec.ts && npm run local_dtslint",
+    "test": "npm run local_dtslint",
+    "build_test": "npm run build && mocha -r ts-node/register test/**/*.js test/**/*.spec.ts && npm run local_dtslint",
     "dtslint": "dtslint",
     "local_dtslint": "dtslint --localTs ./node_modules/typescript/lib",
     "build": "rollup -c ./rollup.config.js",
