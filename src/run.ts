@@ -1,7 +1,7 @@
 import { foldl } from "./foldl";
 import { Iter } from "./internal/typeTraits";
 
-export type Run = {
+export interface Run {
     <T, R0>(t: T | Promise<T>, f0: (t: T) => (R0 | Promise<R0>)): Promise<R0>;
     <T, R0, R1>(t: T | Promise<T>, f0: (t: T) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>)): Promise<R1>;
     <T, R0, R1, R2>(t: T | Promise<T>, f0: (t: T) => (R0 | Promise<R0>), f1: (r0: R0) => (R1 | Promise<R1>), f2: (r1: R1) => (R2 | Promise<R2>)): Promise<R2>;
@@ -46,5 +46,5 @@ export type Run = {
  * @param iter any iterator
  * @param f combination functions
  */
-export const run: Run = (iter: Iter<any>, ...f: any) => 
-    <any>foldl((z: any, fn: any) => fn(z), iter, f);
+export const run: Run = (iter: Iter<any>, ...f: any) =>
+    <any> foldl((z: any, fn: any) => fn(z), iter, f);

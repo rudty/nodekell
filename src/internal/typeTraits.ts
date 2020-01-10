@@ -63,7 +63,7 @@ export type FlatForInternalFn<T> =
         : E
     : unknown;
 
-export type IsTypedArrayFunction = {
+export interface IsTypedArrayFunction {
     (a: Int8Array): true;
     (a: Uint8Array): true;
     (a: Int16Array): true;
@@ -74,13 +74,13 @@ export type IsTypedArrayFunction = {
     (a: Float64Array): true;
     (a: Uint8ClampedArray): true;
     (a: any): boolean;
-};
+}
 
 /**
- * check 
- * 
+ * check
+ *
  * Int8Array
- * Int16Array 
+ * Int16Array
  * Int32Array
  * Uint8Array
  * Uint8ClampedArray
@@ -88,16 +88,14 @@ export type IsTypedArrayFunction = {
  * Uint32Array
  * Float32Array
  * Float64Array
- * 
- * @param a object 
+ *
+ * @param a object
  * @returns {bool} true if isTypedArray else false
  */
-export const _isTypedArray: IsTypedArrayFunction = (a: any): any => 
+export const _isTypedArray: IsTypedArrayFunction = (a: any): any =>
     ArrayBuffer.isView(a) && !(a instanceof DataView);
 
-
-export type IsStringFunction = {
-        (a: String): true;
+export interface IsStringFunction {
         (a: string): true;
         (a: any): boolean;
 }

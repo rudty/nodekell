@@ -1,7 +1,7 @@
 import { curry } from "./curry";
 import { Iter, FlatForInternalFn, CurriedFunction2 } from "./internal/typeTraits";
 
-export type Foldl = {
+export interface Foldl {
     <T, U>(f: (acc: U, elem: T) => (U | Promise<U>), init: U | Promise<U>, iter: Iter<T | Promise<T>>): Promise<U>;
     <T extends Iter<any>, U>(f: (acc: U, elem: FlatForInternalFn<T>) => (U | Promise<U>), init: U | Promise<U>, iter: T): Promise<U>;
     <T extends Iter<any>, U>(f: (acc: U, elem: FlatForInternalFn<T>) => (U | Promise<U>), init: U | Promise<U>): (iter: T) => Promise<U>;
@@ -15,7 +15,7 @@ export type Foldl = {
  *
  * @example
  * const a = [1,2,3,4,5];
- * const sum = foldl((acc, e) => acc + e, 0, a); 
+ * const sum = foldl((acc, e) => acc + e, 0, a);
  * console.log(sum); // print 15
  *
  * @param f (acc: T1, elem: T2) => (T1 | Promise<T1>)

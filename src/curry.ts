@@ -1,7 +1,6 @@
-
 import * as C from "./internal/typeTraits";
 
-export type Curry = {
+export interface Curry {
     <T1, R>(f: (t1: T1) => R): (t1: T1) => R;
     <T1, T2, R>(f: (t1: T1, t2: T2) => R): C.CurriedFunction2<T1, T2, R>;
     <T1, T2, T3, R>(f: (t1: T1, t2: T2, T3: T3) => R): C.CurriedFunction3<T1, T2, T3, R>;
@@ -31,6 +30,6 @@ export const curry: Curry = (fn: (...a: any[]) => any) => (...a: any[]) => {
     if (fn.length <= a.length) {
         return fn(...a);
     } else {
-        return (...b: any[]) => (<any>curry)(fn)(...a, ...b);
+        return (...b: any[]) => (<any> curry)(fn)(...a, ...b);
     }
 };

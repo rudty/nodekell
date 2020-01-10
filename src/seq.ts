@@ -7,7 +7,7 @@ const _seq = async function *(iter: Iter<any>) {
 };
 
 /**
- * make iterable(array, set, map, any iteratorable object) to asyncIterator 
+ * make iterable(array, set, map, any iteratorable object) to asyncIterator
  * @example
  * const a = [1,2,3,4,5];
  * for await(const e of F.seq(a)) {
@@ -17,7 +17,7 @@ const _seq = async function *(iter: Iter<any>) {
  * @returns async iterator
  */
 export const seq = <T>(iter: Iter<T>): AsyncIterableIterator<ExtractPromise<T>> => {
-    const it = (<any>iter)[Symbol.asyncIterator];
+    const it = (<any> iter)[Symbol.asyncIterator];
     if (it) {
         return it.call(iter);
     }
