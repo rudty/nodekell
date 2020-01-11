@@ -107,3 +107,8 @@ export const _isString: IsStringFunction = (a: any): any => a.constructor === St
  * () => {...}
  */
 export const _isFunction = (a: any): boolean => a && a.constructor === Function;
+
+export type _Predicate<T> = (elem: T) => (boolean | Promise<boolean>);
+export type _FlatPredicate<T> = (elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>);
+export type _IndexedPredicate<T> = (idx: number, elem: T) => (boolean | Promise<boolean>);
+export type _IndexedFlatPredicate<T> = (idx: number, elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>);
