@@ -112,3 +112,6 @@ export type _Predicate<T> = (elem: T) => (boolean | Promise<boolean>);
 export type _FlatPredicate<T> = (elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>);
 export type _IndexedPredicate<T> = (idx: number, elem: T) => (boolean | Promise<boolean>);
 export type _IndexedFlatPredicate<T> = (idx: number, elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>);
+
+export type _Func1<T, R> = (elem: T) => (R | Promise<R>);
+export type _FlatFunc1<T, R> = (elem: FlatForInternalFn<T>) => (R | Promise<R>);
