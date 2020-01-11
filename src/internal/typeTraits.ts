@@ -115,3 +115,5 @@ export type _IndexedFlatPredicate<T> = (idx: number, elem: FlatForInternalFn<T>)
 
 export type _Func1<T, R> = (elem: T) => (R | Promise<R>);
 export type _FlatFunc1<T, R> = (elem: FlatForInternalFn<T>) => (R | Promise<R>);
+export type _IndexedFunc1<T, R> = (idx: number, elem: T) => (R | Promise<R>);
+export type _IndexedFlatFunc1<T, R> = (idx: number, elem: FlatForInternalFn<T>) => (R | Promise<R>);
