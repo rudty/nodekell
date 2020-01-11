@@ -103,7 +103,7 @@ export interface IsStringFunction {
 export const _isString: IsStringFunction = (a: any): any => a.constructor === String;
 
 /**
- * function is 
+ * function is
  * () => {...}
  */
 export const _isFunction = (a: any): boolean => a && a.constructor === Function;
