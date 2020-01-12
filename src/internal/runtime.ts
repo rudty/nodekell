@@ -8,7 +8,7 @@ let parallel_global_fetch_count = parallel_default_fetch_count;
  * take it {count} the effect of calculating in parallel.
  *
  * not parallel functions: Promise -> execute -> Promise -> execute
- * 
+ *
  * parallel functions: Promise -> Promise -> Promise... (execute all)
  *
  * @param count take count
@@ -27,7 +27,7 @@ export const parallel_get_fetch_count_internal = () => parallel_global_fetch_cou
  * Get the value.
  * If it's a Promise, it gets its value from Promise
  * Then call the function if the value is a function.
- * @param v any 
+ * @param v any
  */
 export const _takeValue = async (v: any) => {
     v = await v;
@@ -41,11 +41,11 @@ export const _takeValue = async (v: any) => {
 
 /**
  * Remove N elements of iterator
- * 
+ *
  * @param iter any iterator
  * @param count removeCount
  */
-export const _removeIteratorElements = async <T>(iter: IterableIterator<T> | AsyncIterator<T>, count: number = Infinity): Promise<Array<ExtractPromise<T>>> => {
+export const _removeIteratorElements = async <T>(iter: IterableIterator<T> | AsyncIterator<T>, count: number = Infinity): Promise<(ExtractPromise<T>)[] | any> => {
     if (!iter) {
         return;
     }
@@ -68,11 +68,11 @@ export const _removeIteratorElements = async <T>(iter: IterableIterator<T> | Asy
  * @param f zipFunction
  * @param arr zipArray
  */
-export const _zipWith = async function *(f: (a: any) => any, arr: Array<Iterator<any> | AsyncIterator<any>>): AsyncIterator<Array<any>> {
+export const _zipWith = async function *(f: (a: any) => any, arr: (Iterator<any> | AsyncIterator<any>)[]): AsyncIterator<any> {
     while (true) {
         const elems = await Promise.all(arr.map((e) => e.next()));
-        for (let i = 0; i < elems.length; ++i) {
-            if (elems[i].done) {
+        for (const e of elems) {
+            if (e.done) {
                 return;
             }
         }
@@ -83,13 +83,13 @@ export const _zipWith = async function *(f: (a: any) => any, arr: Array<Iterator
 /**
  * throw if value is empty IteratorResult
  *
- * 1. { done: true } 
+ * 1. { done: true }
  *  => throw
  *
- * 2. 1 
+ * 2. 1
  *  => pass
  *
- * 3. { value: undefined, done: false } 
+ * 3. { value: undefined, done: false }
  *  => pass
  *
  * 4. undefined

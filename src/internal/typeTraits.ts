@@ -108,12 +108,18 @@ export const _isString: IsStringFunction = (a: any): any => a.constructor === St
  */
 export const _isFunction = (a: any): boolean => a && a.constructor === Function;
 
+// filter
 export type _Predicate<T> = (elem: T) => (boolean | Promise<boolean>);
 export type _FlatPredicate<T> = (elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>);
 export type _IndexedPredicate<T> = (idx: number, elem: T) => (boolean | Promise<boolean>);
 export type _IndexedFlatPredicate<T> = (idx: number, elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>);
 
+// map
 export type _Func1<T, R> = (elem: T) => (R | Promise<R>);
 export type _FlatFunc1<T, R> = (elem: FlatForInternalFn<T>) => (R | Promise<R>);
 export type _IndexedFunc1<T, R> = (idx: number, elem: T) => (R | Promise<R>);
 export type _IndexedFlatFunc1<T, R> = (idx: number, elem: FlatForInternalFn<T>) => (R | Promise<R>);
+
+// fold
+export type _BiFunction<T, U> = (acc: U, elem: T) => (U | Promise<U>);
+export type _FlatBiFunction<T, U> = (acc: FlatForInternalFn<U>, elem: FlatForInternalFn<T>) => (FlatForInternalFn<U> | Promise<FlatForInternalFn<U>>);

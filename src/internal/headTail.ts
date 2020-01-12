@@ -4,10 +4,11 @@ import { _mustNotEmptyIteratorResult } from "./runtime";
 
 export interface HeadTailType<T> {
     0: T;
-    1: Array<T> | AsyncIterableIterator<ExtractPromise<T>>;
+    1: (T | Promise<T>)[] | AsyncIterableIterator<ExtractPromise<T>>;
+    [Symbol.iterator](): any;
 }
 
-const _headTailArray = async <T>(arr: Array<T>): Promise<HeadTailType<T>> => {
+const _headTailArray = async <T>(arr: (T | Promise<T>)[]): Promise<HeadTailType<T>> => {
     if (arr.length !== 0) {
         return [await arr[0], arr.slice(1)];
     }
@@ -24,10 +25,10 @@ const _headTailIterator = async <T>(iter: Iter<T>): Promise<HeadTailType<T>> => 
 /**
  * get head and tail
  * const [head, tail] = _headTail(iterator);
- * 
+ *
  * head = value
  * tail = generator
- * 
+ *
  * @param iter any iterable
  * @returns [head, tail]
  */
