@@ -108,6 +108,37 @@ export const _isString: IsStringFunction = (a: any): any => a.constructor === St
  */
 export const _isFunction = (a: any): boolean => a && a.constructor === Function;
 
+/**
+ * (a.hasOwnProperty) can be override 
+ * call Object prototype 
+ * @param a any object
+ */
+const _isObjectArrayCheckProps = (a: ArrayLike<any>) => {
+    if (a.length === 0) {
+        return true;
+    }
+    return Object.prototype.hasOwnProperty.call(a, (a.length - 1)); 
+};
+
+/**
+ * const o = {
+ *      0: 1,
+ *      1: 2,
+ *      2: 3,
+ *      length: 3
+ * };
+ * console.log(Array.from(o)); 
+ * //print [1,2,3]
+ * 
+ * @param a any object
+ */
+export const _isObjectArray = (a: any) => {
+    if ((!_isFunction(a)) && Number.isSafeInteger(a.length)) {
+        return _isObjectArrayCheckProps(a);
+    }
+    return false;
+};
+
 // filter
 export type _Predicate<T> = (elem: T) => (boolean | Promise<boolean>);
 export type _FlatPredicate<T> = (elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>);
