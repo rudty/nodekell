@@ -11,7 +11,7 @@ export interface _CollectArray {
 /**
  * any iterable to array
  * and resolve promise elements
- * 
+ *
  * @param iter any iter
  */
 export const _collectArray: _CollectArray = (iter: any): any => {
@@ -19,8 +19,8 @@ export const _collectArray: _CollectArray = (iter: any): any => {
         return Promise.all(iter);
     }
 
-    if (_isTypedArray(iter)){
-        //typed array and string does not require await
+    if (_isTypedArray(iter)) {
+        // typed array and string does not require await
         return iter;
     }
 
