@@ -24,7 +24,7 @@ export const _collectArray: _CollectArray = (iter: any): any => {
         return iter;
     }
 
-    if(_isString(iter)) {
+    if (_isString(iter)) {
         return Array.from(iter);
     }
 
