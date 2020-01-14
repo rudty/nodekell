@@ -3,7 +3,7 @@ export interface Dec {
     (a: undefined): number;
     (a: number): number;
     (a: string): number;
-    (a: Array<any>): number;
+    (a: any[]): number;
     (a: Date): number;
     (a: any): any;
 }

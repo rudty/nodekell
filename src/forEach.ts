@@ -1,11 +1,11 @@
 import { curry } from "./curry";
-import { Iter, FlatForInternalFn, ExtractPromise } from "./internal/typeTraits";
+import { Iter, ExtractPromise, _Func1, _FlatFunc1 } from "./internal/typeTraits";
 
 export interface ForEach {
-    <T, R>(f: (elem: T) => (R | Promise<R>), iter: Iter<T | Promise<T>>): Promise<R[]>;
-    <T extends Iter<any>, R>(f: (elem: FlatForInternalFn<T>) => R, iter: T): Promise<ExtractPromise<R>[]>;
-    <T extends Iter<any>, R>(f: (elem: FlatForInternalFn<T>) => R): (iter: T) => Promise<ExtractPromise<R>[]>;
-    <T, R>(f: (elem: T) => (R | Promise<R>)): (iter: Iter<T | Promise<T>>) => Promise<R[]>;
+    <T, R>(f: _Func1<T, R>, iter: Iter<T | Promise<T>>): Promise<R[]>;
+    <T extends Iter<any>, R>(f: _FlatFunc1<T, R>, iter: T): Promise<ExtractPromise<R>[]>;
+    <T extends Iter<any>, R>(f: _FlatFunc1<T, R>): (iter: T) => Promise<ExtractPromise<R>[]>;
+    <T, R>(f: _Func1<T, R>): (iter: Iter<T | Promise<T>>) => Promise<R[]>;
 }
 
 /**

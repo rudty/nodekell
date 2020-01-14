@@ -3,7 +3,7 @@ export interface Inc {
     (a: undefined): number;
     (a: number): number;
     (a: string): string;
-    (a: Array<any>): string;
+    (a: any[]): string;
     (a: Date): string;
     (a: any): any;
 }
