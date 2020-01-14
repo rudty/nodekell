@@ -4,6 +4,7 @@ export interface Inc {
     (a: number): number;
     (a: string): string;
     (a: Array<any>): string;
+    (a: Date): string;
     (a: any): any;
 }
 
