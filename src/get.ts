@@ -26,7 +26,7 @@ export interface Get {
  *
  * @param key any key value
  * @param target any object
- * @returns a.get or a[key] or undefined
+ * @returns target.get or target[key] or undefined
  */
 export const get: Get = curry((key: any, a: any): any => {
     if (a && _isFunction(a.get)) {
