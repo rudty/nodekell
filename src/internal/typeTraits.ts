@@ -139,6 +139,12 @@ export const _isObjectArray = (a: any) => {
     return false;
 };
 
+/**
+ * real undefined
+ * undefined = 1; // not error!
+ */
+export const undefinedValue: undefined = ((v) => v)();
+
 // filter
 export type _Predicate<T> = (elem: T) => (boolean | Promise<boolean>);
 export type _FlatPredicate<T> = (elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>);
@@ -154,3 +160,31 @@ export type _IndexedFlatFunc1<T, R> = (idx: number, elem: FlatForInternalFn<T>) 
 // fold
 export type _BiFunction<T, U> = (acc: U, elem: T) => (U | Promise<U>);
 export type _FlatBiFunction<T, U> = (acc: FlatForInternalFn<U>, elem: FlatForInternalFn<T>) => (FlatForInternalFn<U> | Promise<FlatForInternalFn<U>>);
+
+export type ExtractMapKey<T> = T extends Map<infer K, any> ? K : unknown;
+export type ExtractMapValue<T> = T extends Map<any, infer V> ? V : unknown;
+export type Getter<T, K> =
+    T extends Map<any, any> ?
+        K extends ExtractMapKey<T> ?
+            K extends keyof T ?
+                ExtractMapValue<T> | T[K]
+            : ExtractMapValue<T> | undefined
+        : K extends keyof T ?
+            T[K]
+        : undefined
+    :
+    T extends any[] ?
+        K extends keyof T ?
+            K extends number ?
+                T[K] | undefined
+            : T[K]
+        : undefined
+    :
+    T extends object ?
+        K extends keyof T ?
+            T[K]
+        : undefined
+    :
+    K extends keyof T ?
+        T[K]
+    : unknown;
