@@ -7,15 +7,15 @@
             "es2015",
             "es2015.iterable",
             "es2015.generator",
-			"esnext.asynciterable"
+            "esnext.asynciterable"
 		],
 		"noImplicitAny": true,
 		"noImplicitThis": true,
 		"strictNullChecks": true,
-		"strictFunctionTypes": true,
+        "strictFunctionTypes": true,
 		"baseUrl": "./",
-		"typeRoots": ["./"],
-		"types": [],
+		"typeRoots": ["./", "./node_modules/@types"],
+        "types": [],
         "forceConsistentCasingInFileNames": true
     },
     "include": [
