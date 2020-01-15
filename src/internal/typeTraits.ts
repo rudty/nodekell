@@ -145,6 +145,8 @@ export const _isObjectArray = (a: any) => {
  */
 export const undefinedValue: undefined = ((v) => v)();
 
+export const _hasIterator = (a: any): boolean => a[Symbol.iterator] || a[Symbol.asyncIterator];
+
 // filter
 export type _Predicate<T> = (elem: T) => (boolean | Promise<boolean>);
 export type _FlatPredicate<T> = (elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>);
