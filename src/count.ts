@@ -12,17 +12,17 @@ export interface Count {
 }
 
 export const count: Count = async (iter: any): Promise<number> => {
-    //array, string
+    // array, string
     if (Number.isSafeInteger(iter.length)) {
         return iter.length;
     }
 
-    //map, set, any collection
+    // map, set, any collection
     if (Number.isSafeInteger(iter.size)) {
         return iter.size;
     }
 
-    //iterators
+    // iterators
     if (_hasIterator(iter)) {
         let c = 0;
         for await (const _ of iter) {
@@ -31,6 +31,6 @@ export const count: Count = async (iter: any): Promise<number> => {
         return c;
     }
 
-    //object
+    // object
     return Object.keys(iter).length;
 };
