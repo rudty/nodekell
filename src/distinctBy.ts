@@ -1,5 +1,5 @@
 import { curry } from "./curry";
-import { Iter, _Func1, _FlatFunc1, FlatForInternalFn } from "./internal/typeTraits";
+import { Iter, _Func1, _FlatFunc1, FlatForInternalFn, ExtractPromise } from "./internal/typeTraits";
 
 export interface DistinctBy {
     /**
@@ -17,10 +17,10 @@ export interface DistinctBy {
      * @param f distinct function (a: T) => any
      * @param iter any iterable
      */
-    <T>(f: _Func1<T, any>, iter: Iter<T | Promise<T>>): AsyncIterableIterator<T>;
+    <T>(f: _Func1<T, any>, iter: Iter<T | Promise<T>>): AsyncIterableIterator<ExtractPromise<T>>;
     <T extends Iter<any>>(f: _FlatFunc1<T, any>, iter: T): AsyncIterableIterator<FlatForInternalFn<T>>;
     <T extends Iter<any>>(f: _FlatFunc1<T, any>): (iter: T) => AsyncIterableIterator<FlatForInternalFn<T>>;
-    <T>(f: _Func1<T, any>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
+    <T>(f: _Func1<T, any>): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<ExtractPromise<T>>;
 }
 export const distinctBy: DistinctBy = curry(async function *(f: any, iter: Iter<any>): AsyncIterableIterator<any> {
     const s = new Set();
