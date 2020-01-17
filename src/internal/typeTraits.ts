@@ -147,6 +147,32 @@ export const undefinedValue: undefined = ((v) => v)();
 
 export const _hasIterator = (a: any): boolean => a[Symbol.iterator] || a[Symbol.asyncIterator];
 
+export const _isArrayLike = (a: any): boolean => (Array.isArray(a) || _isTypedArray(a) || _isObjectArray(a));
+
+/**
+ * is array like object
+ * @param {ArrayLike} any
+ */
+export const _isReadableArrayLike = (a: any): boolean => a && (_isString(a) || _isArrayLike(a));
+
+export const _isPairLike = (a: any): boolean => _isReadableArrayLike(a) && a.length === 2;
+
+/**
+ * is array like object and writable
+ *
+ * Object.isFrozen("string") => true
+ * Object.isFrozen(new String("string")) => false
+ *
+ * but.. (new String()) cannot modify
+ *
+ * @param a any object
+ */
+export const _isWritableArrayLike = (a: any): boolean =>
+    a &&
+    !(_isString(a)) &&
+    !(Object.isFrozen(a)) &&
+    _isArrayLike(a);
+
 // filter
 export type _Predicate<T> = (elem: T) => (boolean | Promise<boolean>);
 export type _FlatPredicate<T> = (elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>);
