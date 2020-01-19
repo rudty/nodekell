@@ -2,11 +2,11 @@ import { collect } from "../collect";
 import { _isTypedArray, _isObjectArray, _isString, Iter } from "./typeTraits";
 
 export interface _CollectArray {
-    (a: string): ArrayLike<string>;
-    <T>(a: ArrayLike<T>): ArrayLike<T>;
-    <T>(a: Iterable<T>): ArrayLike<T>;
-    <T>(a: AsyncIterable<T>): Promise<ArrayLike<T>>;
-    <T>(a: Iter<T>): Promise<ArrayLike<T>>;
+    (a: string): string[];
+    <T>(a: ArrayLike<T>): T[];
+    <T>(a: Iterable<T>): T[];
+    <T>(a: AsyncIterable<T>): Promise<T[]>;
+    <T>(a: Iter<T>): Promise<T[]>;
 }
 /**
  * any iterable to array
