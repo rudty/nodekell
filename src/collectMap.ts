@@ -9,7 +9,7 @@ export interface CollectMap {
      * for(const [k,v] of m) {
      *     console.log(k, v);
      * }
-     * // print 
+     * // print
      * // 1 2
      * // 3 4
      *
@@ -20,4 +20,4 @@ export interface CollectMap {
      */
     <T extends any[]>(iter: Iter<T | Promise<T>>): Promise<Map<T[0], T[1]>>;
 }
-export const collectMap: CollectMap = async (iter: Iter<any>) => new Map((<[any, any]>(await _collectArray(iter))));
+export const collectMap: CollectMap = async (iter: Iter<any>) => new Map((<[any, any]> (await _collectArray(iter))));
