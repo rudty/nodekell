@@ -1,6 +1,6 @@
 import { _collectArray } from "./internal/collectArray";
 import { _isPairLike, Iter } from "./internal/typeTraits";
-export interface KeyValue<T> {
+export interface CollectObjectKeyValue<T> {
     0: any;
     1: T;
 }
@@ -14,7 +14,7 @@ export interface CollectObject {
      * // print { '1': 2, '3': 4 }
      * @param iter [[key, value]] iterator
      */
-    <T>(iter: Iter<KeyValue<T> | Promise<KeyValue<T>>>): Promise<{ [key: string]: KeyValue<T>[1] }>;
+    <T>(iter: Iter<CollectObjectKeyValue<T> | Promise<CollectObjectKeyValue<T>>>): Promise<{ [key: string]: CollectObjectKeyValue<T>[1] }>;
     (iter: Iter<any[] | Promise<any[]>>): Promise<{ [key: string]: any }>;
 }
 
