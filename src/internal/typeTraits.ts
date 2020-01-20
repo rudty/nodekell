@@ -216,3 +216,8 @@ export type Getter<T, K> =
     K extends keyof T ?
         T[K]
     : unknown;
+
+/**
+ * Non-Promise Iter Flat
+ */
+export type Flat<T> = T extends Iter<infer E0> ? E0 : T;
