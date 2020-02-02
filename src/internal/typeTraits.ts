@@ -189,6 +189,9 @@ export type _IndexedFlatFunc1<T, R> = (idx: number, elem: FlatForInternalFn<T>) 
 export type _BiFunction<T, U> = (acc: U, elem: T) => (U | Promise<U>);
 export type _FlatBiFunction<T, U> = (acc: FlatForInternalFn<U>, elem: FlatForInternalFn<T>) => (FlatForInternalFn<U> | Promise<FlatForInternalFn<U>>);
 
+// export type _Function2<T1, T2, R> = (a: T1, b: T2) => (R | Promise<R>);
+// export type _FlatFunction2<T1, T2, R> = (a: FlatForInternalFn<T1>, b: FlatForInternalFn<T2>) => (FlatForInternalFn<R> | Promise<FlatForInternalFn<R>>);
+
 export type ExtractMapKey<T> = T extends Map<infer K, any> ? K : unknown;
 export type ExtractMapValue<T> = T extends Map<any, infer V> ? V : unknown;
 export type Getter<T, K> =
