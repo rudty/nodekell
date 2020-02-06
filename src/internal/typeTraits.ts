@@ -173,6 +173,16 @@ export const _isWritableArrayLike = (a: any): boolean =>
     !(Object.isFrozen(a)) &&
     _isArrayLike(a);
 
+/**
+ * string, number, bigint, boolean, null, undefined, and symbol.
+ */
+export const _isPrimitive = (a: any) => {
+    if (a === null || a === undefinedValue) {
+        return true;
+    }
+    return Object(a) !== a;
+};
+
 // filter
 export type _Predicate<T> = (elem: T) => (boolean | Promise<boolean>);
 export type _FlatPredicate<T> = (elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>);
