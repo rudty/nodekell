@@ -234,3 +234,5 @@ export type Getter<T, K> =
  * Non-Promise Iter Flat
  */
 export type Flat<T> = T extends Iter<infer E0> ? E0 : T;
+
+export type PairIterableKeyType<T> = T extends Iter<infer K> ? K extends any[] ? ExtractPromise<K[0]> : unknown : unknown;
