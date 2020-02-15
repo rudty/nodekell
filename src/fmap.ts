@@ -22,5 +22,3 @@ export const fmap: FMap = curry(async function *(fn: any, iter: any) {
         yield* await fn(e);
     }
 });
-
-export const flatMap = fmap;
