@@ -932,7 +932,7 @@
     const flatMap = fmap;
 
     const fnil = (fn, ...dArgs) => (...args) => {
-        return fn(...Object.assign(dArgs, args));
+        return fn(...Object.assign([], dArgs, args));
     };
 
     const fnothing = () => {};

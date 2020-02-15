@@ -19,5 +19,5 @@
  * @return {Function} function that calls fn
  */
 export const fnil = (fn, ...dArgs) => (...args) => {
-    return fn(...Object.assign(dArgs, args));
+    return fn(...Object.assign([], dArgs, args));
 };
