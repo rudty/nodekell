@@ -241,3 +241,6 @@ export type Flat<T> = T extends Iter<infer E0> ? E0 : T;
 export type PFlatP<T> = ExtractPromise<Flat<ExtractPromise<T>>>;
 
 export type PairIterableKeyType<T> = T extends Iter<infer K> ? K extends any[] ? ExtractPromise<K[0]> : unknown : unknown;
+
+export type Accumulator<T> = (acc: T, elem: T) => any;
+export type FlatAccumulator<T> = Accumulator<FlatForInternalFn<T>>;
