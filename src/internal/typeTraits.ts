@@ -183,6 +183,29 @@ export const _isPrimitive = (a: any) => {
     return Object(a) !== a;
 };
 
+/**
+ * for not support web browser
+ */
+export const NodekellBigInt = (typeof BigInt !== "undefined") ? BigInt : {};
+
+/**
+ * String, Number, BigInt, Boolean, and Symbol.
+ * and wrapper objects
+ * @param a any object
+ */
+export const _isPrimitiveWrapper = (a: any) => {
+    const ctor = a.constructor;
+    switch (ctor) {
+        case Number:
+        case NodekellBigInt:
+        case Boolean:
+        case Symbol:
+        case String:
+           return true;
+    }
+    return false;
+};
+
 // filter
 export type _Predicate<T> = (elem: T) => (boolean | Promise<boolean>);
 export type _FlatPredicate<T> = (elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>);
