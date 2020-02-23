@@ -206,6 +206,12 @@ export const _isPrimitiveWrapper = (a: any) => {
     return false;
 };
 
+export const mustEvenArguments = (arr: any) => {
+    if ((arr.length) & 1) {
+        throw new Error("requires an even arguments");
+    }
+};
+
 // filter
 export type _Predicate<T> = (elem: T) => (boolean | Promise<boolean>);
 export type _FlatPredicate<T> = (elem: FlatForInternalFn<T>) => (boolean | Promise<boolean>);
@@ -267,3 +273,17 @@ export type PairIterableKeyType<T> = T extends Iter<infer K> ? K extends any[] ?
 
 export type Accumulator<T> = (acc: T, elem: T) => any;
 export type FlatAccumulator<T> = Accumulator<FlatForInternalFn<T>>;
+
+export type ReturnTypeIfFunction<T> = T extends (...args: any) => any ? ReturnType<T> : T;
+
+export type Head<T extends any[]> =
+    T extends [any, ...any[]] ?
+        T[0] : never;
+
+export type Second<T extends any[]> =
+    T extends [any, any, ...any[]] ?
+        T[1] : never;
+
+export type Tail<T extends any[]> =
+        ((...a: T) => any) extends ((h: any, ...a: infer U) => any) ?
+            U : never;
