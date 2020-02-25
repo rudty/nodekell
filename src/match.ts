@@ -3,8 +3,8 @@ import { _isFunction, mustEvenArguments, Flat, Head, Second, Tail } from "./inte
 
 export type Length<T extends any[]> = T["length"];
 
-export type Drop<N extends number, T extends any[], I extends any[] = []> = {
-    0: Drop<N, Tail<T>, Prepend<any, I>>;
+export type DropElement<N extends number, T extends any[], I extends any[] = []> = {
+    0: DropElement<N, Tail<T>, Prepend<any, I>>;
     1: T;
 }[
     Length<I> extends N ?
@@ -21,7 +21,7 @@ export type ReturnTypeIfFunction<T> = T extends (...args: any) => any ? ReturnTy
  * ReturnType<PickElements<...>> error
  */
 export type ReturnTypePickElements<N extends 0 | 1, T extends any[], I extends any[] = []> = {
-    0: ReturnTypePickElements<N, Drop<2, T>, Prepend<N extends 0 ? ReturnTypeIfFunction<Head<T>> : ReturnTypeIfFunction<Second<T>>, I>>;
+    0: ReturnTypePickElements<N, DropElement<2, T>, Prepend<N extends 0 ? ReturnTypeIfFunction<Head<T>> : ReturnTypeIfFunction<Second<T>>, I>>;
     1: ReturnTypeIfFunction<Head<T>> | Flat<I>;
     2: ReturnTypeIfFunction<Second<T>> | Flat<I>;
 }[

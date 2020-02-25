@@ -2,7 +2,7 @@ import { seq } from "./seq";
 import { curry } from "./curry";
 import { _removeIteratorElements } from "./internal/runtime";
 import { Iter, FlatForInternalFn } from "./internal/typeTraits";
-export interface Drop {
+export interface DropType {
     /**
      * drop first element
      * @example
@@ -23,7 +23,7 @@ export interface Drop {
     <T extends Iter<any>>(count: number): (iter: T) => AsyncIterableIterator<FlatForInternalFn<T>>;
     <T>(count: number): (iter: Iter<T | Promise<T>>) => AsyncIterableIterator<T>;
 }
-export const drop: Drop = curry(async function *(count: number, iter: Iter<any>): AsyncIterableIterator<any> {
+export const drop: DropType = curry(async function *(count: number, iter: Iter<any>): AsyncIterableIterator<any> {
     const g = seq(iter);
     await _removeIteratorElements(g, count);
     yield* g;
