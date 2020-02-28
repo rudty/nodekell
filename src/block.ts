@@ -1,0 +1,26 @@
+import { _toStrictIterator } from "./internal/iterable";
+import { _removeIteratorElements } from "./internal/runtime";
+
+export interface BlockType {
+    /**
+     * 1. await promise
+     * 2. Fetch all the elements of type iterator.
+     *    When an element returns a promise, it waits for it to finish.
+     * 3. Fetch all elements of async iterator type.
+     * @example
+     *  const r = await F.run([1,2,3,4,5],
+     *      F.map(SomethingNetworkJob),
+     *      F.map(console.log),
+     *      F.block);
+     * @param value any async iterator
+     */
+    (...value: any[]): Promise<void>;
+}
+
+export const block: BlockType = async (...values: any[]) => {
+    values = await Promise.all(values);
+    for (const iter of values) {
+        const it: any = _toStrictIterator(iter);
+        await _removeIteratorElements(it);
+    }
+};
