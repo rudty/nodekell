@@ -287,3 +287,6 @@ export type Second<T extends any[]> =
 export type Tail<T extends any[]> =
         ((...a: T) => any) extends ((h: any, ...a: infer U) => any) ?
             U : never;
+
+export type ArrayN<N extends number, T> = T extends any[] ? T[N] : T;
+export type AssociateMap<T> = Map<ArrayN<0, ExtractPromise<T>>, ArrayN<1, ExtractPromise<T>>>;
