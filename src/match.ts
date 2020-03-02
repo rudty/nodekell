@@ -1,19 +1,5 @@
 import { equals } from "./equals";
-import { _isFunction, mustEvenArguments, Flat, Head, Second, Tail } from "./internal/typeTraits";
-
-export type Length<T extends any[]> = T["length"];
-
-export type DropElement<N extends number, T extends any[], I extends any[] = []> = {
-    0: DropElement<N, Tail<T>, Prepend<any, I>>;
-    1: T;
-}[
-    Length<I> extends N ?
-        1 : 0
-];
-
-export type Prepend<E, T extends any[]> =
-        ((e: E, ...a: T) => any) extends ((...a: infer U) => any) ?
-            U : never;
+import { Prepend, DropElement, Length, _isFunction, mustEvenArguments, Flat, Head, Second } from "./internal/typeTraits";
 
 export type ReturnTypeIfFunction<T> = T extends (...args: any) => any ? ReturnType<T> : T;
 /**

@@ -290,3 +290,17 @@ export type Tail<T extends any[]> =
 
 export type ArrayN<N extends number, T> = T extends any[] ? T[N] : T;
 export type AssociateMap<T> = Map<ArrayN<0, ExtractPromise<T>>, ArrayN<1, ExtractPromise<T>>>;
+
+export type Prepend<E, T extends any[]> =
+        ((e: E, ...a: T) => any) extends ((...a: infer U) => any) ?
+            U : never;
+
+export type Length<T extends any[]> = T["length"];
+
+export type DropElement<N extends number, T extends any[], I extends any[] = []> = {
+    0: DropElement<N, Tail<T>, Prepend<any, I>>;
+    1: T;
+}[
+    Length<I> extends N ?
+        1 : 0
+];
