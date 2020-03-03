@@ -304,3 +304,17 @@ export type DropElement<N extends number, T extends any[], I extends any[] = []>
     Length<I> extends N ?
         1 : 0
 ];
+
+export type InnerJoinObject<T1 extends object, T2 extends object> = { [P in keyof T1 | keyof T2]: P extends keyof T1 ? T1[P] : P extends keyof T2 ? T2[P] : unknown };
+export type IsEmpty<T extends any[]> =
+    T extends [] ?
+        false : true;
+
+export type MergeObject<T extends object, P extends object[]> = {
+    0: MergeObject<InnerJoinObject<Head<P>, T>, DropElement<1, P>>;
+    1: T;
+}[
+    IsEmpty<P> extends true ?
+        0 :
+        1
+];
