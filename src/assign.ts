@@ -33,5 +33,5 @@ export interface AssignType {
 }
 
 export const assign: AssignType = <any> curry((target: any, source: any, ...sources: any[]) => {
-    return Object.assign(target, source, ...sources);
+    return Object.assign({}, target, source, ...sources);
 });
