@@ -2,6 +2,105 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
+const arrayListDefaultSize = 32;
+/**
+ * arraylist using native array
+ *
+ * like template vector<int>
+ *
+ * const int8arr = new _ArrayList(Int8Array); // ArrayList<Int8>
+ * const int16arr = new _ArrayList(Int16Array); // ArrayList<Int16>
+ * const int32arr = new _ArrayList(Int32Array); // ArrayList<Int32>
+ *
+ * internal only
+ */
+class _ArrayList {
+    /**
+     * native array constructor
+     * support
+     *
+     * Int8Array
+     * Int16Array
+     * Int32Array
+     *
+     * Uint8ClampedArray
+     * Uint8Array
+     * Uint16Array
+     * Uint32Array
+     *
+     * @param ArrayCtor
+     */
+    constructor(ArrayCtor) {
+        const buf = new ArrayBuffer(ArrayCtor.BYTES_PER_ELEMENT * arrayListDefaultSize);
+        this._data = new (ArrayCtor)(buf);
+        this._ctor = ArrayCtor;
+        this._length = 0;
+    }
+    /**
+     * [1,2]
+     * grow(4)
+     * [1,2,0,0] <- new
+     */
+    _grow(size) {
+        const byteSize = this._ctor.BYTES_PER_ELEMENT;
+        const buf = new ArrayBuffer(size * byteSize);
+        const newData = new (this._ctor)(buf);
+        const oldData = this._data;
+        // //copy old elem
+        // for (let i = oldData.length - 1; i >= 0; --i) {
+        //     newData[i] = oldData[i];
+        // }
+        newData.set(oldData);
+        this._data = newData;
+    }
+    add(v) {
+        const len = this._length;
+        if (len === this._data.length) {
+            this._grow(len * 2);
+        }
+        this._data[len] = v;
+        this._length += 1;
+    }
+    /**
+     * get
+     * arr[i]
+     * @param i index
+     */
+    get(i) {
+        return this._data[i];
+    }
+    /**
+     * set
+     * arr[i] = e;
+     * @param i index
+     * @param {T} e elem
+     */
+    set(i, e) {
+        this._data[i] = e;
+    }
+    /**
+     * @returns length
+     */
+    get length() {
+        return this._length;
+    }
+    /**
+     * not really clear
+     * set the length 0 only
+     */
+    clear() {
+        this._length = 0;
+    }
+    *[Symbol.iterator]() {
+        for (let i = 0; i < this._length; ++i) {
+            yield this._data[i];
+        }
+    }
+    toArray() {
+        return this._data.slice(0, this._length);
+    }
+}
+
 /**
  * collection interface
  * like java Queue<T>
@@ -164,43 +263,13 @@ const add = curry((a, b) => a + b);
 
 const asc = (a, b) => a > b ? 1 : a < b ? -1 : 0;
 
-const average = async (iter) => {
-    let c = 0;
-    let sum = 0;
-    for await (const e of iter) {
-        ++c;
-        sum += e;
-    }
-    return sum / c;
-};
+const assign = curry((target, source, ...sources) => {
+    return Object.assign({}, target, source, ...sources);
+});
 
-/**
- * iterable to array
- * and resolve promise elements
- *
- * @example
- * const mapped = F.map(e => e + 1, a);
- * console.log(mapped); // print asyncGenerator
- * const collected = await F.collect(mapped);
- * console.log(collected); //print [2,3,4,5,6]
- *
- * const v = await F.run(
- *   F.range(Infinity),//[0,1,2....]
- *   F.filter(e => (e % 3) === 0), //[0,3,6...]
- *   F.map(e => e + 1), //[1,4,7...]
- *   F.take(5), // generator([1,4,7,10,13])
- *   F.collect);  // generator => array
- * console.log(v); //[1,4,7,10,13]
- *
- * @param iter any iterable
- */
-const collect = async (iter) => {
-    const res = [];
-    for await (const e of iter) {
-        res.push(e);
-    }
-    return res;
-};
+const assignRight = curry((source1, source2, ...sources) => {
+    return Object.assign.call(null, [source1, source2, ...sources].reverse());
+});
 
 /**
  * check
@@ -276,45 +345,56 @@ const _isPrimitive = (a) => {
     }
     return Object(a) !== a;
 };
-
 /**
- * any iterable to array
- * and resolve promise elements
- *
- * @param iter any iter
+ * for not support web browser
  */
-const _collectArray = (iter) => {
-    if (Array.isArray(iter)) {
-        return Promise.all(iter);
+const NodekellBigInt = (typeof BigInt !== "undefined") ? BigInt : {};
+/**
+ * String, Number, BigInt, Boolean, and Symbol.
+ * and wrapper objects
+ * @param a any object
+ */
+const _isPrimitiveWrapper = (a) => {
+    const ctor = a.constructor;
+    switch (ctor) {
+        case Number:
+        case NodekellBigInt:
+        case Boolean:
+        case Symbol:
+        case String:
+            return true;
     }
-    if (_isTypedArray(iter)) {
-        // typed array and string does not require await
-        return iter;
+    return false;
+};
+const mustEvenArguments = (arr) => {
+    if ((arr.length) & 1) {
+        throw new Error("requires an even arguments");
     }
-    if (_isString(iter)) {
-        return Array.from(iter);
-    }
-    if (_isObjectArray(iter)) {
-        return Promise.all(Array.from(iter));
-    }
-    return collect(iter);
 };
 
-const collectMap = async (iter) => new Map((await _collectArray(iter)));
-
-const collectObject = async (iter) => {
-    const c = await _collectArray(iter);
-    const o = {};
-    for (const e of c) {
-        if (!_isPairLike(e)) {
-            throw new TypeError("collectObject value is not pair require [k,v] ");
+const associateBy = curry(async (fn, iter) => {
+    const m = new Map();
+    for await (const e of iter) {
+        const v = await fn(e);
+        if (_isReadableArrayLike(v)) {
+            m.set(v[0], v[1]);
         }
-        o[e[0]] = e[1];
+        else {
+            m.set(v, v);
+        }
     }
-    return o;
-};
+    return m;
+});
 
-const collectSet = async (iter) => new Set((await _collectArray(iter)));
+const average = async (iter) => {
+    let c = 0;
+    let sum = 0;
+    for await (const e of iter) {
+        ++c;
+        sum += e;
+    }
+    return sum / c;
+};
 
 const _seq = async function* (iter) {
     for await (const e of iter) {
@@ -432,6 +512,158 @@ const _fetchAndGetIterator = async (fetchCount, iter, fn) => {
     return g;
 };
 
+/**
+ * Get the value.
+ * If it's a Promise, it gets its value from Promise
+ * Then call the function if the value is a function.
+ * @param v any
+ */
+const _takeValue = async (v) => {
+    v = await v;
+    if (_isFunction(v)) {
+        v = await v();
+    }
+    return v;
+};
+/**
+ * Remove N elements of iterator
+ *
+ * @param iter any iterator
+ * @param count removeCount
+ */
+const _removeIteratorElements = async (iter, count = Infinity) => {
+    if (!iter) {
+        return;
+    }
+    const awaiter = [];
+    for (let i = 0; i < count; ++i) {
+        const e = await iter.next();
+        if (e.done) {
+            break;
+        }
+        awaiter.push(e.value);
+    }
+    return Promise.all(awaiter);
+};
+/**
+ * throw if value is empty IteratorResult
+ *
+ * 1. { done: true }
+ *  => throw
+ *
+ * 2. 1
+ *  => pass
+ *
+ * 3. { value: undefined, done: false }
+ *  => pass
+ *
+ * 4. undefined
+ *  => pass
+ *
+ * @param a any object
+ */
+const _mustNotEmptyIteratorResult = (a) => {
+    if (!a) {
+        throw new Error("error iter result");
+    }
+    if (a.done) {
+        throw new Error("empty iter");
+    }
+};
+
+const block = async (...values) => {
+    values = await Promise.all(values);
+    for (const iter of values) {
+        const it = _toStrictIterator(iter);
+        await _removeIteratorElements(it);
+    }
+};
+
+const buffer = curry(async function* (supply, iter) {
+    supply = await supply;
+    if (supply <= 0) {
+        throw new Error("arg supply > 0 required");
+    }
+    let c = [];
+    for await (const e of iter) {
+        const len = c.push(e);
+        if (len >= supply) {
+            yield c;
+            c = [];
+        }
+    }
+    if (c.length !== 0) {
+        yield c;
+    }
+});
+
+/**
+ * iterable to array
+ * and resolve promise elements
+ *
+ * @example
+ * const mapped = F.map(e => e + 1, a);
+ * console.log(mapped); // print asyncGenerator
+ * const collected = await F.collect(mapped);
+ * console.log(collected); //print [2,3,4,5,6]
+ *
+ * const v = await F.run(
+ *   F.range(Infinity),//[0,1,2....]
+ *   F.filter(e => (e % 3) === 0), //[0,3,6...]
+ *   F.map(e => e + 1), //[1,4,7...]
+ *   F.take(5), // generator([1,4,7,10,13])
+ *   F.collect);  // generator => array
+ * console.log(v); //[1,4,7,10,13]
+ *
+ * @param iter any iterable
+ */
+const collect = async (iter) => {
+    const res = [];
+    for await (const e of iter) {
+        res.push(e);
+    }
+    return res;
+};
+
+/**
+ * any iterable to array
+ * and resolve promise elements
+ *
+ * @param iter any iter
+ */
+const _collectArray = (iter) => {
+    if (Array.isArray(iter)) {
+        return Promise.all(iter);
+    }
+    if (_isTypedArray(iter)) {
+        // typed array and string does not require await
+        return iter;
+    }
+    if (_isString(iter)) {
+        return Array.from(iter);
+    }
+    if (_isObjectArray(iter)) {
+        return Promise.all(Array.from(iter));
+    }
+    return collect(iter);
+};
+
+const collectMap = async (iter) => new Map((await _collectArray(iter)));
+
+const collectObject = async (iter) => {
+    const c = await _collectArray(iter);
+    const o = {};
+    for (const e of c) {
+        if (!_isPairLike(e)) {
+            throw new TypeError("collectObject value is not pair require [k,v] ");
+        }
+        o[e[0]] = e[1];
+    }
+    return o;
+};
+
+const collectSet = async (iter) => new Set((await _collectArray(iter)));
+
 const concat = curry(async function* (a, b) {
     yield* _flatOnce(a);
     yield* _flatOnce(b);
@@ -505,64 +737,229 @@ const identity = (e) => e;
 
 const distinct = (iter) => distinctBy(identity, iter);
 
-/**
- * Get the value.
- * If it's a Promise, it gets its value from Promise
- * Then call the function if the value is a function.
- * @param v any
- */
-const _takeValue = async (v) => {
-    v = await v;
-    if (_isFunction(v)) {
-        v = await v();
+const _headTailArray = async (arr) => {
+    if (arr.length !== 0) {
+        return [await arr[0], arr.slice(1)];
     }
-    return v;
+    throw new Error("empty array");
+};
+const _headTailIterator = async (iter) => {
+    const g = seq(iter);
+    const head = await g.next();
+    _mustNotEmptyIteratorResult(head);
+    return [head.value, g];
 };
 /**
- * Remove N elements of iterator
+ * get head and tail
+ * const [head, tail] = _headTail(iterator);
  *
- * @param iter any iterator
- * @param count removeCount
+ * head = value
+ * tail = generator
+ *
+ * @param iter any iterable
+ * @returns [head, tail]
  */
-const _removeIteratorElements = async (iter, count = Infinity) => {
-    if (!iter) {
-        return;
+const _headTail = (iter) => {
+    if (Array.isArray(iter) || _isTypedArray(iter) || _isString(iter)) {
+        return _headTailArray(iter);
     }
-    const awaiter = [];
-    for (let i = 0; i < count; ++i) {
-        const e = await iter.next();
-        if (e.done) {
-            break;
+    return _headTailIterator(iter);
+};
+
+let _equals;
+const map_internal = (lhs, rhs) => {
+    if (lhs.size !== rhs.size) {
+        return false;
+    }
+    for (const kv of lhs) {
+        if (!rhs.has(kv[0])) {
+            return false;
         }
-        awaiter.push(e.value);
+        if (!_equals(rhs.get(kv[0]), kv[1])) {
+            return false;
+        }
     }
-    return Promise.all(awaiter);
+    return true;
 };
-/**
- * throw if value is empty IteratorResult
- *
- * 1. { done: true }
- *  => throw
- *
- * 2. 1
- *  => pass
- *
- * 3. { value: undefined, done: false }
- *  => pass
- *
- * 4. undefined
- *  => pass
- *
- * @param a any object
- */
-const _mustNotEmptyIteratorResult = (a) => {
-    if (!a) {
-        throw new Error("error iter result");
+const set_internal = (lhs, rhs) => {
+    if (lhs.size !== rhs.size) {
+        return false;
     }
-    if (a.done) {
-        throw new Error("empty iter");
+    for (const e of lhs) {
+        if (!rhs.has(e)) {
+            return false;
+        }
     }
+    return true;
 };
+const regExp_internal = (lhs, rhs) => {
+    if (lhs.sticky !== rhs.sticky) {
+        return false;
+    }
+    if (lhs.unicode !== rhs.unicode) {
+        return false;
+    }
+    if (lhs.ignoreCase !== rhs.ignoreCase) {
+        return false;
+    }
+    if (lhs.global !== rhs.global) {
+        return false;
+    }
+    if (lhs.multiline !== rhs.multiline) {
+        return false;
+    }
+    if (lhs.source !== rhs.source) {
+        return false;
+    }
+    return true;
+};
+const typedArray_internal = (lhs, rhs) => {
+    const len = lhs.length;
+    if (len !== rhs.length) {
+        return false;
+    }
+    for (let i = len - 1; i >= 0; --i) {
+        // ignore this eslint duplicate warn
+        if (lhs[i] !== rhs[i]) {
+            return false;
+        }
+    }
+    return true;
+};
+const array_internal = (lhs, rhs) => {
+    const len = lhs.length;
+    if (len !== rhs.length) {
+        return false;
+    }
+    for (let i = len - 1; i >= 0; --i) {
+        // ignore this eslint duplicate warn
+        if (!_equals(lhs[i], rhs[i])) {
+            return false;
+        }
+    }
+    return true;
+};
+const object_internal = (lhs, rhs) => {
+    const kvl = Object.entries(lhs);
+    if (kvl.length !== Object.keys(rhs).length) {
+        return false;
+    }
+    for (const [k, v] of kvl) {
+        if (!rhs.hasOwnProperty(k)) {
+            return false;
+        }
+        if (!_equals(v, rhs[k])) {
+            return false;
+        }
+    }
+    return true;
+};
+const toPrimitive_call_internal = (a, toPrimitiveFunc, hint) => {
+    try {
+        const n = toPrimitiveFunc.call(a, hint);
+        if (n !== null && n !== undefinedValue) {
+            return n;
+        }
+    }
+    catch (_) {
+        // ignore
+    }
+    // return undefined
+};
+const toPrimitiveHints = ["number", "string", "default"];
+const toPrimitive_internal = (a) => {
+    const c = a[Symbol.toPrimitive];
+    if (c) {
+        for (const hint of toPrimitiveHints) {
+            const e = toPrimitive_call_internal(a, c, hint);
+            if (e !== undefinedValue) {
+                return e;
+            }
+        }
+    }
+    // return undefined;
+};
+const toString_internal = (a) => ((Object.prototype.toString.call)(a));
+_equals = curry((lhs, rhs) => {
+    if (lhs === rhs) {
+        // undefined === undefined => true
+        // null === null => true
+        // 0 === 0 => true
+        // Primitive types
+        return true;
+    }
+    if (lhs === underBar || rhs === underBar) {
+        // for pattern matching
+        return true;
+    }
+    if (lhs && rhs) {
+        if (lhs.constructor !== rhs.constructor) {
+            return false;
+        }
+        if (_isPrimitiveWrapper(lhs)) {
+            return lhs.valueOf() === rhs.valueOf();
+        }
+        const lp = toPrimitive_internal(lhs);
+        if (lp) {
+            return lp === toPrimitive_internal(rhs);
+        }
+        if (lhs.valueOf() === rhs.valueOf()) {
+            // extends PrimitiveWrapper
+            return true;
+        }
+        if (lhs instanceof Array) {
+            return array_internal(lhs, rhs);
+        }
+        if (_isTypedArray(lhs)) {
+            return typedArray_internal(lhs, rhs);
+        }
+        if (_isObjectArray(lhs)) {
+            return array_internal(lhs, rhs);
+        }
+        if (lhs instanceof Map) {
+            return map_internal(lhs, rhs);
+        }
+        if (lhs instanceof Set) {
+            return set_internal(lhs, rhs);
+        }
+        if (lhs instanceof RegExp) {
+            return regExp_internal(lhs, rhs);
+        }
+        if (lhs instanceof Promise ||
+            _isFunction(lhs)) {
+            // :(
+            return false;
+        }
+        if (toString_internal(lhs) !== toString_internal(rhs)) {
+            return false;
+        }
+        return object_internal(lhs, rhs);
+    }
+    else {
+        // NaN === NaN => false
+        if (Number.isNaN(lhs) && Number.isNaN(rhs)) {
+            return true;
+        }
+    }
+    return false;
+});
+const equals = _equals;
+
+const distinctUntilChangedBy = curry(async function* (f, iter) {
+    const [h, g] = await _headTail(iter);
+    let head = h;
+    yield head;
+    head = await f(head);
+    for await (const e of g) {
+        const v = await f(e);
+        if (!equals(head, v)) {
+            head = v;
+            yield e;
+        }
+    }
+});
+
+const distinctUntilChanged = distinctUntilChangedBy(identity);
 
 const drop = curry(async function* (count, iter) {
     const g = seq(iter);
@@ -597,6 +994,22 @@ const dropWhile = curry(async function* (f, iter) {
     }
     yield* g;
 });
+
+const emptyThen = curry(async function* (supply, iter) {
+    for await (const e of iter) {
+        yield e;
+        yield* iter;
+        return;
+    }
+    yield* _flatOnce(_takeValue(supply));
+});
+
+const enumerate = async function* (iter) {
+    let i = 0;
+    for await (const e of iter) {
+        yield [i++, e];
+    }
+};
 
 const every = curry(async (f, iter) => {
     for await (const e of iter) {
@@ -651,6 +1064,8 @@ const findLast = curry(async (fn, iter) => {
     // return undefined;
 });
 
+const first = (a) => a[0];
+
 const flat = async function* (iter) {
     for await (const e of iter) {
         yield* _flatOnce(e);
@@ -693,35 +1108,6 @@ const foldl = curry(async (f, z, iter) => {
     }
     return z;
 });
-
-const _headTailArray = async (arr) => {
-    if (arr.length !== 0) {
-        return [await arr[0], arr.slice(1)];
-    }
-    throw new Error("empty array");
-};
-const _headTailIterator = async (iter) => {
-    const g = seq(iter);
-    const head = await g.next();
-    _mustNotEmptyIteratorResult(head);
-    return [head.value, g];
-};
-/**
- * get head and tail
- * const [head, tail] = _headTail(iterator);
- *
- * head = value
- * tail = generator
- *
- * @param iter any iterable
- * @returns [head, tail]
- */
-const _headTail = (iter) => {
-    if (Array.isArray(iter) || _isTypedArray(iter) || _isString(iter)) {
-        return _headTailArray(iter);
-    }
-    return _headTailIterator(iter);
-};
 
 /**
  * take 1 items and call foldl
@@ -966,6 +1352,28 @@ const iterate = curry(async function* (fn, v) {
     }
 });
 
+const juxtA = curry(async (af, iter) => {
+    af = await (_collectArray(af));
+    const len = af.length;
+    const g = seq(iter);
+    const r = [];
+    r.length = len;
+    const firstElem = await g.next();
+    if (firstElem.done) {
+        // empty [undefined, undefined]
+        return r;
+    }
+    r.fill(firstElem.value);
+    //   same
+    //   foldl(async (acc, e) => {
+    //     for (let i = 0; i < len; ++i) {
+    //         acc[i] = af[i](acc[i], e);
+    //         return Promise.all(acc);
+    //     }
+    //  }, r, g);
+    return foldl((acc, e) => forEachIndexed((i, x) => af[i](x, e), acc), r, g);
+});
+
 const juxtO = curry(async (ap, obj) => {
     const r = [];
     for await (const k of ap) {
@@ -1010,6 +1418,19 @@ const mapIndexed = curry(async function* (fn, iter) {
     }
 });
 
+const match = (value, ...cv) => {
+    mustEvenArguments(cv);
+    for (let i = 0; i < cv.length; i += 2) {
+        if (equals(value, cv[i])) {
+            if (_isFunction(cv[i + 1])) {
+                return cv[i + 1](value);
+            }
+            return cv[i + 1];
+        }
+    }
+    // return undefined;
+};
+
 const maxBy = curry(async (f, iter) => {
     const h = await _headTail(iter);
     let m = h[0];
@@ -1025,6 +1446,24 @@ const maxBy = curry(async (f, iter) => {
 });
 
 const max = maxBy(identity);
+
+const memoizeBy = curry((keyFn, callFn) => {
+    const cache = {};
+    return async (...arg) => {
+        let r;
+        const key = await keyFn(...arg);
+        if (!(key in cache)) {
+            r = await callFn(...arg);
+            cache[key] = r;
+        }
+        else {
+            r = cache[key];
+        }
+        return r;
+    };
+});
+
+const memoize = memoizeBy((...a) => a);
 
 const minBy = curry(async (f, iter) => {
     const h = await _headTail(iter);
@@ -1386,6 +1825,10 @@ const some = curry(async (f, iter) => {
     return false;
 });
 
+const splitBy = curry(async function* (f, v) {
+    yield* await f(v);
+});
+
 const sub = curry((a, b) => a - b);
 
 const sum = foldl1(add);
@@ -1432,6 +1875,8 @@ const tap = curry(async (f, arg) => {
     return arg;
 });
 
+const then = curry((f, arg) => f(arg));
+
 const timeout = curry(async (duration, a) => {
     duration = await getDuration(duration);
     const s = errorSleep(duration);
@@ -1446,13 +1891,34 @@ const timeout = curry(async (duration, a) => {
 
 const union = concat;
 
+const updateAt = curry(async function* (value, index, iter) {
+    let i = 0;
+    const g = seq(iter);
+    for await (const e of g) {
+        if (i++ === index) {
+            yield value;
+            yield* g;
+            return;
+        }
+        else {
+            yield e;
+        }
+    }
+});
+
 const values = _arrayElementIterator(1, (e) => { throw new Error(`values / ${e} is not array`); });
 
 exports._ = _;
+exports._ArrayList = _ArrayList;
 exports._Queue = _Queue;
 exports.add = add;
 exports.asc = asc;
+exports.assign = assign;
+exports.assignRight = assignRight;
+exports.associateBy = associateBy;
 exports.average = average;
+exports.block = block;
+exports.buffer = buffer;
 exports.collect = collect;
 exports.collectMap = collectMap;
 exports.collectObject = collectObject;
@@ -1464,15 +1930,21 @@ exports.dec = dec;
 exports.dflat = dflat;
 exports.distinct = distinct;
 exports.distinctBy = distinctBy;
+exports.distinctUntilChanged = distinctUntilChanged;
+exports.distinctUntilChangedBy = distinctUntilChangedBy;
 exports.drop = drop;
 exports.dropLast = dropLast;
 exports.dropWhile = dropWhile;
+exports.emptyThen = emptyThen;
+exports.enumerate = enumerate;
+exports.equals = equals;
 exports.every = every;
 exports.filter = filter;
 exports.filterIndexed = filterIndexed;
 exports.filterNot = filterNot;
 exports.find = find;
 exports.findLast = findLast;
+exports.first = first;
 exports.flat = flat;
 exports.flatMap = flatMap;
 exports.fmap = fmap;
@@ -1492,12 +1964,16 @@ exports.inc = inc;
 exports.isNil = isNil;
 exports.isPrimitive = isPrimitive;
 exports.iterate = iterate;
+exports.juxtA = juxtA;
 exports.juxtO = juxtO;
 exports.keys = keys;
 exports.map = map;
 exports.mapIndexed = mapIndexed;
+exports.match = match;
 exports.max = max;
 exports.maxBy = maxBy;
+exports.memoize = memoize;
+exports.memoizeBy = memoizeBy;
 exports.min = min;
 exports.minBy = minBy;
 exports.prop = prop;
@@ -1521,6 +1997,7 @@ exports.seq = seq;
 exports.shuffle = shuffle;
 exports.sleep = sleep;
 exports.some = some;
+exports.splitBy = splitBy;
 exports.sub = sub;
 exports.sum = sum;
 exports.tail = tail;
@@ -1528,7 +2005,9 @@ exports.take = take;
 exports.takeLast = takeLast;
 exports.takeWhile = takeWhile;
 exports.tap = tap;
+exports.then = then;
 exports.timeout = timeout;
 exports.underBar = underBar;
 exports.union = union;
+exports.updateAt = updateAt;
 exports.values = values;
