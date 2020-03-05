@@ -8,7 +8,7 @@ export interface CollectUInt16Type {
      * if the element is not a number, 0 is assigned
      * @example
      * const arr = [1,2,3,4];
-     * const c = await F.collectUint8(arr);
+     * const c = await F.collectUint16(arr);
      * console.log(c);
      * //print Uint16Array [ 1, 2, 3, 4 ]
      * @param iter iterator or async iterator
