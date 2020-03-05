@@ -11,6 +11,7 @@ export * from "./average";
 export * from "./block";
 export * from "./buffer";
 export * from "./collect";
+export * from "./collectInt8";
 export * from "./collectMap";
 export * from "./collectObject";
 export * from "./collectSet";
