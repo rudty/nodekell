@@ -10,7 +10,7 @@ export interface CollectInt16Type {
      * const arr = [1,2,3,4];
      * const c = await F.collectInt16(arr);
      * console.log(c);
-     * //print Int8Array [ 1, 2, 3, 4 ]
+     * //print Int16Array [ 1, 2, 3, 4 ]
      * @param iter iterator or async iterator
      */
     (iter: Iter<number | Promise<number>>): Promise<Int16Array>;
