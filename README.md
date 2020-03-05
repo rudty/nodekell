@@ -1751,7 +1751,7 @@ see also [collect](#collect)
 const arr = [1,2,3,4];
 const c = await F.collectUint8Clamped(arr);
 console.log(c); 
-//print Uint32Array [ 1, 2, 3, 4 ]
+//print Uint8ClampedArray [ 1, 2, 3, 4 ]
 ```
 
 
