@@ -318,3 +318,10 @@ export type MergeObject<T extends object, P extends object[]> = {
         0 :
         1
 ];
+
+export type PairRepeat<N extends number, T, Y, I extends any[] = []> = {
+    0: PairRepeat<N, T, Y, Prepend<T, Prepend<Y, I>>>;
+    1: I;
+}[
+    Length<I> extends N ? 1 : 0
+];

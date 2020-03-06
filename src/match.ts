@@ -1,5 +1,5 @@
 import { equals } from "./equals";
-import { Prepend, DropElement, Length, _isFunction, mustEvenArguments, Flat, Head, Second } from "./internal/typeTraits";
+import { Prepend, DropElement, Length, _isFunction, mustEvenArguments, Flat, Head, Second, PairRepeat } from "./internal/typeTraits";
 
 export type ReturnTypeIfFunction<T> = T extends (...args: any) => any ? ReturnType<T> : T;
 /**
@@ -14,13 +14,6 @@ export type ReturnTypePickElements<N extends 0 | 1, T extends any[], I extends a
     Length<T> extends 0 ?
         N extends 0 ?
             1 : 2 : 0
-];
-
-export type PairRepeat<N extends number, T, Y, I extends any[] = []> = {
-    0: PairRepeat<N, T, Y, Prepend<T, Prepend<Y, I>>>;
-    1: I;
-}[
-    Length<I> extends N ? 1 : 0
 ];
 
 export interface MatchType {
