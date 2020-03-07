@@ -626,6 +626,28 @@ const collect = async (iter) => {
 };
 
 /**
+ * Int32Array.from does not support async generator
+ *
+ * collect<T>
+ * native number
+ *
+ * @param ctor native array constructor
+ */
+const _collectNativeArray = (ctor) => async (iter) => {
+    const arr = new _ArrayList(ctor);
+    for await (const e of iter) {
+        arr.add(e);
+    }
+    return arr.toArray();
+};
+
+const collectInt16 = _collectNativeArray(Int16Array);
+
+const collectInt32 = _collectNativeArray(Int32Array);
+
+const collectInt8 = _collectNativeArray(Int8Array);
+
+/**
  * any iterable to array
  * and resolve promise elements
  *
@@ -664,9 +686,36 @@ const collectObject = async (iter) => {
 
 const collectSet = async (iter) => new Set((await _collectArray(iter)));
 
+const collectUint16 = _collectNativeArray(Uint16Array);
+
+const collectUint32 = _collectNativeArray(Uint32Array);
+
+const collectUint8 = _collectNativeArray(Uint8Array);
+
+const collectUint8Clamped = _collectNativeArray(Uint8ClampedArray);
+
+const compose = (...fns) => async (...args) => {
+    const len = fns.length;
+    let z = await fns[len - 1](...args);
+    for (let i = len - 2; i >= 0; --i) {
+        z = await fns[i](z);
+    }
+    return z;
+};
+
 const concat = curry(async function* (a, b) {
     yield* _flatOnce(a);
     yield* _flatOnce(b);
+});
+
+const cond = (async (...cv) => {
+    mustEvenArguments(cv);
+    for (let i = 0; i < cv.length; i += 2) {
+        if (await cv[i]) {
+            return cv[i + 1];
+        }
+    }
+    // return undefined
 });
 
 const count = async (iter) => {
@@ -1481,6 +1530,17 @@ const minBy = curry(async (f, iter) => {
 
 const min = minBy(identity);
 
+/**
+ * if (F.otherwise) {
+ *  // work
+ * }
+ *
+ * if (F.otherwise()) {
+ *  // work
+ * }
+ */
+const otherwise = (() => true);
+
 const propOrElse = curry((key, defaultValue, target) => {
     const r = prop(key, target);
     if (r === undefinedValue) {
@@ -1920,10 +1980,19 @@ exports.average = average;
 exports.block = block;
 exports.buffer = buffer;
 exports.collect = collect;
+exports.collectInt16 = collectInt16;
+exports.collectInt32 = collectInt32;
+exports.collectInt8 = collectInt8;
 exports.collectMap = collectMap;
 exports.collectObject = collectObject;
 exports.collectSet = collectSet;
+exports.collectUint16 = collectUint16;
+exports.collectUint32 = collectUint32;
+exports.collectUint8 = collectUint8;
+exports.collectUint8Clamped = collectUint8Clamped;
+exports.compose = compose;
 exports.concat = concat;
+exports.cond = cond;
 exports.count = count;
 exports.curry = curry;
 exports.dec = dec;
@@ -1976,6 +2045,7 @@ exports.memoize = memoize;
 exports.memoizeBy = memoizeBy;
 exports.min = min;
 exports.minBy = minBy;
+exports.otherwise = otherwise;
 exports.prop = prop;
 exports.propOrElse = propOrElse;
 exports.random = random;
