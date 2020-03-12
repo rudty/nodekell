@@ -12,10 +12,10 @@ export interface MergeObjectType {
      * If the key exists, the value on the right is used.
      *
      * @example
-     *      const m1 = new Map([[1, 2], [3, 4]]);
-     *      const o1 = { 5: 6, 7: 8 };
-     *      const r1 = await F.mergeObject(m1, o1);
-     *      console.log(r1); // print { '1': 2, '3': 4, '5': 6, '7': 8 }
+     * const m1 = new Map([[1, 2], [3, 4]]);
+     * const o1 = { 5: 6, 7: 8 };
+     * const r1 = await F.mergeObject(m1, o1);
+     * console.log(r1); // print { '1': 2, '3': 4, '5': 6, '7': 8 }
      */
     (source1: Iter<[any, any]> | object, source2: Iter<[any, any]> | object, ...sources: (Iter<[any, any]> | object)[]): Promise<any>;
     (source1: Iter<[any, any]> | object): (source2: Iter<[any, any]> | object, ...sources: (Iter<[any, any]> | object)[]) => Promise<any>;
