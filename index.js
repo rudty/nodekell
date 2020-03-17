@@ -512,6 +512,26 @@ const _fetchAndGetIterator = async (fetchCount, iter, fn) => {
     return g;
 };
 
+const parallel_default_fetch_count = 100;
+let parallel_global_fetch_count = parallel_default_fetch_count;
+/**
+ * Iterator and AsyncIterator don't calculate until the value is fetched
+ * take it {count} the effect of calculating in parallel.
+ *
+ * not parallel functions: Promise -> execute -> Promise -> execute
+ *
+ * parallel functions: Promise -> Promise -> Promise... (execute all)
+ *
+ * @param count take count
+ */
+const parallel_set_fetch_count_internal = (count) => {
+    count = Number(count);
+    if (count <= 0) {
+        throw new Error("parallel_fetch_count > 0 required");
+    }
+    parallel_global_fetch_count = count || parallel_default_fetch_count;
+};
+const parallel_get_fetch_count_internal = () => parallel_global_fetch_count;
 /**
  * Get the value.
  * If it's a Promise, it gets its value from Promise
@@ -694,6 +714,47 @@ const collectUint8 = _collectNativeArray(Uint8Array);
 
 const collectUint8Clamped = _collectNativeArray(Uint8ClampedArray);
 
+/**
+ *  if (a) {
+ *      //less
+ *      return -1;
+ *  } else {
+ *      //equal
+ *      return 0;
+ *  }
+ * @param {Boolean} a
+ */
+const lessOrEqual = (a) => a ? -1 : 0;
+const _compareRhs = (fn, a, b) => {
+    const ab = fn(a, b);
+    if (ab instanceof Promise) {
+        return ab.then(lessOrEqual);
+    }
+    return lessOrEqual(ab);
+};
+const _compareLhsOrRhs = (fn, a, b) => (r) => {
+    if (r) {
+        return 1;
+    }
+    return _compareRhs(fn, a, b);
+};
+const _comparator = (fn, a, b) => {
+    const ba = fn(b, a);
+    if (ba instanceof Promise) {
+        return ba.then(_compareLhsOrRhs(fn, a, b));
+    }
+    return _compareLhsOrRhs(fn, a, b)(ba);
+};
+const _comparatorAsync = async (fn, a, b) => {
+    return _comparator(fn, (await a), (await b));
+};
+const comparator = curry((fn, a, b) => {
+    if (a instanceof Promise || b instanceof Promise) {
+        return _comparatorAsync(fn, a, b);
+    }
+    return _comparator(fn, a, b);
+});
+
 const compose = (...fns) => async (...args) => {
     const len = fns.length;
     let z = await fns[len - 1](...args);
@@ -752,6 +813,8 @@ const count = async (iter) => {
  * @returns a - 1
  */
 const dec = (a) => a - 1;
+
+const desc = (a, b) => a < b ? 1 : a > b ? -1 : 0;
 
 const dflat = async function* (...iters) {
     for await (const it of iters) {
@@ -1514,6 +1577,38 @@ const memoizeBy = curry((keyFn, callFn) => {
 
 const memoize = memoizeBy((...a) => a);
 
+/**
+ * combination left to right functions
+ * first arguments received second functions argument
+ * from second received combine functions
+ * returns promise
+ *
+ * **Note**
+ * - originally allow Promise wrapped functions. but that is complicated. so don't support Promise wrapped functions type.
+ * - please use functions length 20 or less
+ *
+ * @example
+ * let a = [1,2,3,4,5];
+ * let r = await F.run(a,
+ *          F.map(e => e + 1), // a = [2,3,4,5,6]
+ *          F.filter(e => e < 4), // a = [2,3]
+ *          F.take(Infinity),
+ *          F.collect);
+ * console.log(r); // print [2,3]
+ *
+ * @param iter any iterator
+ * @param f combination functions
+ */
+const run = (iter, ...f) => foldl((z, fn) => fn(z), iter, f);
+
+const mergeMap = curry(async (source1, source2, ...sources) => run([source1, source2, ...sources], map(_toIterator), flat, collectMap));
+
+const mergeMapRight = curry((source1, source2, ...sources) => mergeMap.apply(null, [source1, source2, ...sources].reverse()));
+
+const mergeObject = curry(async (source1, source2, ...sources) => run([source1, source2, ...sources], map(_toIterator), flat, collectObject));
+
+const mergeObjectRight = curry((source1, source2, ...sources) => mergeObject.apply(null, [source1, source2, ...sources].reverse()));
+
 const minBy = curry(async (f, iter) => {
     const h = await _headTail(iter);
     let m = h[0];
@@ -1540,6 +1635,46 @@ const min = minBy(identity);
  * }
  */
 const otherwise = (() => true);
+
+const parallel_set_fetch_count = (count) => parallel_set_fetch_count_internal(count);
+
+const peek = curry(async function* (f, iter) {
+    for await (const e of iter) {
+        await f(e);
+        yield e;
+    }
+});
+
+const _fetchMapInternal = (f, fn, iter) => {
+    const fetchCount = parallel_get_fetch_count_internal() - 1;
+    return _fetchAndGetIterator(fetchCount, iter, (e) => f.add(fn(e)));
+};
+
+const pfmap = curry(async function* (fn, iter) {
+    const f = new _Queue();
+    const g = await _fetchMapInternal(f, fn, iter);
+    for await (const e of g) {
+        f.add(fn(e));
+        yield* await f.poll();
+    }
+    while (!f.isEmpty()) {
+        yield* await f.poll();
+    }
+});
+
+const pflatMap = pfmap;
+
+const pipe = (f, ...fns) => (...args) => foldl((z, fn) => fn(z), f(...args), fns);
+
+const pmap = curry(async function* (fn, iter) {
+    const f = new _Queue();
+    const g = await _fetchMapInternal(f, fn, iter);
+    for await (const e of g) {
+        f.add(fn(e));
+        yield f.poll();
+    }
+    yield* f.removeIterator();
+});
 
 const propOrElse = curry((key, defaultValue, target) => {
     const r = prop(key, target);
@@ -1745,6 +1880,29 @@ const reFindAllSubmatch = curry((re, str) => {
  */
 const reduce = foldl1;
 
+const _removeFirstFunction = async function* (comp, iter) {
+    const g = seq(iter);
+    for await (const e of g) {
+        if (await comp(e)) {
+            yield* g;
+            return;
+        }
+        else {
+            yield e;
+        }
+    }
+};
+const removeFirst = curry(async function* (x, iter) {
+    x = await x;
+    if (_isFunction(x)) {
+        yield* _removeFirstFunction(x, iter);
+    }
+    else {
+        const compareFunction = equals(x);
+        yield* _removeFirstFunction(compareFunction, iter);
+    }
+});
+
 /**
  * arity 1 : [Infinity, arg1]
  * arity 2 : [arg1, arg2]
@@ -1791,30 +1949,6 @@ const reverse = async function* (iter) {
         yield a[i];
     }
 };
-
-/**
- * combination left to right functions
- * first arguments received second functions argument
- * from second received combine functions
- * returns promise
- *
- * **Note**
- * - originally allow Promise wrapped functions. but that is complicated. so don't support Promise wrapped functions type.
- * - please use functions length 20 or less
- *
- * @example
- * let a = [1,2,3,4,5];
- * let r = await F.run(a,
- *          F.map(e => e + 1), // a = [2,3,4,5,6]
- *          F.filter(e => e < 4), // a = [2,3]
- *          F.take(Infinity),
- *          F.collect);
- * console.log(r); // print [2,3]
- *
- * @param iter any iterator
- * @param f combination functions
- */
-const run = (iter, ...f) => foldl((z, fn) => fn(z), iter, f);
 
 const _sampleArray = (arr) => arr[random(arr.length)];
 const _sampleNotArray = async (iter) => {
@@ -1990,12 +2124,14 @@ exports.collectUint16 = collectUint16;
 exports.collectUint32 = collectUint32;
 exports.collectUint8 = collectUint8;
 exports.collectUint8Clamped = collectUint8Clamped;
+exports.comparator = comparator;
 exports.compose = compose;
 exports.concat = concat;
 exports.cond = cond;
 exports.count = count;
 exports.curry = curry;
 exports.dec = dec;
+exports.desc = desc;
 exports.dflat = dflat;
 exports.distinct = distinct;
 exports.distinctBy = distinctBy;
@@ -2043,9 +2179,19 @@ exports.max = max;
 exports.maxBy = maxBy;
 exports.memoize = memoize;
 exports.memoizeBy = memoizeBy;
+exports.mergeMap = mergeMap;
+exports.mergeMapRight = mergeMapRight;
+exports.mergeObject = mergeObject;
+exports.mergeObjectRight = mergeObjectRight;
 exports.min = min;
 exports.minBy = minBy;
 exports.otherwise = otherwise;
+exports.parallel_set_fetch_count = parallel_set_fetch_count;
+exports.peek = peek;
+exports.pflatMap = pflatMap;
+exports.pfmap = pfmap;
+exports.pipe = pipe;
+exports.pmap = pmap;
 exports.prop = prop;
 exports.propOrElse = propOrElse;
 exports.random = random;
@@ -2056,6 +2202,7 @@ exports.reFindAll = reFindAll;
 exports.reFindAllSubmatch = reFindAllSubmatch;
 exports.reFindSubmatch = reFindSubmatch;
 exports.reduce = reduce;
+exports.removeFirst = removeFirst;
 exports.repeat = repeat;
 exports.reverse = reverse;
 exports.run = run;
