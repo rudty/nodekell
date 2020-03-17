@@ -1,13 +1,8 @@
 import { curry } from "./curry";
-import * as P from "./internal/runtime";
 import { _Queue } from "./Queue";
 import { _fetchAndGetIterator } from "./internal/iterable";
-import { Iter, FlatForInternalFn, ExtractPromise, _Func1, _FlatFunc1 } from "./internal/typeTraits";
-
-const fetch_map_internal = (f: any, fn: any, iter: any) => {
-    const fetchCount = P.parallel_get_fetch_count_internal() - 1;
-    return _fetchAndGetIterator(fetchCount, iter, (e) => f.add(fn(e)));
-};
+import { Iter, ExtractPromise, _Func1, _FlatFunc1 } from "./internal/typeTraits";
+import { _fetchMapInternal } from "./internal/parallelFetch";
 
 export interface PMapType {
     /**
@@ -44,7 +39,7 @@ export interface PMapType {
 
 export const pmap: PMapType = curry(async function *(fn: any, iter: any) {
     const f = new _Queue();
-    const g = await fetch_map_internal(f, fn, iter);
+    const g = await _fetchMapInternal(f, fn, iter);
 
     for await (const e of g) {
         f.add(fn(e));
