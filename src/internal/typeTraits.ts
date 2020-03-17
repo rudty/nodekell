@@ -227,6 +227,8 @@ export type _IndexedFlatFunc1<T, R> = (idx: number, elem: FlatForInternalFn<T>) 
 // zip
 export type _Func2<T, U, R> = (elem1: T, elem2: U) => (R | Promise<R>);
 export type _FlatFunc2<T, U, R> = (elem1: FlatForInternalFn<T>, elem2: FlatForInternalFn<U>) => (R | Promise<R>);
+export type _Func3<T, U, V, R> = (elem1: T, elem2: U, elem3: V) => (R | Promise<R>);
+export type _FlatFunc3<T, U, V, R> = (elem1: FlatForInternalFn<T>, elem2: FlatForInternalFn<U>, elem3: FlatForInternalFn<V>) => (R | Promise<R>);
 
 // fold
 export type _BiFunction<T, U> = (acc: U, elem: T) => (U | Promise<U>);
