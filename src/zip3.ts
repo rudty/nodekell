@@ -28,4 +28,5 @@ export interface Zip3FunctionType {
     <T, Y, Z>(iter1: Iter<T | Promise<T>>, iter2: Iter<Y | Promise<Y>>): (iter3: Iter<Z | Promise<Z>>) => AsyncIterableIterator<[T, Y, Z]>;
     <T, Y, Z>(iter1: Iter<T | Promise<T>>): CurriedFunction2<Iter<Y | Promise<Y>>, Iter<Z | Promise<Z>>, AsyncIterableIterator<[T, Y, Z]>>;
 }
+
 export const zip3 = curry((iter1: any, iter2: any, iter3: any) => zipWith3((elem1, elem2, elem3) => [elem1, elem2, elem3], iter1, iter2, iter3));
