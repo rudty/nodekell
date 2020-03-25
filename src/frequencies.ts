@@ -4,7 +4,7 @@ import { Iter, FlatForInternalFn } from "./internal/typeTraits";
 
 export interface FrequenciesType {
     /**
-     * returns a Map. keys are the items that remove duplicates value is the number of times key 
+     * returns a Map. keys are the items that remove duplicates value is the number of times key
      * @example
      * const arr = [1,1,2,3,4,5,5];
      * const r = await F.frequencies(arr);

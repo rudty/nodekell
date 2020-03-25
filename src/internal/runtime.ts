@@ -106,3 +106,11 @@ export const _mustNotEmptyIteratorResult = (a: any) => {
         throw new Error("empty iter");
     }
 };
+
+export const _foldrInternal = async (f: (a: any, b: any) => any, z: any, iter: Iter<any>) => {
+    z = await z;
+    for await (const e of iter) {
+        z = await f(e, z);
+    }
+    return z;
+};
