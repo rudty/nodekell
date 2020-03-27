@@ -566,6 +566,25 @@ const _removeIteratorElements = async (iter, count = Infinity) => {
     return Promise.all(awaiter);
 };
 /**
+ * zip elements
+ *  arr = [[1,2,3],[4,5,6]]
+ *  result => [[1,4],[2,5],[3,6]]
+ *
+ * @param f zipFunction
+ * @param arr zipArray
+ */
+const _zipWith = async function* (f, arr) {
+    while (true) {
+        const elems = await Promise.all(arr.map((e) => e.next()));
+        for (const e of elems) {
+            if (e.done) {
+                return;
+            }
+        }
+        yield f.apply(null, elems.map((e) => e.value));
+    }
+};
+/**
  * throw if value is empty IteratorResult
  *
  * 1. { done: true }
@@ -589,6 +608,13 @@ const _mustNotEmptyIteratorResult = (a) => {
     if (a.done) {
         throw new Error("empty iter");
     }
+};
+const _foldrInternal = async (f, z, iter) => {
+    z = await z;
+    for await (const e of iter) {
+        z = await f(e, z);
+    }
+    return z;
 };
 
 const block = async (...values) => {
@@ -1238,6 +1264,31 @@ const foldl1 = curry(async (f, iter) => {
 });
 
 /**
+ * reverse iterator
+ * @example
+ * const a = [1,2,3,4,5];
+ * const t = F.reverse(a);
+ * console.log(await F.collect(t)); // print 5,4,3,2,1
+ * @param iter any iterator
+ */
+const reverse = async function* (iter) {
+    const a = await _collectArray(iter);
+    for (let i = a.length - 1; i >= 0; i -= 1) {
+        yield a[i];
+    }
+};
+
+const foldr = curry((f, z, iter) => {
+    return _foldrInternal(f, z, reverse(iter));
+});
+
+const foldr1 = curry(async (f, iter) => {
+    const r = reverse(iter);
+    const [head, tail] = await _headTail(r);
+    return _foldrInternal(f, head, tail);
+});
+
+/**
  * works concurrency
  *
  * @example
@@ -1293,6 +1344,18 @@ const forEachIndexed = curry(async (f, iter) => {
     }
     return Promise.all(wait);
 });
+
+const frequenciesBy = curry(async (fn, iter) => {
+    const m = new Map();
+    for await (const v of iter) {
+        const e = await fn(v);
+        const cnt = (m.get(e) || 0) + 1;
+        m.set(e, cnt);
+    }
+    return m;
+});
+
+const frequencies = frequenciesBy(identity);
 
 /**
  * get the properties of that object.
@@ -1441,6 +1504,45 @@ const head = async (iter) => {
  * @returns a + 1
  */
 const inc = (a) => a + 1;
+
+const insertAt = curry(async function* (value, index, iter) {
+    let i = 0;
+    for await (const e of iter) {
+        if (i++ === index) {
+            yield* _flatOnce(value);
+        }
+        yield e;
+    }
+    if (i <= index) {
+        yield* _flatOnce(value);
+    }
+});
+
+const sleep = (t) => new Promise((r) => {
+    setTimeout(r, t);
+});
+
+const interval = (timeout, timerHandler, ...param) => {
+    timeout = Number(timeout);
+    if (Number.isNaN(timeout) && timeout < 1) {
+        timeout = 1;
+    }
+    const k = { run: true };
+    const recur = async () => {
+        const s = sleep(timeout);
+        try {
+            await timerHandler(...param);
+        }
+        catch (_) {
+            // ignore
+        }
+        if (k.run) {
+            s.then(recur);
+        }
+    };
+    recur();
+    return k;
+};
 
 const isNil = (v) => {
     if (v) {
@@ -1807,10 +1909,6 @@ const errorSleep = (t) => new Promise((_, reject) => {
     }, t);
 });
 
-const sleep = (t) => new Promise((r) => {
-    setTimeout(r, t);
-});
-
 const rangeInterval = async function* (duration, ...k) {
     duration = await getDuration(duration);
     await sleep(duration);
@@ -1935,21 +2033,6 @@ const repeat = async function* (a, ...b) {
     }
 };
 
-/**
- * reverse iterator
- * @example
- * const a = [1,2,3,4,5];
- * const t = F.reverse(a);
- * console.log(await F.collect(t)); // print 5,4,3,2,1
- * @param iter any iterator
- */
-const reverse = async function* (iter) {
-    const a = await _collectArray(iter);
-    for (let i = a.length - 1; i >= 0; i -= 1) {
-        yield a[i];
-    }
-};
-
 const _sampleArray = (arr) => arr[random(arr.length)];
 const _sampleNotArray = async (iter) => {
     const r = await _collectArray(iter);
@@ -2018,6 +2101,98 @@ const some = curry(async (f, iter) => {
     }
     return false;
 });
+
+const insertSortThresholdSize = 1;
+const _binarySearchIndex = async (fn, arr, elem, left, right) => {
+    while (true) {
+        if (right <= left) {
+            if (await fn(elem, arr[left]) > 0) {
+                return left + 1;
+            }
+            return left;
+        }
+        const mid = Math.floor((left + right) / 2);
+        const comp = await fn(elem, arr[mid]);
+        if (comp === 0) {
+            return mid;
+        }
+        else if (comp > 0) {
+            left = mid + 1;
+        }
+        else { // if (comp < 0)
+            right = mid - 1;
+        }
+    }
+};
+/**
+ * sort simple array (length < insertSortThresholdSize)
+ * @param {Function} fn compareator
+ * @param {ArrayLike} arr array
+ * @param {Number} left beginIndex (0)
+ * @param {Number} right endIndex (length - 1)
+ */
+const _insertionSort = async (fn, arr, left, right) => {
+    for (let i = left + 1; i <= right; ++i) {
+        const elem = arr[i];
+        const insertIndex = await _binarySearchIndex(fn, arr, elem, left, i);
+        for (let j = i - 1; j >= insertIndex; --j) {
+            arr[j + 1] = arr[j];
+        }
+        arr[insertIndex] = elem;
+    }
+};
+const _mergeSortInternal = async (fn, arr, buf, left, mid, right) => {
+    let i = left;
+    let j = mid + 1;
+    let k = left;
+    for (; i <= mid && j <= right; ++k) {
+        if ((await fn(arr[i], arr[j])) <= 0) {
+            buf[k] = arr[i];
+            ++i;
+        }
+        else {
+            buf[k] = arr[j];
+            ++j;
+        }
+    }
+    if (i > mid) {
+        for (; j <= right; ++j, ++k) {
+            buf[k] = arr[j];
+        }
+    }
+    else {
+        for (; i <= mid; ++i, ++k) {
+            buf[k] = arr[i];
+        }
+    }
+    for (k = left; k <= right; ++k) {
+        arr[k] = buf[k];
+    }
+};
+const _mergeSort = async (fn, arr, buf, left, right) => {
+    if (left < right) {
+        if (right - left < insertSortThresholdSize) {
+            await _insertionSort(fn, arr, left, right);
+        }
+        else {
+            const mid = Math.floor((left + right) / 2);
+            const d1 = _mergeSort(fn, arr, buf, left, mid);
+            const d2 = _mergeSort(fn, arr, buf, mid + 1, right);
+            await d1;
+            await d2;
+            await _mergeSortInternal(fn, arr, buf, left, mid, right);
+        }
+    }
+};
+const sortBy = curry(async (fn, iter) => {
+    const arr = await _collectArray(iter);
+    const buf = [];
+    buf.length = arr.length;
+    await _mergeSort(fn, arr, buf, 0, arr.length - 1);
+    return arr;
+});
+
+const sort = sortBy(asc);
 
 const splitBy = curry(async function* (f, v) {
     yield* await f(v);
@@ -2100,11 +2275,49 @@ const updateAt = curry(async function* (value, index, iter) {
     }
 });
 
+const _updateFirstFunction = async function* (value, comp, iter) {
+    const g = seq(iter);
+    for await (const e of g) {
+        if (await comp(e)) {
+            yield value;
+            yield* g;
+            return;
+        }
+        else {
+            yield e;
+        }
+    }
+};
+const updateFirst = curry(async function* (value, x, iter) {
+    x = await x;
+    if (_isFunction(x)) {
+        yield* _updateFirstFunction(value, x, iter);
+    }
+    else {
+        const compareFunction = equals(x);
+        yield* _updateFirstFunction(value, compareFunction, iter);
+    }
+});
+
 const values = _arrayElementIterator(1, (e) => { throw new Error(`values / ${e} is not array`); });
+
+const zipWith = curry(async function* (f, a, b) {
+    yield* _zipWith(f, [seq(a), seq(b)]);
+});
+
+const zip = curry((iter1, iter2) => zipWith((elem1, elem2) => [elem1, elem2], iter1, iter2));
+
+const zipWith3 = curry(async function* (f, a, b, c) {
+    yield* _zipWith(f, [seq(a), seq(b), seq(c)]);
+});
+
+const zip3 = curry((iter1, iter2, iter3) => zipWith3((elem1, elem2, elem3) => [elem1, elem2, elem3], iter1, iter2, iter3));
 
 exports._ = _;
 exports._ArrayList = _ArrayList;
 exports._Queue = _Queue;
+exports._binarySearchIndex = _binarySearchIndex;
+exports._insertionSort = _insertionSort;
 exports.add = add;
 exports.asc = asc;
 exports.assign = assign;
@@ -2157,8 +2370,12 @@ exports.fnil = fnil;
 exports.fnothing = fnothing;
 exports.foldl = foldl;
 exports.foldl1 = foldl1;
+exports.foldr = foldr;
+exports.foldr1 = foldr1;
 exports.forEach = forEach;
 exports.forEachIndexed = forEachIndexed;
+exports.frequencies = frequencies;
+exports.frequenciesBy = frequenciesBy;
 exports.get = get;
 exports.getOrElse = getOrElse;
 exports.groupBy = groupBy;
@@ -2166,6 +2383,8 @@ exports.has = has;
 exports.head = head;
 exports.identity = identity;
 exports.inc = inc;
+exports.insertAt = insertAt;
+exports.interval = interval;
 exports.isNil = isNil;
 exports.isPrimitive = isPrimitive;
 exports.iterate = iterate;
@@ -2214,6 +2433,8 @@ exports.seq = seq;
 exports.shuffle = shuffle;
 exports.sleep = sleep;
 exports.some = some;
+exports.sort = sort;
+exports.sortBy = sortBy;
 exports.splitBy = splitBy;
 exports.sub = sub;
 exports.sum = sum;
@@ -2227,4 +2448,9 @@ exports.timeout = timeout;
 exports.underBar = underBar;
 exports.union = union;
 exports.updateAt = updateAt;
+exports.updateFirst = updateFirst;
 exports.values = values;
+exports.zip = zip;
+exports.zip3 = zip3;
+exports.zipWith = zipWith;
+exports.zipWith3 = zipWith3;
