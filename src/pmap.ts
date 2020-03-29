@@ -6,7 +6,7 @@ import { _fetchMapInternal } from "./internal/parallelFetch";
 
 export interface PMapType {
     /**
-     * like map but calls a [parallel_set_fetch_count] of functions concurrently.
+     * concurrently map
      *
      * @example
      *  F.parallel_set_fetch_count(3);

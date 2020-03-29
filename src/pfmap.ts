@@ -11,7 +11,7 @@ export type PFlat<T> = ExtractPromise<Flat<ExtractPromise<T>>>;
 
 export interface PFMapType {
     /**
-     * like fmap, but calls a [parallel_set_fetch_count] of functions concurrently.
+     * concurrently fmap
      * @example
      * // F.parallel_set_fetch_count(100); default is 100
      *  const v = await F.run(

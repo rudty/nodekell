@@ -11,6 +11,7 @@ const _fetch_filter_internal = (f: any, v: any, fn: any, iter: any) => {
         v.add(e);
     });
 };
+
 export interface PFilterType {
     /**
      * concurrently filter
