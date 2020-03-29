@@ -1,6 +1,7 @@
 "use strict";
 export * from "./ArrayList";
 export * from "./Queue";
+export * from "./Stack";
 export * from "./_";
 export * from "./add";
 export * from "./asc";
