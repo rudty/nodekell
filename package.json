@@ -54,7 +54,7 @@
   "bugs": "https://github.com/rudty/nodekell/issues",
   "devDependencies": {
     "dtslint": "^0.8.0",
-    "mocha": "^6.2.2",
+    "mocha": "^10.2.0",
     "rollup": "^1.27.13",
     "rollup-plugin-cleanup": "^3.1.1",
     "rollup-plugin-terser": "^5.1.3",
